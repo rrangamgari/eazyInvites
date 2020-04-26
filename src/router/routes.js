@@ -25,7 +25,7 @@ const routes = [
     children: [
       { path: '', component: () => import('components/header.vue') },
       { path: '', component: () => import('components/footer.vue') },
-      { path: '', component: () => import('components/login.vue') },
+
     ],
   },
 ];

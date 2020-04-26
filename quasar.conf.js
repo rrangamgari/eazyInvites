@@ -54,6 +54,8 @@ module.exports = function (/* ctx */) {
 
       components: [
         'QSpinner',
+        'QSelect',
+        'QFile',
       ],
       directives: [],
 

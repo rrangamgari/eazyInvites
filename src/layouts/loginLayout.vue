@@ -5,7 +5,7 @@
     <!-- (Optional) The Footer -->
 <footer-component></footer-component>
 
-<header-component></header-component>
+
     <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
 
 
@@ -21,7 +21,7 @@
 <script>
 import loginComponent from '../components/login.vue';
 
-import headerComponent from '../components/header.vue';
+
 import footerComponent from '../components/footer.vue';
 
 
@@ -30,7 +30,7 @@ export default {
   components: {
     loginComponent,
 
-    headerComponent,
+
     footerComponent,
   },
 };

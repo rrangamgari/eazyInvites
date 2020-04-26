@@ -1,33 +1,36 @@
 <template>
   <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
 
-    <!-- (Optional) The Header -->
+
+    <!-- (Optional) The Footer -->
 <footer-component></footer-component>
 
-<header-component></header-component>
+
     <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
 
 
     <q-page-container>
       <!-- This is where pages get injected -->
-
-      <router-view />
+      <create-invitation-component></create-invitation-component>
+           <router-view />
     </q-page-container>
+
   </q-layout>
 </template>
 
 <script>
+import createInvitationComponent from '../components/createInvitationComponent.vue';
 
 
-import headerComponent from '../components/header.vue';
 import footerComponent from '../components/footer.vue';
 
 
 export default {
-  name: 'createInvitation',
+  name: 'login',
   components: {
+    createInvitationComponent,
 
-    headerComponent,
+
     footerComponent,
   },
 };
