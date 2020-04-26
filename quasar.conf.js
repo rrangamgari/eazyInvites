@@ -53,7 +53,7 @@ module.exports = function (/* ctx */) {
       all: 'auto',
 
       components: [
-        'QSpinner'
+        'QSpinner',
       ],
       directives: [],
 

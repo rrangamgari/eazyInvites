@@ -89,9 +89,11 @@ export default {
               message: this.posts.token,
               position: 'center',
             });
+            this.$router.push('/createInvitation');
           })
           .catch((e) => {
             this.errors.push(e);
+            window.location = '/login1';
           });
       }
     },

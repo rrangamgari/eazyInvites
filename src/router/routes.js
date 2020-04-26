@@ -18,6 +18,16 @@ const routes = [
       { path: '', component: () => import('components/login.vue') },
     ],
   },
+  {
+    path: '/createInvitation',
+    name: 'createEvent',
+    component: () => import('layouts/createInvitationLayout.vue'),
+    children: [
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
+      { path: '', component: () => import('components/login.vue') },
+    ],
+  },
 ];
 
 // Always leave this as last one
