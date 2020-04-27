@@ -2,7 +2,7 @@
 <template>
 
 
-<div class="q-pa-md" style="max-width: 600px;padding:20px;">
+<div class="q-pa-md" style="max-width: 700px;padding:20px;">
 
 <div>&nbsp;</div>
     <q-form
@@ -20,8 +20,9 @@
         @input='val => { onEventTypeChange() }'>
 
 </q-select>
- <q-file filled v-model="model" label="Upload Invitation" >
- <template v-slot:prepend>
+ <q-file filled v-model="model" label="Upload Invitation"
+ style="padding-right:15px">
+ <template v-slot:append>
           <q-icon name="attach_file" />
         </template>
  </q-file>
