@@ -13,7 +13,11 @@
      >
       <q-select name="eventType"  filled
 
-        label="Event Type" v-model="eventType" :options="options" @filter='onEventTypeChange'>
+
+        label="Event Type"
+        v-model="eventType"
+        :options="options"
+        @input='val => { onEventTypeChange() }'>
 
 </q-select>
  <q-file filled v-model="model" label="Upload Invitation" >
@@ -105,9 +109,9 @@ export default {
     },
     onEventTypeChange() {
       // eslint-disable-next-line no-alert
-      // alert('test');
+      // alert(this.eventType);
+      // eslint-disable-next-line max-len
       this.name = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
-      return false;
     },
 
   },
