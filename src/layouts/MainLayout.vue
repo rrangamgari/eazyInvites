@@ -6,17 +6,17 @@
 <footer-component></footer-component>
 
       <q-page-container>
-        <q-page class="q-pa-md">Login
+        <q-page class="q-pa-md">
 <loginComponent>zzczxcxz</loginComponent>
-<PageIndex></PageIndex>
+
         </q-page>
       </q-page-container>
     </q-layout>
   </div>
 </template>
 <script>
-import loginComponent from '../components/login.vue';
-import PageIndex from '../pages/index.vue';
+import loginComponent from '../components/homePageCarousel.vue';
+
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/footer.vue';
 
@@ -25,7 +25,7 @@ export default {
   name: 'main',
   components: {
     loginComponent,
-    PageIndex,
+
     headerComponent,
     footerComponent,
   },

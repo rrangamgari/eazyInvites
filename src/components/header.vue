@@ -1,14 +1,13 @@
 <template>
   <q-header elevated>
         <q-toolbar class="glossy">
-          <q-btn flat round dense icon="menu" class="q-mr-sm" />
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-          </q-avatar>
+         <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
-           <q-toolbar-title>Eazy Invites</q-toolbar-title>
+            <img src="../assets/logo/invite3.png" width="50px">
 
-      <q-space />
+
+           <q-toolbar-title style="font-size:24px">Eazy Invites</q-toolbar-title>
+
 
       <div class="q-pa-md">
     <q-btn-dropdown
@@ -16,33 +15,27 @@
             push
       glossy
       no-caps
-      icon="whatshot"
+icon="person"
             @click="onMainClick"
     >
       <q-list>
         <q-item clickable v-close-popup @click="onItemClick" to="/login">
           <q-item-section avatar>
-            <q-avatar icon="folder" color="primary" text-color="white" />
+            <q-avatar icon="person_outline" color="primary" text-color="white" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Login</q-item-label>
-            <q-item-label caption>February 22, 2016</q-item-label>
-          </q-item-section>
-          <q-item-section side>
-            <q-icon name="info" color="amber" />
+            <q-item-label caption>Login to send invites</q-item-label>
           </q-item-section>
         </q-item>
 
         <q-item clickable v-close-popup @click="onItemClick">
           <q-item-section avatar>
-            <q-avatar icon="img:https://www.w3schools.com/bootstrap/img_avatar3.png" color="secondary" text-color="white" />
+            <q-avatar icon="person_add" color="secondary" text-color="white" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Register</q-item-label>
-            <q-item-label caption>February 22, 2016</q-item-label>
-          </q-item-section>
-          <q-item-section side>
-            <q-icon name="info" color="amber" />
+            <q-item-label caption>New to Easy Invites</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
