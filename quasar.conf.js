@@ -59,6 +59,7 @@ module.exports = function (/* ctx */) {
         'QCarousel',
         'QCarouselControl',
         'QCarouselSlide',
+        'QVideo',
       ],
       directives: [],
 

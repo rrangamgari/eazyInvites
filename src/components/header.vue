@@ -6,7 +6,7 @@
             <img src="../assets/logo/invite3.png" width="50px">
 </a>
 
-           <q-toolbar-title style="font-size:24px">Eazy Invites</q-toolbar-title>
+           <q-toolbar-title  class="logo">Eazy Invites</q-toolbar-title>
 
 
       <div class="q-pa-md">

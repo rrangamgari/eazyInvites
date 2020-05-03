@@ -4,11 +4,11 @@
       arrows
       animated
       v-model="slide"
-      height="400px"
       infinite
       autoplay
       transition-prev="slide-right"
       transition-next="slide-left"
+     :fullscreen.sync="fullscreen"
     >
       <q-carousel-slide name="first" img-src="../assets/home/Chritmas_card.png">
         <div class="absolute-bottom custom-caption">
@@ -34,6 +34,18 @@
           <div class="text-subtitle1">Engagement, Wedding, Receptions etc</div>
         </div>
       </q-carousel-slide>
+      <template v-slot:control>
+        <q-carousel-control
+          position="bottom-right"
+          :offset="[18, 18]"
+        >
+          <q-btn
+            push round dense color="white" text-color="primary"
+            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="fullscreen = !fullscreen"
+          />
+        </q-carousel-control>
+      </template>
     </q-carousel>
   </div>
 </template>

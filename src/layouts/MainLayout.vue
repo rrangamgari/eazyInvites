@@ -8,7 +8,7 @@
       <q-page-container>
         <q-page class="q-pa-md">
 <loginComponent>zzczxcxz</loginComponent>
-
+<videoComponent></videoComponent>
         </q-page>
       </q-page-container>
     </q-layout>
@@ -16,7 +16,7 @@
 </template>
 <script>
 import loginComponent from '../components/homePageCarousel.vue';
-
+import videoComponent from '../components/homePageVideo.vue';
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/footer.vue';
 
@@ -25,7 +25,7 @@ export default {
   name: 'main',
   components: {
     loginComponent,
-
+    videoComponent,
     headerComponent,
     footerComponent,
   },
