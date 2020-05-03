@@ -2,9 +2,9 @@
   <q-header elevated>
         <q-toolbar class="glossy">
          <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
-
+<a href="/">
             <img src="../assets/logo/invite3.png" width="50px">
-
+</a>
 
            <q-toolbar-title style="font-size:24px">Eazy Invites</q-toolbar-title>
 
@@ -16,7 +16,7 @@
       glossy
       no-caps
 icon="person"
-            @click="onMainClick"
+
     >
       <q-list>
         <q-item clickable v-close-popup @click="onItemClick" to="/login">
@@ -52,5 +52,13 @@ export default {
   data() {
     return {};
   },
+  methods: {
+
+    onItemClick() {
+      return {};
+    },
+  },
+
 };
+
 </script>
