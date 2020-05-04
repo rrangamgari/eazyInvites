@@ -16,7 +16,7 @@
       />
 <br>
       <b style="font-size:20px">Ravinder Rangamgari </b><p style="font-size:13px">
-Excellent idea of sending e-invites qith whatsapp. Wide range pre designed cards.
+Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards.
  Used this recently for son's birthday invitation..
 
 Thank you for this awesome product!
