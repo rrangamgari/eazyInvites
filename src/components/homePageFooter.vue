@@ -1,85 +1,85 @@
 <template>
-  <q-footer reveal>
+  <div>
     <q-toolbar class="glossy center">
       <q-toolbar-title style="align:center;text-align: center;">
         <div class="" style="color:#FFFFFF;font-family: 'Merienda', cursive;">
           Follow us
         </div>
-        <div style="height:60px">
-          <a href="https://www.instagram.com/" target="_blank">
-            <img
-              src="../assets/instagram.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>
+        <div>&nbsp;</div>
+        <a href="https://www.instagram.com/" target="_blank">
+          <img
+            src="../assets/instagram.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a>
 
-          <!--&nbsp;
-          <a href="https://skype.com" target="_blank">
-            <img
-              src="../assets/skype.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>-->
+       <!-- &nbsp;
+        <a href="https://skype.com" target="_blank">
+          <img
+            src="../assets/skype.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a> -->
 
-          &nbsp;
-          <a href="https://twitter.com" target="_blank">
-            <img
-              src="../assets/twitter.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>
+        &nbsp;
+        <a href="https://twitter.com" target="_blank">
+          <img
+            src="../assets/twitter.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a>
 
-          &nbsp;
-          <a href="https://www.pinterest.com/" target="_blank">
-            <img
-              src="../assets/pinint.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>
+        &nbsp;
+        <a href="https://www.pinterest.com/" target="_blank">
+          <img
+            src="../assets/pinint.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a>
 
-          &nbsp;
-          <a href="https://facebook.com" target="_blank">
-            <img
-              src="../assets/facebook.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>
+        &nbsp;
+        <a href="https://facebook.com" target="_blank">
+          <img
+            src="../assets/facebook.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a>
 
-          &nbsp;
-          <a href="https://linkedin.com" target="_blank">
-            <img
-              src="../assets/linkedin.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>
+        &nbsp;
+        <a href="https://linkedin.com" target="_blank">
+          <img
+            src="../assets/linkedin.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a>
 
-          <!--&nbsp;
-          <a href="https://youtube.com" target="_blank">
-            <img
-              src="../assets/youtube.png"
-              class="q-icon"
-              style="height:25px;width:25px"
-          /></a>
+       <!-- &nbsp;
+        <a href="https://youtube.com" target="_blank">
+          <img
+            src="../assets/youtube.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a>
 
-          &nbsp;
-          <a href="https://web.whatsapp.com" target="_blank">
-            <img
-              src="../assets/whatsapp.png"
-              class="q-icon"
-              style="height:48px;width:48px"
-          /></a>-->
+        &nbsp;
+        <a href="https://web.whatsapp.com" target="_blank">
+          <img
+            src="../assets/whatsapp.png"
+            class="q-icon"
+            style="height:45px;width:45px"
+        /></a> -->
 
-          &nbsp;
-        </div>
+        &nbsp;
+
+        <div>&nbsp;</div>
         <div
           style="font-size:12px;color:#FFFFFF;font-family: 'Merienda', cursive;"
         >
-          Privacy Policy | About Us | Contact us
+          &copy; copyright 2020 | Privacy Policy | About Us | Contact Us
         </div>
         <div>&nbsp;</div>
       </q-toolbar-title>
     </q-toolbar>
-
     <q-dialog v-model="layout">
       <q-layout container class="bg-white" style="max-height:500px;">
         <q-header class="bg-primary">
@@ -137,20 +137,20 @@
         </q-page-container>
       </q-layout>
     </q-dialog>
-    <div class="icon-bar" style="top:75%">
+    <div class="icon-bar">
       <a href="#" @click="layout = true" class="chat">
         <img
           src="../assets/chat.png"
           class="q-icon"
-          style="height:25px;width:25px"
+          style="height:45px;width:45px"
       /></a>
     </div>
-  </q-footer>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'footerComponent',
+  name: 'homeFooterComponent',
   data() {
     return {
       icon: false,

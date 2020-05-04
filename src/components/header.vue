@@ -1,5 +1,5 @@
 <template>
-  <q-header elevated>
+  <q-header reveal  :reveal-offset="10">
         <q-toolbar class="glossy">
          <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 <a href="/">

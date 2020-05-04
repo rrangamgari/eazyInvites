@@ -3,16 +3,18 @@
     <q-layout view="lHh lpr lFf"  style="" class="shadow-2 rounded-borders">
 
       <header-component></header-component>
-<footer-component></footer-component>
+
 
       <q-page-container>
-        <q-page class="q-pa-md">
+
 <loginComponent>zzczxcxz</loginComponent>
 <video-component></video-component>
 <feed-back-component></feed-back-component>
-        </q-page>
+
+
       </q-page-container>
     </q-layout>
+    <footer-component class="bg-primary"></footer-component>
   </div>
 </template>
 <script>
@@ -20,7 +22,7 @@ import loginComponent from '../components/homePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
 import feedBackComponent from '../components/homePageFeedback.vue';
 import headerComponent from '../components/header.vue';
-import footerComponent from '../components/footer.vue';
+import footerComponent from '../components/homePageFooter.vue';
 
 
 export default {
