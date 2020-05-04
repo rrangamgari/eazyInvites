@@ -1,13 +1,14 @@
 <template>
   <div class="q-pa-md">
+    <q-responsive :ratio="16/8" style="">
     <q-carousel
       arrows
       animated
       v-model="slide"
       infinite
-      autoplay
-      transition-prev="slide-right"
-      transition-next="slide-left"
+      :autoplay="5000"
+      transition-prev="fade"
+      transition-next="fade"
      :fullscreen.sync="fullscreen"
     >
       <q-carousel-slide name="first" img-src="../assets/home/Chritmas_card.png">
@@ -47,6 +48,7 @@
         </q-carousel-control>
       </template>
     </q-carousel>
+    </q-responsive>
   </div>
 </template>
 <script>

@@ -75,7 +75,7 @@ export default {
           position: 'center',
         });
       } else {
-        axios.post('http://localhost:5000/Emantran/api/authenticate', {
+        axios.post('/api/authenticate', {
           username: this.name,
           password: this.age,
         })
