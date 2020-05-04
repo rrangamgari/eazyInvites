@@ -61,8 +61,11 @@ module.exports = function (/* ctx */) {
         'QCarouselSlide',
         'QVideo',
         'QRating',
+        'QDialog',
       ],
-      directives: [],
+      directives: [
+        'ClosePopup',
+      ],
 
       // Quasar plugins
       plugins: ['Notify'],
