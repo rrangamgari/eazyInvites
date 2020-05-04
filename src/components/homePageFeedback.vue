@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       ratingModel: 5,
-      ratingColors: ['yellow-3', 'yellow-6', 'yellow', 'yellow-9', 'yellow-10'],
+      ratingColors: ['yellow', 'yellow', 'yellow', 'yellow', 'yellow'],
     };
   },
 };

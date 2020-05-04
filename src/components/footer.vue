@@ -26,37 +26,46 @@
         <a href="https://web.whatsapp.com" target="_blank"> <img src="../assets/whatsapp.png"
        class="q-icon" style="height:45px;width:45px"></a>
         &nbsp;
-        <a href="#" @click="toolbar = true"> <img src="../assets/chat.png"
+        <a href="#" @click="layout = true"> <img src="../assets/chat.png"
        class="q-icon" style="height:45px;width:45px"></a>
         &nbsp;
       </q-toolbar-title>
         </q-toolbar>
-        <q-dialog v-model="toolbar" >
-          <q-header class="bg-primary">
+        <q-dialog v-model="layout">
+      <q-layout  container class="bg-white" style="max-height:500px;">
+        <q-header class="bg-primary">
           <q-toolbar>
-            <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
-            <q-toolbar-title>Header</q-toolbar-title>
-            <q-btn flat @click="drawerR = !drawerR" round dense icon="menu" />
+
+            <q-toolbar-title>Feedback</q-toolbar-title>
+
             <q-btn flat v-close-popup round dense icon="close" />
           </q-toolbar>
         </q-header>
-      <q-card>
-        <q-toolbar>
-          <q-avatar style="height:90px;width:50px">
-            <img src="../assets/logo/invite3.png">
-          </q-avatar>
 
-          <q-toolbar-title><span class="text-weight-bold">Eazy Feedback </span></q-toolbar-title>
-
-          <q-btn flat round dense icon="close" v-close-popup />
-        </q-toolbar>
-
-        <q-card-section>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus
-           sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam,
-            ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
-        </q-card-section>
-      </q-card>
+        <q-page-container>
+          <q-page padding>
+            <q-form style="padding:20px;" class="q-gutter-md" @submit="onSubmit" @reset="onReset">
+              <q-rating
+        name="quality"
+        v-model="quality"
+        max="5"
+        size="3.5em"
+        color="yellow"
+        icon="star_border"
+        icon-selected="star"
+        no-dimming
+      />
+              <q-input label="Name" type="text" v-model="name" name="name" filled="filled"/>
+              <q-input label="Comments" type="textarea"  v-model="comments"
+               name="comments" filled="filled" />
+              <div>
+        <q-btn label="Submit" type="submit" color="primary"/>
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+      </div>
+            </q-form>
+          </q-page>
+        </q-page-container>
+      </q-layout>
     </q-dialog>
       </q-footer>
 </template>
@@ -70,7 +79,42 @@ export default {
       bar: false,
       bar2: false,
       toolbar: false,
+      layout: false,
+      quality: 5,
+      submitResult: [],
+      moreContent: true,
+      drawer: false,
+      drawerR: false,
+      name: null,
+      comments: null,
+      lorem: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus,'
+        + 'ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!',
     };
+  },
+  computed: {
+    contentSize() {
+      return this.moreContent ? 150 : 5;
+    },
+  },
+  methods: {
+    onSubmit(evt) {
+      // const formData = new FormData(evt.target);
+      const submitResult = [evt];
+
+      /* for (const [name, value] of formData.entries()) {
+        submitResult.push({
+          name,
+          value,
+        });
+      } */
+
+      this.submitResult = submitResult;
+    },
+    onReset() {
+      this.quality = 0;
+      this.name = null;
+      this.comments = null;
+    },
   },
 };
 </script>
