@@ -17,8 +17,12 @@
 <br>
       <b style="font-size:20px">Ravinder Rangamgari </b><p style="font-size:13px">
 Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards.
- Used this recently for son's birthday invitation..
-
+ Used this recently for My son's 12 birthday party.
+ Invitees loved it , it has gps feature for identifying the location with ease...
+<br>
+ the best part is it send reminders to the guests a day before...
+<br>
+<br>
 Thank you for this awesome product!
 </p>
       </div>
