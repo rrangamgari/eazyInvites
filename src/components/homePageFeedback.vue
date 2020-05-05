@@ -3,7 +3,7 @@
 
     <template>
       <div class="q-pa-md">
-        <b style="font-size:25px">&nbsp; What People think about us.... </b>
+        <b style="font-size:25px">&nbsp; Our Customer Reviews </b>
         <div class="row q-col-gutter-x-xs q-col-gutter-y-lg">
           <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="my-content" style="padding:20px">

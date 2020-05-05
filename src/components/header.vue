@@ -3,7 +3,7 @@
         <q-toolbar class="glossy">
          <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 <a href="/">
-            <img src="../assets/logo/mailLogo.png" width="50px">
+            <img src="../assets/logo/mail-send-animation.gif" width="100px">
 </a>
 
            <q-toolbar-title  class="logo">Eazy Invites</q-toolbar-title>
