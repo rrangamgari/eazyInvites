@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="">
     <q-layout view="lHh lpr lFf"  style="" class="shadow-2 rounded-borders">
 
       <header-component></header-component>

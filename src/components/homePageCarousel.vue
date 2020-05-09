@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="">
     <q-responsive :ratio="16/8" style="">
     <q-carousel
       arrows
