@@ -12,8 +12,8 @@
      :fullscreen.sync="fullscreen"
     >
       <q-carousel-slide name="first" img-src="../assets/home/Chritmas_card.png">
-        <div class="absolute-bottom custom-caption">
-          <div class="text-h4">Festivals</div>
+        <div class="absolute-right custom-caption">
+          <div class="text-h5">Festivals</div>
           <div class="text-subtitle1">Christmas Party</div>
         </div>
       </q-carousel-slide>

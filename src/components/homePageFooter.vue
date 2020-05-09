@@ -137,13 +137,10 @@
         </q-page-container>
       </q-layout>
     </q-dialog>
-    <div class="icon-bar">
-      <a href="#" @click="layout = true" class="chat">
-        <img
-          src="../assets/chat.png"
-          class="q-icon"
-          style="height:45px;width:45px"
-      /></a>
+    <div >
+      <a id="ei_tab" class="ei_tab_right" href="#" @click="layout = true">
+    <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
+    Feedback<span class="screen_reader"> Will open a new window</span></a>
     </div>
   </div>
 </template>
