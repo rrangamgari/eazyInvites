@@ -64,7 +64,6 @@ export default {
     };
   },
 
-
   methods: {
     onSubmit() {
       axios.post('http://localhost:5000/Emantran/api/authenticate', {
@@ -84,7 +83,7 @@ export default {
           this.$router.push('/createInvitation');
         })
         .catch((e) => {
-          // this.errors.push(e);
+        //  this.errors.push(e);
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
