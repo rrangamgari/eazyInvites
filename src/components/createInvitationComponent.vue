@@ -1,15 +1,12 @@
 
 <template>
+<div class="q-pa-md flex flex-center" >
 
-
-<div class="q-pa-md" style="max-width: 700px;padding:20px;">
-
-<div>&nbsp;</div>
     <q-form
       @submit="onSubmit"
       @reset="onReset"
-
-      class="q-gutter-md"
+     class="q-gutter-md  q-pt-xl"
+      style="width:60vh"
      >
       <q-select name="eventType"  filled
 

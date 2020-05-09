@@ -1,6 +1,6 @@
 <template>
-  <div class="">
-    <q-responsive :ratio="16/8" style="">
+  <div class="" style="">
+    <q-responsive :ratio="1600/700" style="">
     <q-carousel
       arrows
       animated
@@ -11,28 +11,65 @@
       transition-next="fade"
      :fullscreen.sync="fullscreen"
     >
-      <q-carousel-slide name="first" img-src="../assets/home/Chritmas_card.png">
+    <q-carousel-slide name="first" img-src="~assets/home/ez1.jpg" >
         <div class="absolute-right custom-caption">
           <div class="text-h5">Festivals</div>
           <div class="text-subtitle1">Christmas Party</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="second" img-src="../assets/home/Birthday_sliders.png">
+      <q-carousel-slide name="second" img-src="../assets/home/ez12.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Celebrations</div>
           <div class="text-subtitle1">Birthday Party</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="third" img-src="../assets/home/party_card.png">
+      <q-carousel-slide name="third" img-src="../assets/home/ez4.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Custom Parties</div>
           <div class="text-subtitle1">Weekend Parties with friends</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="fourth" img-src="../assets/home/Engagement_card.png">
+      <q-carousel-slide name="fourth" img-src="../assets/home/ez5.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Lifetime events</div>
           <div class="text-subtitle1">Engagement, Wedding, Receptions etc</div>
+        </div>
+      </q-carousel-slide>
+       <q-carousel-slide name="first1" img-src="~assets/home/ez6.jpg" >
+        <div class="absolute-right custom-caption">
+          <div class="text-h5">Festivals</div>
+          <div class="text-subtitle1">Christmas Party</div>
+        </div>
+      </q-carousel-slide>
+      <q-carousel-slide name="second1" img-src="../assets/home/ez2.jpg">
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h4">Celebrations</div>
+          <div class="text-subtitle1">Birthday Party</div>
+        </div>
+      </q-carousel-slide>
+      <q-carousel-slide name="third1" img-src="../assets/home/ez13.jpg">
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h4">Custom Parties</div>
+          <div class="text-subtitle1">Weekend Parties with friends</div>
+        </div>
+      </q-carousel-slide>
+      <q-carousel-slide name="fourth1" img-src="../assets/home/ez9.jpg">
+        <div class="absolute-bottom-left custom-caption vertical-middle gt-xs">
+          <div class="text-h4">Mehendi Function</div>
+          <div class="text-h4">&nbsp;</div>
+          <div class="text-subtitle1" style="word-wrap">
+            Mehndi is derived from the Sanskrit word mendhikā.
+            <br>The use of mehndi and turmeric is described in the earliest
+             Hindu Vedic ritual books.
+            </div>
+        </div>
+        <div class="absolute-bottom-right custom-caption xs">
+          <div class="text-h4" style="font-size:18px">Mehendi Function</div>
+          <div class="text-subtitle1" style="font-size:12px">
+            Mehndi is derived from the Sanskrit word mendhikā.
+            The use of mehndi and turmeric is described in the earliest
+             Hindu Vedic ritual books.
+            </div>
         </div>
       </q-carousel-slide>
       <template v-slot:control>

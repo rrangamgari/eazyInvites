@@ -12,19 +12,33 @@
 
       <q-toolbar-title class="logo_small xs">Eazy Invites</q-toolbar-title>
 <q-toolbar-title class="logo gt-xs">Eazy Invites</q-toolbar-title>
-      <div class="logo_labels">
+<div class="xs">
         <q-btn
           color="primary"
           glossy
           push
           type="a"
-          href="https://wa.me/919700713424?text=Hi"
+          href="https://wa.me/13022206686?text=Hi EazyInvites, I love to start using this..."
+          target="_blank"
+        >
+          <div class="row items-center no-wrap">
+            <img left src="../assets/whatsapp.png" style="height:25px;width:25px"/>
+            </div>
+        </q-btn>
+      </div>
+      <div class="logo_labels gt-xs">
+        <q-btn
+          color="primary"
+          glossy
+          push
+          type="a"
+          href="https://wa.me/13022206686?text=Hi"
           target="_blank"
         >
           <div class="row items-center no-wrap">
             <img left src="../assets/whatsapp.png" style="height:45px;width:45px"/>
             <div class="text-center">
-              Whatsapp<br>Chatbot
+              Whatsapp<br>Invite
             </div>
           </div>
         </q-btn> | Browse Cards | About Us

@@ -145,6 +145,11 @@
           style="height:25px;width:25px"
       /></a>
     </div>
+    <div >
+      <a id="ei_tab" class="ei_tab_right" href="#" @click="layout = true">
+    <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
+    Feedback<span class="screen_reader"> Will open a new window</span></a>
+    </div>
   </q-footer>
 </template>
 

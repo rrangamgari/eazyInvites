@@ -70,7 +70,7 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://localhost:5000/Emantran/api/feedback')
+    axios.get('/api/feedback')
       .then((response) => {
         // JSON responses are automatically parsed.
         this.feedbackList = this.feedbackList.concat(response.data.data);

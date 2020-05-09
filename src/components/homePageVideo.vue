@@ -1,9 +1,9 @@
 <template>
   <div class="">
-    <q-responsive :ratio="16 / 8" style="">
+    <q-responsive :ratio="16/9" style="">
       <div class="q-video" style="">
         <iframe
-          src="https://www.youtube.com/embed/KqSjX3_Wh-E?rel=0"
+          src="https://www.youtube.com/embed/elJ9X0zn4UI?rel=0"
           frameborder="0"
           allowfullscreen
         />
