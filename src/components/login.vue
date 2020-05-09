@@ -2,21 +2,23 @@
 <template>
 
 
-<div class="q-pa-md" style="max-width: 600px;padding:20px;">
+<div class="q-pa-md flex flex-center">
 
-<div>&nbsp;</div>
+  <div>&nbsp;</div>
     <q-form
+      id="login"
       @submit="onSubmit"
       @reset="onReset"
-      class="q-gutter-md"
+      class="q-gutter-md  q-pt-xl"
+      style="width:60vh"
     >
       <q-input
         filled
         type="text"
         v-model="name"
-        label="Username"
-                lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please type something']"
+        label="Email or Phone"
+        lazy-rules
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Email or Phone']"
       />
 
       <q-input
@@ -25,15 +27,14 @@
         v-model="age"
         label="Password"
         lazy-rules
-        :rules="[
-          val => val !== null && val !== '' || 'Please type something'
-        ]"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Password']"
       />
 
+      <!--
       <q-toggle v-model="accept" label="I accept the license and terms" />
-
+      -->
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
+        <q-btn label="Login" type="submit" color="primary"/>
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
@@ -59,49 +60,44 @@ export default {
     return {
       name: null,
       age: null,
-
-      accept: false,
+      // accept: false,
     };
   },
 
   methods: {
     onSubmit() {
-      if (this.accept !== true) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'You need to accept the license and terms first',
-          position: 'center',
-        });
-      } else {
-        axios.post('/api/authenticate', {
-          username: this.name,
-          password: this.age,
-        })
-          .then((response) => {
-            // JSON responses are automatically parsed.
-            this.posts = response.data;
-            this.$q.notify({
-              color: 'green-4',
-              textColor: 'white',
-              icon: 'cloud_done',
-              message: this.posts.token,
-              position: 'center',
-            });
-            this.$router.push('/createInvitation');
-          })
-          .catch((e) => {
-            this.errors.push(e);
-            window.location = '/login1';
+      axios.post('http://localhost:5000/Emantran/api/authenticate', {
+        username: this.name,
+        password: this.age,
+      })
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data;
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: this.posts.token,
+            position: 'center',
           });
-      }
+          this.$router.push('/createInvitation');
+        })
+        .catch((e) => {
+        //  this.errors.push(e);
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
     },
 
     onReset() {
       this.name = null;
       this.age = null;
-      this.accept = false;
+      // this.accept = false;
     },
   },
 };
