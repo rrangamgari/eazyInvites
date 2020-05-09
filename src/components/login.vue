@@ -80,6 +80,8 @@ export default {
             message: this.posts.token,
             position: 'center',
           });
+          this.$q.sessionStorage.set('login-token', this.posts.token);
+
           this.$router.push('/createInvitation');
         })
         .catch((e) => {

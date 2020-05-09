@@ -8,6 +8,7 @@
      class="q-gutter-md  q-pt-xl"
       style="width:60vh"
      >
+     <q-item-label class="logo">Eazy Invite Step 1</q-item-label>
       <q-select name="eventType"  filled
 
 
@@ -24,11 +25,11 @@
         </template>
  </q-file>
 <q-input
-      v-model="name"
+      v-model="eventmessage"
       filled
       autogrow
       label="Custom Message"
- name="name"
+ name="eventmessage"
     />
       <div>
         <q-btn label="Submit" type="submit" color="primary"/>
@@ -48,6 +49,7 @@ axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 
+
 export default {
   name: 'createInvitationComponent',
   components: {
@@ -57,9 +59,9 @@ export default {
     return {
       model: null,
       eventType: '',
-      name: `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`,
+      eventmessage: `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`,
       options: [
-        'Birthday', 'Engagement', 'Wedding', 'Party', 'Pooja',
+        { value: 1, label: 'Birthday' }, { value: 2, label: 'Engagement' }, { value: 3, label: 'Wedding' }, { value: 4, label: 'Party' }, { value: 5, label: 'Pooja' },
       ],
 
       accept: false,
@@ -77,31 +79,40 @@ export default {
           position: 'center',
         });
       } else {
-        axios.post('http://localhost:5000/Emantran/api/authenticate', {
-          username: this.name,
-          password: this.age,
-        })
+        axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
+        axios.post('/api/userEvents/event',
+          {
+            eventtypeid: this.eventType.value,
+            eventtitle: null,
+            eventmessage: this.eventmessage,
+          })
           .then((response) => {
-            // JSON responses are automatically parsed.
+          // JSON responses are automatically parsed.
             this.posts = response.data;
             this.$q.notify({
               color: 'green-4',
               textColor: 'white',
               icon: 'cloud_done',
-              message: this.posts.token,
+              message: this.posts.status,
               position: 'center',
             });
             this.$router.push('/createInvitation');
           })
           .catch((e) => {
-            this.errors.push(e);
-            window.location = '/login1';
+            //  this.errors.push(e);
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: e.message,
+              position: 'top',
+            });
           });
       }
     },
 
     onReset() {
-      this.name = null;
+      this.eventmessage = null;
       this.eventType = null;
       this.model = null;
     },
@@ -109,7 +120,7 @@ export default {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.name = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
+      this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
     },
 
   },
