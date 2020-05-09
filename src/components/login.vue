@@ -64,6 +64,7 @@ export default {
     };
   },
 
+
   methods: {
     onSubmit() {
       if (this.accept !== true) {
