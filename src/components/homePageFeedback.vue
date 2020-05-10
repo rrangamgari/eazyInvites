@@ -19,7 +19,7 @@
             />
             <br>
             <b style="font-size:18px">{{ feedback.name }}</b>
-            <body style="font-size:12px; white-space: pre-line">{{ feedback.description }}</body>
+            <body style="font-size:12px; white-space: pre-line">{{ feedback.comment }}</body>
             </div>
           </div>
         </div>
@@ -46,25 +46,25 @@ export default {
           id: 1,
           rating: 5,
           name: 'Ravinder Rangamgari',
-          description: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
+          comment: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
         },
         {
           id: 1,
           rating: 5,
           name: 'Sridevi Rangamgari',
-          description: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
+          comment: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
         },
         {
           id: 1,
           rating: 4,
           name: 'Vivek Rangamgari',
-          description: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
+          comment: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
         },
         {
           id: 1,
           rating: 3,
           name: 'Divya Molugu',
-          description: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
+          comment: 'Excellent idea of sending e-invites with whatsapp. Wide range pre designed cards. Used this recently for My son\'s 12 birthday party. Invitees loved it , it has gps feature for identifying the location with ease...\nthe best part is it send reminders to the guests a day before...\n\nThank you for this awesome product!',
         },
       ],
     };

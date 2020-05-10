@@ -94,7 +94,7 @@
           <q-page padding>
             <q-form
               style="padding:20px;"
-              class="q-gutter-md"
+              class="q-gutter-sm"
               @submit="onSubmit"
               @reset="onReset"
             >
@@ -103,7 +103,8 @@
                 v-model="quality"
                 max="5"
                 size="3.5em"
-                color="yellow"
+                color="grey"
+                color-selected="yellow"
                 icon="star_border"
                 icon-selected="star"
                 no-dimming
@@ -114,14 +115,27 @@
                 v-model="name"
                 name="name"
                 filled="filled"
+                lazy-rules
+                :rules="[ val=> val !== null && val !== '' || 'Please enter your Name']"
               />
               <q-input
                 label="Comments"
                 type="textarea"
-                v-model="comments"
+                v-model="comment"
                 name="comments"
                 filled="filled"
               />
+              <div class="q-pa-md" style="font-size:16px">
+                How likely are you to recommend us to a friend?
+                <q-option-group
+                  :options="options"
+                  label="Recommendations"
+                  type="radio"
+                  v-model="group"
+                  size="xs"
+                  style="font-size:14px"
+                />
+              </div>
               <div>
                 <q-btn label="Submit" type="submit" color="primary" />
                 <q-btn
@@ -130,6 +144,7 @@
                   color="primary"
                   flat
                   class="q-ml-sm"
+                  :rules="[ val=> val !== null && val !== '' || 'Please choose any one of above']"
                 />
               </div>
             </q-form>
@@ -146,6 +161,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.headers.get.Accepts = 'application/json';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
+
 export default {
   name: 'homeFooterComponent',
   data() {
@@ -155,16 +177,20 @@ export default {
       bar2: false,
       toolbar: false,
       layout: false,
-      quality: 5,
+      quality: 0,
       submitResult: [],
       moreContent: true,
       drawer: false,
       drawerR: false,
       name: null,
-      comments: null,
+      comment: null,
       lorem:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus,'
         + 'ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!',
+      group: '',
+      options: [{ label: 'Not at all likely', value: 0 },
+        { label: 'Maybe, it depends', value: 1 },
+        { label: 'I definitely would', value: 2 }],
     };
   },
   computed: {
@@ -177,19 +203,54 @@ export default {
       // const formData = new FormData(evt.target);
       const submitResult = [evt];
 
-      /* for (const [name, value] of formData.entries()) {
-        submitResult.push({
-          name,
-          value,
+      const post = {
+        rating: this.quality,
+        name: this.name,
+        comment: this.comment,
+        recommend: this.group,
+      };
+
+      axios.post('/api/feedback', post)
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          if (response.data.data) {
+            // Notification for testing api
+            this.$q.notify({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: response.data.message,
+              position: 'center',
+            });
+          } else {
+            this.$q.notify({
+              color: 'red-4',
+              textColor: 'white',
+              icon: 'cloud_notdone',
+              message: response.data.message,
+              position: 'center',
+            });
+          }
+        })
+        .catch((e) => {
+        //  this.errors.push(e);
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
         });
-      } */
 
       this.submitResult = submitResult;
+      this.onReset();
     },
     onReset() {
       this.quality = 0;
       this.name = null;
-      this.comments = null;
+      this.comment = null;
+      this.group = '';
     },
   },
 };
