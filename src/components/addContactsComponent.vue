@@ -97,30 +97,14 @@ export default {
     },
   },
   data() {
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
-    axios.get('/api/userEvents/guestlist/29')
-      .then((response) => {
-        // JSON responses are automatically parsed.
-        this.data1 = response.data;
-      })
-      .catch((e) => {
-        //  this.errors.push(e);
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-      });
     return {
       columns: [
         {
-          name: 'firstname',
+          name: 'name',
           required: true,
           label: 'Name',
           align: 'left',
-          field: 'firstname',
+          field: (row) => `${row.firstname} ${row.lastname}`,
           sortable: true,
         },
         {
