@@ -28,6 +28,16 @@ const routes = [
 
     ],
   },
+  {
+    path: '/addContacts',
+    name: 'addContacts',
+    component: () => import('layouts/addContactsLayout.vue'),
+    children: [
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
+
+    ],
+  },
 ];
 
 // Always leave this as last one

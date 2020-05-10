@@ -32,7 +32,7 @@
  name="eventmessage"
     />
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
+        <q-btn label="Next" type="submit" color="primary"/>
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
@@ -96,7 +96,7 @@ export default {
               message: this.posts.status,
               position: 'center',
             });
-            this.$router.push('/createInvitation');
+            this.$router.push('/addContacts');
           })
           .catch((e) => {
             //  this.errors.push(e);
