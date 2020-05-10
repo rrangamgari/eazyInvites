@@ -143,7 +143,7 @@
           <q-page padding>
             <q-uploader
         name="file"
-        url= '/api/userEvents/upload'
+        url= '/api/userEvents/upload123'
         method="POST"
         :headers=headerFunc
         label="No thumbnails"
@@ -288,11 +288,11 @@ export default {
       errorMessageProtein: '',
       errorProtein: '',
       uploadContactsModel: '',
-      headerFunc: [{ name: 'Content-Type', value: 'multipart/form-data' },
+      headerFunc: [
         {
           name: 'authorization',
           value:
-         'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXZpbmRlci5yYW5nYW1nYXJpQGNoZXJyeXNvZnQuY29tIiwiZXhwIjoxNTg5MTY5NzY3LCJpYXQiOjE1ODkxNTE3Njd9.LW_53b99aVqfOEbiwbEqTLxGf2im17ctypcZB0N2xUTvoCOdPxoEidrsq5oxq7jq13WIbZGg1LsixOgFuzd9QA',
+         `Bearer ${this.$q.sessionStorage.getItem('login-token')}`,
         }],
       columns: [
         {

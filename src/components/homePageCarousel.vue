@@ -29,25 +29,25 @@
           <div class="text-subtitle1">How can we miss our loved ones...</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
+     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Lifetime events</div>
           <div class="text-subtitle1">Engagement, Wedding, Receptions etc</div>
         </div>
-      </q-carousel-slide>
+      </q-carousel-slide>-->
        <q-carousel-slide name="first1" img-src="~assets/home/ez22.jpg" >
         <div class="absolute-right custom-caption">
           <div class="text-h5">Festivals</div>
           <div class="text-subtitle1">Christmas Party</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
+      <!--<q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Celebrations</div>
           <div class="text-subtitle1">New Baby Born...</div>
         </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="third1" img-src="../assets/home/ez17.jpg">
+      </q-carousel-slide>-->
+      <q-carousel-slide name="third1" img-src="../assets/home/ez16.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Bachelor Parties</div>
           <div class="text-subtitle1">Weekend Parties with friends</div>
