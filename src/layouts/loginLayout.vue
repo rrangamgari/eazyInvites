@@ -1,9 +1,9 @@
 <template>
-  <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
+  <q-layout view="hHh lpr fff"> <!-- Be sure to play with the Layout demo on docs -->
 
 
     <!-- (Optional) The Footer -->
-<footer-component></footer-component>
+    <footer-component></footer-component>
 
 
     <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->

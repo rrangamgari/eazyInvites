@@ -1,5 +1,5 @@
 <template>
-  <q-footer reveal>
+  <q-footer >
     <q-toolbar class="glossy center">
       <q-toolbar-title style="align:center;text-align: center;">
         <div class="" style="color:#FFFFFF;font-family: 'Merienda', cursive;">
