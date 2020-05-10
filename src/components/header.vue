@@ -46,7 +46,7 @@
       <div class="q-pa-md">
         <q-btn-dropdown split push glossy no-caps icon="person">
           <q-list>
-            <q-item clickable v-close-popup @click="onItemClick" to="/login">
+            <q-item clickable v-close-popup @click="onItemClick" to="/login" v-show="viewLogin()">
               <q-item-section avatar>
                 <q-avatar
                   icon="person_outline"
@@ -54,13 +54,13 @@
                   text-color="white"
                 />
               </q-item-section>
-              <q-item-section>
+              <q-item-section >
                 <q-item-label>Login</q-item-label>
                 <q-item-label caption>Login to send invites</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-close-popup @click="onItemClick">
+            <q-item clickable v-close-popup @click="onItemClick" v-show="viewLogin()">
               <q-item-section avatar>
                 <q-avatar
                   icon="person_add"
@@ -71,6 +71,19 @@
               <q-item-section>
                 <q-item-label>Register</q-item-label>
                 <q-item-label caption>New to Easy Invites</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="onLogoutClick" v-show="!viewLogin()">
+              <q-item-section avatar>
+                <q-avatar
+                  icon="person_add"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+                <q-item-label caption>Logout from Easy Invites</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -89,6 +102,20 @@ export default {
   },
   methods: {
     onItemClick() {
+      return {};
+    },
+    viewLogin() {
+      window.console.log(this.$q.sessionStorage.getItem(
+        'login-token',
+      ));
+      if (this.$q.sessionStorage.getItem(
+        'login-token',
+      ) === 'null') return true;
+      return false;
+    },
+    onLogoutClick() {
+      this.$q.sessionStorage.set('login-token', null);
+      this.$router.push('/');
       return {};
     },
   },

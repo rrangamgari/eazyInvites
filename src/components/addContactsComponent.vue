@@ -37,12 +37,12 @@
           <q-icon
             name="contact_phone"
             size="2.5em"
-            v-show="props.col.name == 'phone'"
+            v-show="props.col.name == 'primaryPhone'"
           />
           <q-icon
             name="contact_phone"
             size="2.5em"
-            v-show="props.col.name == 'sphone'"
+            v-show="props.col.name == 'secondaryPhone'"
           />
         </q-th>
       </template>
@@ -50,8 +50,11 @@
         <q-tr :props="props" >
           <q-td  key="firstname" :props="props">
              {{ props.row.firstname }}
-            <q-popup-edit v-model="props.row.firstname" title="Edit the Name" buttons>
-              <q-input v-model="props.row.firstname" dense autofocus counter />
+            <q-popup-edit v-model="props.row.firstname" title="Edit the Name" buttons
+            :validate="firstnameValidation"
+              @hide="firstnameValidation">
+              <q-input v-model="props.row.firstname" dense autofocus counter  :error="errorProtein"
+                :error-message="errorMessageProtein"/>
             </q-popup-edit>
           </q-td>
           <q-td  key="lastname" :props="props">
@@ -80,8 +83,7 @@
           </q-td>
           <q-td key="delete" :props="props">
             <img src="~assets/icon/delete-file-icon.png"
-            style="cursor:pointer;">
-             {{ props.row.eventmemberid }}
+            style="cursor:pointer;" @click="deleteMe(props.row.eventmemberid)">
           </q-td>
         </q-tr>
       </template>
@@ -144,6 +146,26 @@ export default {
         });
       }
     },
+    deleteMe(id) {
+      // naive encoding to csv format
+
+
+      this.$q.notify({
+        message: `Browser denied file download...${id}`,
+        color: 'negative',
+        icon: 'warning',
+      });
+    },
+    firstnameValidation(val) {
+      if (val === '') {
+        this.errorProtein = true;
+        this.errorMessageProtein = 'The firstname cannot be empty';
+        return false;
+      }
+      this.errorProtein = false;
+      this.errorMessageProtein = 'dasasds';
+      return true;
+    },
   },
   data() {
     return {
@@ -151,7 +173,7 @@ export default {
         {
           name: 'firstname',
           required: true,
-          label: 'First Name',
+          label: 'First Name *',
           align: 'left',
           field: (row) => `${row.firstname}`,
           sortable: true,
@@ -167,14 +189,14 @@ export default {
         {
           name: 'primaryPhone',
           align: 'center',
-          label: 'Primary Phone',
+          label: 'Primary Phone *',
           field: 'primaryPhone',
           sortable: true,
           headerStyle: 'icon-right:archive',
         },
         {
           name: 'secondaryPhone',
-          label: 'Secondary Phone (Optional)',
+          label: 'Secondary Phone',
           field: 'secondaryPhone',
           sortable: true,
           icon: 'contacts',
@@ -184,12 +206,6 @@ export default {
           label: 'Email',
           field: 'email',
           sortable: true,
-        },
-        {
-          name: 'edit',
-          label: 'Edit',
-          sortable: false,
-          field: (row) => `${row.eventmemberid}`,
         },
         {
           name: 'delete',

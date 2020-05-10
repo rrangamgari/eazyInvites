@@ -73,13 +73,13 @@ export default {
         .then((response) => {
           // JSON responses are automatically parsed.
           this.posts = response.data;
-          this.$q.notify({
+          /* this.$q.notify({
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
             message: this.posts.token,
             position: 'center',
-          });
+          }); */
           this.$q.sessionStorage.set('login-token', this.posts.token);
 
           this.$router.push('/createInvitation');

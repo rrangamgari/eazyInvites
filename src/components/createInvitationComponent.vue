@@ -120,9 +120,31 @@ export default {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
+      this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
     },
 
+  },
+  mounted() {
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      'login-token',
+    )}`;
+    axios
+      .get('/api/eventSystem/eventType')
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        this.options = response.data.data;
+        // this.data = this.data.concat(response.data.data);
+      })
+      .catch((e) => {
+        //  this.errors.push(e);
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'error',
+          message: e.message,
+          position: 'top',
+        });
+      });
   },
 };
 
