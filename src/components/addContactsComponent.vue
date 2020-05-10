@@ -1,5 +1,6 @@
 /* eslint-disable no-void */ /* eslint-disable no-void */
 <template>
+
   <div class="q-pa-md">
     <q-table
       title="Contacts"
@@ -13,14 +14,16 @@
       <template v-slot:top-right>
         <q-btn
           color="primary"
-          icon-right="archive"
-          label="Import to csv"
+          icon-right="cloud_upload"
+          label="Upload contacts"
+          title="CSV or XLS file accepted"
           no-caps
-          @click="exportTable"
+          @click="uploadContactsLayout = true"
         />
+        &nbsp;&nbsp;
         <q-btn
           color="secondary"
-          icon-right="cloud_upload"
+          icon-right="archive"
           label="Export to csv"
           no-caps
           @click="exportTable"
@@ -47,53 +50,135 @@
         </q-th>
       </template>
       <template v-slot:body="props">
-        <q-tr :props="props" >
-          <q-td  key="firstname" :props="props">
-             {{ props.row.firstname }}
-            <q-popup-edit v-model="props.row.firstname" title="Edit the Name" buttons
-            :validate="firstnameValidation"
-              @hide="firstnameValidation">
-              <q-input v-model="props.row.firstname" dense autofocus counter  :error="errorProtein"
-                :error-message="errorMessageProtein"/>
+        <q-tr :props="props">
+          <q-td key="firstname" :props="props">
+            {{ props.row.firstname }}
+            <q-popup-edit
+              v-model="props.row.firstname"
+              title="Edit the Name"
+              buttons
+              :validate="firstnameValidation"
+              @hide="firstnameValidation"
+            >
+              <q-input
+                v-model="props.row.firstname"
+                dense
+                autofocus
+                counter
+                :error="errorProtein"
+                :error-message="errorMessageProtein"
+              />
             </q-popup-edit>
           </q-td>
-          <q-td  key="lastname" :props="props">
-             {{ props.row.lastname }}
-            <q-popup-edit v-model="props.row.lastname" title="Edit the Name" buttons>
+          <q-td key="lastname" :props="props">
+            {{ props.row.lastname }}
+            <q-popup-edit
+              v-model="props.row.lastname"
+              title="Edit the Name"
+              buttons
+            >
               <q-input v-model="props.row.lastname" dense autofocus counter />
             </q-popup-edit>
           </q-td>
-          <q-td  key="primaryPhone" :props="props">
-             {{ props.row.primaryPhone }}
-            <q-popup-edit v-model="props.row.primaryPhone" title="Edit the Phone" buttons>
-              <q-input v-model="props.row.primaryPhone" dense autofocus counter />
+          <q-td key="primaryPhone" :props="props">
+            {{ props.row.primaryPhone }}
+            <q-popup-edit
+              v-model="props.row.primaryPhone"
+              title="Edit the Phone"
+              buttons
+            >
+              <q-input
+                v-model="props.row.primaryPhone"
+                dense
+                autofocus
+                counter
+              />
             </q-popup-edit>
           </q-td>
-          <q-td  key="secondaryPhone" :props="props">
-             {{ props.row.secondaryPhone }}
-            <q-popup-edit v-model="props.row.secondaryPhone" title="Edit the phone" buttons>
-              <q-input v-model="props.row.secondaryPhone" dense autofocus counter />
+          <q-td key="secondaryPhone" :props="props">
+            {{ props.row.secondaryPhone }}
+            <q-popup-edit
+              v-model="props.row.secondaryPhone"
+              title="Edit the phone"
+              buttons
+            >
+              <q-input
+                v-model="props.row.secondaryPhone"
+                dense
+                autofocus
+                counter
+              />
             </q-popup-edit>
           </q-td>
-          <q-td  key="email" :props="props">
-             {{ props.row.email }}
-            <q-popup-edit v-model="props.row.email" title="Edit the Email" buttons>
+          <q-td key="email" :props="props">
+            {{ props.row.email }}
+            <q-popup-edit
+              v-model="props.row.email"
+              title="Edit the Email"
+              buttons
+            >
               <q-input v-model="props.row.email" dense autofocus counter />
             </q-popup-edit>
           </q-td>
           <q-td key="delete" :props="props">
-            <img src="~assets/icon/delete-file-icon.png"
-            style="cursor:pointer;" @click="deleteMe(props.row.eventmemberid)">
+            <img
+              src="~assets/icon/delete-file-icon.png"
+              style="cursor:pointer;"
+              @click="deleteMe(props.row.eventmemberid)"
+            />
           </q-td>
         </q-tr>
       </template>
     </q-table>
+    <q-dialog v-model="uploadContactsLayout">
+      <q-layout container class="bg-white" style="max-height:300px;">
+        <q-header class="bg-primary">
+          <q-toolbar>
+            <q-toolbar-title>Upload Contacts</q-toolbar-title>
+
+            <q-btn flat v-close-popup round dense icon="close" />
+          </q-toolbar>
+        </q-header>
+        <q-page-container>
+          <q-page padding>
+            <q-form
+              style="padding:20px;"
+              class="q-gutter-md"
+              @submit="onSubmit"
+              @reset="onReset"
+            >
+              <q-file
+                filled
+                v-model="uploadContactsModel"
+                label="Upload Contacts"
+                style="padding-right:15px"
+              >
+                <template v-slot:append>
+                  <q-icon name="attach_file" />
+                </template>
+              </q-file>
+              <div>
+                <q-btn label="Submit" type="submit" color="primary" />
+                <q-btn
+                  label="Reset"
+                  type="reset"
+                  color="primary"
+                  flat
+                  class="q-ml-sm"
+                />
+              </div>
+            </q-form>
+          </q-page>
+        </q-page-container>
+      </q-layout>
+    </q-dialog>
   </div>
 </template>
 
 <script>
-import { exportFile } from 'quasar';
+import { exportFile, Loading, QSpinnerTail } from 'quasar';
 import axios from 'axios';
+
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -119,7 +204,24 @@ function wrapCsvValue(val, formatFn) {
 }
 
 export default {
+  components: {},
   methods: {
+
+    onSubmit(evt) {
+      // const formData = new FormData(evt.target);
+      const submitResult = [evt];
+
+      /* for (const [name, value] of formData.entries()) {
+        submitResult.push({
+          name,
+          value,
+        });
+      } */
+      this.submitResult = submitResult;
+    },
+    onReset() {
+      this.uploadContactsModel = null;
+    },
     exportTable() {
       // naive encoding to csv format
       const content = [this.columns.map((col) => wrapCsvValue(col.label))]
@@ -143,17 +245,18 @@ export default {
           message: 'Browser denied file download...',
           color: 'negative',
           icon: 'warning',
+          position: 'center',
         });
       }
     },
     deleteMe(id) {
       // naive encoding to csv format
 
-
       this.$q.notify({
         message: `Browser denied file download...${id}`,
         color: 'negative',
         icon: 'warning',
+        position: 'center',
       });
     },
     firstnameValidation(val) {
@@ -169,6 +272,10 @@ export default {
   },
   data() {
     return {
+      uploadContactsLayout: false,
+      errorMessageProtein: '',
+      errorProtein: '',
+      uploadContactsModel: '',
       columns: [
         {
           name: 'firstname',
@@ -226,6 +333,11 @@ export default {
     };
   },
   mounted() {
+    Loading.show({
+      spinner: QSpinnerTail,
+      spinnerColor: 'primary',
+      thickness: '3',
+    });
     axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
       'login-token',
     )}`;
@@ -234,10 +346,14 @@ export default {
       .then((response) => {
         // JSON responses are automatically parsed.
         this.data = response.data.data;
+        Loading.hide();
         // this.data = this.data.concat(response.data.data);
       })
       .catch((e) => {
         //  this.errors.push(e);
+        if (e.message === 'Request failed with status code 401') {
+          this.$router.push('/login');
+        }
         this.$q.notify({
           color: 'red-5',
           textColor: 'white',

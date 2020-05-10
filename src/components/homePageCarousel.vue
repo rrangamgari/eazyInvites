@@ -17,7 +17,7 @@
           <div class="text-subtitle1">Christmas Party</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="second" img-src="../assets/home/ez12.jpg">
+      <q-carousel-slide name="second" img-src="../assets/home/ez14.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Celebrations</div>
           <div class="text-subtitle1">Birthday Party</div>
@@ -29,25 +29,25 @@
           <div class="text-subtitle1">Weekend Parties with friends</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="fourth" img-src="../assets/home/ez5.jpg">
+      <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Lifetime events</div>
           <div class="text-subtitle1">Engagement, Wedding, Receptions etc</div>
         </div>
       </q-carousel-slide>
-       <q-carousel-slide name="first1" img-src="~assets/home/ez6.jpg" >
+       <q-carousel-slide name="first1" img-src="~assets/home/ez22.jpg" >
         <div class="absolute-right custom-caption">
           <div class="text-h5">Festivals</div>
           <div class="text-subtitle1">Christmas Party</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="second1" img-src="../assets/home/ez2.jpg">
+      <q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Celebrations</div>
           <div class="text-subtitle1">Birthday Party</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="third1" img-src="../assets/home/ez13.jpg">
+      <q-carousel-slide name="third1" img-src="../assets/home/ez17.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Custom Parties</div>
           <div class="text-subtitle1">Weekend Parties with friends</div>

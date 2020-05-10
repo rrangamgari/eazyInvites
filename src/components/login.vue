@@ -44,7 +44,7 @@
 
 <script>
 import axios from 'axios';
-
+import { Loading, QSpinnerTail } from 'quasar';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -66,6 +66,11 @@ export default {
 
   methods: {
     onSubmit() {
+      Loading.show({
+        spinner: QSpinnerTail,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
       axios.post('/api/authenticate', {
         username: this.name,
         password: this.age,
@@ -81,7 +86,7 @@ export default {
             position: 'center',
           }); */
           this.$q.sessionStorage.set('login-token', this.posts.token);
-
+          Loading.hide();
           this.$router.push('/createInvitation');
         })
         .catch((e) => {

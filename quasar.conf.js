@@ -66,6 +66,8 @@ module.exports = function (/* ctx */) {
         'QHeader',
         'QFooter',
         'QRadio',
+        'Loading',
+        'QSpinnerGears',
       ],
       directives: [
         'ClosePopup',

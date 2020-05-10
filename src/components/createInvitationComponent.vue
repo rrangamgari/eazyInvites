@@ -42,7 +42,7 @@
 
 <script>
 import axios from 'axios';
-
+import { Loading, QSpinnerTail } from 'quasar';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -79,6 +79,11 @@ export default {
           position: 'center',
         });
       } else {
+        Loading.show({
+          spinner: QSpinnerTail,
+          spinnerColor: 'primary',
+          thickness: '3',
+        });
         axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
         axios.post('/api/userEvents/event',
           {
@@ -96,6 +101,7 @@ export default {
               message: this.posts.status,
               position: 'center',
             });
+            Loading.hide();
             this.$router.push('/addContacts');
           })
           .catch((e) => {
@@ -107,6 +113,7 @@ export default {
               message: e.message,
               position: 'top',
             });
+            Loading.hide();
           });
       }
     },
