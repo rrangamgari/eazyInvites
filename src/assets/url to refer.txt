@@ -1,2 +1,3 @@
 https://material.io/resources/icons/?icon=vertical_align_top&style=round
 https://developers.sinch.com/docs/send-your-first-whatsapp-message
+npm run lint -- --fix

@@ -8,8 +8,7 @@
       color="primary"
       row-key="name"
       icon-left="contacts"
-      :table-header-style="{ backgroundColor: '#003755',
-      color:'#FFFFFF' }"
+      :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
     >
       <template v-slot:top-right>
         <q-btn
@@ -29,11 +28,62 @@
       </template>
       <template v-slot:header-cell="props">
         <q-th :props="props">
-          <q-icon name="contact_mail" size="2.5em" v-show="props.col.label=='Email'"/>
-          <q-icon name="contact_phone" size="2.5em" v-show="props.col.name=='phone'"/>
-          <q-icon name="contact_phone" size="2.5em" v-show="props.col.name=='sphone'"/>
-          <b style="font-size:14px"> {{ props.col.label }}</b>
+          <b style="font-size:14px;"> {{ props.col.label }} &nbsp;</b>
+          <q-icon
+            name="contact_mail"
+            size="2.5em"
+            v-show="props.col.label == 'Email'"
+          />
+          <q-icon
+            name="contact_phone"
+            size="2.5em"
+            v-show="props.col.name == 'phone'"
+          />
+          <q-icon
+            name="contact_phone"
+            size="2.5em"
+            v-show="props.col.name == 'sphone'"
+          />
         </q-th>
+      </template>
+      <template v-slot:body="props">
+        <q-tr :props="props" >
+          <q-td  key="firstname" :props="props">
+             {{ props.row.firstname }}
+            <q-popup-edit v-model="props.row.firstname" title="Edit the Name" buttons>
+              <q-input v-model="props.row.firstname" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td  key="lastname" :props="props">
+             {{ props.row.lastname }}
+            <q-popup-edit v-model="props.row.lastname" title="Edit the Name" buttons>
+              <q-input v-model="props.row.lastname" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td  key="primaryPhone" :props="props">
+             {{ props.row.primaryPhone }}
+            <q-popup-edit v-model="props.row.primaryPhone" title="Edit the Phone" buttons>
+              <q-input v-model="props.row.primaryPhone" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td  key="secondaryPhone" :props="props">
+             {{ props.row.secondaryPhone }}
+            <q-popup-edit v-model="props.row.secondaryPhone" title="Edit the phone" buttons>
+              <q-input v-model="props.row.secondaryPhone" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td  key="email" :props="props">
+             {{ props.row.email }}
+            <q-popup-edit v-model="props.row.email" title="Edit the Email" buttons>
+              <q-input v-model="props.row.email" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td key="delete" :props="props">
+            <img src="~assets/icon/delete-file-icon.png"
+            style="cursor:pointer;">
+             {{ props.row.eventmemberid }}
+          </q-td>
+        </q-tr>
       </template>
     </q-table>
   </div>
@@ -42,7 +92,6 @@
 <script>
 import { exportFile } from 'quasar';
 import axios from 'axios';
-
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -100,15 +149,23 @@ export default {
     return {
       columns: [
         {
-          name: 'name',
+          name: 'firstname',
           required: true,
-          label: 'Name',
+          label: 'First Name',
           align: 'left',
-          field: (row) => `${row.firstname} ${row.lastname}`,
+          field: (row) => `${row.firstname}`,
           sortable: true,
         },
         {
-          name: 'phone',
+          name: 'lastname',
+          required: true,
+          label: 'Last Name',
+          align: 'left',
+          field: (row) => `${row.lastname}`,
+          sortable: true,
+        },
+        {
+          name: 'primaryPhone',
           align: 'center',
           label: 'Primary Phone',
           field: 'primaryPhone',
@@ -116,7 +173,7 @@ export default {
           headerStyle: 'icon-right:archive',
         },
         {
-          name: 'sphone',
+          name: 'secondaryPhone',
           label: 'Secondary Phone (Optional)',
           field: 'secondaryPhone',
           sortable: true,
@@ -128,17 +185,36 @@ export default {
           field: 'email',
           sortable: true,
         },
+        {
+          name: 'edit',
+          label: 'Edit',
+          sortable: false,
+          field: (row) => `${row.eventmemberid}`,
+        },
+        {
+          name: 'delete',
+          label: 'Delete',
+          sortable: false,
+          field: (row) => `${row.eventmemberid}`,
+        },
       ],
 
-      data: [{
-        firstname: 'Frozen Yogurt', primaryPhone: 159, secondaryPhone: 6.0, email: 24,
-      },
+      data: [
+        {
+          firstname: 'Frozen Yogurt',
+          primaryPhone: 159,
+          secondaryPhone: 6.0,
+          email: 24,
+        },
       ],
     };
   },
   mounted() {
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
-    axios.get('/api/userEvents/userguestlist')
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      'login-token',
+    )}`;
+    axios
+      .get('/api/userEvents/userguestlist')
       .then((response) => {
         // JSON responses are automatically parsed.
         this.data = response.data.data;
