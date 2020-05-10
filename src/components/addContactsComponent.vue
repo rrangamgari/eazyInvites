@@ -141,33 +141,19 @@
         </q-header>
         <q-page-container>
           <q-page padding>
-            <q-form
-              style="padding:20px;"
-              class="q-gutter-md"
-              @submit="onSubmit"
-              @reset="onReset"
-            >
-              <q-file
-                filled
-                v-model="uploadContactsModel"
-                label="Upload Contacts"
-                style="padding-right:15px"
-              >
-                <template v-slot:append>
-                  <q-icon name="attach_file" />
-                </template>
-              </q-file>
-              <div>
-                <q-btn label="Submit" type="submit" color="primary" />
-                <q-btn
-                  label="Reset"
-                  type="reset"
-                  color="primary"
-                  flat
-                  class="q-ml-sm"
-                />
-              </div>
-            </q-form>
+            <q-uploader
+        name="file"
+        url= '/api/userEvents/upload'
+        method="POST"
+        :headers=headerFunc
+        label="No thumbnails"
+        color="teal"
+        flat
+        bordered
+        text-color="black"
+        no-thumbnails
+        style="max-width: 300px"
+      />
           </q-page>
         </q-page-container>
       </q-layout>
@@ -206,7 +192,33 @@ function wrapCsvValue(val, formatFn) {
 export default {
   components: {},
   methods: {
-
+    factoryFn(file) {
+      this.$q.notify({
+        message: `Browser denied file download...${file}`,
+        color: 'negative',
+        icon: 'warning',
+        position: 'center',
+      });
+      return new Promise((resolve) => {
+        // simulating a delay of 2 seconds
+        setTimeout(() => {
+          resolve({
+            url: '/api/userEvents/upload',
+          });
+        }, 2000);
+      });
+      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+        'login-token',
+      )}`;
+      axios.defaults.headers.get.Accepts = 'multipart/form-data';
+      const formData = new FormData();
+      formData.append('file', this.$q.file);
+      axios({
+        url: '/api/userEvents/upload',
+        method: 'POST',
+        data: formData,
+      }); */
+    },
     onSubmit(evt) {
       // const formData = new FormData(evt.target);
       const submitResult = [evt];
@@ -276,6 +288,12 @@ export default {
       errorMessageProtein: '',
       errorProtein: '',
       uploadContactsModel: '',
+      headerFunc: [{ name: 'Content-Type', value: 'multipart/form-data' },
+        {
+          name: 'authorization',
+          value:
+         'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYXZpbmRlci5yYW5nYW1nYXJpQGNoZXJyeXNvZnQuY29tIiwiZXhwIjoxNTg5MTY5NzY3LCJpYXQiOjE1ODkxNTE3Njd9.LW_53b99aVqfOEbiwbEqTLxGf2im17ctypcZB0N2xUTvoCOdPxoEidrsq5oxq7jq13WIbZGg1LsixOgFuzd9QA',
+        }],
       columns: [
         {
           name: 'firstname',

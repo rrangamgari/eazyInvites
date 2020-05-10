@@ -68,6 +68,7 @@ module.exports = function (/* ctx */) {
         'QRadio',
         'Loading',
         'QSpinnerGears',
+        'QUploader',
       ],
       directives: [
         'ClosePopup',
@@ -199,6 +200,7 @@ module.exports = function (/* ctx */) {
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       id: 'org.cordova.quasar.app',
+      noIosLegacyBuildFlag: true,
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
