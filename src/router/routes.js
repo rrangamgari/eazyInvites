@@ -38,6 +38,16 @@ const routes = [
 
     ],
   },
+  {
+    path: '/newUser',
+    name: 'newUser',
+    component: () => import('layouts/newUserLayout.vue'),
+    children: [
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
+
+    ],
+  },
 ];
 
 // Always leave this as last one

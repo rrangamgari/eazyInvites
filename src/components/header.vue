@@ -60,7 +60,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-close-popup @click="onItemClick" v-show="viewLogin()">
+            <q-item clickable v-close-popup @click="onItemClick" to="/newUser" v-show="viewLogin()">
               <q-item-section avatar>
                 <q-avatar
                   icon="person_add"

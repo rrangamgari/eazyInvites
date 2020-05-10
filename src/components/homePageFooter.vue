@@ -81,7 +81,7 @@
       </q-toolbar-title>
     </q-toolbar>
     <q-dialog v-model="layout">
-      <q-layout container class="bg-white" style="max-height:500px;">
+      <q-layout container class="bg-white" style="max-height:650px;">
         <q-header class="bg-primary">
           <q-toolbar>
             <q-toolbar-title>Feedback</q-toolbar-title>
