@@ -96,12 +96,12 @@ export default {
       }
     },
   },
-  mounted() {
+  data() {
     axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
-    axios.get('/api/userEvents/guestlist/25')
+    axios.get('/api/userEvents/guestlist/29')
       .then((response) => {
         // JSON responses are automatically parsed.
-        this.data = response.data;
+        this.data1 = response.data;
       })
       .catch((e) => {
         //  this.errors.push(e);
@@ -113,43 +113,63 @@ export default {
           position: 'top',
         });
       });
-  },
-  data() {
     return {
       columns: [
         {
-          name: 'desc',
+          name: 'firstname',
           required: true,
           label: 'Name',
           align: 'left',
-          field: (row) => row.name,
+          field: 'firstname',
           sortable: true,
         },
         {
           name: 'phone',
           align: 'center',
           label: 'Primary Phone',
-          field: 'calories',
+          field: 'primaryPhone',
           sortable: true,
           headerStyle: 'icon-right:archive',
         },
         {
           name: 'sphone',
           label: 'Secondary Phone (Optional)',
-          field: 'fat',
+          field: 'secondaryPhone',
           sortable: true,
           icon: 'contacts',
         },
         {
           name: 'email',
           label: 'Email',
-          field: 'carbs',
+          field: 'email',
           sortable: true,
         },
       ],
 
-      data: this.mounted,
+      data: [{
+        firstname: 'Frozen Yogurt', primaryPhone: 159, secondaryPhone: 6.0, email: 24,
+      },
+      ],
     };
+  },
+  mounted() {
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
+    axios.get('/api/userEvents/userguestlist')
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        this.data = response.data.data;
+        // this.data = this.data.concat(response.data.data);
+      })
+      .catch((e) => {
+        //  this.errors.push(e);
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'error',
+          message: e.message,
+          position: 'top',
+        });
+      });
   },
 };
 </script>
