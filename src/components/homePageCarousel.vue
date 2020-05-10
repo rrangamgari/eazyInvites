@@ -11,22 +11,22 @@
       transition-next="fade"
      :fullscreen.sync="fullscreen"
     >
-    <q-carousel-slide name="first" img-src="~assets/home/ez1.jpg" >
-        <div class="absolute-right custom-caption">
-          <div class="text-h5">Festivals</div>
-          <div class="text-subtitle1">Christmas Party</div>
+    <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h4">Pooja Invitations</div>
+          <div class="text-subtitle1">Devine celebrations with friends and dear ones ...</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="second" img-src="../assets/home/ez14.jpg">
+       <q-carousel-slide name="second" img-src="../assets/home/ez14.jpg">
         <div class="absolute-bottom custom-caption">
-          <div class="text-h4">Celebrations</div>
-          <div class="text-subtitle1">Birthday Party</div>
+          <div class="text-h4">Wedding Invitations</div>
+          <div class="text-subtitle1">Once is Lifetime</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="third" img-src="../assets/home/ez4.jpg">
+    <q-carousel-slide name="third" img-src="~assets/home/ez1.jpg" >
         <div class="absolute-bottom custom-caption">
-          <div class="text-h4">Custom Parties</div>
-          <div class="text-subtitle1">Weekend Parties with friends</div>
+          <div class="text-h5">Engagement </div>
+          <div class="text-subtitle1">How can we miss our loved ones...</div>
         </div>
       </q-carousel-slide>
       <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
@@ -44,12 +44,12 @@
       <q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Celebrations</div>
-          <div class="text-subtitle1">Birthday Party</div>
+          <div class="text-subtitle1">New Baby Born...</div>
         </div>
       </q-carousel-slide>
       <q-carousel-slide name="third1" img-src="../assets/home/ez17.jpg">
         <div class="absolute-bottom custom-caption">
-          <div class="text-h4">Custom Parties</div>
+          <div class="text-h4">Bachelor Parties</div>
           <div class="text-subtitle1">Weekend Parties with friends</div>
         </div>
       </q-carousel-slide>
