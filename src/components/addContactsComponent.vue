@@ -142,7 +142,7 @@
         <q-page-container>
           <q-page padding>
             <q-uploader
-        name="file"
+        field-name="file"
         url= '/api/userEvents/upload123'
         method="POST"
         :headers=headerFunc
