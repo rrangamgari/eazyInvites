@@ -99,6 +99,7 @@ export default {
             position: 'top',
           });
         });
+      Loading.hide();
     },
 
     onReset() {

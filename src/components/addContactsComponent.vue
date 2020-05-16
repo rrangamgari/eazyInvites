@@ -9,6 +9,8 @@
       color="primary"
       row-key="name"
       icon-left="contacts"
+      hide-bottom
+      :pagination="{rowsPerPage: 0}"
       :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
     >
       <template v-slot:top-right>
@@ -136,21 +138,20 @@
           <q-toolbar>
             <q-toolbar-title>Upload Contacts</q-toolbar-title>
 
-            <q-btn flat v-close-popup round dense icon="close" />
+            <q-btn flat v-close-popup round dense icon="close"/>
           </q-toolbar>
         </q-header>
         <q-page-container>
           <q-page padding>
             <q-uploader
         field-name="file"
-        url= '/api/userEvents/upload123'
+        url= '/api/userEvents/userguestupload'
         method="POST"
         :headers=headerFunc
-        label="No thumbnails"
+        label="Files"
         color="teal"
         flat
         bordered
-        text-color="black"
         no-thumbnails
         style="max-width: 300px"
       />
@@ -305,7 +306,6 @@ export default {
         },
         {
           name: 'lastname',
-          required: true,
           label: 'Last Name',
           align: 'left',
           field: (row) => `${row.lastname}`,
@@ -314,7 +314,8 @@ export default {
         {
           name: 'primaryPhone',
           align: 'center',
-          label: 'Primary Phone *',
+          label: 'Primary Phone',
+          required: true,
           field: 'primaryPhone',
           sortable: true,
           headerStyle: 'icon-right:archive',
@@ -364,7 +365,6 @@ export default {
       .then((response) => {
         // JSON responses are automatically parsed.
         this.data = response.data.data;
-        Loading.hide();
         // this.data = this.data.concat(response.data.data);
       })
       .catch((e) => {
@@ -380,6 +380,7 @@ export default {
           position: 'top',
         });
       });
+    Loading.hide();
   },
 };
 </script>
