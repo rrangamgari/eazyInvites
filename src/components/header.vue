@@ -53,7 +53,7 @@
   font-weight:bold; " icon="people"/>
           <q-tab name="articles1" label="Browse Cards" style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
-  font-weight:bold; "/>
+  font-weight:bold; " icon="style"/>
   <q-tab name="reviews" label="Reviews" style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; " icon="rate_review"/>
