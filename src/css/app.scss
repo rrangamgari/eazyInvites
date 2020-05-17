@@ -127,3 +127,135 @@
   src: url('./fonts/DancingScriptOT.otf');
 }
 
+
+.price-item {
+  background-color: #ffffff;
+  margin-top: 1.5rem;
+  padding: 0;
+  -webkit-box-shadow: 1px 1px 8px #e1e1e1;
+  box-shadow: 1px 1px 8px #e1e1e1;
+  -webkit-transition: 0.8s ease;
+  -o-transition: 0.8s ease;
+  transition: 0.8s ease;
+}
+.price_header {
+  background-color: #003755;
+  padding: 20px 0 20px 0;
+  -webkit-transition: 0.5s ease;
+  -o-transition: 0.5s ease;
+  transition: 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+.price_header_text {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
+  color: rgba(255, 255, 255, 1);
+  position: relative;
+  z-index: 1;
+}
+.actual_price {
+  font-size: 36px;
+  font-family: "Raleway", sans-serif;
+  color: rgb(51, 51, 51);
+  text-align: center;
+  padding-top: 35px;
+  -webkit-transition: 0.5s ease;
+  -o-transition: 0.5s ease;
+  transition: 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+.small_font {
+  font-size: 14px;
+  font-weight: bold;
+}
+.price-list {
+  list-style: none;
+  padding-left: 0;
+  padding-bottom: 10px;
+}
+.price-list li {
+  padding: 7px;
+  text-align: center;
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif;
+  color: rgb(51, 51, 51);
+}
+.btn-green {
+  padding: 10px 39px 10px 39px;
+  text-align: center;
+  border-radius: 50px;
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.6px;
+  color: white !important;
+  cursor: pointer;
+  -webkit-transition: 0.5s ease;
+  -o-transition: 0.5s ease;
+  transition: 0.5s ease;
+  background-color: #00bcd4;
+  border: 1px solid white;
+}
+.btn-green-margin {
+  margin-bottom: 35px;
+}
+.btn-green:hover {
+  background-color: white;
+  color: #00bcd4 !important;
+  border: 1px solid #00bcd4;
+}
+.price-item-center:hover .actual_price {
+  color: white;
+}
+.price-item:hover .price_header_text {
+  color: white;
+}
+.price-item:hover .actual_price {
+  color: white;
+}
+.colored_hover {
+  position: absolute;
+  height: 0;
+  width: 92%;
+  -webkit-transition: 0.7s ease;
+  -o-transition: 0.7s ease;
+  transition: 0.7s ease;
+  z-index: 1;
+}
+.colored_hover-center {
+  position: absolute;
+  height: 0;
+  width: 92%;
+  -webkit-transition: 0.7s ease;
+  -o-transition: 0.7s ease;
+  transition: 0.7s ease;
+  z-index: 1;
+}
+.price-item:hover .colored_hover {
+  background-color: #00bcd4 !important;
+  height: 175px;
+}
+.price-item-center:hover .colored_hover-center {
+  background-image: -webkit-linear-gradient(190deg, #cf43ca 30%, #8579e0 100%);
+  height: 220px;
+}
+.price-item-center {
+  background-color: #ffffff;
+  padding: 0;
+  -webkit-box-shadow: 1px 1px 8px #e1e1e1;
+  box-shadow: 1px 1px 8px #e1e1e1;
+  -webkit-transition: 0.8s ease;
+  -o-transition: 0.8s ease;
+  transition: 0.8s ease;
+}
+
+.price_header-center {
+  padding-top: 45px;
+  padding-bottom: 45px;
+  background-image: -webkit-linear-gradient(190deg, #cf43ca 30%, #8579e0 100%);
+}
+
+.color-white {
+  color: #ffffff !important;
+}

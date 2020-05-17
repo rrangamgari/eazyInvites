@@ -11,8 +11,7 @@
 <div>&nbsp;</div>
 <video-component></video-component>
 <feed-back-component></feed-back-component>
-
-
+<price-component></price-component>
       </q-page-container>
     </q-layout>
     <footer-component class="bg-primary"></footer-component>
@@ -24,6 +23,7 @@ import videoComponent from '../components/homePageVideo.vue';
 import feedBackComponent from '../components/homePageFeedback.vue';
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/homePageFooter.vue';
+import priceComponent from '../components/priceComponent.vue';
 
 
 export default {
@@ -34,6 +34,7 @@ export default {
     headerComponent,
     footerComponent,
     feedBackComponent,
+    priceComponent,
   },
 };
 </script>
