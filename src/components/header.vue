@@ -53,7 +53,61 @@
         no-caps
         active-color="primary"
         indicator-color="transparent"
-        class="merienda-bold"
+        class="merienda-bold gt-xs md"
+        inline-label
+        dense
+        v-model="tab"
+      >
+        <q-tab
+          name="images"
+          label=""
+          class="text-white"
+          style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
+          icon="home"
+        />
+        <q-tab
+          name="videos"
+          class="text-white"
+          label=""
+          style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; "
+          icon="people"
+        />
+        <q-tab
+          name="articles1"
+          class="text-white"
+          label=""
+          style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; "
+          icon="style"
+        />
+        <q-tab
+          name="reviews"
+          class="text-white"
+          label=""
+          style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; "
+          icon="rate_review"
+          to="/review"
+        />
+        <q-tab
+          name="prices"
+          class="text-white"
+          label=""
+          style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; "
+          icon="monetization_on"
+        />
+      </q-tabs>
+      <q-tabs
+        no-caps
+        active-color="primary"
+        indicator-color="transparent"
+        class="merienda-bold gt-md"
         inline-label
         dense
         v-model="tab"
