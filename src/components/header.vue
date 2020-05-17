@@ -11,8 +11,8 @@
       </a>
 
       <q-toolbar-title class="logo_small xs">Eazy Invites</q-toolbar-title>
-<q-toolbar-title class="logo gt-xs">Eazy Invites</q-toolbar-title>
-<div class="xs">
+      <q-toolbar-title class="logo gt-xs">Eazy Invites</q-toolbar-title>
+      <div class="xs">
         <q-btn
           color="primary"
           glossy
@@ -22,8 +22,12 @@
           target="_blank"
         >
           <div class="row items-center no-wrap">
-            <img left src="../assets/whatsapp.png" style="height:25px;width:25px"/>
-            </div>
+            <img
+              left
+              src="../assets/whatsapp.png"
+              style="height:25px;width:25px"
+            />
+          </div>
         </q-btn>
       </div>
       <div class="logo_labels gt-xs">
@@ -36,35 +40,79 @@
           target="_blank"
         >
           <div class="row items-center no-wrap">
-            <img left src="../assets/whatsapp.png" style="height:45px;width:45px"/>
-            <div class="text-center">
-              Whatsapp<br>Invite
-            </div>
+            <img
+              left
+              src="../assets/whatsapp.png"
+              style="height:45px;width:45px"
+            />
+            <div class="text-center">Whatsapp<br />Invite</div>
           </div>
         </q-btn>
       </div>
-      <q-tabs no-caps active-color="primary" indicator-color="transparent"
-       class="merienda-bold" v-model="tab">
-          <q-tab name="images" label="Home" style="font-family: 'Montserrat', cursive;
+      <q-tabs
+        no-caps
+        active-color="primary"
+        indicator-color="transparent"
+        class="merienda-bold"
+        inline-label
+        dense
+        v-model="tab"
+      >
+        <q-tab
+          name="images"
+          label="Home"
+          class="text-white"
+          style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
+          icon="home"
+        />
+        <q-tab
+          name="videos"
+          class="text-white"
+          label="About Us"
+          style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
-  font-weight:bold; " icon="home"/>
-          <q-tab name="videos" label="About Us" style="font-family: 'Montserrat', cursive;
+  font-weight:bold; "
+          icon="people"
+        />
+        <q-tab
+          name="articles1"
+          class="text-white"
+          label="Browse Cards"
+          style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
-  font-weight:bold; " icon="people"/>
-          <q-tab name="articles1" label="Browse Cards" style="font-family: 'Montserrat', cursive;
+  font-weight:bold; "
+          icon="style"
+        />
+        <q-tab
+          name="reviews"
+          class="text-white"
+          label="Reviews"
+          style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
-  font-weight:bold; " icon="style"/>
-  <q-tab name="reviews" label="Reviews" style="font-family: 'Montserrat', cursive;
+  font-weight:bold; "
+          icon="rate_review"
+          to="/review"
+        />
+        <q-tab
+          name="prices"
+          class="text-white"
+          label="Prices"
+          style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
-  font-weight:bold; " icon="rate_review"/>
-  <q-tab name="prices" label="Prices" style="font-family: 'Montserrat', cursive;
-  font-color:#FFFFFF;
-  font-weight:bold; " icon="monetization_on"/>
-        </q-tabs>
+  font-weight:bold; "
+          icon="monetization_on"
+        />
+      </q-tabs>
       <div class="q-pa-md">
         <q-btn-dropdown split push glossy no-caps icon="person">
           <q-list>
-            <q-item clickable v-close-popup @click="onItemClick" to="/login" v-show="viewLogin()">
+            <q-item
+              clickable
+              v-close-popup
+              @click="onItemClick"
+              to="/login"
+              v-show="viewLogin()"
+            >
               <q-item-section avatar>
                 <q-avatar
                   icon="person_outline"
@@ -72,13 +120,19 @@
                   text-color="white"
                 />
               </q-item-section>
-              <q-item-section >
+              <q-item-section>
                 <q-item-label>Login</q-item-label>
                 <q-item-label caption>Login to send invites</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-close-popup @click="onItemClick" to="/newUser" v-show="viewLogin()">
+            <q-item
+              clickable
+              v-close-popup
+              @click="onItemClick"
+              to="/newUser"
+              v-show="viewLogin()"
+            >
               <q-item-section avatar>
                 <q-avatar
                   icon="person_add"
@@ -91,7 +145,12 @@
                 <q-item-label caption>New to Easy Invites</q-item-label>
               </q-item-section>
             </q-item>
-            <q-item clickable v-close-popup @click="onLogoutClick" v-show="!viewLogin()">
+            <q-item
+              clickable
+              v-close-popup
+              @click="onLogoutClick"
+              v-show="!viewLogin()"
+            >
               <q-item-section avatar>
                 <q-avatar
                   icon="person_add"
@@ -116,19 +175,17 @@
 export default {
   name: 'headerComponent',
   data() {
-    return {};
+    return {
+      tab: 'images1',
+    };
   },
   methods: {
     onItemClick() {
       return {};
     },
     viewLogin() {
-      window.console.log(this.$q.sessionStorage.getItem(
-        'login-token',
-      ));
-      if (this.$q.sessionStorage.getItem(
-        'login-token',
-      ) === 'null') return true;
+      window.console.log(this.$q.sessionStorage.getItem('login-token'));
+      if (this.$q.sessionStorage.getItem('login-token') === 'null') return true;
       return false;
     },
     onLogoutClick() {
