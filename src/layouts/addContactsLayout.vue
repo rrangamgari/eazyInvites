@@ -1,12 +1,6 @@
 <template>
-  <q-layout view="hHh Lpr fFf">
+  <q-layout view="hHh lpr fff">
     <!-- Be sure to play with the Layout demo on docs -->
-
-    <!-- (Optional) The Header -->
-    <q-header elevated> </q-header>
-
-    <!-- (Optional) The Footer -->
-
 
     <q-page-container>
       <!-- This is where pages get injected -->
