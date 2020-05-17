@@ -41,8 +41,26 @@
               Whatsapp<br>Invite
             </div>
           </div>
-        </q-btn> | Browse Cards | About Us
+        </q-btn>
       </div>
+      <q-tabs no-caps active-color="primary" indicator-color="transparent"
+       class="merienda-bold" v-model="tab">
+          <q-tab name="images" label="Home" style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; " icon="home"/>
+          <q-tab name="videos" label="About Us" style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; " icon="people"/>
+          <q-tab name="articles1" label="Browse Cards" style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; "/>
+  <q-tab name="reviews" label="Reviews" style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; " icon="rate_review"/>
+  <q-tab name="prices" label="Prices" style="font-family: 'Montserrat', cursive;
+  font-color:#FFFFFF;
+  font-weight:bold; " icon="monetization_on"/>
+        </q-tabs>
       <div class="q-pa-md">
         <q-btn-dropdown split push glossy no-caps icon="person">
           <q-list>
