@@ -1,5 +1,8 @@
 <template>
-  <div class="" style="">
+  <div style="position: relative;">
+    <div  class="overlay">
+      <q-img src="../assets/snow.gif" width="100%" height="100%"/>
+    </div>
     <q-responsive :ratio="1600/700" style="">
     <q-carousel
       arrows
@@ -98,3 +101,17 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.overlay
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background-color: rgba(0,0,0,0.5);
+</style>
