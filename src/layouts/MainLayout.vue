@@ -12,6 +12,7 @@
 <video-component></video-component>
 <feed-back-component></feed-back-component>
 <price-component></price-component>
+<mettExpertsComponent></mettExpertsComponent>
       </q-page-container>
     </q-layout>
     <footer-component class="bg-primary"></footer-component>
@@ -24,7 +25,7 @@ import feedBackComponent from '../components/homePageFeedback.vue';
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/homePageFooter.vue';
 import priceComponent from '../components/priceComponent.vue';
-
+import mettExpertsComponent from '../components/meetExpertsComponent.vue';
 
 export default {
   name: 'main',
@@ -35,6 +36,7 @@ export default {
     footerComponent,
     feedBackComponent,
     priceComponent,
+    mettExpertsComponent,
   },
 };
 </script>
