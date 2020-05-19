@@ -40,7 +40,7 @@
             <p class="actual_price text-red" >
               <span style="text-decoration: line-through;">
                 ${{Number(Math.round(standard *9.99)/100).toFixed(2)}}</span>
-              <span class="small_font">Actual Price</span>
+              <span class="small_font">    Actual Price    </span>
             </p>
             </q-card-section>
             <q-card-section class="flex flex-center"
