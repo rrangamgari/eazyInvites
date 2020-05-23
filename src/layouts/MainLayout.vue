@@ -13,6 +13,7 @@
 <feed-back-component></feed-back-component>
 <price-component></price-component>
 <mettExpertsComponent></mettExpertsComponent>
+<reviewsCarouselComponent></reviewsCarouselComponent>
       </q-page-container>
     </q-layout>
     <footer-component class="bg-primary"></footer-component>
@@ -26,6 +27,7 @@ import headerComponent from '../components/header.vue';
 import footerComponent from '../components/homePageFooter.vue';
 import priceComponent from '../components/priceComponent.vue';
 import mettExpertsComponent from '../components/meetExpertsComponent.vue';
+import reviewsCarouselComponent from '../components/reviewsCarouselComponent.vue';
 
 export default {
   name: 'main',
@@ -37,6 +39,7 @@ export default {
     feedBackComponent,
     priceComponent,
     mettExpertsComponent,
+    reviewsCarouselComponent,
   },
 };
 </script>
