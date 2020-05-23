@@ -4,10 +4,10 @@
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
       <a href="/" class="xs">
-        <img src="../assets/logo/mail-send-animation.gif" width="50px" />
+        <img src="../assets/logo/Easy_Invites.png" width="120px" />
       </a>
       <a href="/" class="gt-xs">
-        <img src="../assets/logo/mail-send-animation.gif" width="100px" />
+        <img src="../assets/logo/Easy_Invites.png" width="180px" />
       </a>
 
       <q-toolbar-title class="logo_small xs">Eazy Invites</q-toolbar-title>
