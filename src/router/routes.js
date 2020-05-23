@@ -56,6 +56,24 @@ const routes = [
 
     ],
   },
+  {
+    path: '/events',
+    name: 'events',
+    component: () => import('layouts/eventsLayout.vue'),
+    children: [
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
+    ],
+  },
+  {
+    path: '/events/',
+    name: 'events/',
+    component: () => import('layouts/eventStatusLayout.vue'),
+    children: [
+      { path: '*', component: () => import('components/header.vue') },
+      { path: '*', component: () => import('components/footer.vue') },
+    ],
+  },
 ];
 
 // Always leave this as last one
