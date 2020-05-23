@@ -1,8 +1,5 @@
 <template>
   <div style="position: relative;">
-    <div  class="overlay">
-      <q-img src="../assets/snow.gif" width="100%" height="100%"/>
-    </div>
     <q-responsive :ratio="1600/700" style="">
     <q-carousel
       arrows
@@ -15,6 +12,18 @@
      :fullscreen.sync="fullscreen"
     >
     <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
+      <Snowf
+        :amount="30"
+        :size="5"
+        :speed="1.25"
+        :wind="0"
+        :opacity="1"
+        :swing="1"
+        :image="null"
+        :zIndex="null"
+        :resize="false"
+        color="blue"
+      />
         <div class="absolute-bottom custom-caption">
           <div class="text-h2 Dancing">Pooja Invitations</div>
           <div class="text-h4">&nbsp;</div>
@@ -23,6 +32,18 @@
         </div>
       </q-carousel-slide>
        <q-carousel-slide name="second" img-src="../assets/home/ez14.jpg">
+      <Snowf
+        :amount="30"
+        :size="5"
+        :speed="1.25"
+        :wind="0"
+        :opacity="1"
+        :swing="1"
+        :image="null"
+        :zIndex="null"
+        :resize="false"
+        color="#FFFF00"
+      />
         <div class="absolute-bottom custom-caption">
           <div class="text-h2 Dancing">Wedding Invitations</div>
           <div class="text-h4">&nbsp;</div>
@@ -85,6 +106,7 @@
         <q-carousel-control
           position="bottom-right"
           :offset="[18, 18]"
+          style="z-index:3;"
         >
           <q-btn
             push round dense color="white" text-color="primary"
@@ -97,8 +119,14 @@
     </q-responsive>
   </div>
 </template>
+
 <script>
+import Snowf from 'vue-snowf';
+
 export default {
+  components: {
+    Snowf,
+  },
   data() {
     return {
       slide: 'first',
@@ -114,10 +142,10 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: "0px";
+  left: "70px";
+  right: "-700px";
+  bottom: "50px";
   z-index: 2;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.2);
 </style>
