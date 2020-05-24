@@ -1,39 +1,53 @@
-
 <template>
-<div class="q-pa-md flex flex-center" >
+  <div class="q-pa-md flex flex-center">
 
     <q-form
       @submit="onSubmit"
       @reset="onReset"
-     class="q-gutter-md  q-pt-xl"
+      class="q-gutter-md  q-pt-xl"
       style="width:60vh"
-     >
-     <q-item-label class="logo">Eazy Invite Step 1</q-item-label>
-      <q-select name="eventType"  filled
+    >
+      <q-item-label class="logo">Eazy Invite Step 1</q-item-label>
+      <q-select name="eventType" filled
 
 
-        label="Event Type"
-        v-model="eventType"
-        :options="options"
-        @input='val => { onEventTypeChange() }'>
+                label="Event Type"
+                v-model="eventType"
+                :options="options"
+                @input='val => { onEventTypeChange() }'>
 
-</q-select>
- <q-file filled v-model="model" label="Upload Invitation"
- style="padding-right:15px">
- <template v-slot:append>
-          <q-icon name="attach_file" />
+      </q-select>
+      <q-file filled v-model="model" label="Upload Invitation"
+              style="padding-right:15px" class="platform-android-hide platform-ios-hide">
+        <template v-slot:append>
+          <q-icon name="attach_file"/>
         </template>
- </q-file>
-<q-input
-      v-model="eventmessage"
-      filled
-      autogrow
-      label="Custom Message"
- name="eventmessage"
-    />
+      </q-file>
+
+      <q-file filled v-model="model" label="Upload or Copy Invitation"
+              style="padding-right:15px" class="platform-android-only"
+              @click="captureImage">
+        <template v-slot:append>
+          <q-icon name="attach_file"/>
+        </template>
+      </q-file>
+      <img :src="imageSrc" style="width: 20px;height:20px;"
+           class="platform-android-only">
+      <q-btn color="primary" label="Get Picture" @click="captureImage"
+             class="platform-ios-only"/>
+
+      <img :src="imageSrc" style="width: 20px;height:20px;"
+           class="platform-ios-only">
+      <q-input
+        v-model="eventmessage"
+        filled
+        autogrow
+        label="Custom Message"
+        name="eventmessage"
+      />
       <div>
         <q-btn label="Next" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"/>
       </div>
     </q-form>
 
@@ -43,7 +57,9 @@
 <script>
 import axios from 'axios';
 import { Loading, QSpinnerTail } from 'quasar';
+import { Plugins, CameraResultType } from '@capacitor/core';
 
+const { Camera } = Plugins;
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -57,6 +73,7 @@ export default {
   },
   data() {
     return {
+      imageSrc: '',
       model: null,
       eventType: '',
       eventmessage: `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`,
@@ -69,6 +86,18 @@ export default {
   },
 
   methods: {
+    async captureImage() {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: true,
+        resultType: CameraResultType.Uri,
+      });
+      // image.webPath will contain a path that can be set as an image src.
+      // You can access the original file using image.path, which can be
+      // passed to the Filesystem API to read the raw data of the image,
+      // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+      this.imageSrc = image.webPath;
+    },
     onSubmit() {
       if (this.eventType === '') {
         this.$q.notify({

@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">eazyInvites</string>
-    <string name="title_activity_main">eazyInvites</string>
-    <string name="package_name">com.ravinder.eazyivites</string>
-    <string name="custom_url_scheme">com.ravinder.eazyivites</string>
-</resources>

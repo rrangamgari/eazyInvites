@@ -33,6 +33,7 @@
       <!--
       <q-toggle v-model="accept" label="I accept the license and terms" />
       -->
+
       <div>
         <q-btn label="Login" type="submit" color="primary"/>
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -45,6 +46,7 @@
 <script>
 import axios from 'axios';
 import { Loading, QSpinnerTail } from 'quasar';
+
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -60,11 +62,13 @@ export default {
     return {
       name: null,
       age: null,
+
       // accept: false,
     };
   },
 
   methods: {
+
     onSubmit() {
       Loading.show({
         spinner: QSpinnerTail,
