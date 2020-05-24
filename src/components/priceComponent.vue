@@ -1,18 +1,15 @@
 <template>
-  <div id="prices"  class="bg-grey-2">
-    <div>&nbsp;</div>
-    <div class="q-pa-md">
-      <div class="row q-col-gutter-x-xs q-col-gutter-y-lg flex flex-center" >
-        <div class="col-xs-12 col-sm-6 col-md-4" >
-          <q-card>
+  <div class="bg-grey-2 q-pa-md">
+    <div class="row justify-center q-gutter-lg flex flex-center">
+      <q-card>
             <q-card-section class="text-center price_header">
-              <p class="price_header_text">Premium Plan</p>
+              <p class="price_header_text">Free Plan</p>
             </q-card-section>
             <q-separator />
             <q-card-section class="flex flex-center"
             >
-            <p class="actual_price">
-              $9.99<br /><span class="small_font">Base Package</span>
+            <p class="actual_price text-green-5">
+              Free <br /><span class="small_font">Free Package includes emails</span>
             </p>
              </q-card-section>
             <q-card-section class="flex flex-center"
@@ -28,9 +25,32 @@
           </div>
             </q-card-section>
           </q-card>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <q-card>
+        <q-card>
+            <q-card-section class="text-center price_header">
+              <p class="price_header_text">Base Plan</p>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="flex flex-center"
+            >
+            <p class="actual_price">
+              $9.99<br /><span class="small_font">Base Package includes emails and Whatsapp <br>
+              if user doesn't have Whatsapp then SMS</span>
+            </p>
+             </q-card-section>
+            <q-card-section class="flex flex-center"
+            >
+              <ul class="price-list">
+              <li>upto 100 Invitations</li>
+            </ul>
+            </q-card-section>
+            <q-card-section class="flex flex-center"
+            >
+            <div>
+               <q-btn label="Select Plan" type="button" color="secondary" rounded=""/>
+          </div>
+            </q-card-section>
+          </q-card>
+        <q-card>
             <q-card-section class="text-center price_header">
               <p class="price_header_text">Custom Plan</p>
             </q-card-section>
@@ -72,11 +92,7 @@
           </div>
             </q-card-section>
           </q-card>
-          </div>
-
-
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <q-card>
+        <q-card>
             <q-card-section class="text-center price_header">
               <p class="price_header_text">Premium Plan</p>
             </q-card-section>
@@ -100,10 +116,31 @@
           </div>
             </q-card-section>
           </q-card>
-        </div>
-      </div>
+<q-card>
+            <q-card-section class="text-center price_header">
+              <p class="price_header_text">Free Plan</p>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="flex flex-center"
+            >
+            <p class="actual_price text-green-5">
+              Free* <br /><span class="small_font">Free Package for NGO</span>
+            </p>
+             </q-card-section>
+            <q-card-section class="flex flex-center"
+            >
+              <ul class="price-list">
+              <li>upto 100 Invitations</li>
+            </ul>
+            </q-card-section>
+            <q-card-section class="flex flex-center"
+            >
+            <div>
+               <q-btn label="Contact Us" type="button" color="secondary" rounded=""/>
+          </div>
+            </q-card-section>
+          </q-card>
     </div>
-    <div>&nbsp;</div>
   </div>
 </template>
 
