@@ -1,0 +1,13 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "easyInvites",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist/spa",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

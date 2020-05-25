@@ -1,0 +1,7 @@
+{
+  "name": "easyInvites",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
