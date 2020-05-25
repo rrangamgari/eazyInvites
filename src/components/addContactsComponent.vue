@@ -21,7 +21,15 @@
           title="CSV or XLS file accepted"
           no-caps
           @click="uploadContactsLayout = true"
-        />
+          class="platform-android-hide platform-ios-hide"/>
+        <q-btn
+          color="primary"
+          icon-right="cloud_upload"
+          label="Upload contacts"
+          title="CSV or XLS file accepted"
+          no-caps
+          @click="captureImage"
+          class="platform-android-only"/>
         &nbsp;&nbsp;
         <q-btn
           color="secondary"
@@ -165,7 +173,9 @@
 <script>
 import { exportFile, Loading, QSpinnerTail } from 'quasar';
 import axios from 'axios';
+import { Plugins } from '@capacitor/core';
 
+const { CapContacts } = Plugins;
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -193,6 +203,38 @@ function wrapCsvValue(val, formatFn) {
 export default {
   components: {},
   methods: {
+    captureImage() {
+      this.$q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Hello',
+        position: 'center',
+      });
+      CapContacts.getContacts().then((result) => {
+        // window.console.log(result);
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: result,
+          position: 'center',
+        });
+      }).catch((err) => {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: err,
+          position: 'center',
+        });
+      });
+      // image.webPath will contain a path that can be set as an image src.
+      // You can access the original file using image.path, which can be
+      // passed to the Filesystem API to read the raw data of the image,
+      // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+      // this.imageSrc = image.webPath;
+    },
     factoryFn(file) {
       this.$q.notify({
         message: `Browser denied file download...${file}`,

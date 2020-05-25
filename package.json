@@ -12,10 +12,14 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@capacitor/cli": "^2.1.0",
-    "@capacitor/core": "^2.1.0",
+    "@byrds/capacitor-contacts": "^1.0.3",
+    "@capacitor/android": "^2.1.0",
+    "@capacitor/core": "2.1.0",
+    "@ionic-native/contacts": "^5.26.0",
+    "@ionic-native/core": "^5.1.0",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.19.2",
+    "cordova-plugin-contacts": "^3.0.1",
     "node-sass": "^4.14.1",
     "quasar": "^1.0.0",
     "vue-i18n": "^8.0.0",
@@ -23,6 +27,7 @@
     "vue-snowf": "0.0.2"
   },
   "devDependencies": {
+    "@capacitor/cli": "2.1.0",
     "@quasar/app": "^1.8.10",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
