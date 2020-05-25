@@ -27,6 +27,7 @@ import footerComponent from '../components/homePageFooter.vue';
 import priceComponent from '../components/priceComponent.vue';
 import reviewsCarouselComponent from '../components/reviewsCarouselComponent.vue';
 
+
 export default {
   name: 'main',
   components: {
@@ -37,6 +38,19 @@ export default {
     feedBackComponent,
     priceComponent,
     reviewsCarouselComponent,
+  },
+  mounted() {
+    this.$q.notify({
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'error',
+      message: this.$q.platform.is.cordova,
+      position: 'top',
+    });
+    if (this.$q.platform.is.cordova) {
+      //  this.errors.push(e);
+      this.$router.push('/login');
+    }
   },
 };
 </script>

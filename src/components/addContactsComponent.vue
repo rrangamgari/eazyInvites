@@ -21,7 +21,15 @@
           title="CSV or XLS file accepted"
           no-caps
           @click="uploadContactsLayout = true"
-        />
+          class="platform-android-hide platform-ios-hide"/>
+        <q-btn
+          color="primary"
+          icon-right="cloud_upload"
+          label="Upload contacts"
+          title="CSV or XLS file accepted"
+          no-caps
+          @click="captureImage"
+          class="platform-android-only"/>
         &nbsp;&nbsp;
         <q-btn
           color="secondary"
@@ -166,7 +174,6 @@
 import { exportFile, Loading, QSpinnerTail } from 'quasar';
 import axios from 'axios';
 
-
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -189,10 +196,69 @@ function wrapCsvValue(val, formatFn) {
 
   return `"${formatted}"`;
 }
-
+document.addEventListener('deviceready', () => {
+  // it's only now that we are sure
+  // the event has triggered
+  this.$q.notify('Device ready...');
+}, false);
 export default {
   components: {},
   methods: {
+    onSuccess(contacts) {
+      for (let i = 0; i < contacts.length; i += 1) {
+        for (let j = 0; j < contacts[i].addresses.length; j += 1) {
+          this.$q.notify(`Pref: ${contacts[i].addresses[j].pref} \n
+            Type:            ${contacts[i].addresses[j].type}
+            Formatted:       ${contacts[i].addresses[j].formatted}    \n
+            Street Address:  ${contacts[i].addresses[j].streetAddress} \n
+            Locality:        ${contacts[i].addresses[j].locality}     \n
+            Region:          ${contacts[i].addresses[j].region}       \n
+            Postal Code:     ${contacts[i].addresses[j].postalCode}   \n
+            Country:         ${contacts[i].addresses[j].country}`);
+        }
+      }
+    },
+    onError(contactError) {
+      this.$q.notify(contactError);
+    },
+    captureImage() {
+      navigator.camera.getPicture(
+        (data) => { // on success
+          this.imageSrc = `data:image/jpeg;base64,${data}`;
+        },
+        () => { // on fail
+          this.$q.notify('Could not access device camera.');
+        },
+        {
+          // camera options
+        },
+      );
+      const options = new this.$q.cordova.ContactFindOptions();
+      options.filter = '';
+      options.multiple = true;
+      const filter = ['displayName', 'addresses'];
+      navigator.contacts.find(filter, (contacts) => {
+        for (let i = 0; i < contacts.length; i += 1) {
+          for (let j = 0; j < contacts[i].addresses.length; j += 1) {
+            this.$q.notify(`Pref: ${contacts[i].addresses[j].pref} \n
+            Type:            ${contacts[i].addresses[j].type}
+            Formatted:       ${contacts[i].addresses[j].formatted}    \n
+            Street Address:  ${contacts[i].addresses[j].streetAddress} \n
+            Locality:        ${contacts[i].addresses[j].locality}     \n
+            Region:          ${contacts[i].addresses[j].region}       \n
+            Postal Code:     ${contacts[i].addresses[j].postalCode}   \n
+            Country:         ${contacts[i].addresses[j].country}`);
+          }
+        }
+      }, (contactError) => {
+        this.$q.notify(contactError);
+      }, options);
+      // image.webPath will contain a path that can be set as an image src.
+      // You can access the original file using image.path, which can be
+      // passed to the Filesystem API to read the raw data of the image,
+      // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+      // this.imageSrc = image.webPath;
+    },
     factoryFn(file) {
       this.$q.notify({
         message: `Browser denied file download...${file}`,
@@ -352,6 +418,16 @@ export default {
     };
   },
   mounted() {
+    this.$q.cordova.on('deviceready', () => {
+      // here check for your variable
+      this.$q.notify({
+        color: 'red-5',
+        textColor: 'white',
+        icon: 'error',
+        message: 'device Ready',
+        position: 'top',
+      });
+    });
     Loading.show({
       spinner: QSpinnerTail,
       spinnerColor: 'primary',
