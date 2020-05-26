@@ -196,11 +196,7 @@ function wrapCsvValue(val, formatFn) {
 
   return `"${formatted}"`;
 }
-document.addEventListener('deviceready', () => {
-  // it's only now that we are sure
-  // the event has triggered
-  this.$q.notify('Device ready...');
-}, false);
+
 export default {
   components: {},
   methods: {
@@ -221,38 +217,45 @@ export default {
     onError(contactError) {
       this.$q.notify(contactError);
     },
+
     captureImage() {
-      navigator.camera.getPicture(
-        (data) => { // on success
-          this.imageSrc = `data:image/jpeg;base64,${data}`;
-        },
-        () => { // on fail
-          this.$q.notify('Could not access device camera.');
-        },
-        {
-          // camera options
-        },
-      );
-      const options = new this.$q.cordova.ContactFindOptions();
-      options.filter = '';
-      options.multiple = true;
-      const filter = ['displayName', 'addresses'];
-      navigator.contacts.find(filter, (contacts) => {
+      // const filter = ['displayName', 'addresses'];
+
+      navigator.contactsPhoneNumbers.list((contacts) => {
+        // this.$q.notify(contacts[1].phoneNumbers[1].HOME);
         for (let i = 0; i < contacts.length; i += 1) {
-          for (let j = 0; j < contacts[i].addresses.length; j += 1) {
-            this.$q.notify(`Pref: ${contacts[i].addresses[j].pref} \n
-            Type:            ${contacts[i].addresses[j].type}
-            Formatted:       ${contacts[i].addresses[j].formatted}    \n
-            Street Address:  ${contacts[i].addresses[j].streetAddress} \n
-            Locality:        ${contacts[i].addresses[j].locality}     \n
-            Region:          ${contacts[i].addresses[j].region}       \n
-            Postal Code:     ${contacts[i].addresses[j].postalCode}   \n
-            Country:         ${contacts[i].addresses[j].country}`);
+          // this.$q.notify(contacts[i]);
+          // this.$q.notify(contacts[i].lastName);
+          // this.$q.notify(i);
+          if (contacts[i].phoneNumbers.length > 0) {
+            // commentData.firstname = contacts[i].firstName;
+            // commentData.lastname = contacts[i].lastName;
+            let phoneNumber = '';
+            let sphoneNumber = '';
+            const emailId = '';
+            for (let j = 0; j < contacts[i].phoneNumbers.length; j += 1) {
+              const phone = contacts[i].phoneNumbers[j];
+              // this.$q.notify(`===> ' + ${phone.type} + '  '
+              // + ${phone.number} + ' (' + ${phone.normalizedNumber}+ ')`);
+              // commentData.primaryPhone = phone.normalizedNumber;
+              if (phone.type === 'MOBILE') {
+                phoneNumber = phone.normalizedNumber;
+              } else {
+                sphoneNumber = phone.normalizedNumber;
+              }
+            }
+            this.data.push({
+              firstname: contacts[i].firstName,
+              lastname: contacts[i].lastName,
+              primaryPhone: phoneNumber,
+              secondaryPhone: sphoneNumber,
+              email: emailId,
+            });
           }
         }
       }, (contactError) => {
         this.$q.notify(contactError);
-      }, options);
+      }, this.options);
       // image.webPath will contain a path that can be set as an image src.
       // You can access the original file using image.path, which can be
       // passed to the Filesystem API to read the raw data of the image,
@@ -428,6 +431,14 @@ export default {
         position: 'top',
       });
     });
+    document.addEventListener('deviceready', () => {
+      // it's only now that we are sure
+      // the event has triggered
+      // this.$q.notify('Device ready...');
+      const options = new this.cordova.ContactFindOptions();
+      options.filter = '';
+      options.multiple = true;
+    }, false);
     Loading.show({
       spinner: QSpinnerTail,
       spinnerColor: 'primary',

@@ -16,6 +16,8 @@
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-contacts-emails": "0.0.1",
+    "cordova-plugin-contacts-phonenumbers": "0.0.12",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-wkwebview-engine": "^1.2.1"
   },
@@ -34,7 +36,11 @@
       },
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      }
+      },
+      "cordova-plugin-contacts-phonenumbers": {
+        "CONTACTS_USAGE_DESCRIPTION": "This app needs contacts access"
+      },
+      "com.zam.cordova.contactsemails": {}
     },
     "platforms": [
       "android",
