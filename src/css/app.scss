@@ -126,7 +126,10 @@
   font-family: "Dancing";
   src: url('./fonts/DancingScriptOT.otf');
 }
-
+@font-face {
+  font-family: "Italic";
+  src: url('./fonts/Italianno-Regular-OTF.otf');
+}
 
 .price-item {
   background-color: #ffffff;
