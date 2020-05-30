@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import { exportFile, Loading, QSpinnerTail } from 'quasar';
+import { exportFile, Loading } from 'quasar';
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -223,6 +223,7 @@ export default {
 
       navigator.contactsPhoneNumbers.list((contacts) => {
         // this.$q.notify(contacts[1].phoneNumbers[1].HOME);
+
         for (let i = 0; i < contacts.length; i += 1) {
           // this.$q.notify(contacts[i]);
           // this.$q.notify(contacts[i].lastName);
@@ -232,7 +233,6 @@ export default {
             // commentData.lastname = contacts[i].lastName;
             let phoneNumber = '';
             let sphoneNumber = '';
-            const emailId = '';
             for (let j = 0; j < contacts[i].phoneNumbers.length; j += 1) {
               const phone = contacts[i].phoneNumbers[j];
               // this.$q.notify(`===> ' + ${phone.type} + '  '
@@ -249,7 +249,6 @@ export default {
               lastname: contacts[i].lastName,
               primaryPhone: phoneNumber,
               secondaryPhone: sphoneNumber,
-              email: emailId,
             });
           }
         }
@@ -421,29 +420,6 @@ export default {
     };
   },
   mounted() {
-    this.$q.cordova.on('deviceready', () => {
-      // here check for your variable
-      this.$q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'error',
-        message: 'device Ready',
-        position: 'top',
-      });
-    });
-    document.addEventListener('deviceready', () => {
-      // it's only now that we are sure
-      // the event has triggered
-      // this.$q.notify('Device ready...');
-      const options = new this.cordova.ContactFindOptions();
-      options.filter = '';
-      options.multiple = true;
-    }, false);
-    Loading.show({
-      spinner: QSpinnerTail,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
     axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
       'login-token',
     )}`;
@@ -468,6 +444,14 @@ export default {
         });
       });
     Loading.hide();
+    document.addEventListener('deviceready', () => {
+      // it's only now that we are sure
+      // the event has triggered
+      // this.$q.notify('Device ready...');
+      const options = new this.cordova.ContactFindOptions();
+      options.filter = '';
+      options.multiple = true;
+    }, false);
   },
 };
 </script>

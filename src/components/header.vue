@@ -234,6 +234,11 @@ export default {
     };
   },
   methods: {
+    onDeviceReady() {
+      this.$q.notify(cordova);
+      this.$q.notify(window.device);
+      // console.log('device', device);
+    },
     onItemClick() {
       return {};
     },
@@ -247,6 +252,9 @@ export default {
       this.$router.push('/');
       return {};
     },
+  },
+  mounted() {
+    document.addEventListener('deviceready', this.onDeviceReady, false);
   },
 };
 </script>

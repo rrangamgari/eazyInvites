@@ -39,8 +39,7 @@
       },
       "cordova-plugin-contacts-phonenumbers": {
         "CONTACTS_USAGE_DESCRIPTION": "This app needs contacts access"
-      },
-      "com.zam.cordova.contactsemails": {}
+      }
     },
     "platforms": [
       "android",
