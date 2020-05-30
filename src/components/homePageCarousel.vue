@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative;">
-    <q-responsive :ratio="1600/700" style="">
+    <q-responsive :ratio="4/3" style="height: calc(100vh - 1px);">
     <q-carousel
       arrows
       animated
@@ -9,7 +9,6 @@
       :autoplay="10000"
       transition-prev="fade"
       transition-next="fade"
-     :fullscreen.sync="fullscreen"
     >
     <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
       <Snowf
@@ -34,6 +33,7 @@
       </q-carousel-slide>
        <q-carousel-slide name="second" img-src="../assets/home/ez14.jpg">
       <Snowf
+        class="overlay"
         :amount="30"
         :size="5"
         :speed="1.25"
@@ -52,6 +52,19 @@
         </div>
       </q-carousel-slide>
     <q-carousel-slide name="third" img-src="~assets/home/ez1.jpg" >
+      <Snowf
+        class="overlay"
+        :amount="30"
+        :size="5"
+        :speed="1.25"
+        :wind="0"
+        :opacity="1"
+        :swing="1"
+        :image="null"
+        :zIndex="null"
+        :resize="false"
+        color="#FFFF00"
+      />
         <div class="absolute-bottom custom-caption">
           <div class="text-h2 Dancing">Engagement </div>
           <div class="text-h4">&nbsp;</div>
@@ -65,6 +78,19 @@
         </div>
       </q-carousel-slide>-->
        <q-carousel-slide name="first1" img-src="~assets/home/ez22.jpg" >
+         <Snowf
+           class="overlay"
+           :amount="30"
+           :size="5"
+           :speed="1.25"
+           :wind="0"
+           :opacity="1"
+           :swing="1"
+           :image="null"
+           :zIndex="null"
+           :resize="false"
+           color="#FFFF00"
+         />
         <div class="absolute-right custom-caption">
           <div class="text-h2 Dancing">Festivals</div>
           <div class="text-h4">&nbsp;</div>
@@ -85,6 +111,19 @@
         </div>
       </q-carousel-slide>-->
       <q-carousel-slide name="fourth1" img-src="../assets/home/ez9.jpg">
+        <Snowf
+          class="overlay"
+          :amount="30"
+          :size="5"
+          :speed="1.25"
+          :wind="0"
+          :opacity="1"
+          :swing="1"
+          :image="null"
+          :zIndex="null"
+          :resize="false"
+          color="#00FF00"
+        />
         <div class="absolute-bottom-left custom-caption vertical-middle gt-xs">
           <div class="text-h2 Dancing">Mehendi Function</div>
           <div class="text-h4">&nbsp;</div>
@@ -109,11 +148,6 @@
           :offset="[18, 18]"
           style="z-index:3;"
         >
-          <q-btn
-            push round dense color="white" text-color="primary"
-            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="fullscreen = !fullscreen"
-          />
         </q-carousel-control>
       </template>
     </q-carousel>
