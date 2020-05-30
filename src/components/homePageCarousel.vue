@@ -13,6 +13,7 @@
     >
     <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
       <Snowf
+        class="overlay"
         :amount="30"
         :size="5"
         :speed="1.25"
@@ -140,12 +141,5 @@ export default {
 .overlay
   position: absolute;
   display: block;
-  width: 100%;
-  height: 100%;
-  top: "0px";
-  left: "70px";
-  right: "-700px";
-  bottom: "50px";
-  z-index: 2;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.5);
 </style>
