@@ -1,12 +1,12 @@
 
 <template>
-<div class="q-pa-md flex flex-center" >
+<q-page class="q-pa-md flex flex-center" >
 
     <q-form
       @submit="onSubmit"
       @reset="onReset"
-     class="q-gutter-md  q-pt-xl"
-      style="width:60vh"
+      class="q-gutter-md q-pa-xs q-pr-md"
+      style="width:350px"
      >
      <q-item-label class="logo">Eazy Invite Step 1</q-item-label>
       <q-select name="eventType"  filled
@@ -37,7 +37,7 @@
       </div>
     </q-form>
 
-  </div>
+</q-page>
 </template>
 
 <script>

@@ -2,15 +2,14 @@
 <template>
 
 
-<div class="q-pa-md flex flex-center">
+<q-page class="q-pa-md q-pt-lg flex flex-center">
 
-  <div>&nbsp;</div>
     <q-form
       id="login"
       @submit="onSubmit"
       @reset="onReset"
-      class="q-gutter-md  q-pt-xl"
-      style="width:60vh"
+      class="q-gutter-md q-pa-xs q-pr-md"
+      style="width:350px;"
     >
       <q-input
         filled
@@ -39,7 +38,7 @@
       </div>
     </q-form>
 
-  </div>
+</q-page>
 </template>
 
 <script>
