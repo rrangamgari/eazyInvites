@@ -4,8 +4,8 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
     ],
   },
   {
@@ -60,19 +60,21 @@ const routes = [
     path: '/events',
     name: 'events',
     component: () => import('layouts/eventsLayout.vue'),
-    children: [
-      { path: '', component: () => import('components/header.vue') },
-      { path: '', component: () => import('components/footer.vue') },
-    ],
   },
   {
-    path: '/events/',
-    name: 'events/',
+    path: '/events/:eventId',
+    name: 'eventStatus',
     component: () => import('layouts/eventStatusLayout.vue'),
-    children: [
-      { path: '*', component: () => import('components/header.vue') },
-      { path: '*', component: () => import('components/footer.vue') },
-    ],
+  },
+  {
+    path: '/invites',
+    name: 'invites',
+    component: () => import('layouts/invitesLayout.vue'),
+  },
+  {
+    path: '/invites/:inviteId',
+    name: 'invitesRsvp',
+    component: () => import('layouts/invitesRsvpLayout.vue'),
   },
 ];
 
