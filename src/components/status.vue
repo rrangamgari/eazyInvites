@@ -217,7 +217,7 @@ export default {
     };
   },
   mounted() {
-    this.eventid = this.$route.path.split('/').pop();
+    this.eventid = this.$route.params.eventId;
 
     Loading.show({
       spinner: QSpinnerTail,
