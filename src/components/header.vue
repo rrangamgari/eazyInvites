@@ -5,51 +5,14 @@
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
       <a href="/" class="xs">
-        <img src="../assets/logo/logo_final.png" width="100px" />
+        <img src="../assets/logo/logo_final.png" width="50px" />
       </a>
       <a href="/" class="gt-xs">
         <img src="../assets/logo/logo_final.png" width="120px" />
       </a>
 
-      <q-toolbar-title class="logo_small xs">Eazy Invites</q-toolbar-title>
-      <q-toolbar-title class="logo gt-xs" style="color:gold;">Eazy Invites</q-toolbar-title>
-      <div class="xs">
-        <q-btn
-          color="primary"
-          glossy
-          push
-          type="a"
-          href="https://wa.me/13022206686?text=Hi EazyInvites, I love to start using this..."
-          target="_blank"
-        >
-          <div class="row items-center no-wrap">
-            <img
-              left
-              src="../assets/whatsapp.png"
-              style="height:25px;width:25px"
-            />
-          </div>
-        </q-btn>
-      </div>
-      <div class="logo_labels gt-xs">
-        <q-btn
-          color="primary"
-          glossy
-          push
-          type="a"
-          href="https://wa.me/13022206686?text=Hi"
-          target="_blank"
-        >
-          <div class="row items-center no-wrap">
-            <img
-              left
-              src="../assets/whatsapp.png"
-              style="height:45px;width:45px"
-            />
-            <div class="text-center">Whatsapp<br />Invite</div>
-          </div>
-        </q-btn>
-      </div>
+      <q-toolbar-title class="logo_small xs" style="color:white;">Eazy Invites</q-toolbar-title>
+      <q-toolbar-title class="logo gt-xs" style="color:white;">Eazy Invites</q-toolbar-title>
       <!--q-tabs
         no-caps
         active-color="primary"
@@ -121,6 +84,7 @@
         dense
         v-model="tab"
         v-for="Tab  in tabs" :key="Tab.name"
+        id="home_tabs"
       >
         <q-tab
           :name="Tab.name"
@@ -224,6 +188,7 @@ export default {
       header: true,
       hEl: null,
       hStyle: 'background-color: rgba(0,0,0,0);',
+      hideTabs: true,
       tabs: [{ name: 'images', label: 'Home', icon: 'home' },
         { name: 'videos', label: 'About Us', icon: 'people' },
         { name: 'articles', label: 'Browse Cards', icon: 'style' },
@@ -234,6 +199,13 @@ export default {
   },
   mounted() {
     this.hEl = document.getElementById('header');
+    // window.alert(this.$router.currentRoute.path);
+    if (this.$router.currentRoute.path !== '/') {
+      this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
+      this.hStyle = 'background-color: rgba(0,55,85,255);';
+      this.hideTabs = true;
+      // window.alert(this.$router.currentRoute.path);
+    }
   },
   methods: {
     onItemClick() {
@@ -265,12 +237,15 @@ export default {
       }
     },
     scrollHandler(position) {
-      if (position > 300) {
-        this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-        this.hStyle = 'background-color: rgba(0,0,0,255);';
-      } else {
-        this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
-        this.hStyle = 'background-color: rgba(0,0,0,0);';
+      // window.alert(this.$router.currentRoute.path);
+      if (this.$router.currentRoute.path === '/') {
+        if (position > 300) {
+          this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
+          this.hStyle = 'background-color: rgba(0,55,85,255);';
+        } else {
+          this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
+          this.hStyle = 'background-color: rgba(0,0,0,0);';
+        }
       }
     },
   },

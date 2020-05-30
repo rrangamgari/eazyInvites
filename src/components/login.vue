@@ -62,7 +62,8 @@ export default {
       // accept: false,
     };
   },
-
+  mounted() {
+  },
   methods: {
     onSubmit() {
       Loading.show({

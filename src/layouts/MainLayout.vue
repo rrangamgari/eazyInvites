@@ -37,5 +37,7 @@ export default {
     priceComponent,
     reviewsCarouselComponent,
   },
+  mounted() {
+  },
 };
 </script>

@@ -87,6 +87,15 @@
       Feedback
       <span class="screen_reader"> Will open a new window</span>
     </a>
+<a href="https://wa.me/13022206686?text=Hi EazyInvites, I love to start using this..."
+   target="_blank">
+      <img
+        id="whatsapp_tab" class="whatsapp_tab_right"
+        src="../assets/whatsapp.png"
+        style="height:50px;width:50px"
+
+      />
+</a>
   </div>
 </template>
 
