@@ -87,7 +87,7 @@ export default {
           }); */
           this.$q.sessionStorage.set('login-token', this.posts.token);
           Loading.hide();
-          this.$router.push('/createInvitation');
+          this.$router.push('/events');
         })
         .catch((e) => {
         //  this.errors.push(e);

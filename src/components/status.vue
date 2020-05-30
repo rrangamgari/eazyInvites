@@ -233,6 +233,7 @@ export default {
       .get(`/api/userEvents/event/${this.eventid}`)
       .then((response) => {
         this.event = response.data.data;
+        Loading.hide();
       })
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
@@ -245,6 +246,7 @@ export default {
           message: e.message,
           position: 'top',
         });
+        Loading.hide();
       });
 
     axios
@@ -271,6 +273,7 @@ export default {
           message: e.message,
           position: 'top',
         });
+        Loading.hide();
       });
 
     axios
@@ -278,8 +281,6 @@ export default {
       .then((Response) => {
         this.eventType = Response.data.data;
       });
-
-    Loading.hide();
   },
   created() {
     window.addEventListener('resize', this.windowResizeHandler);

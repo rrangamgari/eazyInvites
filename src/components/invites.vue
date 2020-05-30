@@ -69,6 +69,7 @@ export default {
           .get('/api/eventSystem/eventType')
           .then((Response) => {
             this.eventType = Response.data.data;
+            Loading.hide();
           });
       })
       .catch((e) => {
@@ -82,8 +83,8 @@ export default {
           message: e.message,
           position: 'top',
         });
+        Loading.hide();
       });
-    Loading.hide();
   },
   methods: {
     createInvites() {

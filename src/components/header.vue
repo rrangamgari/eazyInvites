@@ -167,6 +167,60 @@
                 <q-item-label caption>Logout from Easy Invites</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/createInvitation"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="create_new_folder"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>New Invitation</q-item-label>
+                <q-item-label caption>Create a new Invitation</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/events"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Events</q-item-label>
+                <q-item-label caption>Show my events</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/addContacts"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Contacts</q-item-label>
+                <q-item-label caption>Show my contacts</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-btn-dropdown>
       </div>
@@ -177,6 +231,7 @@
 
 <script>
 import { scroll } from 'quasar';
+import axios from 'axios';
 
 const { getScrollTarget, setScrollPosition } = scroll;
 
@@ -206,6 +261,15 @@ export default {
       this.hideTabs = true;
       // window.alert(this.$router.currentRoute.path);
     }
+    axios
+      .get('http://ip-api.com/json')
+      .then((Response) => {
+        // window.alert(Response.data.country);
+        if (Response.data.country) {
+          this.hideTabs = true;
+        }
+        // this.eventType = Response.data.data;
+      });
   },
   methods: {
     onItemClick() {

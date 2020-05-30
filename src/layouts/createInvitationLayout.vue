@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import createInvitationComponent from '../components/createInvitationComponent.vue';
+import createInvitationComponent from '../components/quickInvitationComponent.vue';
 
 
 import footerComponent from '../components/footer.vue';
