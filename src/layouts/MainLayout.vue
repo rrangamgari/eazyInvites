@@ -1,25 +1,24 @@
 <template>
-  <div class="">
-    <q-layout view="lHh lpr lFf"  style="" class="shadow-2 rounded-borders">
+  <div>
+    <q-layout view="hhh lpr fff" class="shadow-2 rounded-borders">
 
       <header-component></header-component>
-
+      <carouselComponent id="images"></carouselComponent>
 
       <q-page-container>
 
-<loginComponent>zzczxcxz</loginComponent>
-<div>&nbsp;</div>
-<video-component></video-component>
-<feed-back-component></feed-back-component>
-<price-component></price-component>
-<reviewsCarouselComponent></reviewsCarouselComponent>
+<video-component id="videos"></video-component>
+<feed-back-component id="reviews"></feed-back-component>
+<price-component id="prices"></price-component>
+<reviewsCarouselComponent id="articles"></reviewsCarouselComponent>
+        <router-view />
       </q-page-container>
-    </q-layout>
     <footer-component class="bg-primary"></footer-component>
+    </q-layout>
   </div>
 </template>
 <script>
-import loginComponent from '../components/homePageCarousel.vue';
+import carouselComponent from '../components/homePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
 import feedBackComponent from '../components/homePageFeedback.vue';
 import headerComponent from '../components/header.vue';
@@ -30,7 +29,7 @@ import reviewsCarouselComponent from '../components/reviewsCarouselComponent.vue
 export default {
   name: 'main',
   components: {
-    loginComponent,
+    carouselComponent,
     videoComponent,
     headerComponent,
     footerComponent,

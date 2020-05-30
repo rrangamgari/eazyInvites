@@ -69,6 +69,7 @@ module.exports = function (/* ctx */) {
         'Loading',
         'QSpinnerGears',
         'QUploader',
+        'Scroll',
       ],
       directives: [
         'ClosePopup',

@@ -1,17 +1,18 @@
 <template>
-  <q-header reveal :reveal-offset="1">
-    <q-toolbar class="glossy">
+  <q-header id="header" ref="header" v-scroll="scrollHandler"
+   style="z-index:10;" :style="hStyle">
+    <q-toolbar>
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
       <a href="/" class="xs">
-        <img src="../assets/logo/Easy_Invites.png" width="120px" />
+        <img src="../assets/logo/logo_final.png" width="100px" />
       </a>
       <a href="/" class="gt-xs">
-        <img src="../assets/logo/Easy_Invites.png" width="180px" />
+        <img src="../assets/logo/logo_final.png" width="120px" />
       </a>
 
       <q-toolbar-title class="logo_small xs">Eazy Invites</q-toolbar-title>
-      <q-toolbar-title class="logo gt-xs">Eazy Invites</q-toolbar-title>
+      <q-toolbar-title class="logo gt-xs" style="color:gold;">Eazy Invites</q-toolbar-title>
       <div class="xs">
         <q-btn
           color="primary"
@@ -49,114 +50,99 @@
           </div>
         </q-btn>
       </div>
-      <q-tabs
+      <!--q-tabs
         no-caps
         active-color="primary"
         indicator-color="transparent"
-        class="merienda-bold gt-xs md"
+        class="merienda-bold"
         inline-label
         dense
         v-model="tab"
       >
-        <q-tab
+        <q-route-tab
           name="images"
-          label=""
+          :label= "($q.screen.gt.md) ? 'Home' : ''"
           class="text-white"
           style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
           icon="home"
+          to="/#images"
+          exact
         />
-        <q-tab
+        <q-route-tab
           name="videos"
           class="text-white"
-          label=""
+          :label= "($q.screen.gt.md) ? 'About Us' : ''"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
           icon="people"
+          to="/#videos"
+          exact
         />
-        <q-tab
+        <q-route-tab
           name="articles1"
           class="text-white"
-          label=""
+          :label= "($q.screen.gt.md) ? 'Browse Cards' : ''"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
           icon="style"
+          to="/"
+          exact
         />
         <q-tab
           name="reviews"
           class="text-white"
-          label=""
+          :label= "($q.screen.gt.md) ? 'Reviews' : ''"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
           icon="rate_review"
-          to="/review"
+          @click="scrollTo('reviews')"
         />
-        <q-tab
+        <q-route-tab
           name="prices"
           class="text-white"
-          label=""
+          :label= "($q.screen.gt.md) ? 'Prices' : ''"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
           icon="monetization_on"
+          to="/"
+          exact
         />
-      </q-tabs>
+      </q-tabs-->
       <q-tabs
         no-caps
         active-color="primary"
         indicator-color="transparent"
-        class="merienda-bold gt-md"
+        class="merienda-bold gt-xs"
         inline-label
         dense
         v-model="tab"
+        v-for="Tab  in tabs" :key="Tab.name"
       >
         <q-tab
-          name="images"
-          label="Home"
+          :name="Tab.name"
+          :label="($q.screen.gt.md) ? Tab.label : ''"
           class="text-white"
           style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
-          icon="home"
-        />
-        <q-tab
-          name="videos"
-          class="text-white"
-          label="About Us"
-          style="font-family: 'Montserrat', cursive;
-  font-color:#FFFFFF;
-  font-weight:bold; "
-          icon="people"
-        />
-        <q-tab
-          name="articles1"
-          class="text-white"
-          label="Browse Cards"
-          style="font-family: 'Montserrat', cursive;
-  font-color:#FFFFFF;
-  font-weight:bold; "
-          icon="style"
-        />
-        <q-tab
-          name="reviews"
-          class="text-white"
-          label="Reviews"
-          style="font-family: 'Montserrat', cursive;
-  font-color:#FFFFFF;
-  font-weight:bold; "
-          icon="rate_review"
-          to="/review"
-        />
-        <q-tab
-          name="prices"
-          class="text-white"
-          label="Prices"
-          style="font-family: 'Montserrat', cursive;
-  font-color:#FFFFFF;
-  font-weight:bold; "
-          icon="monetization_on"
+          :icon="Tab.icon"
+          @click="goTo('/',Tab.name)"
         />
       </q-tabs>
+      <q-btn-dropdown class="lt-sm" auto-close stretch flat label="">
+        <q-list v-for="Tab  in tabs" :key="Tab.name">
+          <q-item clickable @click="tab = Tab.name; goTo('/',Tab.name);">
+            <q-item-section avatar>
+              <q-icon :name="Tab.icon" />
+            </q-item-section>
+            <q-item-section>
+              {{Tab.label}}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
       <div class="q-pa-md">
         <q-btn-dropdown split push glossy no-caps icon="person">
           <q-list>
@@ -226,26 +212,66 @@
 </template>
 
 <script>
+import { scroll } from 'quasar';
+
+const { getScrollTarget, setScrollPosition } = scroll;
+
 export default {
   name: 'headerComponent',
   data() {
     return {
-      tab: 'images1',
+      tab: '',
+      header: true,
+      hEl: null,
+      hStyle: 'background-color: rgba(0,0,0,0);',
+      tabs: [{ name: 'images', label: 'Home', icon: 'home' },
+        { name: 'videos', label: 'About Us', icon: 'people' },
+        { name: 'articles', label: 'Browse Cards', icon: 'style' },
+        { name: 'reviews', label: 'Reviews', icon: 'rate_review' },
+        { name: 'prices', label: 'Prices', icon: 'monetization_on' },
+      ],
     };
+  },
+  mounted() {
+    this.hEl = document.getElementById('header');
   },
   methods: {
     onItemClick() {
       return {};
     },
     viewLogin() {
-      window.console.log(this.$q.sessionStorage.getItem('login-token'));
-      if (this.$q.sessionStorage.getItem('login-token') === 'null') return true;
-      return false;
+      window.console.log(`login-token : ${this.$q.sessionStorage.getItem('login-token')}`);
+      return (this.$q.sessionStorage.getItem('login-token') === 'null');
     },
     onLogoutClick() {
       this.$q.sessionStorage.set('login-token', null);
-      this.$router.push('/');
-      return {};
+      if (this.$route.path === '/') this.$router.go(0);
+      else this.$router.push('/');
+    },
+    scrollTo(section) {
+      const ele = document.getElementById(section);
+      const target = getScrollTarget(ele);
+      const offset = ele.offsetTop - this.hEl.clientHeight;
+      const duration = 10;
+      setScrollPosition(target, offset, duration);
+    },
+    goTo(path, section) {
+      if (this.$route.path === path) this.scrollTo(section);
+      else {
+        this.$router.push(path)
+          .then(() => {
+            this.scrollTo(section);
+          });
+      }
+    },
+    scrollHandler(position) {
+      if (position > 300) {
+        this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
+        this.hStyle = 'background-color: rgba(0,0,0,255);';
+      } else {
+        this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
+        this.hStyle = 'background-color: rgba(0,0,0,0);';
+      }
     },
   },
 };
