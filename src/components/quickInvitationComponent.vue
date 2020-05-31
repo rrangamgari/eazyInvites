@@ -47,7 +47,6 @@
             />
           <q-stepper-navigation>
             <q-btn
-              @click="step = 2"
               color="primary"
               label="Continue"
               type="submit"
@@ -152,6 +151,7 @@ export default {
           spinnerColor: 'primary',
           thickness: '3',
         });
+        this.step = 2;
         axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
           'login-token',
         )}`;
