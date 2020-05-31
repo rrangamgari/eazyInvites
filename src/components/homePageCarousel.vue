@@ -14,7 +14,7 @@
       <Snowf
         class="overlay"
         :amount="30"
-        :size="5"
+        :size="8"
         :speed="1.25"
         :wind="0"
         :opacity="1"
@@ -35,7 +35,7 @@
       <Snowf
         class="overlay"
         :amount="30"
-        :size="5"
+        :size="8"
         :speed="1.25"
         :wind="0"
         :opacity="1"
@@ -55,7 +55,7 @@
       <Snowf
         class="overlay"
         :amount="30"
-        :size="5"
+        :size="8"
         :speed="1.25"
         :wind="0"
         :opacity="1"
@@ -63,7 +63,7 @@
         :image="null"
         :zIndex="null"
         :resize="false"
-        color="#FFFF00"
+        color="blue"
       />
         <div class="absolute-bottom custom-caption">
           <div class="text-h2 Dancing">Engagement </div>
@@ -81,7 +81,7 @@
          <Snowf
            class="overlay"
            :amount="30"
-           :size="5"
+           :size="8"
            :speed="1.25"
            :wind="0"
            :opacity="1"
@@ -114,7 +114,7 @@
         <Snowf
           class="overlay"
           :amount="30"
-          :size="5"
+          :size="8"
           :speed="1.25"
           :wind="0"
           :opacity="1"
@@ -166,14 +166,8 @@ export default {
     return {
       slide: 'first',
       fullscreen: false,
+      image: '../assets/logo/user.png',
     };
   },
 };
 </script>
-
-<style lang="sass" scoped>
-.overlay
-  position: absolute;
-  display: block;
-  background-color: rgba(0,0,0,0.5);
-</style>

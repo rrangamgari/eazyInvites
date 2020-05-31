@@ -21,12 +21,7 @@
       <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
                         v-for="feedback in feedbackList"
                         :key="feedback.id" >
-        <div class="q-mt-md text-center" :style="{
-            opacity: 0.45 + (1 - scope.percentScrolled) * 0.55,
-            top: (scope.percentScrolled * 60) + '%',
-            left: 0,
-            right: 0
-          }">
+        <div class="q-mt-md text-center" >
           <!--<img src="~assets/logo/user.png" width="100px" height="100px"
                class="whatsapp_tab_right">
           <br>-->
