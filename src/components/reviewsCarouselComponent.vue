@@ -1,72 +1,51 @@
 <template>
   <div class="q-pa-md" >
-<q-parallax :height="600" :speed="0.5">
-      <template v-slot:media>
-        <img src="../assets/home/bg.jpg">
-      </template>
-<q-carousel-slide name="style" class="column no-wrap flex-center"
-      >
-        <q-icon name="style" size="56px" />
-        <div class="q-mt-md text-center">
-          <h1 class="text-white">Docks</h1>
-         Excellent idea of sending e-invites with whatsapp.
-         Wide range pre designed cards. Used this recently for
-          My son's 12 birthday party. Invitees loved it ,
-           it has gps feature for identifying the location with ease...
-the best part is it send reminders to the guests a day before...
-        </div>
-      </q-carousel-slide>
-    </q-parallax>
+
     <q-carousel
       v-model="slide"
-         animated
-      navigation
+      swipeable
+      animated
       infinite
-      autoplay
-      arrows
+      :autoplay="1000"
       transition-prev="slide-right"
       transition-next="slide-left"
-      class="bg-transperent text-white rounded-borders"
-    img-src="../assets/home/bg.jpg"
-    >
-      <q-carousel-slide name="style" class="column no-wrap flex-center"
-      >
-        <q-icon name="style" size="56px" />
+      :padding="padding"
+      :vertical="vertical"
+      :arrows="arrows"
+      :navigation="navigation"
+      :navigation-position="navPos"
+      height="300px"
+      class="bg-white text-black rounded-borders">
+      <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
+                        v-for="feedback in feedbackList"
+                        :key="feedback.id" >
         <div class="q-mt-md text-center">
-         Excellent idea of sending e-invites with whatsapp.
-         Wide range pre designed cards. Used this recently for
-          My son's 12 birthday party. Invitees loved it ,
-           it has gps feature for identifying the location with ease...
-the best part is it send reminders to the guests a day before...
+          <q-rating
+            :value="feedback.rating"
+            size="3.5em"
+            color="grey"
+            color-selected="yellow"
+            icon="star_border"
+            icon-selected="star"
+            readonly
+          />
+          <br>
+          <b style="font-size:18px">{{ feedback.name }}</b>
+          <body style="font-size:12px; white-space: pre-line">{{ feedback.comment }}</body>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="tv" class="column no-wrap flex-center"
-      >
-        <q-icon name="live_tv" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="layers" class="column no-wrap flex-center"
-      >
-        <q-icon name="layers" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="map" class="column no-wrap flex-center"
-      >
-        <q-icon name="terrain" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-    </q-carousel>
 
+    </q-carousel>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
+axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.headers.get.Accepts = 'application/json';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 export default {
   data() {
     return {
@@ -85,8 +64,34 @@ export default {
 
       slide: 'style',
       lorem: 'Lorem ipsum doloraesentium libero ab nemo.',
+      feedbackList: [
+      ],
     };
   },
-
+  mounted() {
+    axios.get('/api/feedback')
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        this.feedbackList = this.feedbackList.concat(response.data.data);
+        // Notification for testing api
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: response.data.message,
+          position: 'center',
+        });
+      })
+      .catch((e) => {
+        //  this.errors.push(e);
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'error',
+          message: e.message,
+          position: 'top',
+        });
+      });
+  },
 };
 </script>

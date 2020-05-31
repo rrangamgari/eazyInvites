@@ -76,8 +76,8 @@
           color="primary"
           row-key="name"
           icon-left="contacts"
-          hide-bottom
-          :pagination="{rowsPerPage: 0}"
+          virtual-scroll
+          :rows-per-page-options="[0]"
           :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
         >
           <template v-slot:header-cell="props">
