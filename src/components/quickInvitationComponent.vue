@@ -69,9 +69,124 @@
         icon="create_new_folder"
         :done="step > 2"
       >
-        An ad group contains one or more ads which target a shared set of
-        keywords.
+        <q-table
+          title="Contacts"
+          :data="data"
+          :columns="columns"
+          color="primary"
+          row-key="name"
+          icon-left="contacts"
+          hide-bottom
+          :pagination="{rowsPerPage: 0}"
+          :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
+        >
+          <template v-slot:header-cell="props">
+            <q-th :props="props">
+              <b style="font-size:14px;"> {{ props.col.label }} &nbsp;</b>
+              <q-icon
+                name="contact_mail"
+                size="2.5em"
+                v-show="props.col.label == 'Email'"
+              />
+              <q-icon
+                name="contact_phone"
+                size="2.5em"
+                v-show="props.col.name == 'primaryPhone'"
+              />
+              <q-icon
+                name="contact_phone"
+                size="2.5em"
+                v-show="props.col.name == 'secondaryPhone'"
+              />
+            </q-th>
+          </template>
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="checkBox" >
+                <q-checkbox :value="false"
+                            v-model="props.row.eventmemberid" color=""
+                            false-value/>
+              </q-td>
+              <q-td key="firstname" :props="props">
+                {{ props.row.firstname }}
+                <q-popup-edit
+                  v-model="props.row.firstname"
+                  title="Edit the Name"
+                  buttons
+                  :validate="firstnameValidation"
+                  @hide="firstnameValidation"
+                >
+                  <q-input
+                    v-model="props.row.firstname"
+                    dense
+                    autofocus
+                    counter
+                    :error="errorProtein"
+                    :error-message="errorMessageProtein"
+                  />
+                </q-popup-edit>
+              </q-td>
+              <q-td key="lastname" :props="props">
+                {{ props.row.lastname }}
+                <q-popup-edit
+                  v-model="props.row.lastname"
+                  title="Edit the Name"
+                  buttons
+                >
+                  <q-input v-model="props.row.lastname" dense autofocus counter />
+                </q-popup-edit>
+              </q-td>
+              <q-td key="primaryPhone" :props="props">
+                {{ props.row.primaryPhone }}
+                <q-popup-edit
+                  v-model="props.row.primaryPhone"
+                  title="Edit the Phone"
+                  buttons
+                >
+                  <q-input
+                    v-model="props.row.primaryPhone"
+                    dense
+                    autofocus
+                    counter
+                  />
+                </q-popup-edit>
+              </q-td>
+              <q-td key="secondaryPhone" :props="props">
+                {{ props.row.secondaryPhone }}
+                <q-popup-edit
+                  v-model="props.row.secondaryPhone"
+                  title="Edit the phone"
+                  buttons
+                >
+                  <q-input
+                    v-model="props.row.secondaryPhone"
+                    dense
+                    autofocus
+                    counter
+                  />
+                </q-popup-edit>
+              </q-td>
+              <q-td key="email" :props="props">
+                {{ props.row.email }}
+                <q-popup-edit
+                  v-model="props.row.email"
+                  title="Edit the Email"
+                  buttons
+                >
+                  <q-input v-model="props.row.email" dense autofocus counter />
+                </q-popup-edit>
+              </q-td>
+              <q-td key="delete" :props="props">
+                <img
+                  src="~assets/icon/delete-file-icon.png"
+                  style="cursor:pointer;"
+                  @click="deleteMe(props.row.eventmemberid)"
+                />
+              </q-td>
 
+            </q-tr>
+          </template>
+        </q-table>
         <q-stepper-navigation>
           <q-btn @click="step = 4" color="primary" label="Continue" />
           <q-btn
@@ -122,6 +237,7 @@ export default {
       model: null,
       step: 1,
       eventType: '',
+      selection: ['teal'],
       eventmessage: `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`,
       options: [
         { value: 1, label: 'Birthday' },
@@ -132,6 +248,68 @@ export default {
       ],
 
       accept: false,
+      columns: [
+        {
+          name: 'checkBox',
+          required: true,
+          label: 'Check All',
+          align: 'left',
+          field: (row) => `${row.eventmemberid}`,
+          sortable: false,
+        },
+        {
+          name: 'firstname',
+          required: true,
+          label: 'First Name *',
+          align: 'left',
+          field: (row) => `${row.firstname}`,
+          sortable: true,
+        },
+        {
+          name: 'lastname',
+          label: 'Last Name',
+          align: 'left',
+          field: (row) => `${row.lastname}`,
+          sortable: true,
+        },
+        {
+          name: 'primaryPhone',
+          align: 'center',
+          label: 'Primary Phone',
+          required: true,
+          field: 'primaryPhone',
+          sortable: true,
+          headerStyle: 'icon-right:archive',
+        },
+        {
+          name: 'secondaryPhone',
+          label: 'Secondary Phone',
+          field: 'secondaryPhone',
+          sortable: true,
+          icon: 'contacts',
+        },
+        {
+          name: 'email',
+          label: 'Email',
+          field: 'email',
+          sortable: true,
+        },
+        {
+          name: 'delete',
+          label: 'Delete',
+          sortable: false,
+          field: (row) => `${row.eventmemberid}`,
+        },
+      ],
+
+      data: [
+        {
+          firstname: 'Frozen Yogurt',
+          primaryPhone: 159,
+          secondaryPhone: 6.0,
+          email: 24,
+        },
+      ],
     };
   },
 
@@ -156,26 +334,20 @@ export default {
           'login-token',
         )}`;
         axios
-          .post('/api/userEvents/event', {
-            eventtypeid: this.eventType.value,
-            eventtitle: null,
-            eventmessage: this.eventmessage,
-          })
+          .get('/api/userEvents/userguestlist')
           .then((response) => {
-            // JSON responses are automatically parsed.
-            this.posts = response.data;
-            this.$q.notify({
-              color: 'green-4',
-              textColor: 'white',
-              icon: 'cloud_done',
-              message: this.posts.status,
-              position: 'center',
-            });
             Loading.hide();
-            this.$router.push('/addContacts');
+            // JSON responses are automatically parsed.
+            this.data = response.data.data;
+            // this.data = this.data.concat(response.data.data);
           })
           .catch((e) => {
             //  this.errors.push(e);
+            Loading.hide();
+            if (e.message === 'Request failed with status code 401') {
+              this.$router.push('/login');
+            }
+
             this.$q.notify({
               color: 'red-5',
               textColor: 'white',
@@ -183,7 +355,6 @@ export default {
               message: e.message,
               position: 'top',
             });
-            Loading.hide();
           });
       }
     },
