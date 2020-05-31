@@ -2,6 +2,7 @@
   <div class="q-pa-md" >
 <q-parallax
       src="../assets/home/review.jpg"
+      :height="500"
     >
     <q-carousel
       v-model="slide"
@@ -20,12 +21,21 @@
       <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
                         v-for="feedback in feedbackList"
                         :key="feedback.id" >
-        <div class="q-mt-md text-center">
+        <div class="q-mt-md text-center" :style="{
+            opacity: 0.45 + (1 - scope.percentScrolled) * 0.55,
+            top: (scope.percentScrolled * 60) + '%',
+            left: 0,
+            right: 0
+          }">
           <!--<img src="~assets/logo/user.png" width="100px" height="100px"
                class="whatsapp_tab_right">
           <br>-->
-          <b style="font-size:32px" class="Dancing">{{ feedback.name }}</b>
-          <body style="font-size:17px; white-space: pre-line" class="merienda ellipsis">
+          <b style="font-size:32px;"
+           class="Dancing">{{ feedback.name }}</b>
+          <!--<body style="font-size:17px; white-space: pre-line;background: rgba(0, 35, 85, 0.3)"
+           class="merienda ellipsis">-->
+          <body style="font-size:17px; white-space: pre-line;"
+                class="merienda ellipsis">
           {{ feedback.comment }}
           <q-rating
             :value="feedback.rating"
@@ -85,7 +95,7 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: response.data.message,
+          message: 'Welcome to Eazy Invites',
           position: 'center',
         });
       })

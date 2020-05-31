@@ -7,10 +7,12 @@
       <a href="/" class="xs">
         <img src="../assets/logo/logo_final.png" width="50px" />
       </a>
-      <a href="/" class="gt-xs">
-        <img src="../assets/logo/logo_final.png" width="120px" />
+      <a href="/" class="gt-xs lt-md">
+        <img src="../assets/logo/logo_final.png" width="80px" />
       </a>
-
+      <a href="/" class="gt-md">
+        <img src="../assets/logo/logo_final.png" width="100px" />
+      </a>
       <q-toolbar-title class="logo_small xs" style="color:white;">Eazy Invites</q-toolbar-title>
       <q-toolbar-title class="logo gt-xs" style="color:white;">Eazy Invites</q-toolbar-title>
       <!--q-tabs
