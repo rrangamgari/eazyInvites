@@ -122,7 +122,7 @@
           :image="null"
           :zIndex="null"
           :resize="false"
-          color="#00FF00"
+          color="blue"
         />
         <div class="absolute-bottom-left custom-caption vertical-middle gt-xs">
           <div class="text-h2 Dancing">Mehendi Function</div>

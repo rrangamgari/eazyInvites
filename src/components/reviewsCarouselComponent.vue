@@ -1,12 +1,14 @@
 <template>
   <div class="q-pa-md" >
-
+<q-parallax
+      src="../assets/home/review.jpg"
+    >
     <q-carousel
       v-model="slide"
       swipeable
       animated
       infinite
-      :autoplay="1000"
+      :autoplay="5000"
       transition-prev="slide-right"
       transition-next="slide-left"
       :padding="padding"
@@ -14,28 +16,31 @@
       :arrows="arrows"
       :navigation="navigation"
       :navigation-position="navPos"
-      height="300px"
-      class="bg-white text-black rounded-borders">
+      class="bg-transparent text-white rounded-borders">
       <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
                         v-for="feedback in feedbackList"
                         :key="feedback.id" >
         <div class="q-mt-md text-center">
+          <!--<img src="~assets/logo/user.png" width="100px" height="100px"
+               class="whatsapp_tab_right">
+          <br>-->
+          <b style="font-size:32px" class="Dancing">{{ feedback.name }}</b>
+          <body style="font-size:17px; white-space: pre-line" class="merienda ellipsis">
+          {{ feedback.comment }}
           <q-rating
             :value="feedback.rating"
-            size="3.5em"
+            size="2em"
             color="grey"
             color-selected="yellow"
             icon="star_border"
             icon-selected="star"
             readonly
-          />
-          <br>
-          <b style="font-size:18px">{{ feedback.name }}</b>
-          <body style="font-size:12px; white-space: pre-line">{{ feedback.comment }}</body>
+          /></body>
         </div>
       </q-carousel-slide>
 
     </q-carousel>
+    </q-parallax>
   </div>
 </template>
 
@@ -46,12 +51,14 @@ axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
+
+
 export default {
   data() {
     return {
-      padding: true,
+      padding: false,
       vertical: false,
-      arrows: true,
+      arrows: false,
       navigation: true,
 
       navPos: 'bottom',
