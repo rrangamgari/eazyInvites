@@ -48,10 +48,14 @@
         <div class="absolute-bottom custom-caption">
           <div class="text-h2 Dancing">Wedding Invitations</div>
           <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda">Once is Lifetime</div>
+          <div class="text-subtitle1 merienda">The honour of your presence is requested
+            at the marriage of
+            <br>Allison Amber Maven
+            <br>and
+            <br>Barron Michael Anderson</div>
         </div>
       </q-carousel-slide>
-    <q-carousel-slide name="third" img-src="~assets/home/ez33.jpg" >
+    <q-carousel-slide name="third" img-src="~assets/home/ez36.jpg" >
       <Snowf
         class="overlay"
         :amount="30"
@@ -65,10 +69,12 @@
         :resize="false"
         color="blue"
       />
-        <div class="absolute-bottom custom-caption">
+        <div class="absolute-bottom-left custom-caption">
           <div class="text-h2 Dancing">Engagement </div>
           <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda">How can we miss our loved ones...</div>
+          <div class="text-subtitle1 merienda" style="word-wrap">Finally,
+            I have someone who took my hand, opened my
+            mind and touched my heart.<br> Just got engaged to my happily ever after.</div>
         </div>
       </q-carousel-slide>
      <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
@@ -91,10 +97,10 @@
            :resize="false"
            color="#FFFF00"
          />
-         <div class="absolute-bottom custom-caption">
+         <div class="absolute-bottom-right custom-caption">
            <div class="text-h2 Dancing">New Baby Born</div>
            <div class="text-h4">&nbsp;</div>
-           <div class="text-subtitle1 merienda">
+           <div class="text-subtitle1 merienda" style="word-wrap">
              “Children bring us a piece of heaven on earth.” – Roland Leonhardt</div>
          </div>
       </q-carousel-slide>
@@ -131,14 +137,6 @@
           <div class="text-subtitle1 merienda" style="word-wrap">
             Mehndi is derived from the Sanskrit word mendhikā.
             <br>The use of mehndi and turmeric is described in the earliest
-             Hindu Vedic ritual books.
-            </div>
-        </div>
-        <div class="absolute-bottom-right custom-caption xs">
-          <div class="text-h4" style="font-size:18px">Mehendi Function</div>
-          <div class="text-subtitle1 merienda" style="font-size:12px">
-            Mehndi is derived from the Sanskrit word mendhikā.
-            The use of mehndi and turmeric is described in the earliest
              Hindu Vedic ritual books.
             </div>
         </div>

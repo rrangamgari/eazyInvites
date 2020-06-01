@@ -15,8 +15,9 @@
           </q-card-section>
           <q-card-section class="q-pa-xs row items-center">
             <div class="col-7  q-px-xs">
-              <div class="text-left q-px-xs" style="font-size: 10px;">
-                Type: {{ eventType[event.eventtypeid-1].label }}
+              <div class="text-left q-px-xs" style="font-size: 10px;"
+                   v-if="eventType[event.eventtypeid-1] != null">
+                Type:  {{ eventType[event.eventtypeid-1].label }}
               </div>
               <div class="text-left q-px-xs" style="font-size: 10px;">
                 Host: {{ event.hostedby }}
