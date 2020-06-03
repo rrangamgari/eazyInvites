@@ -28,43 +28,58 @@
     </div>
     <div class="text-subtitle1 text-center col-12 q-py-md">RSVP</div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
-      <q-btn style="width:100%;" unelevated label="Will Attend"
+      <q-btn style="width:100%;" unelevated label="Will Attend" no-caps
              :outline="status !== 1" color="green" @click="status = 1"/>
     </div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
-      <q-btn style="width:100%;" unelevated label="Tentaive"
+      <q-btn style="width:100%;" unelevated label="Tentaive" no-caps
              :outline="status !== 3" color="yellow" @click="status = 3"/>
     </div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
-      <q-btn style="width:100%;" unelevated label="Regrets"
+      <q-btn style="width:100%;" unelevated label="Regrets" no-caps
              :outline="status !== 4" color="red" @click="status = 4"/>
     </div>
     <div class="col-12 q-py-md">
       <q-form
         v-show="status !== null && status !== 0"
-        class="q-pa-sm"
-        :style="`max-width: ${max(600, ($q.screen.width/6))}px; margin: auto;`"
+        class="q-pa-sm row"
+        :style="`max-width: ${max(600, ($q.screen.width/2))}px; margin: auto;`"
         @submit="onSubmit"
-        @reset="status = null"
+        @reset="onReset"
       >
         <q-input
+          v-show="status !== 4"
           filled
-          class="col-xs-6 col-sm-12"
+          class="col-xs-12 col-sm-6"
+          :class="`${$q.screen.gt.xs ? 'q-pr-xs' : ''}`"
           type="number"
-          v-model="adults"
+          v-model.number="adults"
           label="Adults"
           lazy-rules
-          :rules="[ val=> val !== null && val !== 0 || 'Please enter a Number']"
+          :rules="[ val=> val !== null && val > 0 &&
+           val <= invite.eventDetails.maxguests || 'Invalid Number']"
+        />
+
+        <q-input
+          v-show="status !== 4"
+          filled
+          class="col-xs-12 col-sm-6"
+          :class="`${$q.screen.gt.xs ? 'q-pl-xs' : ''}`"
+          :disable="!invite.eventDetails.eventallowkids"
+          type="number"
+          v-model.number="kids"
+          suffix="Kids"
+          lazy-rules
+          :rules="[ val=> val !== null && val >= 0 &&
+           val <= invite.eventDetails.maxguests || 'Invalid Number']"
         />
 
         <q-input
           filled
-          class="col-xs-6 col-sm-12"
-          type="number"
-          v-model="kids"
-          label="Kids"
-          lazy-rules
-          :rules="[ val=> val !== null && val !== 0 || 'Please enter a Number']"
+          class="col-12 q-pb-md"
+          type="textarea"
+          v-model="message"
+          label="Message to Host"
         />
 
         <div>
@@ -93,6 +108,9 @@ export default {
       invite: {},
       eventType: [],
       status: 0,
+      adults: 1,
+      kids: 0,
+      message: '',
       colour: ['white', 'green', 'yellow', 'red', 'grey', 'black'],
     };
   },
@@ -145,6 +163,15 @@ export default {
     },
     max(a, b) {
       return (a > b) ? a : b;
+    },
+    onSubmit() {
+
+    },
+    onReset() {
+      this.status = null;
+      this.adults = 1;
+      this.kids = 0;
+      this.message = '';
     },
   },
 };
