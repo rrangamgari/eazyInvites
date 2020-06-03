@@ -74,11 +74,11 @@
           :data="data"
           :columns="columns"
           color="primary"
-          row-key="name"
-          icon-left="contacts"
-          virtual-scroll
+          row-key="eventmemberid"
           :rows-per-page-options="[0]"
           :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
+          selection="multiple"
+          :selected.sync="selected"
         >
           <template v-slot:header-cell="props">
             <q-th :props="props">
@@ -103,9 +103,8 @@
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td key="checkBox" >
-                <q-checkbox :value="false"
-                            v-model="props.row.eventmemberid" color=""
-                            false-value/>
+                <q-checkbox :val="props.row"
+                  v-model="selected"/>
               </q-td>
               <q-td key="firstname" :props="props">
                 {{ props.row.firstname }}
@@ -188,7 +187,7 @@
           </template>
         </q-table>
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="primary" label="Continue" />
+          <q-btn @click="onContinue()" color="primary" label="Continue" />
           <q-btn
             flat
             @click="step = 1"
@@ -200,6 +199,41 @@
       </q-step>
 
       <q-step :name="4" title="Review and Send" icon="add_comment">
+      <div class="col-12 q-px-md q-py-sm q-pb-lg">
+        <q-card class="row">
+          <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
+            <!--q-card-section class="q-pa-xs">
+              <div class="text-center text-weight-medium" style="font-size: 16px;">
+              {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
+                  event.eventtitle : 'Untitled Event' }}
+              </div>
+            </q-card-section-->
+            <q-card-section class="q-pa-xs row items-center">
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                Type: {{ eventType.label }}
+              </div>
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                Host: Self
+              </div>
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                Message: <br>{{ eventmessage }}<br>
+              </div>
+              <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
+                Start: {{ (new Date(event.startdate)).toDateString() }}
+              </div>{{ event.hostedby }}
+              <div class="text-left q-px-xs col-12" style="font-size: 10px;">
+                End: {{ (new Date(event.enddate)).toDateString() }}
+              </div-->
+              <div class="text-left q-px-xs q-py-sm col-12" style="font-size: 12px;">
+                {{ selected.length }} contacts selected
+              </div>
+            </q-card-section>
+          </q-card-section>
+          <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
+            <q-img src="~assets/logo/Easy_Invites.png" />
+          </q-card-section>
+        </q-card>
+      </div>
         Try out different ad text to see what brings in the most customers, and
         learn how to enhance your ads using features like ad extensions. If you
         run into any problems with your ads, find out how to tell if they're
@@ -238,6 +272,7 @@ export default {
       step: 1,
       eventType: '',
       selection: ['teal'],
+      selected: [],
       eventmessage: `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`,
       options: [
         { value: 1, label: 'Birthday' },
@@ -249,14 +284,6 @@ export default {
 
       accept: false,
       columns: [
-        {
-          name: 'checkBox',
-          required: true,
-          label: 'Check All',
-          align: 'left',
-          field: (row) => `${row.eventmemberid}`,
-          sortable: false,
-        },
         {
           name: 'firstname',
           required: true,
@@ -301,7 +328,7 @@ export default {
           field: (row) => `${row.eventmemberid}`,
         },
       ],
-
+      dataLoaded: false,
       data: [
         {
           firstname: 'Frozen Yogurt',
@@ -330,9 +357,12 @@ export default {
           thickness: '3',
         });
         this.step = 2;
-        axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-          'login-token',
-        )}`;
+
+        if (this.dataLoaded) {
+          Loading.hide();
+          return;
+        }
+
         axios
           .get('/api/userEvents/userguestlist')
           .then((response) => {
@@ -356,6 +386,8 @@ export default {
               position: 'top',
             });
           });
+
+        this.dataLoaded = true;
       }
     },
 
@@ -369,6 +401,10 @@ export default {
       // alert(this.eventType);
       // eslint-disable-next-line max-len
       this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
+    },
+    onContinue() {
+      this.step = 4;
+      window.console.log(this.selected);
     },
   },
   mounted() {

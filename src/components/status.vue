@@ -172,7 +172,7 @@ export default {
   name: 'statusComponent',
   data() {
     return {
-      eventid: '',
+      eventId: '',
       event: {},
       eventType: [],
       colour: ['white', 'green', 'yellow', 'red', 'grey', 'black'],
@@ -217,7 +217,7 @@ export default {
     };
   },
   mounted() {
-    this.eventid = this.$route.params.eventId;
+    this.eventId = this.$route.params.eventId;
 
     Loading.show({
       spinner: QSpinnerTail,
@@ -230,7 +230,7 @@ export default {
     )}`;
 
     axios
-      .get(`/api/userEvents/event/${this.eventid}`)
+      .get(`/api/userEvents/event/${this.eventId}`)
       .then((response) => {
         this.event = response.data.data;
         Loading.hide();
@@ -250,7 +250,7 @@ export default {
       });
 
     axios
-      .get(`/api/userEvents/guestlist/${this.eventid}`)
+      .get(`/api/userEvents/guestlist/${this.eventId}`)
       .then((response) => {
         const { data } = response.data;
         this.data = data;
