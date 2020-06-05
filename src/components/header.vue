@@ -208,6 +208,24 @@
             <q-item
               clickable
               v-close-popup
+              to="/invites"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Invites</q-item-label>
+                <q-item-label caption>Show my invites</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
               to="/addContacts"
               v-show="!viewLogin()"
             >

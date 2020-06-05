@@ -199,9 +199,18 @@
       </q-step>
 
       <q-step :name="4" title="Review and Send" icon="add_comment">
-      <div class="col-12 q-px-md q-py-sm q-pb-lg">
-        <q-card class="row">
-          <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
+      <div class="col-12 q-px-md q-py-sm q-pb-lg row justify-center"
+       :class="$q.screen.xs ? 'q-gutter-sm' : ''">
+        <q-expansion-item
+          class="col-xs-12 col-sm-6 overflow-hidden"
+          style="border-radius: 8px"
+          icon="edit"
+          label="Details"
+          v-if="$q.screen.xs"
+          :header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
+        >
+        <q-card class="full-height rounded-borders">
+          <q-card-section class="q-pa-xs">
             <!--q-card-section class="q-pa-xs">
               <div class="text-center text-weight-medium" style="font-size: 16px;">
               {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
@@ -229,18 +238,84 @@
               </div>
             </q-card-section>
           </q-card-section>
-          <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
+        </q-card>
+        </q-expansion-item>
+        <div v-else class="col-6 q-pa-xs row">
+        <q-card class="full-height">
+          <q-card-section class="q-pa-xs">
+            <!--q-card-section class="q-pa-xs">
+              <div class="text-center text-weight-medium" style="font-size: 16px;">
+              {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
+                  event.eventtitle : 'Untitled Event' }}
+              </div>
+            </q-card-section-->
+            <q-card-section class="q-pa-xs row items-center">
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                Type: {{ eventType.label }}
+              </div>
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                Host: Self
+              </div>
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                Message: <br>{{ eventmessage }}<br>
+              </div>
+              <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
+                Start: {{ (new Date(event.startdate)).toDateString() }}
+              </div>{{ event.hostedby }}
+              <div class="text-left q-px-xs col-12" style="font-size: 10px;">
+                End: {{ (new Date(event.enddate)).toDateString() }}
+              </div-->
+              <div class="text-left q-px-xs q-py-sm col-12" style="font-size: 12px;">
+                {{ selected.length }} contacts selected
+              </div>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+        </div>
+        <q-expansion-item
+          class="col-xs-12 col-sm-6 overflow-hidden"
+          style="border-radius: 8px"
+          icon="attachment"
+          label="Invitation"
+          v-if="$q.screen.xs"
+          :header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
+        >
+        <q-card class="full-height">
+          <q-card-section class="q-pa-xs">
             <q-img src="~assets/logo/Easy_Invites.png" />
           </q-card-section>
         </q-card>
+        </q-expansion-item>
+        <div v-else class="col-6 q-pa-xs">
+        <q-card class="full-height">
+          <q-card-section class="q-pa-xs">
+            <q-img src="~assets/logo/Easy_Invites.png" />
+          </q-card-section>
+        </q-card>
+        </div>
       </div>
-        Try out different ad text to see what brings in the most customers, and
-        learn how to enhance your ads using features like ad extensions. If you
-        run into any problems with your ads, find out how to tell if they're
-        running and how to resolve approval issues.
+
+      <div class="q-pa-md text-h6">
+        Price : ${{ price }} <br>
+        Disc. : ${{ discount}} <br>
+        Total : ${{ total}} <br>
+      </div>
+
+      <div class="q-pa-sm row">
+        <q- filled type="text"
+         label="Coupon" v-model="coupon" clearable/>
+         <q-input filled class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
+          :class="`${$q.screen.gt.xs ? 'q-mr-sm' : ''}`"
+          type="text" label="Coupon" v-model="coupon" clearable
+        />
+        <div class="q-pt-sm col-xs-10 col-sm-3 col-md-2">
+          <q-btn color="primary" class="full-width full-height"
+           label="Apply Coupon" @click="applyCoupon()"/>
+        </div>
+      </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="Finish" />
+          <q-btn color="primary" label="Finish" @click="onFinish()"/>
           <q-btn
             flat
             @click="step = 2"
@@ -337,6 +412,11 @@ export default {
           email: 24,
         },
       ],
+      coupon: '',
+      coupons: [{ label: 'NEW10', discount: 10 }, { label: 'EAZY20', discount: 20 }],
+      price: 0,
+      discount: 0,
+      total: 0,
     };
   },
 
@@ -405,6 +485,86 @@ export default {
     onContinue() {
       this.step = 4;
       window.console.log(this.selected);
+      this.price = this.selected.length * 2;
+      this.total = this.price;
+    },
+    applyCoupon() {
+      let valid = false;
+      this.coupons.forEach((coupon) => {
+        if (coupon.label === this.coupon) {
+          valid = true;
+          this.discount = this.price * (coupon.discount / 100.0);
+        }
+      });
+      this.total = this.price - this.discount;
+      if (valid) {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Coupon Applied',
+          position: 'top',
+        });
+      } else {
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'error',
+          message: 'Invalid Coupon',
+          position: 'top',
+        });
+      }
+    },
+    onFinish() {
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
+      axios.post('/api/userEvents/event',
+        {
+          eventtypeid: this.eventType.value,
+          eventtitle: `Event ${(new Date()).toUTCString()}`,
+          eventmessage: this.eventmessage,
+        })
+        .then((response) => {
+          const eventId = response.data.data;
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: response.data.data,
+            position: 'center',
+          });
+
+          const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
+          axios.post(`/api/userEvents/eventGuests/${eventId}`, eventMemberIdList)
+            .then((Response) => {
+              this.$q.notify({
+                color: 'green-4',
+                textColor: 'white',
+                icon: 'cloud_done',
+                message: Response.data.data,
+                position: 'center',
+              });
+              this.$router.push(`/events/${eventId}`);
+            })
+            .catch((e) => {
+              this.$q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'error',
+                message: e.message,
+                position: 'top',
+              });
+            });
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
     },
   },
   mounted() {

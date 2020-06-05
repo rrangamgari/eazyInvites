@@ -2,7 +2,7 @@
   <div>
     <div class="q-pa-lg row warp justify-center items-center">
       <div class="col-12 q-px-md q-py-sm q-pb-lg">
-        <q-card class="row">
+        <q-card class="row justify-center">
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
             <q-card-section class="q-pa-xs">
               <div class="text-center text-weight-medium" style="font-size: 16px;">
@@ -67,7 +67,7 @@
           <q-card-section class="q-pa-xs">
             <div class="text-subtitle2 text-center">Tentative</div>
             <q-avatar style="position: absolute; top: 5px; right: 5px;"
-             icon="oval" :color="colour[2]" size="12px"/>
+             icon="oval" :color="colour[3]" size="12px"/>
           </q-card-section>
           <q-card-section class="q-pa-xs row no-warp justify-center items-center">
             <div class="q-px-auto q-ma-none" style="width:70px">
@@ -175,7 +175,7 @@ export default {
       eventId: '',
       event: {},
       eventType: [],
-      colour: ['white', 'green', 'yellow', 'red', 'grey', 'black'],
+      colour: ['white', 'green', 'grey', 'yellow', 'red', 'black'],
       A: { adults: 0, kids: 0 },
       T: { adults: 0, kids: 0 },
       N: { count: 0 },
@@ -259,7 +259,6 @@ export default {
           da = da.concat(data.map((r, j) => (
             { ...r, index: i * data.length + j + 1 })));
         }
-        this.data = da;
         this.computeCounts();
       })
       .catch((e) => {

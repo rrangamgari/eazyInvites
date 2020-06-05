@@ -17,7 +17,9 @@
               Host: {{ invite.eventDetails.hostedby }}
             </div>
             <div class="text-left q-px-xs" style="font-size: 10px;">
-              Type: {{ eventType[invite.eventDetails.eventtypeid-1].label }}
+              Type: {{ eventType[invite.eventDetails.eventtypeid-1] !== null &&
+               eventType[invite.eventDetails.eventtypeid-1] !== undefined ?
+               eventType[invite.eventDetails.eventtypeid-1].label : '' }}
             </div>
           </q-card-section>
           <q-card-actions class="col-3 q-pl-sm">

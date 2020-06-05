@@ -4,6 +4,9 @@
       src="../assets/home/review.jpg"
       :height="500"
     >
+    <div class="q-pa-sm absolute-right" >
+      <q-btn label="My Feedback" size="md" no-caps rounded icon="add" dense color="primary" />
+    </div>
     <q-carousel
       v-model="slide"
       swipeable
