@@ -9,6 +9,7 @@
       :autoplay="5000"
       transition-prev="fade"
       transition-next="fade"
+      keep-alive
     >
     <q-carousel-slide name="first" img-src="../assets/home/ez4-min.jpg">
       <Snowf

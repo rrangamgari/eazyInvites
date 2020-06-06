@@ -60,6 +60,9 @@ export default {
     };
   },
   mounted() {
+    if (this.$q.sessionStorage.getItem('login-token') === null) {
+      this.$router.push('/login');
+    }
     Loading.show({
       spinner: QSpinnerTail,
       spinnerColor: 'primary',

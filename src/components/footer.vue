@@ -81,18 +81,15 @@
       </q-toolbar-title>
     </q-toolbar>
 
-    <addFeedbackComponent></addFeedbackComponent>
 
   </q-footer>
 </template>
 
 <script>
-import addFeedbackComponent from './addFeedbackComponent.vue';
 
 export default {
   name: 'footerComponent',
   components: {
-    addFeedbackComponent,
   },
   data() {
     return {
@@ -112,6 +109,13 @@ export default {
     contentSize() {
       return this.moreContent ? 150 : 5;
     },
+  },
+  mounted() {
+    if (this.$q.sessionStorage.getItem('login-token') === null) {
+      if (this.$route.path !== '/newUser') {
+        this.$router.push('/login');
+      }
+    }
   },
 };
 </script>
