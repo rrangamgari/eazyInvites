@@ -1,8 +1,9 @@
 <template>
   <q-footer >
-    <q-toolbar class="glossy center">
+    <q-toolbar class="shadow-5 elevated bordered center bg-white text-blue-7"
+               style="color:#0170bc">
       <q-toolbar-title style="align:center;text-align: center;">
-        <div class="" style="color:#FFFFFF;font-family: 'Merienda', cursive;">
+        <div class="" style="font-family: 'Merienda', cursive;">
           Follow us
         </div>
         <div style="height:60px">
@@ -72,7 +73,7 @@
           &nbsp;
         </div>
         <div
-          style="font-size:12px;color:#FFFFFF;font-family: 'Merienda', cursive;"
+          style="font-size:12px;font-family: 'Merienda', cursive;"
         >
           Privacy Policy | About Us | Contact us
         </div>

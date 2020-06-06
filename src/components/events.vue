@@ -2,13 +2,13 @@
   <div class="q-pt-lg">
     <div class="q-pb-lg q-px-md row warp items-center"
      v-for="(title,index) in titles" :key="index">
-      <div class="text-h6 q-px-md q-pb-md text-left col-12">
+      <div class="text-h6 q-px-md q-pb-md text-left col-12 text-primary">
         {{ ((events(index).length == 0) ? 'No ' : '') + title }}</div>
       <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
        v-for="event in events(index)" :key="event.eventdetailsid">
         <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)">
           <q-card-section class="q-pa-xs">
-            <div class="text-center text-weight-medium" style="font-size: 16px;">
+            <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
             {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
                 event.eventtitle : 'Untitled Event' }}
             </div>

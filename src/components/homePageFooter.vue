@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-toolbar class="glossy center">
+    <q-toolbar class="center">
       <q-toolbar-title style="align:center;text-align: center;">
         <div class="" style="color:#FFFFFF;font-family: 'Merienda', cursive;">
           Follow us

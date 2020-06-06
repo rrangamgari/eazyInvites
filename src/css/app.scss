@@ -1,9 +1,9 @@
 #ei_tab{
   display:block;
   position:fixed;
-  background-color:#003755;
+  background-color:#0072C6;
   color:#fff;
-  border:1px solid #003755;
+  border:1px solid #0072C6;
   font-size:15px;
   font-family:Arial;
   line-height:15px;
@@ -47,7 +47,7 @@
   -ms-transform-origin:100% 100% 0
 }
 #ei_tab.ei_tab_right:hover,#ei_tab.ei_tab_right:focus,#ei_tab.ei_tab_right:active{
-  background:#26A69A;
+  background:#0072C6;
   -ms-transform:rotate(-90deg) scale(1.02) translateY(-5px);
   -webkit-transform:rotate(-90deg) translateY(-5px);
   -moz-transform:rotate(-90deg) translateY(-5px)
@@ -67,7 +67,7 @@
   -ms-transform-origin:0 0
 }
 #ei_tab.ei_tab_left:hover,#ei_tab.ei_tab_left:focus,#ei_tab.ei_tab_left:active{
-  background:#26A69A;
+  background:#0072C6;
   -ms-transform:rotate(-90deg) scale(1.02) translateY(5px);
   -webkit-transform:rotate(-90deg) translateY(5px);
   -moz-transform:rotate(-90deg) translateY(5px)
@@ -139,7 +139,7 @@
   transition: 0.8s ease;
 }
 .price_header {
-  background-color: #003755;
+  background-color: #0072C6;
   padding: 20px 0 20px 0;
   -webkit-transition: 0.5s ease;
   -o-transition: 0.5s ease;

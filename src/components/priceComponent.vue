@@ -21,7 +21,7 @@
             <q-card-section class="flex flex-center"
             >
             <div>
-               <q-btn label="Select Plan" type="button" color="secondary" rounded=""/>
+               <q-btn label="Select Plan" type="button" color="primary" rounded=""/>
           </div>
             </q-card-section>
           </q-card>
@@ -48,7 +48,7 @@
               <ul class="price-list text-subtitle1 merienda">
               <li>upto 5000 Invitations</li>
               <li>
-                <q-badge color="secondary">
+                <q-badge color="primary">
       {{ standard }} Invitations
     </q-badge>
                 <q-slider v-model="standard" :min="200" :max="5000"
@@ -61,7 +61,7 @@
             <div>
                <!--<a href="#" class="btn btn-large btn-green btn-green-margin"
               >Select Plan</a>-->
-              <q-btn label="Select Plan" type="button" color="secondary" rounded=""/>
+              <q-btn label="Select Plan" type="button" color="primary" rounded=""/>
           </div>
             </q-card-section>
           </q-card>
@@ -86,7 +86,7 @@
         <q-card-section class="flex flex-center"
         >
           <div>
-            <q-btn label="Select Plan" type="button" color="secondary" rounded=""/>
+            <q-btn label="Select Plan" type="button" color="primary" rounded=""/>
           </div>
         </q-card-section>
       </q-card>

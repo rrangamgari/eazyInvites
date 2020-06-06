@@ -96,9 +96,9 @@ module.exports = function (/* ctx */) {
       // analyze: true,
 
       // Options below are automatically set depending on the env, set them if you want to override
-      // preloadChunks: false,
+      preloadChunks: true,
       // extractCSS: false,
-
+      webpackManifest: true,
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack(cfg) {
         cfg.module.rules.push({
