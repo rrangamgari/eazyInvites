@@ -223,8 +223,8 @@ export default {
       axios.put(`/api/userEvents/invites/${this.inviteId}`,
         {
           status: { eventstatusid: this.status, eventstatusdescription: '' },
-          headcount: `${this.status === 4 ? 0 : this.adults}`,
-          kidscount: `${this.status === 4 ? 0 : this.kids}`,
+          headcount: `${this.status === 4 ? '0' : this.adults}`,
+          kidscount: `${this.status === 4 ? '0' : this.kids}`,
         })
         .then((response) => {
           if (response.data.data === 'User is null') {

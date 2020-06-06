@@ -14,7 +14,13 @@
           class="q-gutter-md q-pa-xs q-pr-md"
           style="width:350px"
         >
-
+            <q-input
+              v-model="eventtitle"
+              type="text"
+              filled
+              label="Event Title"
+              name="eventtitle"
+            />
             <q-select
               name="eventType"
               filled
@@ -28,9 +34,16 @@
               "
             >
             </q-select>
+            <div class="row">
+            <q-input style="width: 48%;"
+             v-model="eventdate" filled type="date" stack-label label="Event Date"/>
+            <div style="width: 4%;"/>
+            <q-input style="width: 48%;"
+             v-model="eventtime" filled type="time" stack-label label="Event Time"/>
+            </div>
             <q-file
               filled
-              v-model="model"
+              v-model="file"
               label="Upload Invitation"
               style="padding-right:15px"
             >
@@ -282,14 +295,14 @@
         >
         <q-card class="full-height">
           <q-card-section class="q-pa-xs">
-            <q-img src="~assets/logo/Easy_Invites.png" />
+            <q-img :src="url" />
           </q-card-section>
         </q-card>
         </q-expansion-item>
         <div v-else class="col-6 q-pa-xs">
         <q-card class="full-height">
           <q-card-section class="q-pa-xs">
-            <q-img src="~assets/logo/Easy_Invites.png" />
+            <q-img :src="url" />
           </q-card-section>
         </q-card>
         </div>
@@ -343,8 +356,13 @@ export default {
   components: {},
   data() {
     return {
-      model: null,
+      file: null,
+      fileId: '',
+      url: '',
       step: 1,
+      eventtitle: '',
+      eventdate: null,
+      eventtime: null,
       eventType: '',
       selection: ['teal'],
       selected: [],
@@ -437,6 +455,7 @@ export default {
           thickness: '3',
         });
         this.step = 2;
+        this.url = URL.createObjectURL(this.file);
 
         if (this.dataLoaded) {
           Loading.hide();
@@ -517,14 +536,14 @@ export default {
     },
     onFinish() {
       axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
-      axios.post('/api/userEvents/event',
-        {
-          eventtypeid: this.eventType.value,
-          eventtitle: `Event ${(new Date()).toUTCString()}`,
-          eventmessage: this.eventmessage,
-        })
+
+      const formData = new FormData();
+      formData.append('file', this.file);
+      if (this.eventtitle === null || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
+
+      axios.post('/api/userEvents/uploadFile', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         .then((response) => {
-          const eventId = response.data.data;
+          this.fileId = response.data.data;
           this.$q.notify({
             color: 'green-4',
             textColor: 'white',
@@ -532,10 +551,18 @@ export default {
             message: response.data.data,
             position: 'center',
           });
-
-          const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
-          axios.post(`/api/userEvents/eventGuests/${eventId}`, eventMemberIdList)
+          axios.post('/api/userEvents/event',
+            {
+              eventtypeid: this.eventType.value,
+              eventtitle: this.eventtitle,
+              eventmessage: this.eventmessage,
+              startdate: new Date(`${this.eventdate}T${this.eventtime}:00`),
+              enddate: new Date(`${this.eventdate}T${this.eventtime}:00`),
+              attachmentlink: `/api/userEvents/file/${this.fileId}`,
+              eventallowkids: true,
+            })
             .then((Response) => {
+              const eventId = Response.data.data;
               this.$q.notify({
                 color: 'green-4',
                 textColor: 'white',
@@ -543,9 +570,31 @@ export default {
                 message: Response.data.data,
                 position: 'center',
               });
-              this.$router.push(`/events/${eventId}`);
+
+              const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
+              axios.post(`/api/userEvents/eventGuests/${eventId}`, eventMemberIdList)
+                .then((Response1) => {
+                  this.$q.notify({
+                    color: 'green-4',
+                    textColor: 'white',
+                    icon: 'cloud_done',
+                    message: Response1.data.data,
+                    position: 'center',
+                  });
+                  this.$router.push(`/events/${eventId}`);
+                })
+                .catch((e) => {
+                  this.$q.notify({
+                    color: 'red-5',
+                    textColor: 'white',
+                    icon: 'error',
+                    message: e.message,
+                    position: 'top',
+                  });
+                });
             })
             .catch((e) => {
+              //  this.errors.push(e);
               this.$q.notify({
                 color: 'red-5',
                 textColor: 'white',
@@ -556,7 +605,6 @@ export default {
             });
         })
         .catch((e) => {
-          //  this.errors.push(e);
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -580,6 +628,9 @@ export default {
       })
       .catch((e) => {
         //  this.errors.push(e);
+        if (e.message === 'Request failed with status code 401') {
+          this.$router.push('/login');
+        }
         this.$q.notify({
           color: 'red-5',
           textColor: 'white',

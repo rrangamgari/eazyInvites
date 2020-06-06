@@ -26,7 +26,8 @@
             </q-card-section>
           </q-card-section>
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
-            <q-img src="~assets/logo/Easy_Invites.png" />
+            <q-img :src="file" :placeholder-src="require('../assets/logo/Easy_Invites.png')"
+             alt="Invitation" contain/>
           </q-card-section>
         </q-card>
       </div>
@@ -175,6 +176,7 @@ export default {
       eventId: '',
       event: {},
       eventType: [],
+      file: null,
       colour: ['white', 'green', 'grey', 'yellow', 'red', 'black'],
       A: { adults: 0, kids: 0 },
       T: { adults: 0, kids: 0 },
@@ -233,6 +235,32 @@ export default {
       .get(`/api/userEvents/event/${this.eventId}`)
       .then((response) => {
         this.event = response.data.data;
+        console.log(this.event.attachmentlink);
+        if (this.event.attachmentlink !== null) {
+          axios
+            .get(this.event.attachmentlink, { responseType: 'arraybuffer' })
+            .then((Response) => {
+              const image = btoa(
+                new Uint8Array(Response.data)
+                  .reduce((data, byte) => data + String.fromCharCode(byte), ''),
+              );
+              this.file = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
+              console.log(`file : ${this.file}`);
+            })
+            .catch((e) => {
+              if (e.message === 'Request failed with status code 401') {
+                this.$router.push('/login');
+              }
+              this.$q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'error',
+                message: e.message,
+                position: 'top',
+              });
+            });
+        }
+
         Loading.hide();
       })
       .catch((e) => {
