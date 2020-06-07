@@ -308,6 +308,9 @@ export default {
     },
     viewLogin() {
       window.console.log(`login-token : ${this.$q.sessionStorage.getItem('login-token')}`);
+      if (this.$q.sessionStorage.getItem('login-token') === null || this.$q.sessionStorage.getItem('login-token') === 'null') {
+        return true;
+      }
       return (this.$q.sessionStorage.getItem('login-token') === null);
     },
     onLogoutClick() {

@@ -12,16 +12,19 @@
       style="width:350px;"
     >
       <q-input
-        filled
+        outlined
         type="text"
         v-model="name"
-        label="Email or Phone"
+        label="Phone"
         lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Email or Phone']"
+        mask="(###) ### - ####"
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter  Phone']"
       />
 
       <q-input
-        filled
+        outlined
         type="password"
         v-model="age"
         label="Password"
