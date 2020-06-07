@@ -89,7 +89,7 @@
           color="primary"
           row-key="eventmemberid"
           :rows-per-page-options="[0]"
-          :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
+          :table-header-style="{ backgroundColor: '#0072C6', color: '#FFFFFF' }"
           selection="multiple"
           :selected.sync="selected"
         >

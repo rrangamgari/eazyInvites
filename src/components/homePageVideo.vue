@@ -1,16 +1,7 @@
 <template>
-  <div class="bg-grey-2">
-    <q-responsive :ratio="16/7" style="">
-      <div class="q-video" style="">
-        <iframe
-          src="https://player.vimeo.com/video/421699838"
-          frameborder="0"
-          allowfullscreen
-          allow="autoplay; fullscreen"
-        />
-      </div>
+    <q-responsive :ratio="16/9" >
+      <q-video src="https://player.vimeo.com/video/421699838" style="height: calc(100vh - 1px);"></q-video>
     </q-responsive>
-  </div>
 </template>
 
 <script>

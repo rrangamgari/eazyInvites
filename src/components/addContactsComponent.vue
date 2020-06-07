@@ -11,7 +11,8 @@
       icon-left="contacts"
       hide-bottom
       :pagination="{rowsPerPage: 0}"
-      :table-header-style="{ backgroundColor: '#003755', color: '#FFFFFF' }"
+      :table-header-style="{ backgroundColor: '#0072C6', color: '#FFFFFF' }"
+
     >
       <template v-slot:top-right>
         <q-btn
@@ -49,6 +50,11 @@
             size="2.5em"
             v-show="props.col.name == 'secondaryPhone'"
           />
+          <q-icon
+            name="delete"
+            size="2.5em"
+            v-show="props.col.name == 'delete'"
+          />
         </q-th>
       </template>
       <template v-slot:body="props">
@@ -76,7 +82,7 @@
             {{ props.row.lastname }}
             <q-popup-edit
               v-model="props.row.lastname"
-              title="Edit the Name"
+              title="Edit the Last Name"
               buttons
             >
               <q-input v-model="props.row.lastname" dense autofocus counter />
@@ -123,11 +129,9 @@
             </q-popup-edit>
           </q-td>
           <q-td key="delete" :props="props">
-            <img
-              src="~assets/icon/delete-file-icon.png"
-              style="cursor:pointer;"
-              @click="deleteMe(props.row.eventmemberid)"
-            />
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(props.row.eventmemberid)"/>
           </q-td>
         </q-tr>
       </template>
@@ -262,15 +266,80 @@ export default {
         });
       }
     },
+    loadContacts() {
+      Loading.show({
+        spinner: QSpinnerTail,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .get('/api/userEvents/userguestlist')
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          this.data = response.data.data;
+          Loading.hide();
+          // this.data = this.data.concat(response.data.data);
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          Loading.hide();
+          if (e.message === 'Request failed with status code 401') {
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
+    },
     deleteMe(id) {
       // naive encoding to csv format
-
-      this.$q.notify({
-        message: `Browser denied file download...${id}`,
-        color: 'negative',
-        icon: 'warning',
-        position: 'center',
+      Loading.show({
+        spinner: QSpinnerTail,
+        spinnerColor: 'primary',
+        thickness: '3',
       });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .delete(`/api/userEvents/userguest/${id}`)
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          if (response.data) {
+            // this.mounted();
+            this.$q.notify({
+              color: 'positive',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Successfully Deleted',
+              position: 'top',
+            });
+            this.loadContacts();
+          }
+          // this.data = this.data.concat(response.data.data);
+          Loading.hide();
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          if (e.message === 'Request failed with status code 401') {
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
     },
     firstnameValidation(val) {
       if (val === '') {
@@ -352,35 +421,7 @@ export default {
     };
   },
   mounted() {
-    Loading.show({
-      spinner: QSpinnerTail,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-      'login-token',
-    )}`;
-    axios
-      .get('/api/userEvents/userguestlist')
-      .then((response) => {
-        // JSON responses are automatically parsed.
-        this.data = response.data.data;
-        // this.data = this.data.concat(response.data.data);
-      })
-      .catch((e) => {
-        //  this.errors.push(e);
-        if (e.message === 'Request failed with status code 401') {
-          this.$router.push('/login');
-        }
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-      });
-    Loading.hide();
+    this.loadContacts();
   },
 };
 </script>

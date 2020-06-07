@@ -2,7 +2,7 @@
   <div class="q-pa-md" >
 <q-parallax
       src="../assets/home/review.jpg"
-      :height="500"
+      :height="600"
     >
     <div class="q-pa-sm absolute-right" >
       <q-btn label="My Feedback" size="md" no-caps rounded icon="add" dense color="primary" />

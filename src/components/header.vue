@@ -1,20 +1,23 @@
 <template>
   <q-header id="header" ref="header" v-scroll="scrollHandler"
-   style="z-index:10;" :style="hStyle">
+   style="z-index:10;" :style="hStyle" :class="hClass">
     <q-toolbar>
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
       <a href="/" class="xs">
-        <img src="../assets/logo/logo_final.png" width="50px" />
+        <img src="../assets/logo/logo_final.png" width="40px" />
       </a>
       <a href="/" class="gt-xs lt-md">
-        <img src="../assets/logo/logo_final.png" width="80px" />
+        <img src="../assets/logo/logo_final.png" width="60px" />
+      </a>
+      <a href="/" class="md">
+        <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
       <a href="/" class="gt-md">
-        <img src="../assets/logo/logo_final.png" width="100px" />
+        <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <q-toolbar-title class="logo_small xs" style="color:white;">Eazy Invites</q-toolbar-title>
-      <q-toolbar-title class="logo gt-xs" style="color:white;">Eazy Invites</q-toolbar-title>
+      <q-toolbar-title class="logo_small xs" :style="lStyle">Eazy Invites</q-toolbar-title>
+      <q-toolbar-title class="logo gt-xs" :style="lStyle" >Eazy Invites</q-toolbar-title>
       <!--q-tabs
         no-caps
         active-color="primary"
@@ -91,8 +94,7 @@
         <q-tab
           :name="Tab.name"
           :label="($q.screen.gt.md) ? Tab.label : ''"
-          class="text-white"
-          style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
+          :style="qtabStyle"
           :icon="Tab.icon"
           @click="goTo('/',Tab.name)"
         />
@@ -103,14 +105,14 @@
             <q-item-section avatar>
               <q-icon :name="Tab.icon" />
             </q-item-section>
-            <q-item-section>
+            <q-item-section >
               {{Tab.label}}
             </q-item-section>
           </q-item>
         </q-list>
       </q-btn-dropdown>
       <div class="q-pa-md">
-        <q-btn-dropdown split push glossy no-caps icon="person">
+        <q-btn-dropdown split push no-caps icon="person" :color="qbtnColor">
           <q-list>
             <q-item
               clickable
@@ -264,6 +266,10 @@ export default {
       hEl: null,
       hStyle: 'background-color: rgba(0,0,0,0);',
       hideTabs: true,
+      hClass: '',
+      lStyle: 'color:white',
+      qbtnColor: '',
+      qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white',
       tabs: [{ name: 'images', label: 'Home', icon: 'home' },
         { name: 'videos', label: 'About Us', icon: 'people' },
         { name: 'articles', label: 'Browse Cards', icon: 'style' },
@@ -277,8 +283,13 @@ export default {
     // window.alert(this.$router.currentRoute.path);
     if (this.$router.currentRoute.path !== '/') {
       this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-      this.hStyle = 'background-color: rgba(0,55,85,255);';
+      this.hStyle = 'background-color: rgba(255,255,255,1);';
+      this.lStyle = 'color:#0072C6';
+      this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:#0072C6 ';
+      this.hClass = 'shadow-5 elevated bordered';
+      // this.hEl.class = this.hEl.class.add('glossy');
       this.hideTabs = true;
+      this.qbtnColor = 'primary';
       // window.alert(this.$router.currentRoute.path);
     }
     axios
@@ -297,7 +308,7 @@ export default {
     },
     viewLogin() {
       window.console.log(`login-token : ${this.$q.sessionStorage.getItem('login-token')}`);
-      return (this.$q.sessionStorage.getItem('login-token') === 'null');
+      return (this.$q.sessionStorage.getItem('login-token') === null);
     },
     onLogoutClick() {
       this.$q.sessionStorage.set('login-token', null);
@@ -325,10 +336,18 @@ export default {
       if (this.$router.currentRoute.path === '/') {
         if (position > 300) {
           this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-          this.hStyle = 'background-color: rgba(0,55,85,255);';
+          this.hStyle = 'background-color: rgba(255,255,255,1);';
+          this.lStyle = 'color:#0072C6';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:#0072C6';
+          this.hClass = 'shadow-5 elevated bordered';
+          this.qbtnColor = 'primary';
         } else {
           this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
           this.hStyle = 'background-color: rgba(0,0,0,0);';
+          this.hClass = '';
+          this.lStyle = 'color:white';
+          this.qbtnColor = '';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
         }
       }
     },

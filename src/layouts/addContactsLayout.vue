@@ -1,8 +1,8 @@
 <template>
-  <q-layout view="hHh lpr fff">
+  <q-layout view="hHh lpr fff" >
     <!-- Be sure to play with the Layout demo on docs -->
 
-    <q-page-container>
+    <q-page-container class="bg-grey-4">
       <!-- This is where pages get injected -->
        <add-contacts-component></add-contacts-component>
       <router-view />

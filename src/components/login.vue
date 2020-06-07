@@ -98,8 +98,8 @@ export default {
             message: e.message,
             position: 'top',
           });
+          Loading.hide();
         });
-      Loading.hide();
     },
 
     onReset() {

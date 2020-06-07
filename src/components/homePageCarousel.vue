@@ -6,11 +6,12 @@
       animated
       v-model="slide"
       infinite
-      :autoplay="10000"
+      :autoplay="5000"
       transition-prev="fade"
       transition-next="fade"
+      keep-alive
     >
-    <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
+    <q-carousel-slide name="first" img-src="../assets/home/ez4-min.jpg">
       <Snowf
         class="overlay"
         :amount="30"
@@ -31,7 +32,7 @@
             Devine celebrations with friends and dear ones ...</div>
         </div>
       </q-carousel-slide>
-       <q-carousel-slide name="second" img-src="../assets/home/ez14.jpg">
+       <q-carousel-slide name="second" img-src="../assets/home/ez14-min.jpg">
       <Snowf
         class="overlay"
         :amount="30"
@@ -55,7 +56,7 @@
             <br>Barron Michael Anderson</div>
         </div>
       </q-carousel-slide>
-    <q-carousel-slide name="third" img-src="~assets/home/ez36.jpg" >
+    <q-carousel-slide name="third" img-src="~assets/home/ez36-min.jpg" >
       <Snowf
         class="overlay"
         :amount="30"
@@ -77,13 +78,13 @@
             mind and touched my heart.<br> Just got engaged to my happily ever after.</div>
         </div>
       </q-carousel-slide>
-     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
+     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18-min.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Lifetime events</div>
           <div class="text-subtitle1 merienda">Engagement, Wedding, Receptions etc</div>
         </div>
       </q-carousel-slide>-->
-       <q-carousel-slide name="first1" img-src="~assets/home/ez15.jpg" >
+       <q-carousel-slide name="first1" img-src="~assets/home/ez15-min.jpg" >
          <Snowf
            class="overlay"
            :amount="30"
@@ -117,7 +118,7 @@
           <div class="text-subtitle1 merienda">Weekend Parties with friends</div>
         </div>
       </q-carousel-slide>-->
-      <q-carousel-slide name="fourth1" img-src="../assets/home/ez9.jpg">
+      <q-carousel-slide name="fourth1" img-src="../assets/home/ez9-min.jpg">
         <Snowf
           class="overlay"
           :amount="30"

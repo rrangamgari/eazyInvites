@@ -1,8 +1,9 @@
 <template>
   <q-footer >
-    <q-toolbar class="glossy center">
+    <q-toolbar class="shadow-5 elevated bordered center bg-white text-blue-7"
+               style="color:#0170bc">
       <q-toolbar-title style="align:center;text-align: center;">
-        <div class="" style="color:#FFFFFF;font-family: 'Merienda', cursive;">
+        <div class="" style="font-family: 'Merienda', cursive;">
           Follow us
         </div>
         <div style="height:60px">
@@ -72,7 +73,7 @@
           &nbsp;
         </div>
         <div
-          style="font-size:12px;color:#FFFFFF;font-family: 'Merienda', cursive;"
+          style="font-size:12px;font-family: 'Merienda', cursive;"
         >
           Privacy Policy | About Us | Contact us
         </div>
@@ -80,18 +81,15 @@
       </q-toolbar-title>
     </q-toolbar>
 
-    <addFeedbackComponent></addFeedbackComponent>
 
   </q-footer>
 </template>
 
 <script>
-import addFeedbackComponent from './addFeedbackComponent.vue';
 
 export default {
   name: 'footerComponent',
   components: {
-    addFeedbackComponent,
   },
   data() {
     return {
@@ -111,6 +109,13 @@ export default {
     contentSize() {
       return this.moreContent ? 150 : 5;
     },
+  },
+  mounted() {
+    if (this.$q.sessionStorage.getItem('login-token') === null) {
+      if (this.$route.path !== '/newUser') {
+        this.$router.push('/login');
+      }
+    }
   },
 };
 </script>
