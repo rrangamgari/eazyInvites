@@ -96,12 +96,12 @@
           :label="($q.screen.gt.md) ? Tab.label : ''"
           :style="qtabStyle"
           :icon="Tab.icon"
-          @click="goTo('/',Tab.name)"
+          @click="goTo(Tab.path, Tab.name)"
         />
       </q-tabs>
       <q-btn-dropdown class="lt-sm" auto-close stretch flat label="">
         <q-list v-for="Tab  in tabs" :key="Tab.name">
-          <q-item clickable @click="tab = Tab.name; goTo('/',Tab.name);">
+          <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
             <q-item-section avatar>
               <q-icon :name="Tab.icon" />
             </q-item-section>
@@ -267,19 +267,31 @@ export default {
       hStyle: 'background-color: rgba(0,0,0,0);',
       hideTabs: true,
       hClass: '',
+      hScreenHeight: 200,
       lStyle: 'color:white',
       qbtnColor: '',
       qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white',
-      tabs: [{ name: 'images', label: 'Home', icon: 'home' },
-        { name: 'videos', label: 'About Us', icon: 'people' },
-        { name: 'articles', label: 'Browse Cards', icon: 'style' },
-        { name: 'reviews', label: 'Reviews', icon: 'rate_review' },
-        { name: 'prices', label: 'Prices', icon: 'monetization_on' },
+      tabs: [{
+        name: 'images', label: 'Home', icon: 'home', path: '/',
+      },
+      {
+        name: 'videos', label: 'About Us', icon: 'people', path: '/',
+      },
+      {
+        name: 'articles', label: 'Browse Cards', icon: 'style', path: '/browsecards',
+      },
+      {
+        name: 'reviews', label: 'Reviews', icon: 'rate_review', path: '/',
+      },
+      {
+        name: 'prices', label: 'Prices', icon: 'monetization_on', path: '/',
+      },
       ],
     };
   },
   mounted() {
     this.hEl = document.getElementById('header');
+    this.hScreenHeight = this.$q.screen.height / 2;
     // window.alert(this.$router.currentRoute.path);
     if (this.$router.currentRoute.path !== '/') {
       this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
@@ -308,10 +320,7 @@ export default {
     },
     viewLogin() {
       window.console.log(`login-token : ${this.$q.sessionStorage.getItem('login-token')}`);
-      if (this.$q.sessionStorage.getItem('login-token') === null || this.$q.sessionStorage.getItem('login-token') === 'null') {
-        return true;
-      }
-      return (this.$q.sessionStorage.getItem('login-token') === null);
+      return (this.$q.sessionStorage.getItem('login-token') === null || this.$q.sessionStorage.getItem('login-token') === 'null');
     },
     onLogoutClick() {
       this.$q.sessionStorage.set('login-token', null);
@@ -319,6 +328,7 @@ export default {
       else this.$router.push('/');
     },
     scrollTo(section) {
+      if (section === null) return;
       const ele = document.getElementById(section);
       const target = getScrollTarget(ele);
       const offset = ele.offsetTop - this.hEl.clientHeight;
@@ -337,7 +347,7 @@ export default {
     scrollHandler(position) {
       // window.alert(this.$router.currentRoute.path);
       if (this.$router.currentRoute.path === '/') {
-        if (position > 300) {
+        if (position > this.hScreenHeight) {
           this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
           this.hStyle = 'background-color: rgba(255,255,255,1);';
           this.lStyle = 'color:#0072C6';

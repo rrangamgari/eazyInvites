@@ -13,7 +13,6 @@
     >
     <q-carousel-slide name="first" img-src="../assets/home/ez4-min.jpg">
       <Snowf
-        class="overlay"
         :amount="30"
         :size="8"
         :speed="1.25"
@@ -25,7 +24,8 @@
         :resize="false"
         color="blue"
       />
-        <div class="absolute-bottom custom-caption">
+        <div class="overlay"/>
+        <div class="absolute custom-caption" style="top: 40%; right:0;">
           <div class="text-h2 Dancing">Pooja Invitations</div>
           <div class="text-h4">&nbsp;</div>
           <div class="text-subtitle1 merienda">
@@ -78,7 +78,7 @@
             mind and touched my heart.<br> Just got engaged to my happily ever after.</div>
         </div>
       </q-carousel-slide>
-     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18-min.jpg">
+     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Lifetime events</div>
           <div class="text-subtitle1 merienda">Engagement, Wedding, Receptions etc</div>

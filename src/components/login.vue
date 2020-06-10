@@ -66,6 +66,10 @@ export default {
     };
   },
   mounted() {
+    // if (this.$q.sessionStorage.getItem('login-token') !== null
+    // && this.$q.sessionStorage.getItem('login-token') !== 'null') this.$router.push('/events');
+
+    axios.defaults.headers.Authorization = '';
   },
   methods: {
     onSubmit() {
@@ -74,6 +78,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
+
       axios.post('/api/authenticate', {
         username: this.name,
         password: this.age,

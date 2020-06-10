@@ -26,8 +26,8 @@
             </q-card-section>
           </q-card-section>
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
-            <q-img :src="file" :placeholder-src="require('../assets/logo/Easy_Invites.png')"
-             alt="Invitation" contain/>
+            <q-img :src="file !== null ? file : require('../assets/logo/Easy_Invites.png')"
+             alt="Invitation" contain :style="`max-height: ${$q.screen.height * 2 / 3}px;`"/>
           </q-card-section>
         </q-card>
       </div>
