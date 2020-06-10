@@ -45,10 +45,15 @@ const routes = [
     ],
   },
   {
-    path: '/review',
-    component: () => import('layouts/MainLayout.vue'),
+    path: '/browsecards',
+    component: () => import('layouts/browseCardsLayout.vue'),
+  },
+  {
+    path: '/editcard',
+    component: () => import('layouts/editCardLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
+      { path: '', redirect: '/browseCards' },
+      { path: ':cardId' },
 
     ],
   },
