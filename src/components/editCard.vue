@@ -3,7 +3,8 @@
     <div class="q-pa-lg row warp justify-left">
       <div class="col-9 q-pa-xs">
         <q-responsive :ratio="16/9" width="100%">
-        <canvas id="Canvas" class="absolute" width="600px" height="500px"></canvas>
+        <canvas id="Canvas" class="absolute" width="100%" height="100%"
+         v-touch-pan.prevent.mouse="drag"></canvas>
         <q-card square style="position: relative; z-index: -1; overflow: hidden;">
           <q-img v-for="layer in layers" :key="layer.name" :id="`Img_${layer.name}`"
            :ref="`Img_${layer.name}`"
@@ -17,7 +18,7 @@
       <div class="col-3 q-pa-xs">
         <q-card>
           <q-card-section class="q-pa-none">
-          <q-list>
+          <q-list label="Layers">
             <q-item clickable v-ripple v-for="(layer) in layers" :key="layer.name"
              @click="selectLayer(layer)" :focused="selected === layer">
               <q-item-section thumbnail>
@@ -74,6 +75,10 @@ export default {
       layers: [],
       selected: '',
       img: '',
+      dragToggle: false,
+      info: null,
+      x: 0,
+      y: 0,
     };
   },
   created() {
@@ -131,6 +136,15 @@ export default {
       }); */
   },
   methods: {
+    selectWarn() {
+      this.$q.notify({
+        color: 'red-5',
+        textColor: 'white',
+        icon: 'error',
+        message: 'Please Select a layer!',
+        position: 'top',
+      });
+    },
     selectLayer(layer) {
       // this.deselect(this.selected);
       if (this.selected === layer) {
@@ -160,16 +174,53 @@ export default {
       ctx.clearRect(0, 0, img.clientWidth, img.clientHeight * (16 / 9));
     },
     changeX(offset) {
-      if (this.selected === '') return;
+      if (this.selected === '') {
+        this.selectWarn();
+        return;
+      }
       this.selected.left += offset;
     },
     changeY(offset) {
-      if (this.selected === '') return;
+      if (this.selected === '') {
+        this.selectWarn();
+        return;
+      }
       this.selected.top += offset;
     },
     changeScale(offset) {
       if (this.selected === '') return;
       this.selected.width += offset;
+    },
+    drag({ evt, ...info }) {
+      this.info = info;
+      console.log(info);
+      if (info.isFirst) {
+        if (this.selected === '') {
+          this.selectWarn();
+          return;
+        }
+        this.dragToggle = true;
+      } else if (info.isFinal) {
+        this.dragToggle = false;
+      }
+
+      if (this.dragToggle) {
+        this.selected.left += info.delta.x;
+        this.selected.top += info.delta.y;
+      }
+    },
+    captureOn(evt) {
+      if (this.selected !== '') {
+        console.log(evt);
+        this.x = evt.x;
+        this.y = evt.y;
+        this.captureToggle = true;
+      } else {
+        this.selectWarn();
+      }
+    },
+    captureOff() {
+      this.captureToggle = false;
     },
   },
 };
