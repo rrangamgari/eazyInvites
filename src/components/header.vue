@@ -320,10 +320,10 @@ export default {
     },
     viewLogin() {
       window.console.log(`login-token : ${this.$q.sessionStorage.getItem('login-token')}`);
-      return (this.$q.sessionStorage.getItem('login-token') === null || this.$q.sessionStorage.getItem('login-token') === 'null');
+      return (this.$q.sessionStorage.getItem('login-token') === null);
     },
     onLogoutClick() {
-      this.$q.sessionStorage.set('login-token', null);
+      this.$q.sessionStorage.remove('login-token');
       if (this.$route.path === '/') this.$router.go(0);
       else this.$router.push('/');
     },

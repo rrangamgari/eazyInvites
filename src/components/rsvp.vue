@@ -179,6 +179,7 @@ export default {
       })
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
+          this.$q.sessionStorage.remove('login-token');
           this.$router.push('/login');
         } else if (e.message === 'Request failed with status code 400') {
           this.$router.push('/invites');
@@ -243,6 +244,7 @@ export default {
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
+            this.$q.sessionStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({

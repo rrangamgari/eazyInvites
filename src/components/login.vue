@@ -66,8 +66,7 @@ export default {
     };
   },
   mounted() {
-    // if (this.$q.sessionStorage.getItem('login-token') !== null
-    // && this.$q.sessionStorage.getItem('login-token') !== 'null') this.$router.push('/events');
+    if (this.$q.sessionStorage.getItem('login-token') !== null) this.$router.push('/events');
 
     axios.defaults.headers.Authorization = '';
   },
@@ -94,6 +93,9 @@ export default {
             position: 'center',
           }); */
           this.$q.sessionStorage.set('login-token', this.posts.token);
+          axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+            'login-token',
+          )}`;
           Loading.hide();
           this.$router.push('/events');
         })
