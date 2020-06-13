@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerTail } from 'quasar';
+import { Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
 
 
@@ -55,7 +55,7 @@ export default {
   },
   mounted() {
     Loading.show({
-      spinner: QSpinnerTail,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });

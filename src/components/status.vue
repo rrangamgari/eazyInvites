@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerTail } from 'quasar';
+import { Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -222,7 +222,7 @@ export default {
     this.eventId = this.$route.params.eventId;
 
     Loading.show({
-      spinner: QSpinnerTail,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });

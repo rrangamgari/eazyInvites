@@ -69,7 +69,7 @@
 
 <script>
 import axios from 'axios';
-import { Loading, QSpinnerTail } from 'quasar';
+import { Loading, QSpinnerBars } from 'quasar';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -99,7 +99,7 @@ export default {
     },
     onSubmit() {
       Loading.show({
-        spinner: QSpinnerTail,
+        spinner: QSpinnerBars,
         spinnerColor: 'primary',
         thickness: '3',
       });

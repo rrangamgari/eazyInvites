@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerTail } from 'quasar';
+import { Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
 
 
@@ -64,7 +64,7 @@ export default {
       this.$router.push('/login');
     }
     Loading.show({
-      spinner: QSpinnerTail,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });

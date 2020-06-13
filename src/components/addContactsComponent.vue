@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import { exportFile, Loading, QSpinnerTail } from 'quasar';
+import { exportFile, Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
 
 
@@ -268,7 +268,7 @@ export default {
     },
     loadContacts() {
       Loading.show({
-        spinner: QSpinnerTail,
+        spinner: QSpinnerBars,
         spinnerColor: 'primary',
         thickness: '3',
       });
@@ -302,7 +302,7 @@ export default {
     deleteMe(id) {
       // naive encoding to csv format
       Loading.show({
-        spinner: QSpinnerTail,
+        spinner: QSpinnerBars,
         spinnerColor: 'primary',
         thickness: '3',
       });

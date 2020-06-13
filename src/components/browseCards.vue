@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerTail, colors } from 'quasar';
+import { Loading, QSpinnerBars, colors } from 'quasar';
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -49,7 +49,7 @@ export default {
     )}`;
 
     Loading.show({
-      spinner: QSpinnerTail,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });

@@ -109,7 +109,7 @@ export default {
     )}`;
 
     Loading.show({
-      spinner: QSpinnerTail,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });

@@ -6,7 +6,7 @@
       animated
       v-model="slide"
       infinite
-      :autoplay="5000"
+      :autoplay="10000"
       transition-prev="fade"
       transition-next="fade"
       keep-alive
@@ -26,10 +26,17 @@
       />
         <div class="overlay"/>
         <div class="absolute custom-caption" style="top: 40%; right:0;">
-          <div class="text-h2 Dancing">Pooja Invitations</div>
+          <div class="text-h2 Dancing">Stressed? <br><br>Frustrated? <br><br>Confused?</div>
           <div class="text-h4">&nbsp;</div>
           <div class="text-subtitle1 merienda">
-            Devine celebrations with friends and dear ones ...</div>
+<p>
+            <br>If you feel any of these feelings while organizing that perfect
+            event for your friends or relatives or colleagues...
+            <br>Than No worry No More..
+  <br>
+            <br>Because Eazy Invites is Here to open that closed Digital Door...
+  <br>
+  <br>Yes its the most trendiest & coolest way to make your invite Eazy-Invite.</p></div>
         </div>
       </q-carousel-slide>
        <q-carousel-slide name="second" img-src="../assets/home/ez14-min.jpg">
@@ -46,14 +53,22 @@
         :resize="false"
         color="#FFFF00"
       />
-        <div class="absolute-bottom custom-caption">
+         <div class="overlay"/>
+        <div class="absolute custom-caption" style="top: 40%; right:0;">
           <div class="text-h2 Dancing">Wedding Invitations</div>
           <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda">The honour of your presence is requested
-            at the marriage of
-            <br>Allison Amber Maven
-            <br>and
-            <br>Barron Michael Anderson</div>
+          <div class="text-subtitle1 merienda"><p>
+            <br>Down on your knees you should be
+            <br>For only your Forever beloved...
+            <br>
+            <br>Than why you should stress for hours to send that perfect invite
+            <br>
+            <br>Come share your personalized Digital Eazy-Invites...
+            <br>
+            <br>Its Personalized
+            <br>Its Fast &
+            <br>Its the users perfect Delight!!!
+          </p></div>
         </div>
       </q-carousel-slide>
     <q-carousel-slide name="third" img-src="~assets/home/ez36-min.jpg" >
@@ -98,11 +113,21 @@
            :resize="false"
            color="#FFFF00"
          />
-         <div class="absolute-bottom-right custom-caption">
+         <div class="overlay"/>
+         <div class="absolute custom-caption" style="top: 40%; right:0;">
            <div class="text-h2 Dancing">New Baby Born</div>
            <div class="text-h4">&nbsp;</div>
-           <div class="text-subtitle1 merienda" style="word-wrap">
-             “Children bring us a piece of heaven on earth.” – Roland Leonhardt</div>
+           <div class="text-subtitle1 merienda vertical-middle" style="word-wrap">
+             <p>
+               <br>Twinkle twinkle
+               <br> We had a new born Star
+               <br>But I wonder how to invite you all are?!?
+               <img src="~assets/logo/confused.png" width="60px" class="vertical-middle" >
+               <br>
+               <br>Now we have Eazy Invite option
+               <br>Its d online invite 1 stop solution
+               <img src="~assets/logo/user.png" width="60px" class="vertical-middle">
+             </p></div>
          </div>
       </q-carousel-slide>
       <!--<q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">

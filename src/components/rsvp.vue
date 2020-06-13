@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerTail } from 'quasar';
+import { Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -160,7 +160,7 @@ export default {
     this.inviteId = this.$route.params.inviteId;
 
     Loading.show({
-      spinner: QSpinnerTail,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });
@@ -212,7 +212,7 @@ export default {
       window.console.log(this.polls);
 
       Loading.show({
-        spinner: QSpinnerTail,
+        spinner: QSpinnerBars,
         spinnerColor: 'primary',
         thickness: '3',
       });

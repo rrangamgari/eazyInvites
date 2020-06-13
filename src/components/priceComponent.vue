@@ -7,7 +7,7 @@
             </q-card-section>
             <q-separator />
             <q-card-section class="flex flex-center"
-                            style="width: 370px">
+                            style="min-width: 300px">
             <p class="actual_price text-green-5">
               Free <br /><span class="small_font">Free Package includes emails</span>
             </p>
@@ -31,7 +31,7 @@
             </q-card-section>
             <q-separator />
             <q-card-section class="flex flex-center"
-            style="width: 370px">
+            style="width: 300px">
             <p class="actual_price text-red" >
               <span style="text-decoration: line-through;">
                 ${{Number(Math.round(standard *9.99)/100).toFixed(2)}}</span>
@@ -71,7 +71,7 @@
         </q-card-section>
         <q-separator />
         <q-card-section class="flex flex-center"
-                        style="width: 370px">
+                        style="width: 300px">
           <p class="actual_price">
             $9.99<br /><span class="small_font">Base Package includes emails and Whatsapp <br>
               if user doesn't have Whatsapp then SMS</span>
