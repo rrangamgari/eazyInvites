@@ -1,54 +1,100 @@
 <template>
   <q-page>
     <div class="q-pa-lg row warp justify-left">
-      <div class="col-9 q-pa-xs">
-        <q-responsive :ratio="16/9" width="100%">
-        <canvas id="Canvas" class="absolute" width="100%" height="100%"
-         v-touch-pan.prevent.mouse="drag"></canvas>
-        <q-card square style="position: relative; z-index: -1; overflow: hidden;">
-          <q-img v-for="layer in layers" :key="layer.name" :id="`Img_${layer.name}`"
-           :ref="`Img_${layer.name}`"
-           :ratio="16/9" :width="`${layer.width}%`" style="position: absolute;"
-           :style="`z-index: ${layer.zIndex}; top: ${layer.top}px; left: ${layer.left}px;
-            ${selected === layer ? 'outline: 1px solid #000000; outline-offset: -1px;' : ''}`"
+      <div class="col-9 q-pa-xs" style="display: block;">
+        <div style="position: relative; width: 100%; padding-bottom: 56.25%;"
+         v-touch-pan.prevent.mouse="drag">
+        <svg id="svg" width="100%" height="100%"
+         style="position: absolute; overflow: visible;" v-if="selected !== ''">
+         <g
+           :style="`transform: rotate(${selected.rotate}deg);
+            transform-box: fill-box; transform-origin: center;`">
+          <rect :x="`${selected.left}%`" :y="`${selected.top}%`"
+           :width="`${selected.width}%`" :height="`${selected.height}%`"
+           :stroke="primary" stroke-width="2" fill="transparent"/>
+          <circle v-for="(c,i) in circles" :key="i" :cx="`${selected.left + selected.width*c.cx}%`"
+           :cy="`${selected.top + selected.height*c.cy}%`" r="5px" :fill="primary"
+           v-touch-pan.prevent.mouse="({evt, ...info}) => { scale({evt, ...info}, i) }"
+           @mouseover="c.hover = true" @mouseleave="c.hover = false"
+           :style="`${c.hover ? `cursor: ${c.cur}-resize;` : ''}`"/>
+          <circle :cx="`${selected.left + selected.width*0.5}%`"
+           :cy="`${selected.top - 5}%`" r="5px" :fill="primary"/>
+          <line :x1="`${selected.left + selected.width*0.5}%`" :y1="`${selected.top - 5}%`"
+           :x2="`${selected.left + selected.width*0.5}%`" :y2="`${selected.top}%`"
+           stroke-width="2" :stroke="primary"/>
+         </g>
+        </svg>
+        <q-card id="editor" square style="position:absolute;  width: 100%; height: 100%;
+        z-index: -1; overflow: hidden;">
+        <canvas id="Canvas" :width="`${width}px`" :height="`${height}px`"
+         style="position: absolute; z-index: 100">
+        </canvas>
+          <img v-for="layer in layers" :key="layer.name" :id="`Img_${layer.name}`"
+           :ref="`Img_${layer.name}`" style="position: absolute; max-width: none; max-height: none;"
+           :style="`width: ${layer.width}%; height: ${layer.height}%;  z-index: ${layer.zIndex};
+            top: ${layer.top}%; left: ${layer.left}%; transform: rotate(${layer.rotate}deg);`"
            :src="require(`../assets/${layer.src}`)"/>
         </q-card>
-        </q-responsive>
+        </div>
       </div>
       <div class="col-3 q-pa-xs">
         <q-card>
           <q-card-section class="q-pa-none">
-          <q-list label="Layers">
+          <div class="text-center text-primary">Layers</div>
+          <q-list>
             <q-item clickable v-ripple v-for="(layer) in layers" :key="layer.name"
              @click="selectLayer(layer)" :focused="selected === layer">
               <q-item-section thumbnail>
                 <img :id="layer.name" class="q-pa-xs" :src="require(`../assets/${layer.src}`)">
               </q-item-section>
-              <q-item-section>{{layer.name}}</q-item-section>
+              <q-item-section class="text-primary">{{layer.name}}</q-item-section>
             </q-item>
           </q-list>
           </q-card-section>
+          <q-separator/>
           <q-card-section class="q-pa-sm">
-            <div class="q-pa-sm q-gutter-sm">
-              {{'X Pos : '}}
+            <div class="text-center text-primary">Position</div>
+            <div class="q-pa-sm q-gutter-sm text-primary">
+              {{'X : '}}
               <q-btn color="primary" dense round padding="none"
                icon="remove" @click="changeX(-1)"/>
               <q-btn color="primary" dense round padding="none"
                icon="add" @click="changeX(+1)"/>
             </div>
-            <div class="q-pa-sm q-gutter-sm">
-              {{'Y Pos : '}}
+            <div class="q-pa-sm q-gutter-sm text-primary">
+              {{'Y : '}}
               <q-btn color="primary" dense round padding="none"
                icon="remove" @click="changeY(-1)"/>
               <q-btn color="primary"  dense round padding="none"
                icon="add" @click="changeY(+1)"/>
             </div>
-            <div class="q-pa-sm q-gutter-sm">
-              {{'Scale :  '}}
+          </q-card-section>
+          <q-separator/>
+          <q-card-section class="q-pa-sm">
+            <div class="text-center text-primary">Scale</div>
+            <div class="q-pa-sm q-gutter-sm text-primary">
+              {{'X : '}}
               <q-btn color="primary" dense round padding="none"
-               icon="remove" @click="changeScale(-1)"/>
+               icon="remove" @click="changeScaleX(-1)"/>
               <q-btn color="primary" dense round padding="none"
-               icon="add" @click="changeScale(+1)"/>
+               icon="add" @click="changeScaleX(+1)"/>
+            </div>
+            <div class="q-pa-sm q-gutter-sm text-primary">
+              {{'Y : '}}
+              <q-btn color="primary" dense round padding="none"
+               icon="remove" @click="changeScaleY(-1)"/>
+              <q-btn color="primary"  dense round padding="none"
+               icon="add" @click="changeScaleY(+1)"/>
+            </div>
+          </q-card-section>
+          <q-separator/>
+          <q-card-section class="q-pa-sm">
+            <div class="q-pa-sm q-gutter-sm text-primary">
+              {{'Rotate : '}}
+              <q-btn color="primary" dense round padding="none"
+               icon="rotate_left" @click="rotate(-1)"/>
+              <q-btn color="primary" dense round padding="none"
+               icon="rotate_right" @click="rotate(+1)"/>
             </div>
           </q-card-section>
         </q-card>
@@ -57,6 +103,7 @@
   </q-page>
 </template>
 <script>
+import { colors } from 'quasar';
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -72,13 +119,38 @@ export default {
   data() {
     return {
       cardId: '',
+      ratio: 16 / 9,
       layers: [],
       selected: '',
-      img: '',
+      primary: '',
+      width: 500,
+      height: 281.25,
       dragToggle: false,
       info: null,
-      x: 0,
-      y: 0,
+      circles: [{
+        cx: 0, cy: 0, hover: false, cur: 'nw',
+      },
+      {
+        cx: 0.5, cy: 0, hover: false, cur: 'n',
+      },
+      {
+        cx: 1, cy: 0, hover: false, cur: 'ne',
+      },
+      {
+        cx: 1, cy: 0.5, hover: false, cur: 'e',
+      },
+      {
+        cx: 1, cy: 1, hover: false, cur: 'se',
+      },
+      {
+        cx: 0.5, cy: 1, hover: false, cur: 's',
+      },
+      {
+        cx: 0, cy: 1, hover: false, cur: 'sw',
+      },
+      {
+        cx: 0, cy: 0.5, hover: false, cur: 'w',
+      }],
     };
   },
   created() {
@@ -86,19 +158,36 @@ export default {
     console.log(`Card: ${this.cardId}`);
 
     this.layers = [{
-      src: `home/ez${this.cardId}.jpg`, zIndex: 1, width: 90, name: 'Photo', top: 0, left: 0,
+      src: `home/ez${this.cardId}.jpg`, zIndex: 1, width: 90, height: 90, name: 'Photo', top: 0, left: 0, rotate: 0,
     },
     {
-      src: 'logo/Easy_Invites.png', zIndex: 2, width: 50, name: 'Card', top: 0, left: 0,
+      src: 'logo/Easy_Invites.png', zIndex: 2, width: 50, height: 50, name: 'Card', top: 0, left: 0, rotate: 0,
     }];
     console.log(this.layers);
   },
   mounted() {
+    this.primary = colors.getBrand('primary');
     canvas = document.getElementById('Canvas');
     ctx = canvas.getContext('2d');
-    console.log(canvas);
+    const rect = document.getElementById('editor').getBoundingClientRect();
+    if (rect.width) {
+      this.width = rect.width;
+      this.height = rect.height;
+    } else {
+      this.width = rect.right - rect.left;
+      this.height = rect.bottom - rect.top;
+    }
+    console.log(this.width);
+    console.log(this.height);
+    console.log(canvas.clientWidth);
     console.log(ctx);
-
+    ctx.fillStyle = '#FF0000';
+    ctx.fillRect(0, 0, 600, 100);
+    ctx.fillRect(10, 45, 200, 300);
+    ctx.fillRect(0, 60, (canvas.clientWidth / 2), 30);
+    ctx.fillRect((canvas.clientWidth / 2), 90, 200, 30);
+    ctx.fillStyle = '#00FF00';
+    ctx.fillRect((canvas.clientWidth / 3), 0, 30, (canvas.clientHeight / 2));
     /* this.layers.forEach((layer) => {
       const img = document.getElementById(layer.name);
       console.log(img);
@@ -188,9 +277,26 @@ export default {
       }
       this.selected.top += offset;
     },
-    changeScale(offset) {
-      if (this.selected === '') return;
+    changeScaleX(offset) {
+      if (this.selected === '') {
+        this.selectWarn();
+        return;
+      }
       this.selected.width += offset;
+    },
+    changeScaleY(offset) {
+      if (this.selected === '') {
+        this.selectWarn();
+        return;
+      }
+      this.selected.height += offset;
+    },
+    rotate(offset) {
+      if (this.selected === '') {
+        this.selectWarn();
+        return;
+      }
+      this.selected.rotate += offset;
     },
     drag({ evt, ...info }) {
       this.info = info;
@@ -206,8 +312,64 @@ export default {
       }
 
       if (this.dragToggle) {
-        this.selected.left += info.delta.x;
-        this.selected.top += info.delta.y;
+        this.selected.left += info.delta.x * (100.0 / this.width);
+        this.selected.top += info.delta.y * (100.0 / this.height);
+      }
+    },
+    scale({ ...info }, index) {
+      this.dragToggle = false;
+      console.log(`Scale: ${index} ${info}`);
+      console.log(info);
+      let ox = info.delta.x * (100.0 / this.width);
+      let oy = info.delta.y * (100.0 / this.height);
+      console.log(`${ox} ${oy}`);
+      if (info.isFirst) {
+        this.circles[index].hover = true;
+      } else if (info.isFinal) {
+        this.circles[index].hover = false;
+      }
+      if (info.evt.ctrlKey) {
+        ox *= 1;
+        if (index % 4 === 0) oy = ox;
+        else oy = -ox;
+      }
+      switch (index) {
+        case 0:
+          this.selected.left += ox;
+          this.selected.width -= ox;
+          this.selected.top += oy;
+          this.selected.height -= oy;
+          break;
+        case 2:
+          this.selected.width += ox;
+          this.selected.top += oy;
+          this.selected.height -= oy;
+          break;
+        case 4:
+          this.selected.width += ox;
+          this.selected.height += oy;
+          break;
+        case 6:
+          this.selected.left += ox;
+          this.selected.width -= ox;
+          this.selected.height += oy;
+          break;
+        case 1:
+          this.selected.top += oy;
+          this.selected.height -= oy;
+          break;
+        case 3:
+          this.selected.width += ox;
+          break;
+        case 5:
+          this.selected.height += oy;
+          break;
+        case 7:
+          this.selected.left += ox;
+          this.selected.width -= ox;
+          break;
+        default:
+          break;
       }
     },
     captureOn(evt) {
