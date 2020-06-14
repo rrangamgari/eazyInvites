@@ -17,11 +17,11 @@
            @mouseover="c.hover = true" @mouseleave="c.hover = false"
            :style="`${c.hover ? `cursor: ${c.cur}-resize;` : ''}`"/>
           <circle :cx="`${selected.left + selected.width*0.5}%`"
-           :cy="`${selected.top - 5}%`" r="5px" :fill="primary"
+           :cy="`${selected.top - 7}%`" r="5px" :fill="primary"
            @mouseover="rotater = true" @mouseleave="rotater = false"
-           :style="`cursor: url(~assets/rotate.png), grab;`"
+           class="rotate-cursor"
            v-touch-pan.prevent.mouse="rotate"/>
-          <line :x1="`${selected.left + selected.width*0.5}%`" :y1="`${selected.top - 5}%`"
+          <line :x1="`${selected.left + selected.width*0.5}%`" :y1="`${selected.top - 7}%`"
            :x2="`${selected.left + selected.width*0.5}%`" :y2="`${selected.top}%`"
            stroke-width="2" :stroke="primary"/>
          </g>
