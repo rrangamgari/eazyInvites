@@ -6,9 +6,8 @@
          v-touch-pan.prevent.mouse="drag">
         <svg id="svg" width="100%" height="100%"
          style="position: absolute; overflow: visible;" v-if="selected !== ''">
-         <g
-           :style="`transform: rotate(${selected.rotate}deg);
-            transform-box: fill-box; transform-origin: center;`">
+         <g :style="`transform: rotate(${selected.rotate}deg);
+           transform-box: fill-box; transform-origin: center;`">
           <rect :x="`${selected.left}%`" :y="`${selected.top}%`"
            :width="`${selected.width}%`" :height="`${selected.height}%`"
            :stroke="primary" stroke-width="2" fill="transparent"/>
@@ -18,7 +17,10 @@
            @mouseover="c.hover = true" @mouseleave="c.hover = false"
            :style="`${c.hover ? `cursor: ${c.cur}-resize;` : ''}`"/>
           <circle :cx="`${selected.left + selected.width*0.5}%`"
-           :cy="`${selected.top - 5}%`" r="5px" :fill="primary"/>
+           :cy="`${selected.top - 5}%`" r="5px" :fill="primary"
+           @mouseover="rotater = true" @mouseleave="rotater = false"
+           :style="`cursor: url(~assets/rotate.png), grab;`"
+           v-touch-pan.prevent.mouse="rotate"/>
           <line :x1="`${selected.left + selected.width*0.5}%`" :y1="`${selected.top - 5}%`"
            :x2="`${selected.left + selected.width*0.5}%`" :y2="`${selected.top}%`"
            stroke-width="2" :stroke="primary"/>
@@ -92,9 +94,9 @@
             <div class="q-pa-sm q-gutter-sm text-primary">
               {{'Rotate : '}}
               <q-btn color="primary" dense round padding="none"
-               icon="rotate_left" @click="rotate(-1)"/>
+               icon="rotate_left" @click="changeRotate(-1)"/>
               <q-btn color="primary" dense round padding="none"
-               icon="rotate_right" @click="rotate(+1)"/>
+               icon="rotate_right" @click="changeRotate(+1)"/>
             </div>
           </q-card-section>
         </q-card>
@@ -125,6 +127,7 @@ export default {
       primary: '',
       width: 500,
       height: 281.25,
+      editor: null,
       dragToggle: false,
       info: null,
       circles: [{
@@ -151,6 +154,7 @@ export default {
       {
         cx: 0, cy: 0.5, hover: false, cur: 'w',
       }],
+      rotater: false,
     };
   },
   created() {
@@ -169,17 +173,16 @@ export default {
     this.primary = colors.getBrand('primary');
     canvas = document.getElementById('Canvas');
     ctx = canvas.getContext('2d');
-    const rect = document.getElementById('editor').getBoundingClientRect();
-    if (rect.width) {
-      this.width = rect.width;
-      this.height = rect.height;
+    this.editor = document.getElementById('editor').getBoundingClientRect();
+    if (this.editor.width) {
+      this.width = this.editor.width;
+      this.height = this.editor.height;
     } else {
-      this.width = rect.right - rect.left;
-      this.height = rect.bottom - rect.top;
+      this.width = this.editor.right - this.editor.left;
+      this.height = this.editor.bottom - this.editor.top;
     }
     console.log(this.width);
     console.log(this.height);
-    console.log(canvas.clientWidth);
     console.log(ctx);
     ctx.fillStyle = '#FF0000';
     ctx.fillRect(0, 0, 600, 100);
@@ -291,7 +294,7 @@ export default {
       }
       this.selected.height += offset;
     },
-    rotate(offset) {
+    changeRotate(offset) {
       if (this.selected === '') {
         this.selectWarn();
         return;
@@ -371,6 +374,21 @@ export default {
         default:
           break;
       }
+    },
+    rotate({ ...info }) {
+      this.dragToggle = false;
+      console.log(`Rotate: ${info}`);
+      console.log(info, this.editor);
+      // eslint-disable-next-line max-len
+      const ox = (info.position.left - this.editor.left) * (100.0 / this.width) - this.selected.left - this.selected.width / 2;
+      // eslint-disable-next-line max-len
+      const oy = this.selected.top + this.selected.height / 2 - (info.position.top - this.editor.top) * (100.0 / this.height);
+      let t = 90;
+      if (ox !== 0) t = 180 * (Math.atan(oy / ox) / Math.PI);
+      console.log(`${ox} ${oy} ${t}`);
+      if (ox < 0) this.selected.rotate = -(90 + t);
+      else this.selected.rotate = 90 - t;
+      console.log(this.selected.rotate);
     },
     captureOn(evt) {
       if (this.selected !== '') {
