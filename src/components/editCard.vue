@@ -7,7 +7,7 @@
         <svg id="svg" width="100%" height="100%"
          style="position: absolute; overflow: visible;" v-if="selected !== ''">
          <g :style="`transform: rotate(${selected.rotate}deg);
-           transform-box: fill-box; transform-origin: center;`">
+           transform-origin: ${transformOrigin(selected)};`">
           <rect :x="`${selected.left}%`" :y="`${selected.top}%`"
            :width="`${selected.width}%`" :height="`${selected.height}%`"
            :stroke="primary" stroke-width="2" fill="transparent"/>
@@ -131,28 +131,28 @@ export default {
       dragToggle: false,
       info: null,
       circles: [{
-        cx: 0, cy: 0, hover: false, cur: 'nw',
+        cx: 0, cy: 0, hover: false, cur: 'nw', a: 315,
       },
       {
-        cx: 0.5, cy: 0, hover: false, cur: 'n',
+        cx: 0.5, cy: 0, hover: false, cur: 'n', a: 0,
       },
       {
-        cx: 1, cy: 0, hover: false, cur: 'ne',
+        cx: 1, cy: 0, hover: false, cur: 'ne', a: 45,
       },
       {
-        cx: 1, cy: 0.5, hover: false, cur: 'e',
+        cx: 1, cy: 0.5, hover: false, cur: 'e', a: 90,
       },
       {
-        cx: 1, cy: 1, hover: false, cur: 'se',
+        cx: 1, cy: 1, hover: false, cur: 'se', a: 135,
       },
       {
-        cx: 0.5, cy: 1, hover: false, cur: 's',
+        cx: 0.5, cy: 1, hover: false, cur: 's', a: 180,
       },
       {
-        cx: 0, cy: 1, hover: false, cur: 'sw',
+        cx: 0, cy: 1, hover: false, cur: 'sw', a: 225,
       },
       {
-        cx: 0, cy: 0.5, hover: false, cur: 'w',
+        cx: 0, cy: 0.5, hover: false, cur: 'w', a: 270,
       }],
       rotater: false,
     };
@@ -229,6 +229,9 @@ export default {
       }); */
   },
   methods: {
+    transformOrigin(layer) {
+      return `${layer.left + layer.width * 0.5}% ${layer.top + layer.height * 0.5}%`;
+    },
     selectWarn() {
       this.$q.notify({
         color: 'red-5',
@@ -299,7 +302,7 @@ export default {
         this.selectWarn();
         return;
       }
-      this.selected.rotate += offset;
+      this.selected.rotate = (this.selected.rotate + offset + 360) % 360;
     },
     drag({ evt, ...info }) {
       this.info = info;
@@ -321,11 +324,16 @@ export default {
     },
     scale({ ...info }, index) {
       this.dragToggle = false;
-      console.log(`Scale: ${index} ${info}`);
-      console.log(info);
+      console.log(`Scale: ${index}`, info);
       let ox = info.delta.x * (100.0 / this.width);
       let oy = info.delta.y * (100.0 / this.height);
-      console.log(`${ox} ${oy}`);
+      let a = (Math.atan(this.selected.width / this.selected.height) * 180) / Math.PI;
+      a = this.selected.rotate + (index % 2 === 0 ? this.circles[(index + 7) % 8].a + a
+        : this.circles[index].a);
+      a %= 360;
+      if (a > 180) ox *= -1;
+      if (a > 270 || a < 90) oy *= -1;
+      console.log(`${a}deg ${ox} ${oy}`);
       if (info.isFirst) {
         this.circles[index].hover = true;
       } else if (info.isFinal) {
@@ -333,33 +341,38 @@ export default {
       }
       if (info.evt.ctrlKey) {
         ox *= 1;
-        if (index % 4 === 0) oy = ox;
-        else oy = -ox;
+        oy = ox;
       }
-      switch (index) {
+      if (index === 1 || index === 5) ox = 0;
+      if (index === 3 || index === 7) oy = 0;
+      this.selected.left -= ox;
+      this.selected.width += 2 * ox;
+      this.selected.top -= oy;
+      this.selected.height += 2 * oy;
+      /* switch (index) {
         case 0:
-          this.selected.left += ox;
-          this.selected.width -= ox;
-          this.selected.top += oy;
-          this.selected.height -= oy;
+          this.selected.left -= ox;
+          this.selected.width += ox;
+          this.selected.top -= oy;
+          this.selected.height += oy;
           break;
         case 2:
           this.selected.width += ox;
-          this.selected.top += oy;
-          this.selected.height -= oy;
+          this.selected.top -= oy;
+          this.selected.height += oy;
           break;
         case 4:
           this.selected.width += ox;
           this.selected.height += oy;
           break;
         case 6:
-          this.selected.left += ox;
-          this.selected.width -= ox;
+          this.selected.left -= ox;
+          this.selected.width += ox;
           this.selected.height += oy;
           break;
         case 1:
-          this.selected.top += oy;
-          this.selected.height -= oy;
+          this.selected.top -= oy;
+          this.selected.height += oy;
           break;
         case 3:
           this.selected.width += ox;
@@ -368,12 +381,12 @@ export default {
           this.selected.height += oy;
           break;
         case 7:
-          this.selected.left += ox;
-          this.selected.width -= ox;
+          this.selected.left -= ox;
+          this.selected.width += ox;
           break;
         default:
           break;
-      }
+      } */
     },
     rotate({ ...info }) {
       this.dragToggle = false;
@@ -386,7 +399,7 @@ export default {
       let t = 90;
       if (ox !== 0) t = 180 * (Math.atan(oy / ox) / Math.PI);
       console.log(`${ox} ${oy} ${t}`);
-      if (ox < 0) this.selected.rotate = -(90 + t);
+      if (ox < 0) this.selected.rotate = 360 - (90 + t);
       else this.selected.rotate = 90 - t;
       console.log(this.selected.rotate);
     },
