@@ -115,6 +115,7 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 
 let canvas = null;
 let ctx = null;
+let editor = null;
 
 export default {
   name: 'statusComponent',
@@ -127,32 +128,31 @@ export default {
       primary: '',
       width: 500,
       height: 281.25,
-      editor: null,
       dragToggle: false,
       info: null,
       circles: [{
-        cx: 0, cy: 0, hover: false, cur: 'nw', a: 315,
+        cx: 0, cy: 0, hover: false, cur: 'nw', x: -180, y: -180,
       },
       {
-        cx: 0.5, cy: 0, hover: false, cur: 'n', a: 0,
+        cx: 0.5, cy: 0, hover: false, cur: 'n', x: -180, y: -180,
       },
       {
-        cx: 1, cy: 0, hover: false, cur: 'ne', a: 45,
+        cx: 1, cy: 0, hover: false, cur: 'ne', x: 0, y: -180,
       },
       {
-        cx: 1, cy: 0.5, hover: false, cur: 'e', a: 90,
+        cx: 1, cy: 0.5, hover: false, cur: 'e', x: 0, y: 0,
       },
       {
-        cx: 1, cy: 1, hover: false, cur: 'se', a: 135,
+        cx: 1, cy: 1, hover: false, cur: 'se', x: 0, y: 0,
       },
       {
-        cx: 0.5, cy: 1, hover: false, cur: 's', a: 180,
+        cx: 0.5, cy: 1, hover: false, cur: 's', x: 0, y: 0,
       },
       {
-        cx: 0, cy: 1, hover: false, cur: 'sw', a: 225,
+        cx: 0, cy: 1, hover: false, cur: 'sw', x: -180, y: 0,
       },
       {
-        cx: 0, cy: 0.5, hover: false, cur: 'w', a: 270,
+        cx: 0, cy: 0.5, hover: false, cur: 'w', x: -180, y: 0,
       }],
       rotater: false,
     };
@@ -173,13 +173,13 @@ export default {
     this.primary = colors.getBrand('primary');
     canvas = document.getElementById('Canvas');
     ctx = canvas.getContext('2d');
-    this.editor = document.getElementById('editor').getBoundingClientRect();
-    if (this.editor.width) {
-      this.width = this.editor.width;
-      this.height = this.editor.height;
+    editor = document.getElementById('editor').getBoundingClientRect();
+    if (editor.width) {
+      this.width = editor.width;
+      this.height = editor.height;
     } else {
-      this.width = this.editor.right - this.editor.left;
-      this.height = this.editor.bottom - this.editor.top;
+      this.width = editor.right - editor.left;
+      this.height = editor.bottom - editor.top;
     }
     console.log(this.width);
     console.log(this.height);
@@ -318,22 +318,22 @@ export default {
       }
 
       if (this.dragToggle) {
-        this.selected.left += info.delta.x * (100.0 / this.width);
-        this.selected.top += info.delta.y * (100.0 / this.height);
+        this.selected.left += info.delta.x * (100.0 / editor.width);
+        this.selected.top += info.delta.y * (100.0 / editor.height);
       }
     },
     scale({ ...info }, index) {
       this.dragToggle = false;
       console.log(`Scale: ${index}`, info);
-      let ox = info.delta.x * (100.0 / this.width);
-      let oy = info.delta.y * (100.0 / this.height);
-      let a = (Math.atan(this.selected.width / this.selected.height) * 180) / Math.PI;
-      a = this.selected.rotate + (index % 2 === 0 ? this.circles[(index + 7) % 8].a + a
-        : this.circles[index].a);
-      a %= 360;
-      if (a > 180) ox *= -1;
-      if (a > 270 || a < 90) oy *= -1;
-      console.log(`${a}deg ${ox} ${oy}`);
+      // eslint-disable-next-line max-len
+      let ox = (Math.cos((this.selected.rotate + this.circles[index].x) * (Math.PI / 180)) * info.delta.x
+        + Math.sin((this.selected.rotate + this.circles[index].x) * (Math.PI / 180)) * info.delta.y)
+        * (100.0 / this.width);
+      // eslint-disable-next-line max-len
+      let oy = (Math.cos((this.selected.rotate + this.circles[index].y) * (Math.PI / 180)) * info.delta.y
+        - Math.sin((this.selected.rotate + this.circles[index].y) * (Math.PI / 180)) * info.delta.x)
+        * (100.0 / editor.height);
+      console.log(`${ox} ${oy}`);
       if (info.isFirst) {
         this.circles[index].hover = true;
       } else if (info.isFinal) {
@@ -341,61 +341,67 @@ export default {
       }
       if (info.evt.ctrlKey) {
         ox *= 1;
-        oy = ox;
+        oy = (ox / this.selected.width) * this.selected.height;
       }
       if (index === 1 || index === 5) ox = 0;
       if (index === 3 || index === 7) oy = 0;
-      this.selected.left -= ox;
-      this.selected.width += 2 * ox;
-      this.selected.top -= oy;
-      this.selected.height += 2 * oy;
-      /* switch (index) {
-        case 0:
-          this.selected.left -= ox;
-          this.selected.width += ox;
-          this.selected.top -= oy;
-          this.selected.height += oy;
-          break;
-        case 2:
-          this.selected.width += ox;
-          this.selected.top -= oy;
-          this.selected.height += oy;
-          break;
-        case 4:
-          this.selected.width += ox;
-          this.selected.height += oy;
-          break;
-        case 6:
-          this.selected.left -= ox;
-          this.selected.width += ox;
-          this.selected.height += oy;
-          break;
-        case 1:
-          this.selected.top -= oy;
-          this.selected.height += oy;
-          break;
-        case 3:
-          this.selected.width += ox;
-          break;
-        case 5:
-          this.selected.height += oy;
-          break;
-        case 7:
-          this.selected.left -= ox;
-          this.selected.width += ox;
-          break;
-        default:
-          break;
-      } */
+      if (this.selected.width + 2 * ox <= 0) {
+        this.selected.width = 0.1;
+      } else if (this.selected.height + 2 * oy <= 0) {
+        this.selected.height = 0.1;
+      } else {
+        this.selected.left -= ox;
+        this.selected.width += 2 * ox;
+        this.selected.top -= oy;
+        this.selected.height += 2 * oy;
+        /* switch (index) {
+          case 0:
+            this.selected.left -= ox;
+            this.selected.width += ox;
+            this.selected.top -= oy;
+            this.selected.height += oy;
+            break;
+          case 2:
+            this.selected.width += ox;
+            this.selected.top -= oy;
+            this.selected.height += oy;
+            break;
+          case 4:
+            this.selected.width += ox;
+            this.selected.height += oy;
+            break;
+          case 6:
+            this.selected.left -= ox;
+            this.selected.width += ox;
+            this.selected.height += oy;
+            break;
+          case 1:
+            this.selected.top -= oy;
+            this.selected.height += oy;
+            break;
+          case 3:
+            this.selected.width += ox;
+            break;
+          case 5:
+            this.selected.height += oy;
+            break;
+          case 7:
+            this.selected.left -= ox;
+            this.selected.width += ox;
+            break;
+          default:
+            break;
+        } */
+      }
     },
     rotate({ ...info }) {
       this.dragToggle = false;
       console.log(`Rotate: ${info}`);
-      console.log(info, this.editor);
+      console.log(info, editor);
       // eslint-disable-next-line max-len
-      const ox = (info.position.left - this.editor.left) * (100.0 / this.width) - this.selected.left - this.selected.width / 2;
+      const ox = (info.position.left - editor.left) * (100.0 / editor.width) - this.selected.left - this.selected.width / 2;
       // eslint-disable-next-line max-len
-      const oy = this.selected.top + this.selected.height / 2 - (info.position.top - this.editor.top) * (100.0 / this.height);
+      const oy = this.selected.top + this.selected.height / 2 - (info.position.top - editor.top) * (100.0 / editor.height);
       let t = 90;
       if (ox !== 0) t = 180 * (Math.atan(oy / ox) / Math.PI);
       console.log(`${ox} ${oy} ${t}`);
