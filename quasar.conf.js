@@ -70,6 +70,8 @@ module.exports = function (/* ctx */) {
         'QSpinnerGears',
         'QUploader',
         'Scroll',
+        'QBtn',
+        'QBtnDropdown',
       ],
       directives: [
         'ClosePopup',

@@ -4,6 +4,20 @@
     <q-toolbar>
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
+      <q-btn-dropdown style="margin-left: 0px;" auto-close dropdown-icon="menu"
+       dense flat :color="qbtnColor">
+        <q-list v-for="Tab  in tabs" :key="Tab.name">
+          <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
+            <q-item-section avatar>
+              <q-icon :name="Tab.icon" />
+            </q-item-section>
+            <q-item-section >
+              {{Tab.label}}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+
       <a href="/" class="xs">
         <img src="../assets/logo/logo_final.png" width="40px" />
       </a>
@@ -80,7 +94,7 @@
           exact
         />
       </q-tabs-->
-      <q-tabs
+      <!--q-tabs
         no-caps
         active-color="primary"
         indicator-color="transparent"
@@ -99,18 +113,6 @@
           @click="goTo(Tab.path, Tab.name)"
         />
       </q-tabs>
-      <q-btn-dropdown class="lt-sm" auto-close stretch flat label="">
-        <q-list v-for="Tab  in tabs" :key="Tab.name">
-          <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
-            <q-item-section avatar>
-              <q-icon :name="Tab.icon" />
-            </q-item-section>
-            <q-item-section >
-              {{Tab.label}}
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
       <div class="q-pa-md">
         <q-btn-dropdown split push no-caps icon="person" :color="qbtnColor">
           <q-list>
@@ -245,14 +247,224 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
-      </div>
+      </div-->
       <!-- <q-btn flat round dense icon="whatshot" /> -->
+
+      <div v-if="viewLogin()" class="row items-center">
+      <q-input
+        outlined
+        class="q-pa-sm"
+        type="text"
+        v-model="name"
+        label="Phone"
+        lazy-rules
+        mask="(###) ### - ####"
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter  Phone']"
+      />
+
+      <q-input
+        outlined
+        class="q-pa-sm"
+        type="password"
+        v-model="age"
+        label="Password"
+        lazy-rules
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Password']"
+      />
+
+      <div>
+        <q-btn label="Login" @click="onLogin" color="primary"/>
+        <q-btn label="Register" @click="$router.push('/newUser')"
+         color="primary" flat class="q-ml-sm" />
+      </div>
+      </div>
+
+      <q-tabs
+        v-else
+        no-caps
+        active-color="primary"
+        indicator-color="transparent"
+        class="merienda-bold gt-xs"
+        inline-label
+        dense
+        v-model="tab"
+        id="home_tabs"
+      >
+        <q-route-tab
+          name="New Invitation"
+          :label="($q.screen.gt.md) ? 'New Invitation' : ''"
+          :style="qtabStyle"
+          icon="create_new_folder"
+          to="/createInvitation"
+        />
+        <q-route-tab
+          name="My Events"
+          :label="($q.screen.gt.md) ? 'My Events' : ''"
+          :style="qtabStyle"
+          icon="folder_shared"
+          to="/events"
+        />
+        <q-route-tab
+          name="My Invites"
+          :label="($q.screen.gt.md) ? 'My Invites' : ''"
+          :style="qtabStyle"
+          icon="folder_shared"
+          to="/invites"
+        />
+        <q-route-tab
+          name="My Contacts"
+          :label="($q.screen.gt.md) ? 'My Contacts' : ''"
+          :style="qtabStyle"
+          icon="group"
+          to="/addContacts"
+        />
+        <q-tab
+          name="logout"
+          :label="($q.screen.gt.md) ? 'Logout' : ''"
+          :style="qtabStyle"
+          icon="person_add"
+          @click="onLogoutClick"
+        />
+            <!--q-item
+              clickable
+              v-close-popup
+              @click="onItemClick"
+              to="/login"
+              v-show="viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="person_outline"
+                  color="primary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Login</q-item-label>
+                <q-item-label caption>Login to send invites</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              clickable
+              v-close-popup
+              @click="onItemClick"
+              to="/newUser"
+              v-show="viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="person_add"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Register</q-item-label>
+                <q-item-label caption>New to Easy Invites</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              @click="onLogoutClick"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon=""
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+                <q-item-label caption>Logout from Easy Invites</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/createInvitation"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="create_new_folder"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>New Invitation</q-item-label>
+                <q-item-label caption>Create a new Invitation</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/events"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Events</q-item-label>
+                <q-item-label caption>Show my events</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/invites"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Invites</q-item-label>
+                <q-item-label caption>Show my invites</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/addContacts"
+              v-show="!viewLogin()"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Contacts</q-item-label>
+                <q-item-label caption>Show my contacts</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown-->
+      </q-tabs>
     </q-toolbar>
   </q-header>
 </template>
 
 <script>
-import { scroll } from 'quasar';
+import { Loading, QSpinnerBars, scroll } from 'quasar';
 import axios from 'axios';
 
 const { getScrollTarget, setScrollPosition } = scroll;
@@ -363,6 +575,46 @@ export default {
           this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
         }
       }
+    },
+    onLogin() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
+      axios.post('/api/authenticate', {
+        username: this.name,
+        password: this.age,
+      })
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data;
+          /* this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: this.posts.token,
+            position: 'center',
+          }); */
+          this.$q.sessionStorage.set('login-token', this.posts.token);
+          axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+            'login-token',
+          )}`;
+          Loading.hide();
+          this.$router.push('/events');
+        })
+        .catch((e) => {
+        //  this.errors.push(e);
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
     },
   },
 };
