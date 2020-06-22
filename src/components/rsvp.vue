@@ -1,5 +1,8 @@
 <template>
-  <div class="row justify-center q-pa-lg">
+  <q-page class="bg-grey">
+  <q-img v-if="file !== null" class="full-width bg-white" :height="`${$q.screen.height-height}px`"
+   transition="rotate" contain :src="file"/>
+  <q-card square class="row justify-center q-pa-lg">
     <div class="text-h5 text-center col-12 q-pb-md">
     {{invite.eventDetails.eventtitle !== null ? invite.eventDetails.eventtitle : 'Untitled Event'}}
     </div>
@@ -116,7 +119,8 @@
         </div>
       </q-form>
     </div>
-  </div>
+  </q-card>
+  </q-page>
 </template>
 
 <script>
@@ -135,6 +139,8 @@ export default {
       inviteId: '',
       invite: {},
       eventType: [],
+      height: 50,
+      file: null,
       status: 0,
       adults: 1,
       kids: 0,
@@ -158,7 +164,7 @@ export default {
   },
   mounted() {
     this.inviteId = this.$route.params.inviteId;
-
+    this.height = document.getElementById('header').clientHeight;
     Loading.show({
       spinner: QSpinnerBars,
       spinnerColor: 'primary',
@@ -173,6 +179,31 @@ export default {
       .get(`/api/userEvents/invites/${this.inviteId}`)
       .then((response) => {
         this.invite = response.data.data;
+        if (this.invite.eventDetails.attachmentlink !== null) {
+          axios
+            .get(this.invite.eventDetails.attachmentlink, { responseType: 'arraybuffer' })
+            .then((Response) => {
+              const image = btoa(
+                new Uint8Array(Response.data)
+                  .reduce((data, byte) => data + String.fromCharCode(byte), ''),
+              );
+              this.file = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
+            })
+            .catch((e) => {
+              if (e.message === 'Request failed with status code 401') {
+                this.$q.sessionStorage.remove('login-token');
+                this.$router.push('/login');
+              }
+              this.$q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'error',
+                message: e.message,
+                position: 'top',
+              });
+            });
+        }
+
         Loading.hide();
         this.adults = this.invite.headcount;
         this.kids = this.invite.kidscount;

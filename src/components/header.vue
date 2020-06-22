@@ -4,7 +4,7 @@
     <q-toolbar>
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
-      <q-btn-dropdown style="margin-left: 0px;" auto-close dropdown-icon="menu"
+      <q-btn-dropdown auto-close dropdown-icon="menu"
        dense flat :color="qbtnColor">
         <q-list v-for="Tab  in tabs" :key="Tab.name">
           <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
@@ -250,10 +250,13 @@
       </div-->
       <!-- <q-btn flat round dense icon="whatshot" /> -->
 
-      <div v-if="viewLogin()" class="row items-center">
+      <div v-if="viewLogin()" class="row items-center q-pl-sm">
       <q-input
-        outlined
-        class="q-pa-sm"
+        v-if="$q.screen.width >= 777"
+        :dark="qbtnColor !== 'primary'"
+        outlined dense
+        class="q-pt-sm q-pr-sm"
+        style="width: 180px"
         type="text"
         v-model="name"
         label="Phone"
@@ -265,8 +268,12 @@
       />
 
       <q-input
-        outlined
-        class="q-pa-sm"
+        v-if="$q.screen.width >= 777"
+        :dark="qbtnColor !== 'primary'"
+        stack-label
+        outlined dense
+        class="q-pt-sm q-pr-sm"
+        style="width: 180px"
         type="password"
         v-model="age"
         label="Password"
@@ -274,55 +281,58 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Password']"
       />
 
-      <div>
-        <q-btn label="Login" @click="onLogin" color="primary"/>
-        <q-btn label="Register" @click="$router.push('/newUser')"
-         color="primary" flat class="q-ml-sm" />
+      <div class="row" style="max-width: 90px; padding: 9px 0px;">
+        <q-btn class="col-12" label="Login" @click="onLogin" dense
+         :color="`${qbtnColor || 'white'}`"
+         :text-color="`${qbtnColor === '' ? 'black' : 'white'}`"/>
+        <div @click="$router.push('/newUser')" class="q-pt-xs" :class="`text-${qbtnColor}`"
+         style="font-size: 10px; text-decoration: underline; cursor: default;">New User?</div>
       </div>
       </div>
 
+      <div v-else>
       <q-tabs
-        v-else
         no-caps
         active-color="primary"
         indicator-color="transparent"
         class="merienda-bold gt-xs"
         inline-label
-        dense
+        dense shrink
         v-model="tab"
         id="home_tabs"
       >
         <q-route-tab
           name="New Invitation"
-          :label="($q.screen.gt.md) ? 'New Invitation' : ''"
+          :label="($q.screen.gt.sm) ? 'New Invitation' : ''"
           :style="qtabStyle"
           icon="create_new_folder"
           to="/createInvitation"
+          content-class="padding: 0px 8px;"
         />
         <q-route-tab
           name="My Events"
-          :label="($q.screen.gt.md) ? 'My Events' : ''"
+          :label="($q.screen.gt.sm) ? 'My Events' : ''"
           :style="qtabStyle"
           icon="folder_shared"
           to="/events"
         />
         <q-route-tab
           name="My Invites"
-          :label="($q.screen.gt.md) ? 'My Invites' : ''"
+          :label="($q.screen.gt.sm) ? 'My Invites' : ''"
           :style="qtabStyle"
           icon="folder_shared"
           to="/invites"
         />
         <q-route-tab
           name="My Contacts"
-          :label="($q.screen.gt.md) ? 'My Contacts' : ''"
+          :label="($q.screen.gt.sm) ? 'My Contacts' : ''"
           :style="qtabStyle"
           icon="group"
           to="/addContacts"
         />
         <q-tab
           name="logout"
-          :label="($q.screen.gt.md) ? 'Logout' : ''"
+          :label="($q.screen.gt.sm) ? 'Logout' : ''"
           :style="qtabStyle"
           icon="person_add"
           @click="onLogoutClick"
@@ -459,6 +469,97 @@
           </q-list>
         </q-btn-dropdown-->
       </q-tabs>
+      <q-btn-dropdown icon="person" dropdown-icon=""
+       auto-close dense flat :color="qbtnColor" class="lt-sm">
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              to="/createInvitation"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="create_new_folder"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>New Invitation</q-item-label>
+                <q-item-label caption>Create a new Invitation</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/events"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Events</q-item-label>
+                <q-item-label caption>Show my events</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/invites"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="folder_shared"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Invites</q-item-label>
+                <q-item-label caption>Show my invites</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/addContacts"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="group"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Contacts</q-item-label>
+                <q-item-label caption>Show my contacts</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              @click="onLogoutClick"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  icon="person_add"
+                  color="secondary"
+                  text-color="white"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+                <q-item-label caption>Logout from Easy Invites</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+      </q-btn-dropdown>
+      </div>
     </q-toolbar>
   </q-header>
 </template>
@@ -490,7 +591,7 @@ export default {
         name: 'videos', label: 'About Us', icon: 'people', path: '/',
       },
       {
-        name: 'articles', label: 'Browse Cards', icon: 'style', path: '/browsecards',
+        name: null, label: 'Browse Cards', icon: 'style', path: '/browsecards',
       },
       {
         name: 'reviews', label: 'Reviews', icon: 'rate_review', path: '/',
@@ -499,6 +600,8 @@ export default {
         name: 'prices', label: 'Prices', icon: 'monetization_on', path: '/',
       },
       ],
+      name: '',
+      age: '',
     };
   },
   mounted() {
@@ -540,11 +643,11 @@ export default {
       else this.$router.push('/');
     },
     scrollTo(section) {
-      if (section === null) return;
+      const duration = 50;
+      if (section === null) section = 'header';
       const ele = document.getElementById(section);
       const target = getScrollTarget(ele);
       const offset = ele.offsetTop - this.hEl.clientHeight;
-      const duration = 10;
       setScrollPosition(target, offset, duration);
     },
     goTo(path, section) {
@@ -558,7 +661,7 @@ export default {
     },
     scrollHandler(position) {
       // window.alert(this.$router.currentRoute.path);
-      if (this.$router.currentRoute.path === '/') {
+      if (this.$route.path === '/') {
         if (position > this.hScreenHeight) {
           this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
           this.hStyle = 'background-color: rgba(255,255,255,1);';
@@ -577,6 +680,10 @@ export default {
       }
     },
     onLogin() {
+      if (this.$q.screen.width < 777) {
+        this.$router.push('/login');
+        return;
+      }
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -602,7 +709,7 @@ export default {
             'login-token',
           )}`;
           Loading.hide();
-          this.$router.push('/events');
+          this.goTo('/events', null);
         })
         .catch((e) => {
         //  this.errors.push(e);
