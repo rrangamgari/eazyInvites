@@ -17,13 +17,13 @@
             <q-input
               v-model="eventtitle"
               type="text"
-              filled
+               outlined
               label="Event Title"
               name="eventtitle"
             />
             <q-select
               name="eventType"
-              filled
+               outlined
               label="Event Type"
               v-model="eventType"
               :options="options"
@@ -36,13 +36,32 @@
             </q-select>
             <div class="row">
             <q-input style="width: 48%;"
-             v-model="eventdate" filled type="date" stack-label label="Event Date"/>
+             v-model="eventdate"  outlined mask="date" stack-label label="Event Date"
+                     :rules="['eventdate']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                    <q-date v-model="eventdate" @input="() => $refs.qDateProxy.hide()"
+                            today-btn :options="optionsFn"/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
             <div style="width: 4%;"/>
             <q-input style="width: 48%;"
-             v-model="eventtime" filled type="time" stack-label label="Event Time"/>
+             v-model="eventtime"  outlined mask="time" stack-label label="Event Time">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                    <q-time v-model="eventtime" @input="() => $refs.qDateProxy.hide()"
+                            format24h/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
             </div>
             <q-file
-              filled
+               outlined
               v-model="file"
               label="Upload Invitation"
               style="padding-right:15px"
@@ -53,16 +72,17 @@
             </q-file>
             <q-input
               v-model="eventmessage"
-              filled
+               outlined
               autogrow
               label="Custom Message"
               name="eventmessage"
             />
           <q-stepper-navigation>
             <q-btn
-              color="primary"
+              color="primary  q-px-xl q-py-xs"
               label="Continue"
               type="submit"
+              size="md"
             />
             <q-btn
               label="Reset"
@@ -223,7 +243,7 @@
           header-class="bg-primary"
           :header-style="{ color: '#FFFFFF' }"
         >
-        <q-card class="full-height rounded-borders">
+        <q-card class="full-height -borders">
           <q-card-section class="q-pa-xs">
             <!--q-card-section class="q-pa-xs">
               <div class="text-center text-weight-medium" style="font-size: 16px;">
@@ -317,9 +337,9 @@
       </div>
 
       <div class="q-pa-sm row">
-        <q- filled type="text"
+        <q-  outlined type="text"
          label="Coupon" v-model="coupon" clearable/>
-         <q-input filled class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
+         <q-input  outlined class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
           :class="`${$q.screen.gt.xs ? 'q-mr-sm' : ''}`"
           type="text" label="Coupon" v-model="coupon" clearable
         />
@@ -330,7 +350,7 @@
       </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="Finish" @click="onFinish()"/>
+          <q-btn color="primary" class="glossy"  label="Finish" @click="onFinish()"/>
           <q-btn
             flat
             @click="step = 2"
@@ -346,13 +366,14 @@
 
 <script>
 import axios from 'axios';
-import { Loading, QSpinnerBars } from 'quasar';
+import { Loading, QSpinnerBars, date } from 'quasar';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 
+// let newDate = date.buildDate({ year:2010, date:5, hours:15, milliseconds:123})
 export default {
   name: 'createInvitationComponent',
   components: {},
@@ -363,8 +384,8 @@ export default {
       url: '',
       step: 1,
       eventtitle: '',
-      eventdate: null,
-      eventtime: null,
+      eventdate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
+      eventtime: '00:00',
       eventType: '',
       selection: ['teal'],
       selected: [],
@@ -441,6 +462,11 @@ export default {
   },
 
   methods: {
+    optionsFn(date_) {
+      const futuredate = new Date(); // Now
+      futuredate.setDate(futuredate.getDate() + 365); // Set now + 30 days as the new date
+      return date_ >= date.formatDate(Date.now(), 'YYYY/MM/DD') && date_ <= date.formatDate(futuredate, 'YYYY/MM/DD');
+    },
     onSubmit() {
       if (this.eventType === '') {
         this.$q.notify({
