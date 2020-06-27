@@ -24,7 +24,9 @@
           </q-card-section>
           <q-card-actions class="col-3 q-pl-sm">
             <q-space/>
-            <q-btn no-caps :to="`/invites/${invite.eventguestsid}`" label="View"/>
+            <q-btn no-caps :to="`/invites/${invite.eventguestsid}`" label="View"
+             :color="`${invite.status.eventstatusid === 5 ? 'primary' : ''}`"
+             :text-color="`${invite.status.eventstatusid === 5 ? 'white' : 'primary'}`"/>
           </q-card-actions>
         </q-card>
       </div>

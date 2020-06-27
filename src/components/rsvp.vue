@@ -1,8 +1,8 @@
 <template>
-  <q-page class="bg-grey">
+  <q-page>
   <q-img v-if="file !== null" class="full-width bg-white" :height="`${$q.screen.height-height}px`"
    transition="rotate" contain :src="file"/>
-  <q-card square class="row justify-center q-pa-lg">
+  <div class="row justify-center q-pa-lg">
     <div class="text-h5 text-center col-12 q-pb-md">
     {{invite.eventDetails.eventtitle !== null ? invite.eventDetails.eventtitle : 'Untitled Event'}}
     </div>
@@ -43,6 +43,9 @@
       <q-btn style="width:100%;" unelevated label="Regrets" no-caps
              :outline="status !== 4" color="red" @click="status = 4"/>
     </div>
+    <div class="text-red q-pa-xs text-caption"
+     v-if="error">Please select an option above</div>
+
     <div class="col-12 q-py-md">
       <q-form
         v-show="status !== null && status !== 0"
@@ -53,7 +56,7 @@
       >
         <q-input
           v-show="status !== 4"
-          filled
+          outlined
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pr-xs' : ''}`"
           type="number"
@@ -67,7 +70,7 @@
 
         <q-input
           v-show="status !== 4"
-          filled
+          outlined
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pl-xs' : ''}`"
           :disable="!invite.eventDetails.eventallowkids"
@@ -81,17 +84,18 @@
         />
 
         <q-input
-          filled
+          outlined
           class="col-12 q-pb-md"
           type="textarea"
           v-model="message"
           label="Message to Host"
+          maxlength="800"
         />
 
-        <div class="col-12" v-for="(poll,index) in polls" :key="index">
+        <!--div class="col-12" v-for="(poll,index) in polls" :key="index">
           <q-field
             class="q-pt-md q-pb-md"
-            filled
+            outlined
             label-width="12"
             :label="poll.question"
             v-model="poll.answer"
@@ -111,7 +115,7 @@
             />
           </div>
           </q-field>
-        </div>
+        </div-->
 
         <div class="q-pt-md">
             <q-btn label="Submit" type="submit" color="primary"/>
@@ -119,7 +123,7 @@
         </div>
       </q-form>
     </div>
-  </q-card>
+  </div>
   </q-page>
 </template>
 
@@ -145,6 +149,7 @@ export default {
       adults: 1,
       kids: 0,
       message: '',
+      error: false,
       polls: [{
         type: 'S',
         required: false,
@@ -179,6 +184,19 @@ export default {
       .get(`/api/userEvents/invites/${this.inviteId}`)
       .then((response) => {
         this.invite = response.data.data;
+        this.status = this.invite.status.eventstatusid;
+        if (this.status === 5) {
+          this.status = 2;
+          axios.put(`/api/userEvents/invites/${this.inviteId}`,
+            {
+              status: { eventstatusid: 2, eventstatusdescription: '' },
+              headcount: 0,
+              kidscount: 0,
+            });
+        }
+        this.adults = this.invite.headcount || 1;
+        this.kids = this.invite.kidscount;
+        this.message = this.invite.message;
         if (this.invite.eventDetails.attachmentlink !== null) {
           axios
             .get(this.invite.eventDetails.attachmentlink, { responseType: 'arraybuffer' })
@@ -188,6 +206,7 @@ export default {
                   .reduce((data, byte) => data + String.fromCharCode(byte), ''),
               );
               this.file = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
+              Loading.hide();
             })
             .catch((e) => {
               if (e.message === 'Request failed with status code 401') {
@@ -201,12 +220,9 @@ export default {
                 message: e.message,
                 position: 'top',
               });
+              Loading.hide();
             });
-        }
-
-        Loading.hide();
-        this.adults = this.invite.headcount;
-        this.kids = this.invite.kidscount;
+        } else Loading.hide();
       })
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
@@ -241,6 +257,11 @@ export default {
     },
     onSubmit() {
       window.console.log(this.polls);
+
+      if (!([1, 3, 4].includes(this.status))) {
+        this.error = true;
+        return;
+      }
 
       Loading.show({
         spinner: QSpinnerBars,
@@ -294,6 +315,7 @@ export default {
       this.kids = this.invite.kidscount;
       this.message = '';
       this.polls.forEach((poll) => { poll.answer = []; });
+      this.error = false;
     },
   },
 };

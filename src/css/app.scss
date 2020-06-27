@@ -48,6 +48,7 @@
 }
 #ei_tab.ei_tab_right:hover,#ei_tab.ei_tab_right:focus,#ei_tab.ei_tab_right:active{
   background:#0072C6;
+  transform: rotate(-90deg) scale(1.02) translateY(-5px);
   -ms-transform:rotate(-90deg) scale(1.02) translateY(-5px);
   -webkit-transform:rotate(-90deg) translateY(-5px);
   -moz-transform:rotate(-90deg) translateY(-5px)
@@ -68,6 +69,7 @@
 }
 #ei_tab.ei_tab_left:hover,#ei_tab.ei_tab_left:focus,#ei_tab.ei_tab_left:active{
   background:#0072C6;
+  transform:rotate(-90deg) scale(1.02) translateY(5px);
   -ms-transform:rotate(-90deg) scale(1.02) translateY(5px);
   -webkit-transform:rotate(-90deg) translateY(5px);
   -moz-transform:rotate(-90deg) translateY(5px)
@@ -310,6 +312,7 @@
 }
 #whatsapp_tab.whatsapp_tab_right:hover,#whatsapp_tab.whatsapp_tab_right:focus,#whatsapp_tab.whatsapp_tab_right:active{
   background:#26A69A;
+  transform:rotate(0deg) scale(1.02) translateY(-5px);
   -ms-transform:rotate(0deg) scale(1.02) translateY(-5px);
   -webkit-transform:rotate(0deg) translateY(-5px);
   -moz-transform:rotate(0deg) translateY(-5px)
