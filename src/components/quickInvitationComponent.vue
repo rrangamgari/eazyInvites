@@ -12,7 +12,7 @@
           @submit="onSubmit"
           @reset="onReset"
           class="q-gutter-md q-pa-xs q-pr-md"
-          style="width:350px"
+          style="width:450px"
         >
             <q-input
               v-model="eventtitle"
@@ -27,6 +27,7 @@
               label="Event Type"
               v-model="eventType"
               :options="options"
+              :rules="[val => !!val || 'Event Type is required']"
               @input="
                 val => {
                   onEventTypeChange();
@@ -35,37 +36,42 @@
             >
             </q-select>
             <div class="row">
-            <q-input style="width: 48%;"
+            <q-input style="width: 80%;"
              v-model="eventdate"  outlined mask="date" stack-label label="Event Date"
-                     :rules="['eventdate']">
+                     :rules="[val => !!val || 'Event Date is required']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                     <q-date v-model="eventdate" @input="() => $refs.qDateProxy.hide()"
-                            today-btn :options="optionsFn"/>
+                            :options="optionsFn"/>
                   </q-popup-proxy>
                 </q-icon>
               </template>
             </q-input>
-            <div style="width: 4%;"/>
-            <q-input style="width: 48%;"
+              <div style="width: 4%;"/>
+          <q-toggle style="width: 10%;"
+            v-model="first"
+            icon="alarm"
+                    size="50px"
+          />
+            </div>
+            <q-input v-show="first"
              v-model="eventtime"  outlined mask="time" stack-label label="Event Time">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-time v-model="eventtime" @input="() => $refs.qDateProxy.hide()"
+                  <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
+                    <q-time v-model="eventtime" @input="() => $refs.qTimeProxy.hide()"
                             format24h/>
                   </q-popup-proxy>
                 </q-icon>
               </template>
             </q-input>
-            </div>
             <q-file
                outlined
               v-model="file"
               label="Upload Invitation"
               style="padding-right:15px"
-            >
+               :rules="[val => !!val || 'Please upload your invitation']">
               <template v-slot:append>
                 <q-icon name="attach_file" />
               </template>
@@ -77,9 +83,17 @@
               label="Custom Message"
               name="eventmessage"
             />
+          <q-btn
+            label="More Custom Messages"
+            type="button"
+            color="primary"
+            flat
+            class="q-ml-sm"
+          />
           <q-stepper-navigation>
             <q-btn
-              color="primary  q-px-xl q-py-xs"
+              color="primary"
+              class ="q-px-xl q-py-xs"
               label="Continue"
               type="submit"
               size="md"
@@ -88,8 +102,8 @@
               label="Reset"
               type="reset"
               color="primary"
+              class ="q-px-xl q-py-xs"
               flat
-              class="q-ml-sm"
             />
           </q-stepper-navigation>
         </q-form>
@@ -220,7 +234,7 @@
           </template>
         </q-table>
         <q-stepper-navigation>
-          <q-btn @click="onContinue()" color="primary" label="Continue" />
+          <q-btn @click="onContinue()" color="primary" label="Continue" class="q-px-xl q-py-xs"/>
           <q-btn
             flat
             @click="step = 1"
@@ -350,7 +364,7 @@
       </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" class="glossy"  label="Finish" @click="onFinish()"/>
+          <q-btn color="primary" class="q-px-xl q-py-xs"  label="Finish" @click="onFinish()"/>
           <q-btn
             flat
             @click="step = 2"
@@ -381,6 +395,7 @@ export default {
     return {
       file: null,
       fileId: null,
+      first: false,
       url: '',
       step: 1,
       eventtitle: '',
@@ -389,7 +404,7 @@ export default {
       eventType: '',
       selection: ['teal'],
       selected: [],
-      eventmessage: `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`,
+      eventmessage: `\nDear {{Guest Name}}, We invite you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`,
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -437,12 +452,6 @@ export default {
           field: 'email',
           sortable: true,
         },
-        {
-          name: 'delete',
-          label: 'Delete',
-          sortable: false,
-          field: (row) => `${row.eventmemberid}`,
-        },
       ],
       dataLoaded: false,
       data: [
@@ -458,6 +467,8 @@ export default {
       price: 0,
       discount: 0,
       total: 0,
+      errorMessageProtein: '',
+      errorProtein: '',
     };
   },
 
@@ -524,11 +535,24 @@ export default {
       this.eventType = null;
       this.model = null;
     },
+    firstnameValidation(val) {
+      if (val === '') {
+        this.errorProtein = true;
+        this.errorMessageProtein = 'The firstname cannot be empty';
+        return false;
+      }
+      this.errorProtein = false;
+      this.errorMessageProtein = 'dasasds';
+      return true;
+    },
     onEventTypeChange() {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has invited you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
+      this.eventmessage = `\nDear {{Guest Name}}, We invite you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`;
+      // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
+      // invited you for a ${this.eventType.label} party.
+      // \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
     },
     onContinue() {
       this.step = 4;
