@@ -266,13 +266,13 @@
               </div>
             </q-card-section-->
             <q-card-section class="q-pa-xs row items-center">
-              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                 <p style="font-size: 34px;">Type: {{ eventType.label }}</p>
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                 Host: {{ hostname }}
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                 Message: <br>{{ eventmessage }}<br>
               </div>
               <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
@@ -297,14 +297,17 @@
                   event.eventtitle : 'Untitled Event' }}
               </div>
             </q-card-section-->
-            <q-card-section class="q-pa-xs row items-center">
-              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+            <q-card-section class="q-pa-xs row items-center logo" style="font-family:
+              'Montserrat', cursive;  font-weight:bolder; color:#0072C6">
+              <div class="text-left q-px-xs col-12 " style="font-size: 34px;">
                 Type: {{ eventType.label }}
               </div>
+              <div>&nbsp;</div>
               <div class="text-left q-px-xs col-12" style="font-size: 34px;">
                 Host: {{ hostname }}
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 34px; ">
+              <div>&nbsp;</div>
+              <div class="text-left q-px-xs col-12" style="font-size: 20px; ">
                 Message: <br>{{ eventmessage }}<br>
               </div>
               <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
@@ -313,7 +316,8 @@
               <div class="text-left q-px-xs col-12" style="font-size: 10px;">
                 End: {{ (new Date(event.enddate)).toDateString() }}
               </div-->
-              <div class="text-left q-px-xs q-py-sm col-12" style="font-size: 12px;">
+              <div>&nbsp;</div>
+              <div class="text-left q-px-xs q-py-sm col-12" style="font-size: 20px;">
                 {{ selected.length }} contacts selected
               </div>
             </q-card-section>
