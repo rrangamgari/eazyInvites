@@ -77,6 +77,12 @@ const routes = [
     name: 'invitesRsvp',
     component: () => import('layouts/invitesRsvpLayout.vue'),
   },
+  {
+    path: '/view/:viewInviteId',
+    name: 'guestInvitesRsvp',
+    component: () => import('layouts/guestInvitesRsvpLayout.vue'),
+    props: true,
+  },
 ];
 
 // Always leave this as last one

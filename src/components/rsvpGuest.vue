@@ -4,30 +4,30 @@
    transition="rotate" contain :src="file"/>
   <div class="row justify-center q-pa-lg">
     <div class="text-h5 text-center col-12 q-pb-md">
-    {{invite.eventDetails.eventtitle !== null ? invite.eventDetails.eventtitle : 'Untitled Event'}}
+    {{event.eventtitle !== null ? event.eventtitle : 'Untitled Event'}}
     </div>
-    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.hostedby !== null">
+    <div class="col-xs-12 col-sm-4" v-if="event.hostedby !== null">
       <div class="text-subtitle1 text-center">Host</div>
-      <div class="text-h6 text-center">{{ invite.eventDetails.hostedby }}</div>
-      <div class="text-h6 text-center">Ph: {{ invite.eventDetails.phone }}</div>
+      <div class="text-h6 text-center">{{ event.hostedby }}</div>
+      <div class="text-h6 text-center">Ph: {{ event.phone }}</div>
     </div>
-    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.startdate !== null">
+    <div class="col-xs-12 col-sm-4" v-if="event.startdate !== null">
       <div class="text-subtitle1 text-center">Date</div>
       <div class="text-h6 text-center">
-        Start: {{ new Date(invite.eventDetails.startdate).toDateString() }}
+        Start: {{ new Date(event.startdate).toDateString() }}
       </div>
       <div class="text-h6 text-center">
-        End: {{ new Date(invite.eventDetails.enddate).toDateString() }}
+        End: {{ new Date(event.enddate).toDateString() }}
       </div>
     </div>
-    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.addresses !== null">
+    <div class="col-xs-12 col-sm-4" v-if="event.addresses !== null">
       <div class="text-subtitle1 text-center">Venue</div>
-      <div class="text-h6 text-center">{{ getAddress(invite) }}</div>
+      <div class="text-h6 text-center">{{ getAddress(event) }}</div>
     </div>
     <div class="col-12 q-py-lg">
       <div class="text-subtitle1 text-center">Message</div>
       <div class="text-h6 text-center" style="max-width: 350px; margin: auto;">
-        {{ invite.eventDetails.eventmessage }}
+        {{ event.eventmessage }}
       </div>
     </div>
     <div class="text-subtitle1 text-center col-12 q-py-md">RSVP</div>
@@ -55,12 +55,41 @@
         @reset="onReset"
       >
         <q-input
+          outlined
+          class="col-12 q-pb-lg"
+          type="text"
+          v-model="name"
+          label="Name"
+          lazy-rules
+          :rules="[ val=> val !== null && val !== '' || 'Please enter a Name']"
+        />
+
+        <q-input
+          outlined
+          class="col-12 q-pb-lg"
+          type="text"
+          v-model="phone"
+          label="Phone"
+          lazy-rules
+          :rules="[ val=> val !== null && val !== '' ||
+           ( email !== null && email !== '' || 'Please enter Phone or Email')]"
+        />
+
+        <q-input
+          outlined
+          class="col-12 q-pb-md"
+          type="text"
+          v-model="email"
+          label="Email"
+        />
+
+        <q-input
           v-show="status !== 4"
           outlined
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pr-xs' : ''}`"
           type="number"
-          :max="invite.eventDetails.maxguests"
+          :max="event.maxguests"
           min=1
           v-model.number="adults"
           label="Adults"
@@ -73,9 +102,9 @@
           outlined
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pl-xs' : ''}`"
-          :disable="!invite.eventDetails.eventallowkids"
+          :disable="!event.eventallowkids"
           type="number"
-          :max="invite.eventDetails.maxguests"
+          :max="event.maxguests"
           min=0
           v-model.number="kids"
           suffix="Kids"
@@ -140,12 +169,15 @@ export default {
   name: 'statusComponent',
   data() {
     return {
-      inviteId: '',
-      invite: {},
+      viewInviteId: '',
+      event: {},
       eventType: [],
       height: 50,
       file: null,
-      status: 0,
+      name: '',
+      phone: '',
+      email: '',
+      status: 2,
       adults: 1,
       kids: 0,
       message: '',
@@ -168,7 +200,8 @@ export default {
     };
   },
   mounted() {
-    this.inviteId = this.$route.params.inviteId;
+    this.viewInviteId = this.$route.params.viewInviteId;
+    console.log(this.viewInviteId);
     this.height = document.getElementById('header').clientHeight;
     Loading.show({
       spinner: QSpinnerBars,
@@ -176,62 +209,14 @@ export default {
       thickness: '3',
     });
 
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-      'login-token',
-    )}`;
-
     axios
-      .get(`/api/userEvents/invites/${this.inviteId}`)
+      .get(`/api/userEvents/guestInvites/${this.viewInviteId}`)
       .then((response) => {
-        this.invite = response.data.data;
-        this.status = this.invite.status.eventstatusid;
-        if (this.status === 5) {
-          this.status = 2;
-          axios.put(`/api/userEvents/invites/${this.inviteId}`,
-            {
-              status: { eventstatusid: 2, eventstatusdescription: '' },
-              headcount: 0,
-              kidscount: 0,
-            });
-        }
-        this.adults = this.invite.headcount || 1;
-        this.kids = this.invite.kidscount;
-        this.message = this.invite.message;
-        if (this.invite.eventDetails.attachmentlink !== null) {
-          axios
-            .get(this.invite.eventDetails.attachmentlink, { responseType: 'arraybuffer' })
-            .then((Response) => {
-              const image = btoa(
-                new Uint8Array(Response.data)
-                  .reduce((data, byte) => data + String.fromCharCode(byte), ''),
-              );
-              this.file = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
-              Loading.hide();
-            })
-            .catch((e) => {
-              if (e.message === 'Request failed with status code 401') {
-                this.$q.sessionStorage.remove('login-token');
-                this.$router.push('/login');
-              }
-              this.$q.notify({
-                color: 'red-5',
-                textColor: 'white',
-                icon: 'error',
-                message: e.message,
-                position: 'top',
-              });
-              Loading.hide();
-            });
-        } else Loading.hide();
+        this.event = response.data.data;
+        this.file = this.event.attachmentlink;
+        Loading.hide();
       })
       .catch((e) => {
-        if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
-          this.$router.push('/login');
-        } else if (e.message === 'Request failed with status code 400') {
-          this.$router.push('/invites');
-          e.message = 'Invite not found!';
-        }
         this.$q.notify({
           color: 'red-5',
           textColor: 'white',
@@ -248,8 +233,8 @@ export default {
       });
   },
   methods: {
-    getAddress(invite) {
-      const address = invite.eventDetails.addresses;
+    getAddress(event) {
+      const address = event.addresses;
       return `${address.eventaddress}, ${address.eventcity}, ${address.eventstate}, ${address.eventcountry} - ${address.eventzip}`;
     },
     max(a, b) {
@@ -269,12 +254,9 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-        'login-token',
-      )}`;
-
-      axios.put(`/api/userEvents/invites/${this.inviteId}`,
+      axios.put(`/api/userEvents/guestInvites/${this.viewInviteId}`,
         {
+          eventMembers: { firstname: this.name, primaryPhone: this.phone, email: this.email },
           status: { eventstatusid: this.status, eventstatusdescription: '' },
           headcount: `${this.status === 4 ? '0' : this.adults}`,
           kidscount: `${this.status === 4 ? '0' : this.kids}`,
@@ -292,14 +274,9 @@ export default {
               position: 'top',
             });
             Loading.hide();
-            this.$router.push('/invites');
           }
         })
         .catch((e) => {
-          if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
-            this.$router.push('/login');
-          }
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -311,9 +288,12 @@ export default {
         });
     },
     onReset() {
-      this.status = this.invite.status.eventstatusid;
-      this.adults = this.invite.headcount || 1;
-      this.kids = this.invite.kidscount;
+      this.name = '';
+      this.phone = '';
+      this.email = '';
+      this.status = 2;
+      this.adults = 1;
+      this.kids = 0;
       this.message = '';
       this.polls.forEach((poll) => { poll.answer = []; });
       this.error = false;
