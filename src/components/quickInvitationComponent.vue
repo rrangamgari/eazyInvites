@@ -266,13 +266,13 @@
               </div>
             </q-card-section-->
             <q-card-section class="q-pa-xs row items-center">
-              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
-                Type: {{ eventType.label }}
+              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+                <p style="font-size: 34px;">Type: {{ eventType.label }}</p>
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
-                Host: Self
+              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+                Host: {{ hostname }}
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
                 Message: <br>{{ eventmessage }}<br>
               </div>
               <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
@@ -298,13 +298,13 @@
               </div>
             </q-card-section-->
             <q-card-section class="q-pa-xs row items-center">
-              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
                 Type: {{ eventType.label }}
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
-                Host: Self
+              <div class="text-left q-px-xs col-12" style="font-size: 34px;">
+                Host: {{ hostname }}
               </div>
-              <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 34px; ">
                 Message: <br>{{ eventmessage }}<br>
               </div>
               <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
@@ -404,6 +404,7 @@ export default {
       eventType: '',
       selection: ['teal'],
       selected: [],
+      hostname: this.$q.sessionStorage.getItem('user-token'),
       eventmessage: `\nDear {{Guest Name}}, We invite you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`,
       options: [
         { value: 1, label: 'Birthday' },
@@ -673,15 +674,22 @@ export default {
     },
   },
   mounted() {
+    Loading.show({
+      spinner: QSpinnerBars,
+      spinnerColor: 'primary',
+      thickness: '3',
+    });
     axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
       'login-token',
     )}`;
+
     axios
       .get('/api/eventSystem/eventType')
       .then((response) => {
         // JSON responses are automatically parsed.
         this.options = response.data.data;
         // this.data = this.data.concat(response.data.data);
+        Loading.hide();
       })
       .catch((e) => {
         //  this.errors.push(e);
@@ -696,6 +704,31 @@ export default {
           message: e.message,
           position: 'top',
         });
+        Loading.hide();
+      });
+    Loading.show({
+      spinner: QSpinnerBars,
+      spinnerColor: 'primary',
+      thickness: '3',
+    });
+    axios.get('/api/UserDetails/getCurrentUser')
+      .then((response1) => {
+        // JSON responses are automatically parsed.
+        this.$q.sessionStorage.set('user-token', response1.data.data);
+        this.hostname = `${this.$q.sessionStorage.getItem('user-token').givenname} ${this.$q.sessionStorage.getItem('user-token').familyname}`;
+        // Notification for testing api
+        Loading.hide();
+      })
+      .catch((e) => {
+        //  this.errors.push(e);
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'error',
+          message: e.message,
+          position: 'top',
+        });
+        Loading.hide();
       });
   },
 };

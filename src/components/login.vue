@@ -85,19 +85,36 @@ export default {
         .then((response) => {
           // JSON responses are automatically parsed.
           this.posts = response.data;
-          /* this.$q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: this.posts.token,
-            position: 'center',
-          }); */
           this.$q.sessionStorage.set('login-token', this.posts.token);
-          axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-            'login-token',
-          )}`;
-          Loading.hide();
-          this.$router.push('/events');
+          axios.defaults.headers.Authorization = `Bearer ${this.posts.token}`;
+
+          axios.get('/api/UserDetails/getCurrentUser')
+            .then((response1) => {
+              // JSON responses are automatically parsed.
+              this.$q.sessionStorage.set('user-token', response1.data);
+              this.$q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'error',
+                message: response1,
+                position: 'top',
+              });
+
+              // Notification for testing api
+              this.$router.push('/events');
+              Loading.hide();
+            })
+            .catch((e) => {
+              //  this.errors.push(e);
+              this.$q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'error',
+                message: e.message,
+                position: 'top',
+              });
+              Loading.hide();
+            });
         })
         .catch((e) => {
         //  this.errors.push(e);
