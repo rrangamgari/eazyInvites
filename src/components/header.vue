@@ -5,7 +5,7 @@
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
       <q-btn-dropdown auto-close dropdown-icon="menu"
-       dense flat :color="qbtnColor">
+       dense flat :color="qmenuColor">
         <q-list v-for="Tab  in tabs" :key="Tab.name">
           <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
             <q-item-section avatar>
@@ -610,12 +610,13 @@ export default {
     if (this.$router.currentRoute.path !== '/') {
       this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
       this.hStyle = 'background-color: rgba(0,0,0,1);';
-      this.lStyle = 'color:#18d26e';
-      this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:#18d26e ';
+      this.lStyle = 'color:white';
+      this.qtabStyle = 'font-family: \'Montserrat\', sans-serif;  font-color:white;  font-weight:bold; color:white; font-size: 13px; ';
       this.hClass = 'shadow-5 elevated bordered';
       // this.hEl.class = this.hEl.class.add('glossy');
       this.hideTabs = true;
       this.qbtnColor = 'primary';
+      this.qmenuColor = 'white';
       // window.alert(this.$router.currentRoute.path);
     }
     axios
@@ -668,6 +669,7 @@ export default {
           this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
           this.hClass = 'shadow-5 elevated bordered';
           this.qbtnColor = 'primary';
+          this.qmenuColor = 'white';
         } else {
           this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
           this.hStyle = 'background-color: rgba(0,0,0,0);';
