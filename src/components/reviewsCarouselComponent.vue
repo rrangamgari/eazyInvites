@@ -50,7 +50,7 @@ text-align: center;font-family: 'Montserrat', sans-serif;font-size: 32px;text-tr
           <!--<body style="font-size:17px; white-space: pre-line;background: rgba(0, 35, 85, 0.3)"
            class="merienda ellipsis">-->
           <p>
-          <img src="~assets/quote-sign-left1.png" class="quote-sign-left" alt="">
+          <img src="~assets/quote-sign-left.png" class="quote-sign-left" alt="">
           {{ feedback.comment }}
           <img src="~assets/quote-sign-right.png" class="quote-sign-right" alt="">
           </p>
