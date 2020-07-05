@@ -1,17 +1,18 @@
 <template>
-  <div style="position: relative;">
+  <div style="position: relative;" id="intro">
     <q-responsive :ratio="4/3" style="height: calc(100vh - 1px);">
     <q-carousel
       arrows
       animated
       v-model="slide"
       infinite
-      :autoplay="10000"
+      :autoplay="30000"
       transition-prev="fade"
       transition-next="fade"
       keep-alive
+      id="intro"
     >
-    <q-carousel-slide name="first" img-src="../assets/home/ez4-min.jpg">
+    <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
       <Snowf
         :amount="30"
         :size="8"
@@ -25,18 +26,16 @@
         color="blue"
       />
         <div class="overlay"/>
-        <div class="absolute custom-caption" style="top: 40%; right:0;">
-          <div class="text-h2 Dancing">Stressed? <br><br>Frustrated? <br><br>Confused?</div>
-          <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda">
-<p>
-            <br>If you feel any of these feelings while organizing that perfect
-            event for your friends or relatives or colleagues...
-            <br>Than No worry No More..
-  <br>
-            <br>Because Eazy Invites is Here to open that closed Digital Door...
-  <br>
-  <br>Yes its the most trendiest & coolest way to make your invite Eazy-Invite.</p></div>
+        <div class="absolute custom-caption" style="top: 30%; right:10%;">
+          <h2>Pooja Invitations</h2>
+          <p>
+            <br>WE Invites is Here to open that closed Digital Door...
+            <br>
+            <br>Yes its the most trendiest & coolest way to make your invite Eazy & Digital..</p>
+          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a>
+          <br>
+          <br>
+          <br>
         </div>
       </q-carousel-slide>
        <q-carousel-slide name="second" img-src="../assets/home/ez14-min.jpg">
@@ -54,21 +53,21 @@
         color="#FFFF00"
       />
          <div class="overlay"/>
-        <div class="absolute custom-caption" style="top: 40%; right:0;">
-          <div class="text-h2 Dancing">Wedding Invitations</div>
-          <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda"><p>
-            <br>Down on your knees you should be
-            <br>For only your Forever beloved...
+        <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+          <h2>Wedding Invitations</h2>
+          <p>Down on your knees you should be<br>
+            For only your Forever beloved...<br>
             <br>
-            <br>Than why you should stress for hours to send that perfect invite
+            Than why you should stress for hours to send that perfect invite<br>
             <br>
-            <br>Come share your personalized Digital Eazy-Invites...
+            Come share your personalized Digital Eazy-Invites...<br>
             <br>
-            <br>Its Personalized
-            <br>Its Fast &
-            <br>Its the users perfect Delight!!!
-          </p></div>
+            Its Personalized<br>
+            Its Fast &<br>
+            Its the users perfect Delight!!!</p>
+          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+          <br>
+          <br>
         </div>
       </q-carousel-slide>
     <q-carousel-slide name="third" img-src="~assets/home/ez36-min.jpg" >
@@ -85,12 +84,14 @@
         :resize="false"
         color="blue"
       />
-        <div class="absolute-bottom-left custom-caption">
-          <div class="text-h2 Dancing">Engagement </div>
-          <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda" style="word-wrap">Finally,
+        <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+          <h2>Engagement Invitations</h2>
+          <p>Finally,
             I have someone who took my hand, opened my
-            mind and touched my heart.<br> Just got engaged to my happily ever after.</div>
+            mind and touched my heart.<br> Just got engaged to my happily ever after</p>
+          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+          <br>
+          <br>
         </div>
       </q-carousel-slide>
      <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
@@ -114,20 +115,19 @@
            color="#FFFF00"
          />
          <div class="overlay"/>
-         <div class="absolute custom-caption" style="top: 40%; right:0;">
-           <div class="text-h2 Dancing">New Baby Born</div>
-           <div class="text-h4">&nbsp;</div>
-           <div class="text-subtitle1 merienda vertical-middle" style="word-wrap">
-             <p>
-               <br>Twinkle twinkle
-               <br> We had a new born Star
-               <br>But I wonder how to invite you all are?!?
-               <img src="~assets/logo/confused.png" width="60px" class="vertical-middle" >
-               <br>
-               <br>Now we have Eazy Invite option
-               <br>Its d online invite 1 stop solution
-               <img src="~assets/logo/user.png" width="60px" class="vertical-middle">
-             </p></div>
+         <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+           <h2>New Baby Born</h2>
+           <p>
+             Twinkle twinkle<br>
+             We had a new born Star<br>
+             But I wonder how to invite you all are?!? <br>
+             <br>
+             Now we have Eazy Invite option<br>
+             Its d online invite 1 stop solution<br>
+           </p>
+           <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+           <br>
+           <br>
          </div>
       </q-carousel-slide>
       <!--<q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
@@ -157,14 +157,14 @@
           :resize="false"
           color="blue"
         />
-        <div class="absolute-bottom-left custom-caption vertical-middle gt-xs">
-          <div class="text-h2 Dancing">Mehendi Function</div>
-          <div class="text-h4">&nbsp;</div>
-          <div class="text-subtitle1 merienda" style="word-wrap">
-            Mehndi is derived from the Sanskrit word mendhikā.
+        <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+          <h2>Mehendi Function</h2>
+          <p> Mehndi is derived from the Sanskrit word mendhikā.
             <br>The use of mehndi and turmeric is described in the earliest
-             Hindu Vedic ritual books.
-            </div>
+            Hindu Vedic ritual books.</p>
+          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+          <br>
+          <br>
         </div>
       </q-carousel-slide>
       <template v-slot:control>

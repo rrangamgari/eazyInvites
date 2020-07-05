@@ -7,17 +7,10 @@
   <template v-slot:media>
     <img src="../assets/home/review.jpg">
   </template>
-    <div class="q-pa-sm absolute-right" >
+    <!--<div class="q-pa-sm absolute-right" >
       <q-btn label="My Feedback" size="md" no-caps rounded icon="add" dense color="primary" />
-    </div>
-  <header class="section-header absolute-top text-white" style="margin-left: auto;
-margin-right: auto;
-left: 0;
-right: 0;
-text-align: center;font-family: 'Montserrat', sans-serif;font-size: 32px;text-transform: uppercase;
-    text-align: center;
-    font-weight: 700;
-    padding-bottom: 15px">
+    </div>-->
+  <header class="section-header absolute-top text-white" style="">
     <h3>Reviews</h3>
   </header>
     <q-carousel
@@ -35,7 +28,7 @@ text-align: center;font-family: 'Montserrat', sans-serif;font-size: 32px;text-tr
       :navigation-position="navPos"
       navigation-icon="radio_button_unchecked"
       class="bg-transparent text-white rounded-borders"
-    style="max-width: 800px;min-height: 550px">
+    style="max-width: 800px;min-height: 520px">
 
       <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
                         v-for="feedback in feedbackList"

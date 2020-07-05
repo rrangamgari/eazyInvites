@@ -191,6 +191,7 @@ export default {
       this.data.forEach((event) => {
         // this.event.attachmentlink = geteventcard(this.event.attachmentlink);
         if (event.attachmentlink !== null) {
+          axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
           axios
             .get(event.attachmentlink, { responseType: 'arraybuffer' })
             .then((Response) => {

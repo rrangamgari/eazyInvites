@@ -622,7 +622,7 @@ export default {
       } else {
         this.fileId = null;
       }
-
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
       axios.post('/api/userEvents/event',
         {
           eventtypeid: this.eventType.value,

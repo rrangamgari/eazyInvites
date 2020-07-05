@@ -33,7 +33,7 @@
                 type="text"
                 v-model="name"
                 name="name"
-                filled
+                outlined
                 lazy-rules='ondemand'
                 :rules="[ val=> val !== null && val !== '' || 'Please enter your Name']"
               />
@@ -42,12 +42,12 @@
                 type="textarea"
                 v-model="comment"
                 name="comments"
-                filled
+                outlined
                 autogrow
               />
               <q-field
                 class="q-pt-md q-pb-md"
-                filled
+                outlined
                 label="How likely are you to recommend us to a friend?"
                 v-model="group"
                 lazy-rules="ondemand"
@@ -82,11 +82,11 @@
         </q-page-container>
       </q-layout>
     </q-dialog>
-    <!--<a id="ei_tab" class="ei_tab_right" @click="layout = true">
+    <a id="ei_tab" class="ei_tab_right" @click="layout = true">
       <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
       Feedback
       <span class="screen_reader"> Will open a new window</span>
-    </a>-->
+    </a>
 <a href="https://wa.me/13022206686?text=Hi EazyInvites, I love to start using this..."
    target="_blank">
       <img
