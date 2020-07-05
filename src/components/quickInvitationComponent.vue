@@ -123,7 +123,7 @@
           color="primary"
           row-key="eventmemberid"
           :rows-per-page-options="[0]"
-          :table-header-style="{ backgroundColor: '#0072C6', color: '#FFFFFF' }"
+          :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
           selection="multiple"
           :selected.sync="selected"
         >
@@ -298,7 +298,7 @@
               </div>
             </q-card-section-->
             <q-card-section class="q-pa-xs row items-center logo" style="font-family:
-              'Montserrat', cursive;  font-weight:bolder; color:#0072C6">
+              'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
               <div class="text-left q-px-xs col-12 " style="font-size: 34px;">
                 Type: {{ eventType.label }}
               </div>

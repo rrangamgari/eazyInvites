@@ -11,7 +11,7 @@
       icon-left="contacts"
       hide-bottom
       :pagination="{rowsPerPage: 0}"
-      :table-header-style="{ backgroundColor: '#0072C6', color: '#FFFFFF' }"
+      :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
 
     >
       <template v-slot:top-right>

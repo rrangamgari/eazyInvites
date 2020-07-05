@@ -4,9 +4,22 @@
       src="../assets/home/review.jpg"
       :height="600"
     >
+  <template v-slot:media>
+    <img src="../assets/home/review.jpg">
+  </template>
     <div class="q-pa-sm absolute-right" >
       <q-btn label="My Feedback" size="md" no-caps rounded icon="add" dense color="primary" />
     </div>
+  <header class="section-header absolute-top text-white" style="margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;
+text-align: center;font-family: 'Montserrat', sans-serif;font-size: 32px;text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+    padding-bottom: 15px">
+    <h3>Reviews</h3>
+  </header>
     <q-carousel
       v-model="slide"
       swipeable
@@ -20,7 +33,10 @@
       :arrows="arrows"
       :navigation="navigation"
       :navigation-position="navPos"
-      class="bg-transparent text-white rounded-borders">
+      navigation-icon="radio_button_unchecked"
+      class="bg-transparent text-white rounded-borders"
+    style="max-width: 800px;min-height: 550px">
+
       <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
                         v-for="feedback in feedbackList"
                         :key="feedback.id" >
@@ -28,13 +44,16 @@
           <!--<img src="~assets/logo/user.png" width="100px" height="100px"
                class="whatsapp_tab_right">
           <br>-->
-          <b style="font-size:32px;"
-           class="Dancing">{{ feedback.name }}</b>
+          <img src="~assets/testimonial-1.jpg" class="testimonial-img" alt="">
+          <h3 style="font-size: 20px;font-weight: bold;font-family: 'Montserrat', sans-serif;"
+           class="">{{ feedback.name }}</h3>
           <!--<body style="font-size:17px; white-space: pre-line;background: rgba(0, 35, 85, 0.3)"
            class="merienda ellipsis">-->
-          <body style="font-size:17px; white-space: pre-line;"
-                class="merienda ellipsis">
+          <p>
+          <img src="~assets/quote-sign-left1.png" class="quote-sign-left" alt="">
           {{ feedback.comment }}
+          <img src="~assets/quote-sign-right.png" class="quote-sign-right" alt="">
+          </p>
           <q-rating
             :value="feedback.rating"
             size="2em"
@@ -43,7 +62,7 @@
             icon="star_border"
             icon-selected="star"
             readonly
-          /></body>
+          />
         </div>
       </q-carousel-slide>
 

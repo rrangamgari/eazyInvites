@@ -30,8 +30,7 @@
       <a href="/" class="gt-md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <q-toolbar-title class="logo_small xs" :style="lStyle">Eazy Invites</q-toolbar-title>
-      <q-toolbar-title class="logo gt-xs" :style="lStyle" >Eazy Invites</q-toolbar-title>
+      <q-toolbar-title class="logo" :style="lStyle" >WE Invites</q-toolbar-title>
       <!--q-tabs
         no-caps
         active-color="primary"
@@ -610,9 +609,9 @@ export default {
     // window.alert(this.$router.currentRoute.path);
     if (this.$router.currentRoute.path !== '/') {
       this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-      this.hStyle = 'background-color: rgba(255,255,255,1);';
-      this.lStyle = 'color:#0072C6';
-      this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:#0072C6 ';
+      this.hStyle = 'background-color: rgba(0,0,0,1);';
+      this.lStyle = 'color:#18d26e';
+      this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:#18d26e ';
       this.hClass = 'shadow-5 elevated bordered';
       // this.hEl.class = this.hEl.class.add('glossy');
       this.hideTabs = true;
@@ -664,9 +663,9 @@ export default {
       if (this.$route.path === '/') {
         if (position > this.hScreenHeight) {
           this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-          this.hStyle = 'background-color: rgba(255,255,255,1);';
-          this.lStyle = 'color:#0072C6';
-          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:#0072C6';
+          this.hStyle = 'background-color: rgba(0,0,0,.7);';
+          this.lStyle = 'color:#FFFFF';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
           this.hClass = 'shadow-5 elevated bordered';
           this.qbtnColor = 'primary';
         } else {
