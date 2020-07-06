@@ -159,7 +159,7 @@
                 <li class="na"></li>
                 <li class="na"></li>
                 <div class="btn-wrap">
-                  <a href="#" class="btn-buy">Get Started</a>
+                  <a href="#" class="btn-buy" @click="openDialog">Get Started</a>
                 </div>
               </ul>
             </div>
@@ -175,7 +175,7 @@
                 <li>Upto 100 Whatsapp Invitations</li>
                 <li></li>
                 <div class="btn-wrap">
-                  <a href="#" class="btn-buy">Get Started</a>
+                  <a href="#" class="btn-buy" @click="openDialog">Get Started</a>
                 </div>
               </ul>
             </div>
@@ -201,7 +201,7 @@
                             label/></li>
               </ul>
               <div class="btn-wrap">
-                <a href="#" class="btn-buy">Get Started</a>
+                <a href="#" class="btn-buy" @click="openDialog">Get Started</a>
               </div>
             </div>
           </div>
@@ -214,12 +214,60 @@
 </template>
 
 <script>
+import { Loading, QSpinnerBars } from 'quasar';
+import newUserComponent from './newUserComponent';
+
 export default {
   // name: 'ComponentName',
   data() {
     return {
       standard: 200,
     };
+  },
+  methods: {
+    openDialog() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      this.$q.dialog({
+        component: newUserComponent,
+        persistent: true,
+        // optional if you want to have access to
+        // Router, Vuex store, and so on, in your
+        // custom component:
+        parent: this, // becomes child of this Vue node
+        // ("this" points to your Vue component)
+        // (prop was called "root" in < 1.1.0 and
+        // still works, but recommending to switch
+        // to the more appropriate "parent" name)
+
+        // props forwarded to component
+        // (everything except "component" and "parent" props above):
+        text: 'something',
+        // ...more.props...
+      }).onOk(() => {
+        // eslint-disable-next-line no-console
+        console.log('OK');
+      }).onCancel(() => {
+        // eslint-disable-next-line no-console
+        console.log('Cancel');
+      }).onDismiss(() => {
+        // eslint-disable-next-line no-console
+        console.log('Called on OK or Cancel');
+      });
+      Loading.hide();
+    },
+    show() {
+      this.$refs.dialog.show();
+    },
+    hide() {
+      this.$refs.dialog.hide();
+    },
+    onDialogHide() {
+      this.$emit('hide');
+    },
   },
 };
 </script>

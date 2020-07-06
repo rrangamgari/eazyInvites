@@ -1,4 +1,15 @@
 <template>
+  <q-dialog ref="dialog" @hide="onDialogHide">
+    <q-layout container class="bg-white" style="max-height:650px;">
+      <q-header class="bg-primary">
+        <q-toolbar>
+          <q-toolbar-title>Register</q-toolbar-title>
+
+          <q-btn flat v-close-popup round dense icon="close" />
+        </q-toolbar>
+      </q-header>
+
+      <q-page-container>
   <q-page class="q-pa-md q-pt-lg flex flex-center">
 
     <q-form
@@ -65,6 +76,9 @@
     </q-form>
 
   </q-page>
+  </q-page-container>
+    </q-layout>
+  </q-dialog>
 </template>
 
 <script>
@@ -96,6 +110,21 @@ export default {
       this.phone = null;
       this.password = null;
       this.cpassword = null;
+    },
+    show() {
+      this.$refs.dialog.show();
+    },
+
+    // following method is REQUIRED
+    // (don't change its name --> "hide")
+    hide() {
+      this.$refs.dialog.hide();
+    },
+
+    onDialogHide() {
+      // required to be emitted
+      // when QDialog emits "hide" event
+      this.$emit('hide');
     },
     onSubmit() {
       Loading.show({

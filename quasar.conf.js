@@ -79,7 +79,7 @@ module.exports = function (/* ctx */) {
 
       // Quasar plugins
       plugins: ['Notify', 'LocalStorage',
-        'SessionStorage'],
+        'SessionStorage', 'Dialog'],
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie

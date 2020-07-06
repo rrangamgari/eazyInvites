@@ -32,7 +32,8 @@
             <br>WE Invites is Here to open that closed Digital Door...
             <br>
             <br>Yes its the most trendiest & coolest way to make your invite Eazy & Digital..</p>
-          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a>
+          <a href="#featured-services" class="btn-get-started"
+             @click="openDialog">Get Started</a>
           <br>
           <br>
           <br>
@@ -65,7 +66,8 @@
             Its Personalized<br>
             Its Fast &<br>
             Its the users perfect Delight!!!</p>
-          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+          <a href="#featured-services" class="btn-get-started "
+             @click="openDialog">Get Started</a><br>
           <br>
           <br>
         </div>
@@ -89,7 +91,8 @@
           <p>Finally,
             I have someone who took my hand, opened my
             mind and touched my heart.<br> Just got engaged to my happily ever after</p>
-          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+          <a href="#featured-services" class="btn-get-started "
+             @click="openDialog">Get Started</a><br>
           <br>
           <br>
         </div>
@@ -125,7 +128,8 @@
              Now we have Eazy Invite option<br>
              Its d online invite 1 stop solution<br>
            </p>
-           <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+           <a href="#featured-services" class="btn-get-started "
+              @click="openDialog">Get Started</a><br>
            <br>
            <br>
          </div>
@@ -162,7 +166,8 @@
           <p> Mehndi is derived from the Sanskrit word mendhikā.
             <br>The use of mehndi and turmeric is described in the earliest
             Hindu Vedic ritual books.</p>
-          <a href="#featured-services" class="btn-get-started scrollto">Get Started</a><br>
+          <a href="#featured-services" class="btn-get-started "
+             @click="openDialog">Get Started</a><br>
           <br>
           <br>
         </div>
@@ -182,6 +187,8 @@
 
 <script>
 import Snowf from 'vue-snowf';
+import { Loading, QSpinnerBars } from 'quasar';
+import newUserComponent from './newUserComponent';
 
 export default {
   components: {
@@ -193,6 +200,51 @@ export default {
       fullscreen: false,
       image: '../assets/logo/user.png',
     };
+  },
+  methods: {
+    openDialog() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      this.$q.dialog({
+        component: newUserComponent,
+        persistent: true,
+        // optional if you want to have access to
+        // Router, Vuex store, and so on, in your
+        // custom component:
+        parent: this, // becomes child of this Vue node
+        // ("this" points to your Vue component)
+        // (prop was called "root" in < 1.1.0 and
+        // still works, but recommending to switch
+        // to the more appropriate "parent" name)
+
+        // props forwarded to component
+        // (everything except "component" and "parent" props above):
+        text: 'something',
+        // ...more.props...
+      }).onOk(() => {
+        // eslint-disable-next-line no-console
+        console.log('OK');
+      }).onCancel(() => {
+        // eslint-disable-next-line no-console
+        console.log('Cancel');
+      }).onDismiss(() => {
+        // eslint-disable-next-line no-console
+        console.log('Called on OK or Cancel');
+      });
+      Loading.hide();
+    },
+    show() {
+      this.$refs.dialog.show();
+    },
+    hide() {
+      this.$refs.dialog.hide();
+    },
+    onDialogHide() {
+      this.$emit('hide');
+    },
   },
 };
 </script>
