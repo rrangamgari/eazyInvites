@@ -26,12 +26,12 @@
         color="blue"
       />
         <div class="overlay"/>
-        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+        <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left:10%; max-width: ${$q.screen.width};`
          : 'width: 570px;'">
           <h2>Pooja Invitations</h2>
           <p>
-            <br>WE Invites is Here to open that closed Digital Door...
+            WE Invites is Here to open that closed Digital Door...
             <br>
             <br>Yes its the most trendiest & coolest way to make your invite Eazy & Digital..</p>
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a>
@@ -53,7 +53,7 @@
         color="#FFFF00"
       />
          <div class="overlay"/>
-        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+        <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Wedding Invitations</h2>
           <p>Down on your knees you should be<br>
@@ -85,7 +85,7 @@
         :resize="false"
         color="blue"
       />
-        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+        <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Engagement Invitations</h2>
           <p>Finally,
@@ -115,7 +115,7 @@
            color="#FFFF00"
          />
          <div class="overlay"/>
-         <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
            <h2>New Baby Born</h2>
            <p>
@@ -156,7 +156,7 @@
           :resize="false"
           color="blue"
         />
-        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+        <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Mehendi Function</h2>
           <p> Mehndi is derived from the Sanskrit word mendhikā.

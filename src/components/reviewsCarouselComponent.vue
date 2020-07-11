@@ -37,7 +37,7 @@
           <!--<img src="~assets/logo/user.png" width="100px" height="100px"
                class="whatsapp_tab_right">
           <br>-->
-          <img src="https://media-exp1.licdn.com/dms/image/C5603AQEJlmQhQKQHAg/profile-displayphoto-shrink_200_200/0?e=1599696000&v=beta&t=meW2FdE7G25zJz0hiiziG_HAyYqy1TqH7jia3cCmx04" class="testimonial-img" alt="">
+          <img src="https://media-exp1.licdn.com/dms/image/C5603AQE0qSW62R_m3Q/profile-displayphoto-shrink_800_800/0?e=1599696000&v=beta&t=LhENKW3cr9wODGyRC5-WlBhalgvHSarR9P6W_QphzgY" class="testimonial-img" alt="">
           <h3 style="font-size: 20px;font-weight: bold;font-family: 'Montserrat', sans-serif;"
            class="">{{ feedback.name }}</h3>
           <!--<body style="font-size:17px; white-space: pre-line;background: rgba(0, 35, 85, 0.3)"

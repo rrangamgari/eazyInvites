@@ -18,7 +18,7 @@ import carouselComponent from '../components/homePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/homePageFooter.vue';
-import priceComponent from '../components/priceComponent.vue';
+import priceComponent from '../components/indianPriceComponent.vue';
 import reviewsCarouselComponent from '../components/reviewsCarouselComponent.vue';
 
 export default {

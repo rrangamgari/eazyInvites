@@ -23,6 +23,7 @@ module.exports = function (/* ctx */) {
     css: [
       'app.sass',
       'app.scss',
+      'font-awesome.scss',
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras

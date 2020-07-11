@@ -83,6 +83,12 @@ const routes = [
     component: () => import('layouts/guestInvitesRsvpLayout.vue'),
     props: true,
   },
+  {
+    path: '/termsconditions',
+    name: 'termsAndConditions',
+    component: () => import('layouts/terrmsAndConditions.vue'),
+    props: true,
+  },
 ];
 
 // Always leave this as last one
