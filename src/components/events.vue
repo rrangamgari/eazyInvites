@@ -108,7 +108,7 @@
 <script>
 import { Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
-
+import loginDialog from './loginDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -130,7 +130,7 @@ export default {
   },
   mounted() {
     if (this.$q.sessionStorage.getItem('login-token') === null) {
-      this.$router.push('/login');
+      if (!this.login()) this.$router.replace('/');
     }
     Loading.show({
       spinner: QSpinnerBars,
@@ -155,7 +155,8 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.sessionStorage.remove('login-token');
-          this.$router.push('/login');
+          if (!this.login()) this.$router.replace('/');
+          // Restart function
         }
         this.$q.notify({
           color: 'red-5',
@@ -186,6 +187,14 @@ export default {
     //     });
     //   return this.eventcard;
     // },
+    login() {
+      this.$q.dialog({
+        component: loginDialog,
+        persistent: true,
+        parent: this,
+        login: true,
+      }).onOk(() => true).onCancel(() => false);
+    },
     createEvents() {
       const date = new Date();
       this.data.forEach((event) => {

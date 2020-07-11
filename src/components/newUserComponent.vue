@@ -1,26 +1,15 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-layout container class="bg-white" style="max-height:650px;">
-      <q-header class="bg-primary">
-        <q-toolbar>
-          <q-toolbar-title>Register</q-toolbar-title>
-
-          <q-btn flat v-close-popup round dense icon="close" />
-        </q-toolbar>
-      </q-header>
-
-      <q-page-container>
-  <q-page class="q-pa-md q-pt-lg flex flex-center">
-
+  <div class="q-pa-md flex flex-center">
     <q-form
-      id="login"
+      id="register"
       @submit="onSubmit"
       @reset="onReset"
-      class="q-gutter-md"
-      style="width:350px;"
+      class="q-gutter-md q-pa-xs q-pr-md"
+      style="width: 350px;"
     >
       <q-input
-        color="primary" outlined
+        outlined
+        :dark="$props.dark"
         type="text"
         v-model="firstname"
         label="First Name"
@@ -28,7 +17,8 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Firstname']"
       />
       <q-input
-        color="primary" outlined
+        outlined
+        :dark="$props.dark"
         type="text"
         v-model="lastname"
         label="Last Name"
@@ -36,7 +26,8 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Lastname']"
       />
       <q-input
-        color="primary" outlined
+        outlined
+        :dark="$props.dark"
         v-model="phone"
         label="Phone Number"
         lazy-rules
@@ -47,7 +38,8 @@
       />
 
       <q-input
-        color="primary" outlined
+        outlined
+        :dark="$props.dark"
         :type="passwordFieldType"
         v-model="password"
         label="Password"
@@ -59,7 +51,8 @@
         </template>
       </q-input>
       <q-input
-        color="primary" outlined
+        outlined
+        :dark="$props.dark"
         type="password"
         v-model="cpassword"
         label="Confirm Password"
@@ -71,14 +64,10 @@
       -->
       <div>
         <q-btn label="Register" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" outlined/>
+        <q-btn label="Reset" type="reset" flat class="q-ml-sm"  color="primary"/>
       </div>
     </q-form>
-
-  </q-page>
-  </q-page-container>
-    </q-layout>
-  </q-dialog>
+  </div>
 </template>
 
 <script>
@@ -92,6 +81,7 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 
 export default {
   // name: 'ComponentName',
+  props: ['dark'],
   data() {
     return {
       firstname: null,
@@ -102,6 +92,11 @@ export default {
       passwordFieldType: 'password',
       iconName: 'visibility_off',
     };
+  },
+  mounted() {
+    if (this.$q.sessionStorage.getItem('login-token') !== null) this.$router.push('/events');
+
+    axios.defaults.headers.Authorization = '';
   },
   methods: {
     onReset() {

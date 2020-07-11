@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lhr lpr lfr"> <!-- Be sure to play with the Layout demo on docs -->
+  <q-layout view="hHh lpr fff"> <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
     <q-page-container>
@@ -13,7 +13,8 @@
 
 <script>
 import newUserComponent from '../components/newUserComponent.vue';
-import footerComponent from '../components/homePageFooter.vue';
+import footerComponent from '../components/footer.vue';
+
 
 export default {
   name: 'main',

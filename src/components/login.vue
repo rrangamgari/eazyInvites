@@ -1,28 +1,15 @@
-
 <template>
-
-<q-dialog ref="dialog" @hide="onDialogHide">
-  <q-layout container class="bg-white" style="max-height:650px;">
-    <q-header class="bg-primary">
-      <q-toolbar>
-        <q-toolbar-title>Feedback</q-toolbar-title>
-
-        <q-btn flat v-close-popup round dense icon="close" />
-      </q-toolbar>
-    </q-header>
-
-    <q-page-container>
-<q-page class="q-pa-md q-pt-lg flex flex-center">
-
+<div class="q-pa-md flex flex-center">
     <q-form
       id="login"
       @submit="onSubmit"
       @reset="onReset"
       class="q-gutter-md q-pa-xs q-pr-md"
-      style="width:350px;"
+      style="width: 350px;"
     >
       <q-input
         outlined
+        :dark="$props.dark"
         type="text"
         v-model="name"
         label="Phone"
@@ -30,11 +17,12 @@
         mask="(###) ### - ####"
         unmasked-value
         fill-mask="#"
-        :rules="[ val=> val !== null && val !== '' || 'Please enter  Phone']"
+        :rules="[ val=> val !== null && val !== '' && val.length === 10 || 'Please enter Phone']"
       />
 
       <q-input
         outlined
+        :dark="$props.dark"
         type="password"
         v-model="age"
         label="Password"
@@ -51,10 +39,7 @@
       </div>
     </q-form>
 
-</q-page>
-    </q-page-container>
-  </q-layout>
-</q-dialog>
+</div>
 </template>
 
 <script>
@@ -68,9 +53,7 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 
 export default {
   name: 'loginComponent',
-  components: {
-
-  },
+  props: ['dark'],
   data() {
     return {
       name: null,
@@ -114,7 +97,7 @@ export default {
               });
 
               // Notification for testing api
-              this.$router.push('/events');
+              this.$emit('login-success');
               Loading.hide();
             })
             .catch((e) => {

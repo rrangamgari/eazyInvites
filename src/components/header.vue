@@ -1,6 +1,6 @@
 <template>
   <q-header id="header" ref="header" v-scroll="scrollHandler"
-   style="z-index:10;" :style="hStyle" :class="hClass">
+   :style="hStyle" :class="hClass">
     <q-toolbar>
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
@@ -250,9 +250,15 @@
       <!-- <q-btn flat round dense icon="whatshot" /> -->
 
       <div v-if="viewLogin()" class="row items-center q-pl-sm">
+      <q-form
+        id="login"
+        @submit="onLogin"
+        @reset="() => {}"
+        class="row"
+      >
       <q-input
         v-if="$q.screen.width >= 777"
-        :dark="qbtnColor !== 'primary'"
+        dark
         outlined dense
         class="q-pt-sm q-pr-sm"
         style="width: 180px"
@@ -263,12 +269,12 @@
         mask="(###) ### - ####"
         unmasked-value
         fill-mask="#"
-        :rules="[ val=> val !== null && val !== '' || 'Please enter  Phone']"
+        :rules="[ val=> val !== null && val !== '' && val.length === 10 || 'Please enter  Phone']"
       />
 
       <q-input
         v-if="$q.screen.width >= 777"
-        :dark="qbtnColor !== 'primary'"
+        dark
         stack-label
         outlined dense
         class="q-pt-sm q-pr-sm"
@@ -281,14 +287,14 @@
       />
 
       <div class="row" style="max-width: 90px; padding: 9px 0px;">
-        <q-btn class="col-12" label="Login" @click="onLogin" dense
+        <q-btn class="col-12" label="Login" type="submit" dense
          :color="`${qbtnColor || 'white'}`"
          :text-color="`${qbtnColor === '' ? 'black' : 'white'}`"/>
-        <div @click="$router.push('/newUser')" class="q-pt-xs" :class="`text-${qbtnColor}`"
+        <div @click="openDialog()" class="q-pt-xs" :class="`text-${qbtnColor}`"
          style="font-size: 10px; text-decoration: underline; cursor: default;">New User?</div>
       </div>
+      </q-form>
       </div>
-
       <div v-else>
       <q-tabs
         no-caps
@@ -566,6 +572,7 @@
 <script>
 import { Loading, QSpinnerBars, scroll } from 'quasar';
 import axios from 'axios';
+import loginDialog from './loginDialog.vue';
 
 const { getScrollTarget, setScrollPosition } = scroll;
 
@@ -581,6 +588,7 @@ export default {
       hClass: '',
       hScreenHeight: 200,
       lStyle: 'color:white',
+      qmenuColor: '',
       qbtnColor: '',
       qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white',
       tabs: [{
@@ -667,7 +675,7 @@ export default {
           this.hStyle = 'background-color: rgba(0,0,0,.7);';
           this.lStyle = 'color:#FFFFF';
           this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
-          this.hClass = 'shadow-5 elevated bordered';
+          this.hClass = 'elevated bordered';
           this.qbtnColor = 'primary';
           this.qmenuColor = 'white';
         } else {
@@ -680,9 +688,26 @@ export default {
         }
       }
     },
+    openDialog(login) {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      this.$q.dialog({
+        component: loginDialog,
+        persistent: true,
+        parent: this,
+        login,
+      }).onOk(() => {
+        this.$router.push('/events');
+      }).onCancel(() => {
+      });
+      Loading.hide();
+    },
     onLogin() {
       if (this.$q.screen.width < 777) {
-        this.$router.push('/login');
+        this.openDialog(true);
         return;
       }
       Loading.show({

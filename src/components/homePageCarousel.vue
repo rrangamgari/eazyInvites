@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;" id="intro">
+  <div id="intro">
     <q-responsive :ratio="4/3" style="height: calc(100vh - 1px);">
     <q-carousel
       arrows
@@ -26,16 +26,15 @@
         color="blue"
       />
         <div class="overlay"/>
-        <div class="absolute custom-caption" style="top: 30%; right:10%;">
+        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+         :style="($q.screen.width < 730) ? `left:10%; max-width: ${$q.screen.width};`
+         : 'width: 570px;'">
           <h2>Pooja Invitations</h2>
           <p>
             <br>WE Invites is Here to open that closed Digital Door...
             <br>
             <br>Yes its the most trendiest & coolest way to make your invite Eazy & Digital..</p>
-          <a href="#featured-services" class="btn-get-started"
-             @click="openDialog">Get Started</a>
-          <br>
-          <br>
+          <a href="#" class="btn-get-started" @click="openDialog">Get Started</a>
           <br>
         </div>
       </q-carousel-slide>
@@ -54,7 +53,8 @@
         color="#FFFF00"
       />
          <div class="overlay"/>
-        <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+         :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Wedding Invitations</h2>
           <p>Down on your knees you should be<br>
             For only your Forever beloved...<br>
@@ -66,11 +66,10 @@
             Its Personalized<br>
             Its Fast &<br>
             Its the users perfect Delight!!!</p>
-          <a href="#featured-services" class="btn-get-started "
-             @click="openDialog">Get Started</a><br>
-          <br>
-          <br>
+          <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
+        <!-- <a href="#" class="btn-get-started " style="position: absolute; bottom: 0%;"
+          @click="openDialog">Started</a> -->
       </q-carousel-slide>
     <q-carousel-slide name="third" img-src="~assets/home/ez36-min.jpg" >
       <Snowf
@@ -86,15 +85,13 @@
         :resize="false"
         color="blue"
       />
-        <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+         :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Engagement Invitations</h2>
           <p>Finally,
             I have someone who took my hand, opened my
             mind and touched my heart.<br> Just got engaged to my happily ever after</p>
-          <a href="#featured-services" class="btn-get-started "
-             @click="openDialog">Get Started</a><br>
-          <br>
-          <br>
+          <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
       </q-carousel-slide>
      <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
@@ -118,7 +115,8 @@
            color="#FFFF00"
          />
          <div class="overlay"/>
-         <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+         <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+         :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
            <h2>New Baby Born</h2>
            <p>
              Twinkle twinkle<br>
@@ -128,10 +126,7 @@
              Now we have Eazy Invite option<br>
              Its d online invite 1 stop solution<br>
            </p>
-           <a href="#featured-services" class="btn-get-started "
-              @click="openDialog">Get Started</a><br>
-           <br>
-           <br>
+           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
          </div>
       </q-carousel-slide>
       <!--<q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
@@ -161,15 +156,13 @@
           :resize="false"
           color="blue"
         />
-        <div  class="absolute custom-caption" style="top: 30%; right:10%;">
+        <div class="absolute custom-caption" style="bottom: 0%; right: 10%;"
+         :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Mehendi Function</h2>
           <p> Mehndi is derived from the Sanskrit word mendhikā.
             <br>The use of mehndi and turmeric is described in the earliest
             Hindu Vedic ritual books.</p>
-          <a href="#featured-services" class="btn-get-started "
-             @click="openDialog">Get Started</a><br>
-          <br>
-          <br>
+          <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
       </q-carousel-slide>
       <template v-slot:control>
@@ -188,7 +181,7 @@
 <script>
 import Snowf from 'vue-snowf';
 import { Loading, QSpinnerBars } from 'quasar';
-import newUserComponent from './newUserComponent';
+import loginDialog from './loginDialog.vue';
 
 export default {
   components: {
@@ -209,29 +202,16 @@ export default {
         thickness: '3',
       });
       this.$q.dialog({
-        component: newUserComponent,
+        component: loginDialog,
         persistent: true,
-        // optional if you want to have access to
-        // Router, Vuex store, and so on, in your
-        // custom component:
-        parent: this, // becomes child of this Vue node
-        // ("this" points to your Vue component)
-        // (prop was called "root" in < 1.1.0 and
-        // still works, but recommending to switch
-        // to the more appropriate "parent" name)
-
-        // props forwarded to component
-        // (everything except "component" and "parent" props above):
-        text: 'something',
-        // ...more.props...
+        parent: this,
       }).onOk(() => {
-        // eslint-disable-next-line no-console
         console.log('OK');
+        this.$router.push('/events');
+        console.log('OK2');
       }).onCancel(() => {
-        // eslint-disable-next-line no-console
         console.log('Cancel');
       }).onDismiss(() => {
-        // eslint-disable-next-line no-console
         console.log('Called on OK or Cancel');
       });
       Loading.hide();
