@@ -89,6 +89,7 @@
             color="primary"
             flat
             class="q-ml-sm"
+            @click="openDialog"
           />
           <q-stepper-navigation>
             <q-btn
@@ -385,6 +386,7 @@
 <script>
 import axios from 'axios';
 import { Loading, QSpinnerBars, date } from 'quasar';
+import customMessageDialog from './customMessageDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -478,6 +480,28 @@ export default {
   },
 
   methods: {
+    openDialog() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      this.$q.dialog({
+        component: customMessageDialog,
+        persistent: true,
+        parent: this,
+      }).onOk((me) => {
+        console.log('OK');
+        this.eventmessage = me;
+        // this.$router.push('/events');
+        console.log('OK2');
+      }).onCancel(() => {
+        console.log('Cancel');
+      }).onDismiss(() => {
+        console.log('Called on OK or Cancel');
+      });
+      Loading.hide();
+    },
     optionsFn(date_) {
       const futuredate = new Date(); // Now
       futuredate.setDate(futuredate.getDate() + 365); // Set now + 30 days as the new date
