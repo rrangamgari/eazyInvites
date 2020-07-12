@@ -4,7 +4,7 @@
      v-for="(title,index) in titles" :key="index">
       <div class="full-width q-px-md q-pb-md text-center col-12">
         <header class="section-header">
-          <h3>{{ ((events(index).length == 0) ? 'No ' : '') + title }}</h3>
+          <h3 style="color: #757575">{{ ((events(index).length == 0) ? 'No ' : '') + title }}</h3>
         </header>
       </div>
       <!-- <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"> -->

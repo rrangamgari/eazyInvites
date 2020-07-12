@@ -37,13 +37,13 @@
             </q-select>
             <div class="row">
             <q-input style="width: 80%;"
-             v-model="eventdate"  outlined mask="date" stack-label label="Event Date"
+             v-model="eventdate"  outlined   stack-label label="Event Date"
                      :rules="[val => !!val || 'Event Date is required']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                     <q-date v-model="eventdate" @input="() => $refs.qDateProxy.hide()"
-                            :options="optionsFn"/>
+                            :options="optionsFn" mask="DD/MM/YYYY"/>
                   </q-popup-proxy>
                 </q-icon>
               </template>
@@ -403,7 +403,7 @@ export default {
       url: '',
       step: 1,
       eventtitle: '',
-      eventdate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
+      eventdate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
       eventtime: '00:00',
       eventType: '',
       selection: ['teal'],
@@ -623,13 +623,18 @@ export default {
         this.fileId = null;
       }
       axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
+      const from = `${this.eventdate}`.split('/');
+      const fromMonth = (from[1]);
+      const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
+      const startTime = `${this.eventtime}`;
+      // window.alert(startDate);
       axios.post('/api/userEvents/event',
         {
           eventtypeid: this.eventType.value,
           eventtitle: this.eventtitle,
           eventmessage: this.eventmessage,
-          startdate: new Date(`${this.eventdate}T${this.eventtime}:00`),
-          enddate: new Date(`${this.eventdate}T${this.eventtime}:00`),
+          startdate: new Date(`${startDate}T${startTime}:00`),
+          enddate: new Date(`${startDate}T${startTime}:00`),
           attachmentlink: this.fileId !== null ? `/api/userEvents/file/${this.fileId}` : null,
           eventallowkids: true,
         })
