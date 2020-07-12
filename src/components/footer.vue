@@ -9,13 +9,13 @@
               <div class="container">
                 <div class="row">
 
-                  <div class="col-xs-12 col-sm-6 col-md-4 footer-info">
+                  <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 footer-info">
                     <h3>WE Invites</h3>
                     <p>We Invites is an application which can be used
                       for both email and Whatsapp invitations.</p>
                   </div>
 
-                  <div class="col-xs-12 col-sm-6 col-md-4 footer-links">
+                  <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 footer-links">
                     <h4>Useful Links</h4>
                     <ul>
                       <li><i class="ion-ios-arrow-right"></i> <a href="#">Home</a></li>
@@ -28,7 +28,7 @@
                     </ul>
                   </div>
 
-                  <div class="col-xs-12 col-sm-6 col-md-4 footer-contact">
+                  <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 footer-contact">
                     <h4>Contact Us</h4>
                     <p>
                       55 Marble House Dr <br>
