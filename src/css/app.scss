@@ -490,6 +490,9 @@ section {
   position: relative;
   // width: 120px;
   // height: 300px;
+  animation: rotateIn; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 2s; /* don't forget to set a duration! */
+  animate-delay: 0.9s;
 }
 
 .member .member-info {
@@ -1063,4 +1066,13 @@ section {
   text-align: center;
   font-size: 13px;
   color: #ddd;
+}
+
+.q-dialog {
+  display: inline-block;
+  margin: 0 0;
+
+  animation: bounce; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 2s; /* don't forget to set a duration! */
+  animate-delay: 0.9s;
 }

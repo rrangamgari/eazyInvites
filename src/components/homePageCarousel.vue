@@ -205,6 +205,9 @@ export default {
         component: loginDialog,
         persistent: true,
         parent: this,
+        transitionShow: 'bounceInLeft',
+        transitionHide: 'bounceInLeft',
+        animationDuration: '2s',
       }).onOk(() => {
         console.log('OK');
         this.$router.push('/events');

@@ -1,4 +1,9 @@
 <template>
+  <transition
+    appear
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
+  >
 <q-dialog ref="dialog" @hide="onDialogHide">
     <q-layout container :style="`height: 80%; background-color: ${body[i]}`">
       <q-header :class="`${head[i]}`">
@@ -32,6 +37,7 @@
       </q-page-container>
     </q-layout>
   </q-dialog>
+  </transition>
 </template>
 
 <script>
