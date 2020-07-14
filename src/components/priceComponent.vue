@@ -215,7 +215,7 @@
 
 <script>
 import { Loading, QSpinnerBars } from 'quasar';
-import newUserComponent from './newUserComponent';
+import loginDialog from './loginDialog';
 
 export default {
   // name: 'ComponentName',
@@ -232,41 +232,13 @@ export default {
         thickness: '3',
       });
       this.$q.dialog({
-        component: newUserComponent,
+        component: loginDialog,
         persistent: true,
-        // optional if you want to have access to
-        // Router, Vuex store, and so on, in your
-        // custom component:
-        parent: this, // becomes child of this Vue node
-        // ("this" points to your Vue component)
-        // (prop was called "root" in < 1.1.0 and
-        // still works, but recommending to switch
-        // to the more appropriate "parent" name)
-
-        // props forwarded to component
-        // (everything except "component" and "parent" props above):
-        text: 'something',
-        // ...more.props...
+        parent: this,
       }).onOk(() => {
-        // eslint-disable-next-line no-console
-        console.log('OK');
-      }).onCancel(() => {
-        // eslint-disable-next-line no-console
-        console.log('Cancel');
-      }).onDismiss(() => {
-        // eslint-disable-next-line no-console
-        console.log('Called on OK or Cancel');
+        this.$router.push('/events');
       });
       Loading.hide();
-    },
-    show() {
-      this.$refs.dialog.show();
-    },
-    hide() {
-      this.$refs.dialog.hide();
-    },
-    onDialogHide() {
-      this.$emit('hide');
     },
   },
 };

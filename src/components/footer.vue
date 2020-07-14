@@ -54,12 +54,5 @@ export default {
       return this.moreContent ? 150 : 5;
     },
   },
-  mounted() {
-    if (this.$q.sessionStorage.getItem('login-token') === null) {
-      if (this.$route.path !== '/newUser') {
-        this.$router.push('/login');
-      }
-    }
-  },
 };
 </script>
