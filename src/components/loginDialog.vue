@@ -1,5 +1,10 @@
 <template>
-  <q-dialog ref="dialog" :persistent="$props.persistent" @hide="onDialogHide">
+  <transition
+    appear
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
+  >
+<q-dialog ref="dialog" :persistent="$props.persistent" @hide="onDialogHide">
     <q-card :style="`height: 80%; width: 400px; background-color: ${body[i]}`">
       <q-card-section :style="`height: 55px; padding: 0px; background-color: ${head[i]}`">
         <q-toolbar style="padding-right: 4px; height: 50px;">
@@ -30,6 +35,7 @@
       </q-tab-panels>
     </q-card>
   </q-dialog>
+  </transition>
 </template>
 
 <script>

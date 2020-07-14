@@ -1,7 +1,7 @@
 <template>
   <q-footer >
     <q-toolbar class="shadow-5 elevated bordered center bg-white text-blue-7"
-               style="color:#0170bc">
+               style="color:#0170bc; padding: 0px;">
       <q-toolbar-title style="align:center;text-align: center;">
         <div>
           <footer id="footer">

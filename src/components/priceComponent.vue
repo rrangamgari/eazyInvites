@@ -184,11 +184,11 @@
           <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="box">
               <h3>Super Premium Plan</h3>
-              <h1>
+              <h1 style="margin-top: 30px; margin-bottom: -10px;">
                 <sup>$</sup>
                 <abbr>{{Number(Math.round(standard *9.99)/100).toFixed(2)}}</abbr>
                 <span>&nbsp;  / Actual Price</span></h1>
-              <h4><sup>$</sup>
+              <h4 style="margin-top: 0px; margin-bottom: 0px;"><sup>$</sup>
                 <abbr>{{Math.round((standard *.09)*.9)+.99}} </abbr>
                 <span>/ Discount Price</span></h4>
               <ul>
@@ -199,10 +199,10 @@
                   <q-slider v-model="standard" :min="200" :max="5000"
                             :step="100"
                             label/></li>
-              </ul>
               <div class="btn-wrap">
                 <a href="#" class="btn-buy" @click="openDialog">Get Started</a>
               </div>
+              </ul>
             </div>
           </div>
 
