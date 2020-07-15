@@ -184,11 +184,11 @@
           <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="box">
               <h3>Super Premium Plan</h3>
-              <h1>
+              <h1 style="margin-top: 30px; margin-bottom: -10px;">
                 <sup>$</sup>
                 <abbr>{{Number(Math.round(standard *9.99)/100).toFixed(2)}}</abbr>
                 <span>&nbsp;  / Actual Price</span></h1>
-              <h4><sup>$</sup>
+              <h4 style="margin-top: 0px; margin-bottom: 0px;"><sup>$</sup>
                 <abbr>{{Math.round((standard *.09)*.9)+.99}} </abbr>
                 <span>/ Discount Price</span></h4>
               <ul>
@@ -199,10 +199,10 @@
                   <q-slider v-model="standard" :min="200" :max="5000"
                             :step="100"
                             label/></li>
-              </ul>
               <div class="btn-wrap">
                 <a href="#" class="btn-buy" @click="openDialog">Get Started</a>
               </div>
+              </ul>
             </div>
           </div>
 
@@ -215,7 +215,7 @@
 
 <script>
 import { Loading, QSpinnerBars } from 'quasar';
-import newUserComponent from './newUserComponent';
+import loginDialog from './loginDialog';
 
 export default {
   // name: 'ComponentName',
@@ -232,41 +232,13 @@ export default {
         thickness: '3',
       });
       this.$q.dialog({
-        component: newUserComponent,
+        component: loginDialog,
         persistent: true,
-        // optional if you want to have access to
-        // Router, Vuex store, and so on, in your
-        // custom component:
-        parent: this, // becomes child of this Vue node
-        // ("this" points to your Vue component)
-        // (prop was called "root" in < 1.1.0 and
-        // still works, but recommending to switch
-        // to the more appropriate "parent" name)
-
-        // props forwarded to component
-        // (everything except "component" and "parent" props above):
-        text: 'something',
-        // ...more.props...
+        parent: this,
       }).onOk(() => {
-        // eslint-disable-next-line no-console
-        console.log('OK');
-      }).onCancel(() => {
-        // eslint-disable-next-line no-console
-        console.log('Cancel');
-      }).onDismiss(() => {
-        // eslint-disable-next-line no-console
-        console.log('Called on OK or Cancel');
+        this.$router.push('/events');
       });
       Loading.hide();
-    },
-    show() {
-      this.$refs.dialog.show();
-    },
-    hide() {
-      this.$refs.dialog.hide();
-    },
-    onDialogHide() {
-      this.$emit('hide');
     },
   },
 };

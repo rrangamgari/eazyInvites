@@ -130,7 +130,8 @@ export default {
   },
   mounted() {
     if (this.$q.sessionStorage.getItem('login-token') === null) {
-      if (!this.login()) this.$router.replace('/');
+      const auth = this.login();
+      if (!auth) this.$router.replace('/');
     }
     Loading.show({
       spinner: QSpinnerBars,

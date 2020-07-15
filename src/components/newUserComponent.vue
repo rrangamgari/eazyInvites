@@ -63,8 +63,8 @@
       <q-toggle v-model="accept" label="I accept the license and terms" />
       -->
       <div>
-        <q-btn label="Register" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" flat class="q-ml-sm"  color="primary"/>
+        <q-btn label="Register" type="submit" color="primary" class="q-mr-sm"/>
+        <q-btn label="Reset" type="reset" color="primary" flat/>
       </div>
     </q-form>
   </div>
@@ -105,21 +105,6 @@ export default {
       this.phone = null;
       this.password = null;
       this.cpassword = null;
-    },
-    show() {
-      this.$refs.dialog.show();
-    },
-
-    // following method is REQUIRED
-    // (don't change its name --> "hide")
-    hide() {
-      this.$refs.dialog.hide();
-    },
-
-    onDialogHide() {
-      // required to be emitted
-      // when QDialog emits "hide" event
-      this.$emit('hide');
     },
     onSubmit() {
       Loading.show({

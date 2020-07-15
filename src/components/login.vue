@@ -34,8 +34,8 @@
       <q-toggle v-model="accept" label="I accept the license and terms" />
       -->
       <div>
-        <q-btn label="Login" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Login" type="submit" color="primary" class="q-mr-sm"/>
+        <q-btn label="Reset" type="reset" color="primary" flat/>
       </div>
     </q-form>
 
@@ -123,37 +123,6 @@ export default {
           });
           Loading.hide();
         });
-    },
-    show() {
-      this.$refs.dialog.show();
-    },
-
-    // following method is REQUIRED
-    // (don't change its name --> "hide")
-    hide() {
-      this.$refs.dialog.hide();
-    },
-
-    onDialogHide() {
-      // required to be emitted
-      // when QDialog emits "hide" event
-      this.$emit('hide');
-    },
-
-    onOKClick() {
-      // on OK, it is REQUIRED to
-      // emit "ok" event (with optional payload)
-      // before hiding the QDialog
-      this.$emit('ok');
-      // or with payload: this.$emit('ok', { ... })
-
-      // then hiding dialog
-      this.hide();
-    },
-
-    onCancelClick() {
-      // we just need to hide dialog
-      this.hide();
     },
     onReset() {
       this.name = null;
