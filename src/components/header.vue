@@ -263,16 +263,14 @@
         v-if="$q.screen.width >= 777"
         dark
         outlined dense
-        class="q-pt-sm q-pr-sm"
+        class="q-pr-sm"
         style="width: 180px"
         type="text"
         v-model="name"
         label="Phone"
-        lazy-rules
         mask="(###) ### - ####"
         unmasked-value
         fill-mask="#"
-        :rules="[ val=> val !== null && val !== '' && val.length === 10 || 'Please enter  Phone']"
       />
 
       <q-input
@@ -280,21 +278,19 @@
         dark
         stack-label
         outlined dense
-        class="q-pt-sm q-pr-sm"
+        class="q-pr-sm"
         style="width: 180px"
         type="password"
         v-model="age"
         label="Password"
-        lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Password']"
       />
 
-      <div class="row" style="max-width: 90px; padding: 9px 0px;">
+      <div class="row" style="max-width: 90px; padding-top: 9px;">
         <q-btn class="col-12" label="Login" type="submit" dense
          :color="`${qbtnColor || 'white'}`"
          :text-color="`${qbtnColor === '' ? 'black' : 'white'}`"/>
-        <div @click="openDialog()" class="q-pt-xs" :class="`text-${qbtnColor}`"
-         style="font-size: 10px; text-decoration: underline; cursor: default;">New User?</div>
+        <a @click="openDialog()" class="q-pt-xs q-px-xs" :class="`text-${qbtnColor || 'white'}`"
+         style="font-size: 10px; text-decoration: underline;">New User?</a>
       </div>
       </q-form>
       </div>
@@ -479,7 +475,7 @@
         </q-btn-dropdown-->
       </q-tabs>
       <q-btn-dropdown v-else icon="person" dropdown-icon=""
-       auto-close dense flat :color="qbtnColor">
+       auto-close dense flat color="white">
           <q-list>
             <q-item
               clickable
@@ -695,7 +691,7 @@ export default {
         }
       }
     },
-    openDialog(login) {
+    openDialog(login, username = '') {
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -706,6 +702,7 @@ export default {
         persistent: true,
         parent: this,
         login,
+        username,
       }).onOk(() => {
         this.$router.push('/events');
       }).onCancel(() => {
@@ -715,6 +712,11 @@ export default {
     onLogin() {
       if (this.$q.screen.width < 777) {
         this.openDialog(true);
+        return;
+      }
+      if (this.name === null || this.name === '') return;
+      if (this.name.length !== 10 || this.age === null || this.age === '') {
+        this.openDialog(true, this.name);
         return;
       }
       Loading.show({
@@ -728,24 +730,17 @@ export default {
         password: this.age,
       })
         .then((response) => {
-          // JSON responses are automatically parsed.
           this.posts = response.data;
-          /* this.$q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: this.posts.token,
-            position: 'center',
-          }); */
           this.$q.sessionStorage.set('login-token', this.posts.token);
           axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
             'login-token',
           )}`;
           Loading.hide();
-          this.goTo('/events', null);
+          this.$nextTick(() => {
+            this.$router.push('/events');
+          });
         })
         .catch((e) => {
-        //  this.errors.push(e);
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -754,6 +749,7 @@ export default {
             position: 'top',
           });
           Loading.hide();
+          this.openDialog(true, this.name);
         });
     },
   },

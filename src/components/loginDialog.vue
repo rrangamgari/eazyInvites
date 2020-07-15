@@ -26,7 +26,7 @@
       <q-tab-panels v-model="tab" animated class="bg-transparent" keep-alive
        :style="`height: calc(100% - 55px);`">
         <q-tab-panel name="login" style="padding-right: 0px;">
-          <login-component :dark="!i" @login-success="onOk"/>
+          <login-component :dark="!i" :username="$props.username" @login-success="onOk"/>
         </q-tab-panel>
 
         <q-tab-panel name="register" style="padding-right: 0px;">
@@ -50,6 +50,7 @@ export default {
   props: [
     'persistent',
     'login',
+    'username',
   ],
   data() {
     return {

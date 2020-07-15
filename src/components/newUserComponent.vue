@@ -15,6 +15,7 @@
         label="First Name"
         lazy-rules
         :rules="[ val=> val !== null && val !== '' || 'Please enter Firstname']"
+        autofocus
       />
       <q-input
         outlined

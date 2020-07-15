@@ -18,6 +18,7 @@
         unmasked-value
         fill-mask="#"
         :rules="[ val=> val !== null && val !== '' && val.length === 10 || 'Please enter Phone']"
+        :autofocus="name.length != 10"
       />
 
       <q-input
@@ -28,6 +29,7 @@
         label="Password"
         lazy-rules
         :rules="[ val=> val !== null && val !== '' || 'Please enter Password']"
+        :autofocus="name.length == 10"
       />
 
       <!--
@@ -53,10 +55,10 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 
 export default {
   name: 'loginComponent',
-  props: ['dark'],
+  props: ['dark', 'username'],
   data() {
     return {
-      name: null,
+      name: this.$props.username || null,
       age: null,
       // accept: false,
     };
