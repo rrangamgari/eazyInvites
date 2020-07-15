@@ -1,7 +1,83 @@
-/* eslint-disable no-void */ /* eslint-disable no-void */
 <template>
-
-  <div class="q-pa-md">
+<div class="row">
+  <div v-show="$q.screen.width < 1150" class="col-12 q-px-md q-pt-md">
+  <q-card>
+    <q-form
+      id="addContact"
+      @submit="onFormSubmit"
+      @reset="onFormReset"
+      class="q-pt-sm q-pb-xs"
+      :class="`${$q.screen.gt.xs ? 'row' : 'q-pa-md'}`"
+    >
+      <q-input
+        style="padding-left: 0.5%; padding-right: 0.5%;"
+        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        outlined
+        type="text"
+        v-model="firstname"
+        label="First Name"
+        lazy-rules
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Firstname']"
+      />
+      <q-input
+        style="padding-left: 0.5%; padding-right: 0.5%;"
+        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        outlined
+        type="text"
+        v-model="lastname"
+        label="Last Name"
+        lazy-rules
+        :rules="[ val => true || 'Please enter Firstname']"
+      />
+      <q-input
+        style="padding-left: 0.5%; padding-right: 0.5%;"
+        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        outlined
+        v-model="phone"
+        label="Phone Number"
+        lazy-rules
+        mask="(###) ### - ####"
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Phone']"
+      />
+      <!-- <q-input
+        style="padding-left: 0.5%; padding-right: 0.5%;"
+        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        outlined
+        v-model="phone2"
+        label="Secondary Phone Number"
+        lazy-rules
+        mask="(###) ### - ####"
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Secondary Phone']"
+      /> -->
+      <q-input
+        style="padding-left: 0.5%; padding-right: 0.5%;"
+        :style="`${$q.screen.gt.xs ? 'width: 33%' : ''}
+        ${$q.screen.width > 850 ? 'padding-top: 0px; width: 30%;' : ''}`"
+        outlined
+        type="text"
+        v-model="email"
+        label="Email"
+        lazy-rules
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
+      />
+      <div style="padding-left: 0.5%; padding-right: 0.53%;"
+       :style="`${$q.screen.gt.xs ? 'width: 7%;' : ''}
+        ${$q.screen.width > 850 ? 'padding-top: 10px; width: 10%;' : ''}`">
+        <q-btn :label="$q.screen.gt.xs ? '' : 'Add Contact'" :dense="$q.screen.gt.xs"
+         :title="$q.screen.gt.xs ? 'Add Contact' : ''" icon="person_add"
+         type="submit" color="primary" class="q-mr-sm"/>
+        <q-btn :label="$q.screen.gt.xs ? '' : 'Reset'" :dense="$q.screen.gt.xs"
+         :title="$q.screen.gt.xs ? 'Reset' : ''" icon="autorenew"
+         type="reset" color="primary" flat/>
+      </div>
+    </q-form>
+  </q-card>
+  </div>
+  <div class="q-pa-md" :class="`${$q.screen.width < 1150 ? 'col-12' : 'col'}`">
     <q-table
       title="Contacts"
       :data="data"
@@ -12,7 +88,7 @@
       hide-bottom
       :pagination="{rowsPerPage: 0}"
       :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
-
+      :visible-columns="visible"
     >
       <template v-slot:top-right>
         <q-btn
@@ -45,11 +121,11 @@
             size="2.5em"
             v-show="props.col.name == 'primaryPhone'"
           />
-          <q-icon
+          <!-- <q-icon
             name="contact_phone"
             size="2.5em"
             v-show="props.col.name == 'secondaryPhone'"
-          />
+          /> -->
           <q-icon
             name="delete"
             size="2.5em"
@@ -148,22 +224,82 @@
         <q-page-container>
           <q-page padding>
             <q-uploader
-        field-name="file"
-        url= '/api/userEvents/userguestupload'
-        method="POST"
-        :headers=headerFunc
-        label="Files"
-        color="teal"
-        flat
-        bordered
-        no-thumbnails
-        style="max-width: 300px"
-      />
+              field-name="file"
+              url= '/api/userEvents/userguestupload'
+              method="POST"
+              :headers=headerFunc
+              label="Files"
+              color="teal"
+              flat
+              bordered
+              no-thumbnails
+              style="max-width: 300px"
+            />
           </q-page>
         </q-page-container>
       </q-layout>
     </q-dialog>
   </div>
+  <div v-show="$q.screen.width >= 1150" class="col-3 q-py-md q-pr-md q-mt-md">
+  <q-card>
+    <q-form
+      id="addContact"
+      @submit="onFormSubmit"
+      @reset="onFormReset"
+      class="q-gutter-md q-pa-md q-pr-lg"
+    >
+      <q-input
+        outlined
+        type="text"
+        v-model="firstname"
+        label="First Name"
+        lazy-rules
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Firstname']"
+      />
+      <q-input
+        outlined
+        type="text"
+        v-model="lastname"
+        label="Last Name"
+        lazy-rules
+        :rules="[ val => true || 'Please enter Firstname']"
+      />
+      <q-input
+        outlined
+        v-model="phone"
+        label="Phone Number"
+        lazy-rules
+        mask="(###) ### - ####"
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Phone']"
+      />
+      <!-- <q-input
+        outlined
+        v-model="phone2"
+        label="Secondary Phone Number"
+        lazy-rules
+        mask="(###) ### - ####"
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Secondary Phone']"
+      /> -->
+      <q-input
+        outlined
+        type="text"
+        v-model="email"
+        label="Email"
+        lazy-rules
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
+      />
+      <div>
+        <q-btn label="Add Contact" icon="person_add" type="submit" color="primary" class="q-mr-sm"/>
+        <q-btn label="Reset" icon="autorenew" type="reset" color="primary" flat/>
+      </div>
+    </q-form>
+  </q-card>
+  </div>
+</div>
 </template>
 
 <script>
@@ -353,6 +489,30 @@ export default {
       this.errorMessageProtein = 'dasasds';
       return true;
     },
+    onFormReset() {
+      this.firstname = null;
+      this.lastname = null;
+      this.phone = null;
+      this.phone2 = null;
+      this.email = null;
+    },
+    onFormSubmit() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      this.data.push(
+        {
+          firstname: this.firstname,
+          lastname: this.lastname,
+          primaryPhone: this.phone,
+          secondaryPhone: this.phone2,
+          email: this.email,
+        },
+      );
+      Loading.hide();
+    },
   },
   data() {
     return {
@@ -366,6 +526,7 @@ export default {
           value:
          `Bearer ${this.$q.sessionStorage.getItem('login-token')}`,
         }],
+      visible: ['firstname', 'lastname', 'primaryPhone', 'email', 'delete'],
       columns: [
         {
           name: 'firstname',
@@ -420,6 +581,12 @@ export default {
           email: 24,
         },
       ],
+
+      firstname: null,
+      lastname: null,
+      phone: null,
+      phone2: null,
+      email: null,
     };
   },
   mounted() {

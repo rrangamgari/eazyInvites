@@ -18,19 +18,22 @@
         </q-list>
       </q-btn-dropdown>
 
-      <a href="/" class="xs">
+      <a @click="goHome" class="xs">
         <img src="../assets/logo/logo_final.png" width="40px" />
       </a>
-      <a href="/" class="gt-xs lt-md">
+      <a @click="goHome" class="gt-xs lt-md">
         <img src="../assets/logo/logo_final.png" width="60px" />
       </a>
-      <a href="/" class="md">
+      <a @click="goHome" class="md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <a href="/" class="gt-md">
+      <a @click="goHome" class="gt-md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <q-toolbar-title class="logo" :style="lStyle" >WE Invites</q-toolbar-title>
+      <q-toolbar-title @click="goHome" class="logo" shrink :style="lStyle" style="cursor: pointer;">
+        WE Invites
+      </q-toolbar-title>
+      <q-space/>
       <!--q-tabs
         no-caps
         active-color="primary"
@@ -295,15 +298,16 @@
       </div>
       </q-form>
       </div>
-      <div v-else>
       <q-tabs
+        v-else-if="$q.screen.gt.xs"
         no-caps
         active-color="primary"
         indicator-color="transparent"
-        class="merienda-bold gt-xs"
+        class="merienda-bold gt-xs q-pa-xs"
         inline-label
-        dense shrink
-        v-model="tab"
+        dense stretch
+        align="right"
+        :breakpoint="0"
         id="home_tabs"
       >
         <q-route-tab
@@ -474,8 +478,8 @@
           </q-list>
         </q-btn-dropdown-->
       </q-tabs>
-      <q-btn-dropdown icon="person" dropdown-icon=""
-       auto-close dense flat :color="qbtnColor" class="lt-sm">
+      <q-btn-dropdown v-else icon="person" dropdown-icon=""
+       auto-close dense flat :color="qbtnColor">
           <q-list>
             <q-item
               clickable
@@ -564,7 +568,6 @@
             </q-item>
           </q-list>
       </q-btn-dropdown>
-      </div>
     </q-toolbar>
   </q-header>
 </template>
@@ -666,6 +669,10 @@ export default {
             this.scrollTo(section);
           });
       }
+    },
+    goHome() {
+      if (this.$route.path === '/') this.$router.go(0);
+      else this.$router.push('/');
     },
     scrollHandler(position) {
       // window.alert(this.$router.currentRoute.path);
