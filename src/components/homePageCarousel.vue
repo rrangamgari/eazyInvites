@@ -6,7 +6,7 @@
       animated
       v-model="slide"
       infinite
-      :autoplay="30000"
+      :autoplay="5000"
       transition-prev="fade"
       transition-next="fade"
       keep-alive
