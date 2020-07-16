@@ -1,6 +1,7 @@
 <template>
   <div class="q-pa-md">
-    <q-stepper v-model="step" color="primary" :vertical="$q.screen.width < 677" animated>
+    <q-stepper v-model="step" color="primary" keep-alive
+     :vertical="$q.screen.width < 687" animated>
       <q-step
         :name="1"
         title="Upload Invitation"
@@ -117,124 +118,8 @@
         icon="create_new_folder"
         :done="step > 2"
       >
-        <q-table
-          title="Contacts"
-          :data="data"
-          :columns="columns"
-          color="primary"
-          row-key="eventmemberid"
-          :rows-per-page-options="[0]"
-          :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
-          selection="multiple"
-          :selected.sync="selected"
-        >
-          <template v-slot:header-cell="props">
-            <q-th :props="props">
-              <b style="font-size:14px;"> {{ props.col.label }} &nbsp;</b>
-              <q-icon
-                name="contact_mail"
-                size="2.5em"
-                v-show="props.col.label == 'Email'"
-              />
-              <q-icon
-                name="contact_phone"
-                size="2.5em"
-                v-show="props.col.name == 'primaryPhone'"
-              />
-              <q-icon
-                name="contact_phone"
-                size="2.5em"
-                v-show="props.col.name == 'secondaryPhone'"
-              />
-            </q-th>
-          </template>
-          <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td key="checkBox" >
-                <q-checkbox :val="props.row"
-                  v-model="selected"/>
-              </q-td>
-              <q-td key="firstname" :props="props">
-                {{ props.row.firstname }}
-                <q-popup-edit
-                  v-model="props.row.firstname"
-                  title="Edit the Name"
-                  buttons
-                  :validate="firstnameValidation"
-                  @hide="firstnameValidation"
-                >
-                  <q-input
-                    v-model="props.row.firstname"
-                    dense
-                    autofocus
-                    counter
-                    :error="errorProtein"
-                    :error-message="errorMessageProtein"
-                  />
-                </q-popup-edit>
-              </q-td>
-              <q-td key="lastname" :props="props">
-                {{ props.row.lastname }}
-                <q-popup-edit
-                  v-model="props.row.lastname"
-                  title="Edit the Name"
-                  buttons
-                >
-                  <q-input v-model="props.row.lastname" dense autofocus counter />
-                </q-popup-edit>
-              </q-td>
-              <q-td key="primaryPhone" :props="props">
-                {{ props.row.primaryPhone }}
-                <q-popup-edit
-                  v-model="props.row.primaryPhone"
-                  title="Edit the Phone"
-                  buttons
-                >
-                  <q-input
-                    v-model="props.row.primaryPhone"
-                    dense
-                    autofocus
-                    counter
-                  />
-                </q-popup-edit>
-              </q-td>
-              <q-td key="secondaryPhone" :props="props">
-                {{ props.row.secondaryPhone }}
-                <q-popup-edit
-                  v-model="props.row.secondaryPhone"
-                  title="Edit the phone"
-                  buttons
-                >
-                  <q-input
-                    v-model="props.row.secondaryPhone"
-                    dense
-                    autofocus
-                    counter
-                  />
-                </q-popup-edit>
-              </q-td>
-              <q-td key="email" :props="props">
-                {{ props.row.email }}
-                <q-popup-edit
-                  v-model="props.row.email"
-                  title="Edit the Email"
-                  buttons
-                >
-                  <q-input v-model="props.row.email" dense autofocus counter />
-                </q-popup-edit>
-              </q-td>
-              <q-td key="delete" :props="props">
-                <img
-                  src="~assets/icon/delete-file-icon.png"
-                  style="cursor:pointer;"
-                  @click="deleteMe(props.row.eventmemberid)"
-                />
-              </q-td>
-
-            </q-tr>
-          </template>
-        </q-table>
-        <q-stepper-navigation>
+        <add-contacts-component :offset="90" select :selected.sync="selected"/>
+        <q-stepper-navigation class="q-pa-md">
           <q-btn @click="onContinue()" color="primary" label="Continue" class="q-px-xl q-py-xs"/>
           <q-btn
             flat
@@ -355,18 +240,16 @@
         Total : ${{ total}} <br>
       </div>
 
-      <div class="q-pa-sm row">
-        <q-  outlined type="text"
-         label="Coupon" v-model="coupon" clearable/>
-         <q-input  outlined class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
+      <q-form @submit="applyCoupon" class="q-pa-sm row">
+        <q-input outlined class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
           :class="`${$q.screen.gt.xs ? 'q-mr-sm' : ''}`"
           type="text" label="Coupon" v-model="coupon" clearable
         />
         <div class="q-pt-sm col-xs-10 col-sm-3 col-md-2">
-          <q-btn color="primary" class="full-width full-height"
-           label="Apply Coupon" @click="applyCoupon()"/>
+          <q-btn color="primary" type="submit" class="full-width full-height"
+           label="Apply Coupon"/>
         </div>
-      </div>
+      </q-form>
 
         <q-stepper-navigation>
           <q-btn color="primary" class="q-px-xl q-py-xs"  label="Finish" @click="onFinish()"/>
@@ -387,6 +270,7 @@
 import axios from 'axios';
 import { Loading, QSpinnerBars, date } from 'quasar';
 import customMessageDialog from './customMessageDialog.vue';
+import addContactsComponent from './addContactsComponent.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -396,7 +280,9 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 // let newDate = date.buildDate({ year:2010, date:5, hours:15, milliseconds:123})
 export default {
   name: 'createInvitationComponent',
-  components: {},
+  components: {
+    addContactsComponent,
+  },
   data() {
     return {
       file: null,
@@ -420,56 +306,50 @@ export default {
         { value: 5, label: 'Pooja' },
       ],
 
-      accept: false,
-      columns: [
-        {
-          name: 'firstname',
-          required: true,
-          label: 'First Name *',
-          align: 'left',
-          field: (row) => `${row.firstname}`,
-          sortable: true,
-        },
-        {
-          name: 'lastname',
-          label: 'Last Name',
-          align: 'left',
-          field: (row) => `${row.lastname}`,
-          sortable: true,
-        },
-        {
-          name: 'primaryPhone',
-          align: 'center',
-          label: 'Primary Phone',
-          required: true,
-          field: 'primaryPhone',
-          sortable: true,
-          headerStyle: 'icon-right:archive',
-        },
-        {
-          name: 'secondaryPhone',
-          label: 'Secondary Phone',
-          field: 'secondaryPhone',
-          sortable: true,
-          icon: 'contacts',
-        },
-        {
-          name: 'email',
-          label: 'Email',
-          field: 'email',
-          sortable: true,
-        },
-      ],
-      dataLoaded: false,
-      data: [
-        {
-          firstname: 'Frozen Yogurt',
-          primaryPhone: 159,
-          secondaryPhone: 6.0,
-          email: 24,
-        },
-      ],
+      // accept: false,
+      // columns: [
+      //   {
+      //     name: 'firstname',
+      //     required: true,
+      //     label: 'First Name *',
+      //     align: 'left',
+      //     field: (row) => `${row.firstname}`,
+      //     sortable: true,
+      //   },
+      //   {
+      //     name: 'lastname',
+      //     label: 'Last Name',
+      //     align: 'left',
+      //     field: (row) => `${row.lastname}`,
+      //     sortable: true,
+      //   },
+      //   {
+      //     name: 'primaryPhone',
+      //     align: 'center',
+      //     label: 'Primary Phone',
+      //     required: true,
+      //     field: 'primaryPhone',
+      //     sortable: true,
+      //     headerStyle: 'icon-right:archive',
+      //   },
+      //   {
+      //     name: 'secondaryPhone',
+      //     label: 'Secondary Phone',
+      //     field: 'secondaryPhone',
+      //     sortable: true,
+      //     icon: 'contacts',
+      //   },
+      //   {
+      //     name: 'email',
+      //     label: 'Email',
+      //     field: 'email',
+      //     sortable: true,
+      //   },
+      // ],
+      // dataLoaded: false,
+      // data: undefined,
       coupon: '',
+      accCoupon: { label: '', discount: 0 },
       coupons: [{ label: 'NEW10', discount: 10 }, { label: 'EAZY20', discount: 20 }],
       price: 0,
       discount: 0,
@@ -524,38 +404,37 @@ export default {
         });
         this.step = 2;
         if (this.file !== null) this.url = URL.createObjectURL(this.file);
+        Loading.hide();
+        // if (this.dataLoaded) {
+        //   Loading.hide();
+        //   return;
+        // }
 
-        if (this.dataLoaded) {
-          Loading.hide();
-          return;
-        }
+        // axios
+        //   .get('/api/userEvents/userguestlist')
+        //   .then((response) => {
+        //     Loading.hide();
+        //     this.data = response.data.data;
+        //     this.dataLoaded = true;
+        //     console.log(this.data);
+        //   })
+        //   .catch((e) => {
+        //     Loading.hide();
+        //     if (e.message === 'Request failed with status code 401') {
+        //       this.$q.sessionStorage.remove('login-token');
+        //       this.$router.push('/login');
+        //     }
 
-        axios
-          .get('/api/userEvents/userguestlist')
-          .then((response) => {
-            Loading.hide();
-            // JSON responses are automatically parsed.
-            this.data = response.data.data;
-            // this.data = this.data.concat(response.data.data);
-          })
-          .catch((e) => {
-            //  this.errors.push(e);
-            Loading.hide();
-            if (e.message === 'Request failed with status code 401') {
-              this.$q.sessionStorage.remove('login-token');
-              this.$router.push('/login');
-            }
+        //     this.data = undefined;
 
-            this.$q.notify({
-              color: 'red-5',
-              textColor: 'white',
-              icon: 'error',
-              message: e.message,
-              position: 'top',
-            });
-          });
-
-        this.dataLoaded = true;
+        //     this.$q.notify({
+        //       color: 'red-5',
+        //       textColor: 'white',
+        //       icon: 'error',
+        //       message: e.message,
+        //       position: 'top',
+        //     });
+        //   });
       }
     },
 
@@ -585,16 +464,18 @@ export default {
     },
     onContinue() {
       this.step = 4;
-      window.console.log(this.selected);
-      this.price = this.selected.length * 2;
-      this.total = this.price;
+      console.log(this.selected);
+      this.price = this.selected.length * 2; // Calculate Price
+      this.discount = this.price * (this.accCoupon.discount / 100.0);
+      this.total = this.price - this.discount;
     },
     applyCoupon() {
       let valid = false;
       this.coupons.forEach((coupon) => {
         if (coupon.label === this.coupon) {
           valid = true;
-          this.discount = this.price * (coupon.discount / 100.0);
+          this.accCoupon = coupon;
+          this.discount = this.price * (this.accCoupon.discount / 100.0);
         }
       });
       this.total = this.price - this.discount;
@@ -607,6 +488,7 @@ export default {
           position: 'top',
         });
       } else {
+        this.accCoupon = { label: '', discount: 0 };
         this.$q.notify({
           color: 'red-5',
           textColor: 'white',

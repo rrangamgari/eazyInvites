@@ -1,17 +1,17 @@
 <template>
 <div class="row">
-  <div v-show="$q.screen.width < 1150" class="col-12 q-px-md q-pt-md">
+  <div v-if="cWidth < 1150" class="col-12 q-px-md q-pt-md">
   <q-card>
     <q-form
       id="addContact"
       @submit="onFormSubmit"
       @reset="onFormReset"
       class="q-pt-sm q-pb-xs"
-      :class="`${$q.screen.gt.xs ? 'row' : 'q-pa-md'}`"
+      :class="`${cWidth > $q.screen.sizes.sm ? 'row' : 'q-pa-md'}`"
     >
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
-        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
         outlined
         type="text"
         v-model="firstname"
@@ -21,7 +21,7 @@
       />
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
-        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
         outlined
         type="text"
         v-model="lastname"
@@ -31,7 +31,7 @@
       />
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
-        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
         outlined
         v-model="phone"
         label="Phone Number"
@@ -43,7 +43,7 @@
       />
       <!-- <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
-        :style="`${$q.screen.gt.xs ? 'width: 20%;' : ''}`"
+        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
         outlined
         v-model="phone2"
         label="Secondary Phone Number"
@@ -55,8 +55,8 @@
       /> -->
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
-        :style="`${$q.screen.gt.xs ? 'width: 33%' : ''}
-        ${$q.screen.width > 850 ? 'padding-top: 0px; width: 30%;' : ''}`"
+        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 33%' : ''}
+        ${cWidth > 850 ? 'padding-top: 0px; width: 30%;' : ''}`"
         outlined
         type="text"
         v-model="email"
@@ -65,30 +65,34 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
       />
       <div style="padding-left: 0.5%; padding-right: 0.53%;"
-       :style="`${$q.screen.gt.xs ? 'width: 7%;' : ''}
-        ${$q.screen.width > 850 ? 'padding-top: 10px; width: 10%;' : ''}`">
-        <q-btn :label="$q.screen.gt.xs ? '' : 'Add Contact'" :dense="$q.screen.gt.xs"
-         :title="$q.screen.gt.xs ? 'Add Contact' : ''" icon="person_add"
-         type="submit" color="primary" class="q-mr-sm"/>
-        <q-btn :label="$q.screen.gt.xs ? '' : 'Reset'" :dense="$q.screen.gt.xs"
-         :title="$q.screen.gt.xs ? 'Reset' : ''" icon="autorenew"
-         type="reset" color="primary" flat/>
+       :style="`${cWidth > $q.screen.sizes.sm ? 'width: 7%;' : ''}
+        ${cWidth > 850 ? 'padding-top: 10px; width: 10%;' : ''}`">
+        <q-btn :label="cWidth > $q.screen.sizes.sm ? '' : 'Add Contact'"
+         :title="cWidth > $q.screen.sizes.sm ? 'Add Contact' : ''" icon="person_add"
+         :dense="cWidth > $q.screen.sizes.sm" type="submit" color="primary" class="q-mr-sm"/>
+        <q-btn :label="cWidth > $q.screen.sizes.sm ? '' : 'Reset'"
+         :title="cWidth > $q.screen.sizes.sm ? 'Reset' : ''" icon="autorenew"
+         :dense="cWidth > $q.screen.sizes.sm" type="reset" color="primary" flat/>
       </div>
     </q-form>
   </q-card>
   </div>
-  <div class="q-pa-md" :class="`${$q.screen.width < 1150 ? 'col-12' : 'col'}`">
+  <div class="q-pa-md" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
     <q-table
       title="Contacts"
       :data="data"
       :columns="columns"
       color="primary"
-      row-key="name"
-      icon-left="contacts"
+      row-key="eventmemberid"
+      icon-left="people"
       hide-bottom
+      :rows-per-page-options="[0]"
       :pagination="{rowsPerPage: 0}"
       :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
-      :visible-columns="visible"
+      :visible-columns="select ? visible : visible.concat('delete')"
+      :selection="select ? 'multiple' : 'none'"
+      :selected="selected"
+      @update:selected="(newSelected) => $emit('update:selected', newSelected)"
     >
       <template v-slot:top-right>
         <q-btn
@@ -135,6 +139,9 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
+          <q-td auto-width v-if="select">
+            <q-checkbox :val="props.row" v-model="props.selected"/>
+          </q-td>
           <q-td key="firstname" :props="props">
             {{ props.row.firstname }}
             <q-popup-edit
@@ -204,7 +211,7 @@
               <q-input v-model="props.row.email" dense autofocus counter />
             </q-popup-edit>
           </q-td>
-          <q-td key="delete" :props="props">
+          <q-td v-if="!select" key="delete" :props="props">
             <q-icon name="delete" size="2rem" color='primary' class=""
                     style="cursor:pointer;"
                     @click="deleteMe(props.row.eventmemberid)"/>
@@ -240,7 +247,7 @@
       </q-layout>
     </q-dialog>
   </div>
-  <div v-show="$q.screen.width >= 1150" class="col-3 q-py-md q-pr-md q-mt-md">
+  <div v-if="cWidth >= 1150" class="col-3 q-py-md q-pr-md q-mt-md">
   <q-card>
     <q-form
       id="addContact"
@@ -331,7 +338,99 @@ function wrapCsvValue(val, formatFn) {
 }
 
 export default {
+  name: 'addContactsComponent',
   components: {},
+  model: {
+    prop: 'selected',
+    event: 'update:selected',
+  },
+  props: {
+    offset: {
+      type: Number,
+      default: 0,
+    },
+    select: Boolean,
+    selected: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      uploadContactsLayout: false,
+      errorMessageProtein: '',
+      errorProtein: '',
+      uploadContactsModel: '',
+      headerFunc: [
+        {
+          name: 'authorization',
+          value:
+         `Bearer ${this.$q.sessionStorage.getItem('login-token')}`,
+        }],
+      visible: ['firstname', 'lastname', 'primaryPhone', 'email'],
+      columns: [
+        {
+          name: 'firstname',
+          required: true,
+          label: 'First Name *',
+          align: 'left',
+          field: (row) => `${row.firstname}`,
+          sortable: true,
+        },
+        {
+          name: 'lastname',
+          label: 'Last Name',
+          align: 'left',
+          field: (row) => `${row.lastname}`,
+          sortable: true,
+        },
+        {
+          name: 'primaryPhone',
+          align: 'center',
+          label: 'Primary Phone',
+          required: true,
+          field: 'primaryPhone',
+          sortable: true,
+          headerStyle: 'icon-right:archive',
+        },
+        {
+          name: 'secondaryPhone',
+          label: 'Secondary Phone',
+          field: 'secondaryPhone',
+          sortable: true,
+          icon: 'contacts',
+        },
+        {
+          name: 'email',
+          label: 'Email',
+          field: 'email',
+          sortable: true,
+        },
+        {
+          name: 'delete',
+          label: 'Delete',
+          sortable: false,
+          field: (row) => `${row.eventmemberid}`,
+        },
+      ],
+
+      data: this.contacts || [],
+
+      firstname: null,
+      lastname: null,
+      phone: null,
+      phone2: null,
+      email: null,
+    };
+  },
+  created() {
+    this.loadContacts();
+  },
+  computed: {
+    cWidth() {
+      return this.$q.screen.width - this.offset;
+    },
+  },
   methods: {
     factoryFn(file) {
       this.$q.notify({
@@ -513,84 +612,6 @@ export default {
       );
       Loading.hide();
     },
-  },
-  data() {
-    return {
-      uploadContactsLayout: false,
-      errorMessageProtein: '',
-      errorProtein: '',
-      uploadContactsModel: '',
-      headerFunc: [
-        {
-          name: 'authorization',
-          value:
-         `Bearer ${this.$q.sessionStorage.getItem('login-token')}`,
-        }],
-      visible: ['firstname', 'lastname', 'primaryPhone', 'email', 'delete'],
-      columns: [
-        {
-          name: 'firstname',
-          required: true,
-          label: 'First Name *',
-          align: 'left',
-          field: (row) => `${row.firstname}`,
-          sortable: true,
-        },
-        {
-          name: 'lastname',
-          label: 'Last Name',
-          align: 'left',
-          field: (row) => `${row.lastname}`,
-          sortable: true,
-        },
-        {
-          name: 'primaryPhone',
-          align: 'center',
-          label: 'Primary Phone',
-          required: true,
-          field: 'primaryPhone',
-          sortable: true,
-          headerStyle: 'icon-right:archive',
-        },
-        {
-          name: 'secondaryPhone',
-          label: 'Secondary Phone',
-          field: 'secondaryPhone',
-          sortable: true,
-          icon: 'contacts',
-        },
-        {
-          name: 'email',
-          label: 'Email',
-          field: 'email',
-          sortable: true,
-        },
-        {
-          name: 'delete',
-          label: 'Delete',
-          sortable: false,
-          field: (row) => `${row.eventmemberid}`,
-        },
-      ],
-
-      data: [
-        {
-          firstname: 'Frozen Yogurt',
-          primaryPhone: 159,
-          secondaryPhone: 6.0,
-          email: 24,
-        },
-      ],
-
-      firstname: null,
-      lastname: null,
-      phone: null,
-      phone2: null,
-      email: null,
-    };
-  },
-  mounted() {
-    this.loadContacts();
   },
 };
 </script>

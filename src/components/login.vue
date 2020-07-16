@@ -18,7 +18,7 @@
         unmasked-value
         fill-mask="#"
         :rules="[ val=> val !== null && val !== '' && val.length === 10 || 'Please enter Phone']"
-        :autofocus="name.length != 10"
+        :autofocus="!name || name.length != 10"
       />
 
       <q-input
@@ -58,8 +58,8 @@ export default {
   props: ['dark', 'username'],
   data() {
     return {
-      name: this.$props.username || null,
-      age: null,
+      name: this.$props.username || '',
+      age: '',
       // accept: false,
     };
   },

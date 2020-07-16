@@ -141,8 +141,8 @@
           :filter="filter"
           color="primary"
           rows-key="name"
-          rows-per-page-label=' '
-          rows-per-page-options=""
+          :rows-per-page-label="''"
+          :rows-per-page-options="[0]"
           :pagination-label="(firstRowIndex, endRowIndex, totalRowsNumber) => ''"
           :pagination="{rowsPerPage: 0}"
           :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
