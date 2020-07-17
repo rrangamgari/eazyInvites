@@ -130,44 +130,10 @@ export default {
   },
   mounted() {
     if (this.$q.sessionStorage.getItem('login-token') === null) {
-      const auth = this.login();
-      if (!auth) this.$router.replace('/');
-    }
-    Loading.show({
-      spinner: QSpinnerBars,
-      spinnerColor: 'positive',
-      thickness: '3',
-    });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-      'login-token',
-    )}`;
-    axios
-      .get('/api/userEvents/events')
-      .then((response) => {
-        this.data = response.data.data;
-        this.createEvents();
-        axios
-          .get('/api/eventSystem/eventType')
-          .then((Response) => {
-            this.eventType = Response.data.data;
-            Loading.hide();
-          });
-      })
-      .catch((e) => {
-        if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
-          if (!this.login()) this.$router.replace('/');
-          // Restart function
-        }
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-        Loading.hide();
-      });
+      this.login()
+        .onOk(() => this.loadEvents())
+        .onCancel(() => this.$router.replace('/'));
+    } else this.loadEvents();
   },
   methods: {
     // geteventcard(attachmentlink) {
@@ -189,12 +155,63 @@ export default {
     //   return this.eventcard;
     // },
     login() {
-      this.$q.dialog({
+      return this.$q.dialog({
         component: loginDialog,
-        persistent: true,
         parent: this,
+
+        noBackdropDismiss: true,
+        noEscDismiss: true,
+        noRouteDismiss: false,
+
         login: true,
-      }).onOk(() => true).onCancel(() => false);
+      });
+    },
+    loadEvents() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'positive',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .get('/api/userEvents/events')
+        .then((response) => {
+          this.data = response.data.data;
+          this.createEvents();
+          axios
+            .get('/api/eventSystem/eventType')
+            .then((Response) => {
+              this.eventType = Response.data.data;
+              Loading.hide();
+            });
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.sessionStorage.remove('login-token');
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: 'You need to Login to view this Content',
+              position: 'top',
+            });
+            Loading.hide();
+            this.login()
+              .onOk(() => setTimeout(this.loadEvents(), 50)) // Restart function
+              .onCancel(() => this.$router.replace('/'));
+          } else {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: e.message,
+              position: 'top',
+            });
+            Loading.hide();
+          }
+        });
     },
     createEvents() {
       const date = new Date();

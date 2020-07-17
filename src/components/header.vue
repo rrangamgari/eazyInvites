@@ -699,7 +699,6 @@ export default {
       });
       this.$q.dialog({
         component: loginDialog,
-        persistent: true,
         parent: this,
         login,
         username,
