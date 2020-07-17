@@ -233,7 +233,6 @@ export default {
       });
       this.$q.dialog({
         component: loginDialog,
-        persistent: true,
         parent: this,
       }).onOk(() => {
         this.$router.push('/events');

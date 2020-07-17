@@ -203,8 +203,8 @@ export default {
       });
       this.$q.dialog({
         component: loginDialog,
-        persistent: true,
         parent: this,
+
         transitionShow: 'bounceInLeft',
         transitionHide: 'bounceInLeft',
         animationDuration: '2s',
