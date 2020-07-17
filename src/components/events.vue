@@ -199,7 +199,7 @@ export default {
             });
             Loading.hide();
             this.login()
-              .onOk(() => this.loadEvents()) // Restart fn // Check for Stack Overflow Possiblities
+              .onOk(() => this.loadEvents()) // Restart fn // Check for Stack Overflow
               .onCancel(() => this.$router.replace('/'));
           } else {
             this.$q.notify({
