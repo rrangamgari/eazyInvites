@@ -118,12 +118,12 @@
           <q-icon
             name="contact_mail"
             size="2.5em"
-            v-show="props.col.label == 'Email'"
+            v-if="props.col.label == 'Email'"
           />
           <q-icon
             name="contact_phone"
             size="2.5em"
-            v-show="props.col.name == 'primaryPhone'"
+            v-if="props.col.name == 'primaryPhone'"
           />
           <!-- <q-icon
             name="contact_phone"
@@ -133,7 +133,7 @@
           <q-icon
             name="delete"
             size="2.5em"
-            v-show="props.col.name == 'delete'"
+            v-if="props.col.name == 'delete'"
           />
         </q-th>
       </template>

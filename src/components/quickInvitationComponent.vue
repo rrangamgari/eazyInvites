@@ -499,85 +499,64 @@ export default {
       }
     },
     onFinish() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
       axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
 
-      if (this.eventtitle === null || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
-      if (this.file !== null) {
-        const formData = new FormData();
-        formData.append('file', this.file);
-        axios.post('/api/userEvents/uploadFile', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-          .then((response) => {
-            this.fileId = response.data.data;
-            this.$q.notify({
-              color: 'green-4',
-              textColor: 'white',
-              icon: 'cloud_done',
-              message: response.data.data,
-              position: 'center',
-            });
-          })
-          .catch((e) => {
-            this.$q.notify({
-              color: 'red-5',
-              textColor: 'white',
-              icon: 'error',
-              message: e.message,
-              position: 'top',
-            });
-          });
-      } else {
-        this.fileId = null;
-      }
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
+      if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
+
       const from = `${this.eventdate}`.split('/');
       const fromMonth = (from[1]);
       const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
       const startTime = `${this.eventtime}`;
-      // window.alert(startDate);
-      axios.post('/api/userEvents/event',
-        {
-          eventtypeid: this.eventType.value,
-          eventtitle: this.eventtitle,
-          eventmessage: this.eventmessage,
-          startdate: new Date(`${startDate}T${startTime}:00`),
-          enddate: new Date(`${startDate}T${startTime}:00`),
-          attachmentlink: this.fileId !== null ? `/api/userEvents/file/${this.fileId}` : null,
-          eventallowkids: true,
-        })
-        .then((Response) => {
-          const eventId = Response.data.data;
+
+      const eventDetails = {
+        eventtypeid: this.eventType.value,
+        eventtitle: this.eventtitle,
+        eventmessage: this.eventmessage,
+        startdate: new Date(`${startDate}T${startTime}:00`),
+        enddate: new Date(`${startDate}T${startTime}:00`),
+        attachmentlink: null,
+        eventallowkids: true,
+      };
+
+      const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
+
+      const formData = new FormData();
+      formData.append('file', this.file);
+      formData.append('eventDetails', new Blob([JSON.stringify(eventDetails)], { type: 'application/json' }));
+      formData.append('eventGuests', new Blob([JSON.stringify(eventMemberIdList)], { type: 'application/json' }));
+
+      axios.post('/api/userEvents/event', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        .then((response) => {
+          if (!response.data.data || response.data.data === 'null') {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: response.data.message,
+              position: 'top',
+            });
+            Loading.hide();
+            return;
+          }
+          const eventId = response.data.data;
           this.$q.notify({
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
-            message: Response.data.data,
+            message: response.data.data,
             position: 'center',
           });
 
-          const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
-          axios.post(`/api/userEvents/eventGuests/${eventId}`, eventMemberIdList)
-            .then((Response1) => {
-              this.$q.notify({
-                color: 'green-4',
-                textColor: 'white',
-                icon: 'cloud_done',
-                message: Response1.data.data,
-                position: 'center',
-              });
-              this.$router.push(`/events/${eventId}`);
-            })
-            .catch((e) => {
-              this.$q.notify({
-                color: 'red-5',
-                textColor: 'white',
-                icon: 'error',
-                message: e.message,
-                position: 'top',
-              });
-            });
+          Loading.hide();
+          this.$router.push(`/events/${eventId}`);
         })
         .catch((e) => {
-          //  this.errors.push(e);
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -585,6 +564,7 @@ export default {
             message: e.message,
             position: 'top',
           });
+          Loading.hide();
         });
     },
   },
