@@ -14,7 +14,7 @@
           <div class="member" >
             <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)">
               <q-img :src="event.attachmentlink !== null ? event.attachmentlink :
-              require('../assets/logo/bird.png')" alt>
+              require('../assets/logo/bird.png')" alt :ratio="4/3">
               <div class="absolute-bottom text-subtitle2 text-center">
                 {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
                   event.eventtitle : 'Untitled Event' }}
@@ -37,7 +37,7 @@
             <div class="member" >
           <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)">
               <q-img :src="event.attachmentlink !== null ? (event.attachmentlink) :
-              require('../assets/logo/bird.png')" alt>
+              require('../assets/logo/bird.png')" alt :ratio="4/3">
               <div class="absolute-bottom text-subtitle2 text-center">
                 {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
                   event.eventtitle : 'Untitled Event' }}
