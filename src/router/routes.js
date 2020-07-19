@@ -63,7 +63,7 @@ const routes = [
     component: () => import('layouts/eventsLayout.vue'),
   },
   {
-    path: '/events/:eventId',
+    path: '/events/:eventId/:eventAlpha',
     name: 'eventStatus',
     component: () => import('layouts/eventStatusLayout.vue'),
   },

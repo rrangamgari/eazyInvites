@@ -335,6 +335,13 @@
           icon="group"
           to="/addContacts"
         />
+        <q-route-tab
+          name="My Profile"
+          :label="($q.screen.gt.sm) ? 'My Profile' : ''"
+          :style="qtabStyle"
+          icon="group"
+          to="/addContacts"
+        />
         <q-tab
           name="logout"
           :label="($q.screen.gt.sm) ? 'Logout' : ''"

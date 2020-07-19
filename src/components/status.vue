@@ -220,6 +220,7 @@ export default {
   },
   mounted() {
     this.eventId = this.$route.params.eventId;
+    this.eventAlpha = this.$route.params.eventAlpha;
 
     Loading.show({
       spinner: QSpinnerBars,
@@ -232,19 +233,19 @@ export default {
     )}`;
 
     axios
-      .get(`/api/userEvents/event/${this.eventId}`)
+      .get(`/api/userEvents/event/${this.eventId}/${this.eventAlpha}`)
       .then((response) => {
         this.event = response.data.data;
         console.log(this.event.attachmentlink);
         if (this.event.attachmentlink !== null) {
           axios
             .get(this.event.attachmentlink, { responseType: 'arraybuffer' })
-            .then((Response) => {
+            .then((response1) => {
               const image = btoa(
-                new Uint8Array(Response.data)
+                new Uint8Array(response1.data)
                   .reduce((data, byte) => data + String.fromCharCode(byte), ''),
               );
-              this.file = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
+              this.file = `data:${response1.headers['content-type'].toLowerCase()};base64,${image}`;
               console.log(`file : ${this.file}`);
             })
             .catch((e) => {
@@ -252,13 +253,6 @@ export default {
                 this.$q.sessionStorage.remove('login-token');
                 this.$router.push('/login');
               }
-              this.$q.notify({
-                color: 'red-5',
-                textColor: 'white',
-                icon: 'error',
-                message: e.message,
-                position: 'top',
-              });
             });
         }
 

@@ -12,7 +12,8 @@
           <div class=" col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"
           v-for="event in events(index)" :key="event.eventdetailsid">
           <div class="member" >
-            <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)">
+            <q-card clickable v-ripple
+                    @click="onCardClick(event.eventdetailsid,event.eventdetailsalphaid)">
               <q-img :src="event.attachmentlink !== null ? event.attachmentlink :
               require('../assets/logo/bird.png')" alt :ratio="4/3">
               <div class="absolute-bottom text-subtitle2 text-center">
@@ -35,7 +36,8 @@
           <div class=" col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"
           v-for="event in events(index).slice(0,4)" :key="event.eventdetailsid">
             <div class="member" >
-          <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)">
+          <q-card clickable v-ripple
+                  @click="onCardClick(event.eventdetailsid,event.eventdetailsalphaid)">
               <q-img :src="event.attachmentlink !== null ? (event.attachmentlink) :
               require('../assets/logo/bird.png')" alt :ratio="4/3">
               <div class="absolute-bottom text-subtitle2 text-center">
@@ -243,8 +245,8 @@ export default {
       }
       return this.events1;
     },
-    onCardClick(eventdetailsid) {
-      this.$router.push(`/events/${eventdetailsid}`);
+    onCardClick(eventdetailsid, eventdetailsalphaid) {
+      this.$router.push(`/events/${eventdetailsid}/${eventdetailsalphaid}`);
     },
     getcard(url) {
       return axios

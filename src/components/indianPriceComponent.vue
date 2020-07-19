@@ -49,7 +49,7 @@
                 <sup>&#8377;</sup>
                 <abbr>{{Number(Math.round(standard *699)/100).toFixed(0)}}</abbr>
                 <span>&nbsp;  / Actual Price</span>
-              </h1>
+              </h1>hello
               <h4 style="margin-top: 0px; margin-bottom: 0px;"><sup>&#8377;</sup>
                 <abbr v-if="standard <= 500">{{Math.round((standard *.0699)*0.90)*100+99}} </abbr>
                 <abbr v-if="standard > 500 && standard <= 1000">
@@ -62,7 +62,7 @@
                 <span>/ Discount Price</span></h4>
               <ul>
                 <li>Custom Calculation</li>
-                <li><q-badge color="primary">
+                <li><q-badge color="secondary">
                   {{ standard }} Invitations
                 </q-badge>
                   <q-slider v-model="standard" :min="200" :max="5000"

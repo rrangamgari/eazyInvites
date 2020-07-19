@@ -601,16 +601,57 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      this.data.push(
-        {
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .post('/api/userEvents/userguest/123', {
           firstname: this.firstname,
           lastname: this.lastname,
           primaryPhone: this.phone,
           secondaryPhone: this.phone2,
           email: this.email,
-        },
-      );
-      Loading.hide();
+        })
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          if (response.data) {
+            // this.mounted();
+            this.$q.notify({
+              color: 'positive',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Successfully Added',
+              position: 'top',
+            });
+            // this.loadContacts();
+            this.data.push(
+              {
+                firstname: this.firstname,
+                lastname: this.lastname,
+                primaryPhone: this.phone,
+                secondaryPhone: this.phone2,
+                email: this.email,
+              },
+            );
+          }
+          // this.data = this.data.concat(response.data.data);
+          Loading.hide();
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.sessionStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
     },
   },
 };
