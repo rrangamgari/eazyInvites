@@ -118,6 +118,7 @@ export default {
         password: { password: this.password },
         givenname: this.firstname,
         familyname: this.lastname,
+        fax: this.$q.localStorage.getItem('country-token') === 'US' ? '1' : '91',
         role: { roleid: 3, active: true },
       })
         .then((response) => {
@@ -131,8 +132,28 @@ export default {
               message: 'User Created',
               position: 'center',
             });
-            Loading.hide();
-            this.$router.push('/login');
+            this.$q.sessionStorage.set('login-token', this.posts.data);
+            axios.defaults.headers.Authorization = `Bearer ${this.posts.data}`;
+
+            axios.get('/api/UserDetails/getCurrentUser')
+              .then((response1) => {
+                // JSON responses are automatically parsed.
+                this.$q.sessionStorage.set('user-token', response1.data);
+                // Notification for testing api
+                this.$router.push('/createInvitation');
+                Loading.hide();
+              })
+              .catch((e) => {
+                //  this.errors.push(e);
+                this.$q.notify({
+                  color: 'red-5',
+                  textColor: 'white',
+                  icon: 'error',
+                  message: e.message,
+                  position: 'top',
+                });
+                Loading.hide();
+              });
           }
           if (this.posts.status === 'failed') {
             this.$q.notify({

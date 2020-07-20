@@ -159,9 +159,11 @@
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>New Year Party</h2>
-          <p> Mehndi is derived from the Sanskrit word mendhikā.
-            <br>The use of mehndi and turmeric is described in the earliest
-            Hindu Vedic ritual books.</p>
+          <p> Out With the Old
+            <br>In With the New
+            <br>If You’re Ready For {{new Date().getFullYear()+1}}
+            <br>This Party is For You
+            <br>BYO booze and an appetizer to share</p>
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
       </q-carousel-slide>

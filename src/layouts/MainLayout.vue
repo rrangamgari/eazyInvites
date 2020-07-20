@@ -4,7 +4,7 @@
 
       <header-component></header-component>
       <carouselComponent id="images" v-show="showUS"></carouselComponent>
-      <indiacarouselComponent id="images" v-show="!showUS"></indiacarouselComponent>
+      <indiacarouselComponent id="images" v-show="showInd"></indiacarouselComponent>
       <video-component id="videos"></video-component>
       <reviewsCarouselComponent id="reviews"></reviewsCarouselComponent>
       <price-component id="prices" v-show="showUS"></price-component>
@@ -16,6 +16,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { Loading, QSpinnerBars } from 'quasar';
 import carouselComponent from '../components/homePageCarousel.vue';
 import indiacarouselComponent from '../components/indiaHomePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
@@ -40,21 +41,41 @@ export default {
   data() {
     return {
       showUS: false,
+      showInd: false,
     };
   },
   mounted() {
-    if (this.$q.sessionStorage.getItem('login-token') !== null
-      && this.$q.sessionStorage.getItem('login-token') === 'US') this.showUS = true;
-    if (this.$q.sessionStorage.getItem('login-token') === null) {
+    Loading.show({
+      spinner: QSpinnerBars,
+      spinnerColor: 'primary',
+      thickness: '3',
+    });
+    if (this.$q.localStorage.getItem('country-token') !== null
+      && this.$q.localStorage.getItem('country-token') === 'US') {
+      this.showUS = true;
+      this.showInd = false;
+      Loading.hide();
+    } else {
+      this.showUS = false;
+      this.showInd = true;
+      Loading.hide();
+    }
+    if (this.$q.localStorage.getItem('country-token') === null) {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
       axios.get('http://ip-api.com/json/')
         .then((response) => {
           // JSON responses are automatically parsed.
           // this.feedbackList = this.feedbackList.concat(response.data.data);
           // Notification for testing api
-          this.$q.sessionStorage.set('country-token', response.data.countryCode);
+          this.$q.localStorage.set('country-token', response.data.countryCode);
           if (response.data.countryCode === 'US') {
             this.showUS = true;
           }
+          Loading.hide();
         })
         .catch((e) => {
           //  this.errors.push(e);
@@ -65,6 +86,7 @@ export default {
             message: e.message,
             position: 'top',
           });
+          Loading.hide();
         });
     }
   },

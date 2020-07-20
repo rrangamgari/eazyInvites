@@ -46,6 +46,7 @@ import loginComponent from './login.vue';
 import registerComponent from './newUserComponent.vue';
 
 export default {
+  name: 'loginDialogComponent',
   components: {
     loginComponent,
     registerComponent,

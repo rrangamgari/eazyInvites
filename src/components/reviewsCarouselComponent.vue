@@ -5,7 +5,8 @@
       :height="600"
     >
   <template v-slot:media>
-    <img src="../assets/home/review.jpg">
+    <img src="../assets/home/review11.jpg" v-if="!showUS">
+    <img src="../assets/home/review.jpg" v-if="showUS">
   </template>
     <!--<div class="q-pa-sm absolute-right" >
       <q-btn label="My Feedback" size="md" no-caps rounded icon="add" dense color="primary" />
@@ -77,6 +78,7 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 export default {
   data() {
     return {
+      showUS: false,
       padding: false,
       vertical: false,
       arrows: false,
@@ -97,6 +99,10 @@ export default {
     };
   },
   mounted() {
+    if (this.$q.localStorage.getItem('country-token') !== null
+      && this.$q.localStorage.getItem('country-token') === 'US') {
+      this.showUS = true;
+    }
     axios.get('/api/feedback')
       .then((response) => {
         // JSON responses are automatically parsed.
