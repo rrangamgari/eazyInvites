@@ -28,7 +28,8 @@
       :navigation-position="navPos"
       navigation-icon="radio_button_unchecked"
       class="bg-transparent text-white rounded-borders"
-    style="max-width: 800px;min-height: 520px">
+      style="max-width: 800px;min-height: 520px"
+      keep-alive>
 
       <q-carousel-slide :name="feedback.id" class="column no-wrap flex-center"
                         v-for="feedback in feedbackList"

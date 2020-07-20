@@ -3,35 +3,70 @@
     <q-layout view="hhh lpr fff" class="shadow-2 rounded-borders">
 
       <header-component></header-component>
-      <carouselComponent id="images"></carouselComponent>
+      <carouselComponent id="images" v-show="showUS"></carouselComponent>
+      <indiacarouselComponent id="images" v-show="!showUS"></indiacarouselComponent>
       <video-component id="videos"></video-component>
       <reviewsCarouselComponent id="reviews"></reviewsCarouselComponent>
-      <price-component id="prices"></price-component>
-
+      <price-component id="prices" v-show="showUS"></price-component>
+      <indianPriceComponent id="prices" v-show="!showUS"></indianPriceComponent>
       <router-view/>
       <footer-component class="bg-primary"></footer-component>
     </q-layout>
   </div>
 </template>
 <script>
+import axios from 'axios';
 import carouselComponent from '../components/homePageCarousel.vue';
+import indiacarouselComponent from '../components/indiaHomePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/homePageFooter.vue';
-import priceComponent from '../components/indianPriceComponent.vue';
+import indianPriceComponent from '../components/indianPriceComponent.vue';
+import priceComponent from '../components/priceComponent.vue';
 import reviewsCarouselComponent from '../components/reviewsCarouselComponent.vue';
 
 export default {
   name: 'main',
   components: {
     carouselComponent,
+    indiacarouselComponent,
     videoComponent,
     headerComponent,
     footerComponent,
     priceComponent,
+    indianPriceComponent,
     reviewsCarouselComponent,
   },
+  data() {
+    return {
+      showUS: false,
+    };
+  },
   mounted() {
+    if (this.$q.sessionStorage.getItem('login-token') !== null
+      && this.$q.sessionStorage.getItem('login-token') === 'US') this.showUS = true;
+    if (this.$q.sessionStorage.getItem('login-token') === null) {
+      axios.get('http://ip-api.com/json/')
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          // this.feedbackList = this.feedbackList.concat(response.data.data);
+          // Notification for testing api
+          this.$q.sessionStorage.set('country-token', response.data.countryCode);
+          if (response.data.countryCode === 'US') {
+            this.showUS = true;
+          }
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
+    }
   },
 };
 </script>

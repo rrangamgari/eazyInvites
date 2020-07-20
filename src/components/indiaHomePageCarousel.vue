@@ -12,7 +12,7 @@
       keep-alive
       id="intro"
     >
-    <q-carousel-slide name="first" img-src="../assets/home/ez_us_8.jpg">
+    <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
       <Snowf
         :amount="30"
         :size="8"
@@ -29,7 +29,7 @@
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left:10%; max-width: ${$q.screen.width};`
          : 'width: 570px;'">
-          <h2>Christmas Celebrations</h2>
+          <h2>Pooja Invitations</h2>
           <p>
             WE Invites is Here to open that closed Digital Door...
             <br>
@@ -38,7 +38,7 @@
           <br>
         </div>
       </q-carousel-slide>
-       <q-carousel-slide name="second" img-src="../assets/home/ez_us_5.jpg">
+       <q-carousel-slide name="second" img-src="../assets/home/ez14-min.jpg">
       <Snowf
         class="overlay"
         :amount="30"
@@ -50,7 +50,7 @@
         :image="null"
         :zIndex="null"
         :resize="false"
-        color="blue"
+        color="#FFFF00"
       />
          <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
@@ -71,7 +71,7 @@
         <!-- <a href="#" class="btn-get-started " style="position: absolute; bottom: 0%;"
           @click="openDialog">Started</a> -->
       </q-carousel-slide>
-    <q-carousel-slide name="third" img-src="~assets/home/review1.jpg" >
+    <q-carousel-slide name="third" img-src="~assets/home/ez36-min.jpg" >
       <Snowf
         class="overlay"
         :amount="30"
@@ -100,7 +100,7 @@
           <div class="text-subtitle1 merienda">Engagement, Wedding, Receptions etc</div>
         </div>
       </q-carousel-slide>-->
-       <q-carousel-slide name="first1" img-src="~assets/home/ez_us_2.jpg" >
+       <q-carousel-slide name="first1" img-src="~assets/home/ez15-min.jpg" >
          <Snowf
            class="overlay"
            :amount="30"
@@ -112,12 +112,12 @@
            :image="null"
            :zIndex="null"
            :resize="false"
-           color="blue"
+           color="#FFFF00"
          />
          <div class="overlay"/>
          <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
-           <h2>My First Birthday</h2>
+           <h2>New Baby Born</h2>
            <p>
              Twinkle twinkle<br>
              We had a new born Star<br>
@@ -142,7 +142,7 @@
           <div class="text-subtitle1 merienda">Weekend Parties with friends</div>
         </div>
       </q-carousel-slide>-->
-      <q-carousel-slide name="fourth1" img-src="../assets/home/ez_us_3.jpg">
+      <q-carousel-slide name="fourth1" img-src="../assets/home/ez9-min.jpg">
         <Snowf
           class="overlay"
           :amount="30"
@@ -158,7 +158,7 @@
         />
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
-          <h2>New Year Party</h2>
+          <h2>Mehendi Function</h2>
           <p> Mehndi is derived from the Sanskrit word mendhikā.
             <br>The use of mehndi and turmeric is described in the earliest
             Hindu Vedic ritual books.</p>

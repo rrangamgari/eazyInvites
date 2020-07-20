@@ -131,10 +131,20 @@ export default {
               message: 'User Created',
               position: 'center',
             });
+            Loading.hide();
+            this.$router.push('/login');
+          }
+          if (this.posts.status === 'failed') {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: this.posts.data,
+              position: 'center',
+            });
           }
           // this.$q.sessionStorage.set('login-token', this.posts.token);
           Loading.hide();
-          this.$router.push('/login');
         })
         .catch((e) => {
           //  this.errors.push(e);
@@ -142,7 +152,7 @@ export default {
             color: 'red-5',
             textColor: 'white',
             icon: 'error',
-            message: e.message,
+            message: e.data,
             position: 'center',
           });
           Loading.hide();

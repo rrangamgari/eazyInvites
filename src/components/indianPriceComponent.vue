@@ -49,13 +49,13 @@
                 <sup>&#8377;</sup>
                 <abbr>{{Number(Math.round(standard *699)/100).toFixed(0)}}</abbr>
                 <span>&nbsp;  / Actual Price</span>
-              </h1>hello
+              </h1>
               <h4 style="margin-top: 0px; margin-bottom: 0px;"><sup>&#8377;</sup>
-                <abbr v-if="standard <= 500">{{Math.round((standard *.0699)*0.90)*100+99}} </abbr>
+                <abbr v-if="standard <= 500">{{Math.round((standard *.0699)*0.85)*100+99}} </abbr>
                 <abbr v-if="standard > 500 && standard <= 1000">
-                  {{Math.round((standard *.0699)*0.85)*100+99}} </abbr>
-                <abbr v-if="standard > 1000 && standard <= 2000">
                   {{Math.round((standard *.0699)*0.80)*100+99}} </abbr>
+                <abbr v-if="standard > 1000 && standard <= 2000">
+                  {{Math.round((standard *.0699)*0.75)*100+99}} </abbr>
                 <abbr v-if="standard > 2000">
                   {{Math.round((standard *.0699)*0.70)*100+99}} </abbr>
 
