@@ -74,6 +74,7 @@ export default {
           this.$q.localStorage.set('country-token', response.data.countryCode);
           if (response.data.countryCode === 'US') {
             this.showUS = true;
+            this.showInd = false;
           }
           Loading.hide();
         })
