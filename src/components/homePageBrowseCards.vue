@@ -24,9 +24,12 @@
               <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" data-lightbox="portfolio"
                  data-title="App 1" class="link-preview" title="Preview">
-                <i class="ion ion-eye"></i></a>
+                <i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -42,9 +45,12 @@
               <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="Web 3" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="Web 3" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -60,9 +66,12 @@
               <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="App 2" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="App 2" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -78,9 +87,12 @@
               <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="Card 2" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="Card 2" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -96,9 +108,12 @@
               <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="Web 2" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="Web 2" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -114,9 +129,12 @@
               <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="App 3" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="App 3" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -129,12 +147,15 @@
         <div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
           <div class="portfolio-wrap">
             <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
+              <img src="~assets/cards/party_card.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="Card 1" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="Card 1" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -148,12 +169,15 @@
              data-wow-delay="0.1s">
           <div class="portfolio-wrap">
             <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
+              <img src="~assets/cards/party_card.png" class="img-fluid" alt="">
               <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
                  data-lightbox="portfolio"
-                 data-title="Card 3" title="Preview"><i class="ion ion-eye"></i></a>
+                 data-title="Card 3" title="Preview"><i class="ion ion-eye">
+                <q-icon name="remove_red_eye" /></i></a>
               <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open"></i></a>
+                <i class="ion ion-android-open" >
+                  <q-icon name="open_in_new" />
+                </i></a>
             </figure>
 
             <div class="portfolio-info">
@@ -399,5 +423,9 @@ export default {
     font-weight: 600;
     color: #334242;
     margin-bottom: 10px;
+  }
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
   }
 </style>
