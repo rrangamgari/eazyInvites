@@ -604,7 +604,7 @@ export default {
         name: 'videos', label: 'About Us', icon: 'people', path: '/',
       },
       {
-        name: null, label: 'Browse Cards', icon: 'style', path: '/browsecards',
+        name: 'browsecards', label: 'Browse Cards', icon: 'style', path: '/',
       },
       {
         name: 'reviews', label: 'Reviews', icon: 'rate_review', path: '/',
@@ -633,15 +633,6 @@ export default {
       this.qmenuColor = 'white';
       // window.alert(this.$router.currentRoute.path);
     }
-    axios
-      .get('http://ip-api.com/json')
-      .then((Response) => {
-        // window.alert(Response.data.country);
-        if (Response.data.country) {
-          this.hideTabs = true;
-        }
-        // this.eventType = Response.data.data;
-      });
   },
   methods: {
     onItemClick() {

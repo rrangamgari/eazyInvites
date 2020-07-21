@@ -6,6 +6,7 @@
       <carouselComponent id="images" v-show="showUS"></carouselComponent>
       <indiacarouselComponent id="images" v-show="showInd"></indiacarouselComponent>
       <video-component id="videos"></video-component>
+      <cards-component id="browsecards"></cards-component>
       <reviewsCarouselComponent id="reviews"></reviewsCarouselComponent>
       <price-component id="prices" v-show="showUS"></price-component>
       <indianPriceComponent id="prices" v-show="!showUS"></indianPriceComponent>
@@ -20,6 +21,7 @@ import { Loading, QSpinnerBars } from 'quasar';
 import carouselComponent from '../components/homePageCarousel.vue';
 import indiacarouselComponent from '../components/indiaHomePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
+import cardsComponent from '../components/homePageBrowseCards.vue';
 import headerComponent from '../components/header.vue';
 import footerComponent from '../components/homePageFooter.vue';
 import indianPriceComponent from '../components/indianPriceComponent.vue';
@@ -32,6 +34,7 @@ export default {
     carouselComponent,
     indiacarouselComponent,
     videoComponent,
+    cardsComponent,
     headerComponent,
     footerComponent,
     priceComponent,

@@ -1079,18 +1079,18 @@ section {
 
 /* Portfolio Section
 --------------------------------*/
-#portfolio {
+#browsecards {
   padding: 20px 0;
 }
 
-#portfolio #portfolio-flters {
+#browsecards #browsecards-flters {
   padding: 0;
   margin: 5px 0 35px 0;
   list-style: none;
   text-align: center;
 }
 
-#portfolio #portfolio-flters li {
+#browsecards #browsecards-flters li {
   cursor: pointer;
   margin: 15px 15px 15px 0;
   display: inline-block;
@@ -1105,31 +1105,31 @@ section {
   transition: all 0.3s ease-in-out;
 }
 
-#portfolio #portfolio-flters li:hover, #portfolio #portfolio-flters li.filter-active {
+#browsecards #browsecards-flters li:hover, #browsecards #browsecards-flters li.filter-active {
   background: #18d26e;
   color: #fff;
 }
 
-#portfolio #portfolio-flters li:last-child {
+#browsecards #browsecards-flters li:last-child {
   margin-right: 0;
 }
 
-#portfolio .portfolio-wrap {
+#browsecards .portfolio-wrap {
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
   transition: 0.3s;
 }
 
-#portfolio .portfolio-wrap:hover {
+#browsecards .portfolio-wrap:hover {
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.16);
 }
 
-#portfolio .portfolio-item {
+#browsecards .portfolio-item {
   position: relative;
   height: 360px;
   overflow: hidden;
 }
 
-#portfolio .portfolio-item figure {
+#browsecards .portfolio-item figure {
   background: #000;
   overflow: hidden;
   height: 240px;
@@ -1138,12 +1138,12 @@ section {
   margin: 0;
 }
 
-#portfolio .portfolio-item figure:hover img {
+#browsecards .portfolio-item figure:hover img {
   opacity: 0.4;
   transition: 0.3s;
 }
 
-#portfolio .portfolio-item figure .link-preview, #portfolio .portfolio-item figure .link-details {
+#browsecards .portfolio-item figure .link-preview, #browsecards .portfolio-item figure .link-details {
   position: absolute;
   display: inline-block;
   visibility: hidden;
@@ -1156,41 +1156,41 @@ section {
   transition: 0.2s;
 }
 
-#portfolio .portfolio-item figure .link-preview i, #portfolio .portfolio-item figure .link-details i {
+#browsecards .portfolio-item figure .link-preview i, #browsecards .portfolio-item figure .link-details i {
   padding-top: 6px;
   font-size: 22px;
   color: #333;
 }
 
-#portfolio .portfolio-item figure .link-preview:hover, #portfolio .portfolio-item figure .link-details:hover {
+#browsecards .portfolio-item figure .link-preview:hover, #browsecards .portfolio-item figure .link-details:hover {
   background: #18d26e;
 }
 
-#portfolio .portfolio-item figure .link-preview:hover i, #portfolio .portfolio-item figure .link-details:hover i {
+#browsecards .portfolio-item figure .link-preview:hover i, #browsecards .portfolio-item figure .link-details:hover i {
   color: #fff;
 }
 
-#portfolio .portfolio-item figure .link-preview {
+#browsecards .portfolio-item figure .link-preview {
   left: calc(50% - 38px);
   top: calc(50% - 18px);
 }
 
-#portfolio .portfolio-item figure .link-details {
+#browsecards .portfolio-item figure .link-details {
   right: calc(50% - 38px);
   top: calc(50% - 18px);
 }
 
-#portfolio .portfolio-item figure:hover .link-preview {
+#browsecards .portfolio-item figure:hover .link-preview {
   visibility: visible;
   left: calc(50% - 44px);
 }
 
-#portfolio .portfolio-item figure:hover .link-details {
+#browsecards .portfolio-item figure:hover .link-details {
   visibility: visible;
   right: calc(50% - 44px);
 }
 
-#portfolio .portfolio-item .portfolio-info {
+#browsecards .portfolio-item .portfolio-info {
   background: #fff;
   text-align: center;
   padding: 30px;
@@ -1198,7 +1198,7 @@ section {
   border-radius: 0 0 3px 3px;
 }
 
-#portfolio .portfolio-item .portfolio-info h4 {
+#browsecards .portfolio-item .portfolio-info h4 {
   font-size: 18px;
   line-height: 1px;
   font-weight: 700;
@@ -1206,15 +1206,15 @@ section {
   padding-bottom: 0;
 }
 
-#portfolio .portfolio-item .portfolio-info h4 a {
+#browsecards .portfolio-item .portfolio-info h4 a {
   color: #333;
 }
 
-#portfolio .portfolio-item .portfolio-info h4 a:hover {
+#browsecards .portfolio-item .portfolio-info h4 a:hover {
   color: #18d26e;
 }
 
-#portfolio .portfolio-item .portfolio-info p {
+#browsecards .portfolio-item .portfolio-info p {
   padding: 0;
   margin: 0;
   color: #b8b8b8;

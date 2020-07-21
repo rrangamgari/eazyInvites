@@ -58,7 +58,7 @@ export default {
     return {
       eventTypeOptions: [],
       eventType: [],
-      indices: [11, 12, 13, 14, 15, 16, 17, 20, 21, 22, 23],
+      indices: [11, 12, 13, 14, 16, 23],
       selected: null,
       primary: '',
       imgs: '',
