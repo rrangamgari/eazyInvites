@@ -130,8 +130,9 @@
         </div>
       </template>
       <template v-slot:item="props">
-        <div class="q-pa-sm col-xs-12 col-sm-6 col-md-4">
-          <q-card>
+        <div class="q-pa-sm col-xs-12 col-sm-6 col-md-4 grid-style-transition"
+             :style="props.selected ? 'transform: scale(0.95);' : ''">
+          <q-card :style="props.selected ? 'background-color:#F5F5F5;' : ''">
             <q-card-section class="flex text-primary"
                             :style="{ fontSize: '20px' }">
               <div>
@@ -587,7 +588,9 @@ export default {
   },
 };
 </script>
-<style lang="sass">
-  .grid-style-transition
-    transition: transform .28s, background-color .28s
+<style>
+  .grid-style-transition{
+    transition: transform .28s;
+  }
+
 </style>
