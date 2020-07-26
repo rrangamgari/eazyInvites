@@ -77,155 +77,82 @@
     </q-form>
   </q-card>
   </div>
-  <div class="q-pa-md" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
+  <div class="q-pa-xs" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
     <q-table
-      title="Contacts"
+      title=""
       :data="data"
       :columns="columns"
+      grid
       color="primary"
       row-key="eventmemberid"
       icon-left="people"
       hide-bottom
+      hide-header
       :rows-per-page-options="[0]"
       :pagination="{rowsPerPage: 0}"
-      :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
-      :visible-columns="select ? visible : visible.concat('delete')"
-      :selection="select ? 'multiple' : 'none'"
-      :selected="selected"
+      selection="multiple"
+      :selected.sync="selected"
+      :filter="filter"
       @update:selected="(newSelected) => $emit('update:selected', newSelected)"
     >
       <template v-slot:top-right>
-        <q-btn
-          color="primary"
-          icon-right="cloud_upload"
-          label="Import from whatsapp"
-          title="CSV or XLS file accepted"
-          no-caps
-          @click="uploadContactsLayout = true"
-        />
-        &nbsp;&nbsp;
-        <q-btn
-          color="primary"
-          icon-right="cloud_upload"
-          label="Upload contacts"
-          title="CSV or XLS file accepted"
-          no-caps
-          @click="uploadContactsLayout = true"
-        />
-        &nbsp;&nbsp;
-        <q-btn
-          color="secondary"
-          icon-right="archive"
-          label="Export to csv"
-          no-caps
-          @click="exportTable"
-        />
+        <div class="row">
+          <div class="q-pa-xs full-width">
+            <q-btn
+              color="primary"
+              icon-right="cloud_upload"
+              label="Import from whatsapp"
+              title="CSV or XLS file accepted"
+              no-caps
+              @click="uploadContactsLayout = true"
+              class="full-width"
+            />
+          </div>
+          <div class="q-pa-xs full-width">
+            <q-btn
+              color="primary"
+              icon-right="cloud_upload"
+              label="Upload contacts"
+              title="CSV or XLS file accepted"
+              no-caps
+              @click="uploadContactsLayout = true"
+              class="full-width"
+            />
+          </div>
+          <div class="q-pa-xs full-width">
+            <q-input  dense debounce="300" v-model="filter" placeholder="Search"
+                     class="full-width">
+              <template v-slot:append>
+                <q-icon name="search"/>
+              </template>
+            </q-input>
+          </div>
+        </div>
       </template>
-      <template v-slot:header-cell="props">
-        <q-th :props="props">
-          <b style="font-size:14px;"> {{ props.col.label }} &nbsp;</b>
-          <q-icon
-            name="contact_mail"
-            size="2.5em"
-            v-if="props.col.label == 'Email'"
-          />
-          <q-icon
-            name="contact_phone"
-            size="2.5em"
-            v-if="props.col.name == 'primaryPhone'"
-          />
-          <!-- <q-icon
-            name="contact_phone"
-            size="2.5em"
-            v-show="props.col.name == 'secondaryPhone'"
-          /> -->
-          <q-icon
-            name="delete"
-            size="2.5em"
-            v-if="props.col.name == 'delete'"
-          />
-        </q-th>
-      </template>
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td auto-width v-if="select">
-            <q-checkbox :val="props.row" v-model="props.selected"/>
-          </q-td>
-          <q-td key="firstname" :props="props">
-            {{ props.row.firstname }}
-            <q-popup-edit
-              v-model="props.row.firstname"
-              title="Edit the Name"
-              buttons
-              :validate="firstnameValidation"
-              @hide="firstnameValidation"
-            >
-              <q-input
-                v-model="props.row.firstname"
-                dense
-                autofocus
-                counter
-                :error="errorProtein"
-                :error-message="errorMessageProtein"
-              />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="lastname" :props="props">
-            {{ props.row.lastname }}
-            <q-popup-edit
-              v-model="props.row.lastname"
-              title="Edit the Last Name"
-              buttons
-            >
-              <q-input v-model="props.row.lastname" dense autofocus counter />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="primaryPhone" :props="props">
-            {{ props.row.primaryPhone }}
-            <q-popup-edit
-              v-model="props.row.primaryPhone"
-              title="Edit the Phone"
-              buttons
-            >
-              <q-input
-                v-model="props.row.primaryPhone"
-                dense
-                autofocus
-                counter
-              />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="secondaryPhone" :props="props">
-            {{ props.row.secondaryPhone }}
-            <q-popup-edit
-              v-model="props.row.secondaryPhone"
-              title="Edit the phone"
-              buttons
-            >
-              <q-input
-                v-model="props.row.secondaryPhone"
-                dense
-                autofocus
-                counter
-              />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="email" :props="props">
-            {{ props.row.email }}
-            <q-popup-edit
-              v-model="props.row.email"
-              title="Edit the Email"
-              buttons
-            >
-              <q-input v-model="props.row.email" dense autofocus counter />
-            </q-popup-edit>
-          </q-td>
-          <q-td v-if="!select" key="delete" :props="props">
-            <q-icon name="delete" size="2rem" color='primary' class=""
-                    style="cursor:pointer;"
-                    @click="deleteMe(props.row.eventmemberid)"/>
-          </q-td>
-        </q-tr>
+      <template v-slot:item="props">
+        <div class="q-pa-sm col-xs-12 col-sm-6 col-md-4">
+          <q-card>
+            <q-card-section class="flex text-primary"
+                            :style="{ fontSize: '20px' }">
+              <div>
+                <q-checkbox dense v-model="props.selected" />
+                {{ props.row.firstname }}
+                {{(props.row.lastname === null||props.row.lastname === '')?"":props.row.lastname}}
+              </div>
+            </q-card-section>
+            <q-card-section class="flex">
+              <div v-show="(props.row.primaryPhone === null
+              ||props.row.primaryPhone === '')?false:true">
+                Phone : <strong>{{ props.row.primaryPhone }}</strong>
+              </div>
+              <div v-show="(props.row.email === null
+              ||props.row.email === '')?false:true">
+                Email : <strong>{{ props.row.email }}</strong></div>
+            </q-card-section>
+
+            <q-separator />
+          </q-card>
+        </div>
       </template>
     </q-table>
     <q-dialog v-model="uploadContactsLayout">
@@ -366,6 +293,7 @@ export default {
   },
   data() {
     return {
+      filter: '',
       uploadContactsLayout: false,
       errorMessageProtein: '',
       errorProtein: '',
@@ -414,12 +342,6 @@ export default {
           label: 'Email',
           field: 'email',
           sortable: true,
-        },
-        {
-          name: 'delete',
-          label: 'Delete',
-          sortable: false,
-          field: (row) => `${row.eventmemberid}`,
         },
       ],
 
@@ -665,3 +587,7 @@ export default {
   },
 };
 </script>
+<style lang="sass">
+  .grid-style-transition
+    transition: transform .28s, background-color .28s
+</style>
