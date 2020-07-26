@@ -1,202 +1,60 @@
 <template>
   <section id="portfolio"  class="portfolio section-bg" >
-    <div class="container">
-
       <header class="section-header">
-        <h3 style="font-size: 32px;">Our Portfolio</h3>
+        <h3 style="font-size: 32px;">Browse Cards</h3>
       </header>
 
       <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
           <ul id="portfolio-flters">
-            <li data-filter="*" class="filter-active">All</li>
+            <!--<li data-filter="*" class="filter-active">All</li>
             <li data-filter=".filter-app">Birthday</li>
             <li data-filter=".filter-card">Engagement</li>
-            <li data-filter=".filter-web">Wedding</li>
+            <li data-filter=".filter-web">Wedding</li>-->
+            <li
+              v-for="item in items"
+              :key="item.id"
+              :class="item.class"
+              :data-filter="item.datafilter"
+              @click="portfolioClick(item.id)"
+            >{{ item.text }}</li>
           </ul>
         </div>
       </div>
-
-      <div class="row portfolio-container">
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" data-lightbox="portfolio"
-                 data-title="App 1" class="link-preview" title="Preview">
-                <i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 col-xl-2 q-px-md q-py-sm"
+           v-for="index in indices" :key="index">
+          <div class="portfolio-item">
+            <div class="portfolio-wrap">
+              <figure>
+                <img  style="width: 100%;height: 100%"
+                     :src="require(`../assets/cards/ez${index}.jpg`)" >
+                <a @click= "showCard(require(`../assets/cards/ez${index}.jpg`))"
+                   data-lightbox="portfolio" data-title="Card"
+                   class="link-preview" title="Preview"><i class="ion ion-eye">
+                  <q-icon name="remove_red_eye" />
                 </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">App 1</a></h4>
-              <p>App</p>
+                <a  @click= "$router.push(`/editcard/${index}`)"
+                    class="link-details" title="Use this card">
+                  <i class="ion ion-android-open">
+                    <q-icon name="open_in_new" />
+                  </i></a>
+              </figure>
             </div>
           </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.1s">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="Web 3" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">Web 3</a></h4>
-              <p>Web</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.2s">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="App 2" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">App 2</a></h4>
-              <p>App</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="Card 2" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">Card 2</a></h4>
-              <p>Card</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.1s">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="Web 2" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">Web 2</a></h4>
-              <p>Web</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.2s">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/Birthday_sliders.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="App 3" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">App 3</a></h4>
-              <p>App</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/party_card.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="Card 1" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">Card 1</a></h4>
-              <p>Card</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp"
-             data-wow-delay="0.1s">
-          <div class="portfolio-wrap">
-            <figure>
-              <img src="~assets/cards/party_card.png" class="img-fluid" alt="">
-              <a href="~assets/cards/Birthday_sliders.png" class="link-preview"
-                 data-lightbox="portfolio"
-                 data-title="Card 3" title="Preview"><i class="ion ion-eye">
-                <q-icon name="remove_red_eye" /></i></a>
-              <a href="#" class="link-details" title="More Details">
-                <i class="ion ion-android-open" >
-                  <q-icon name="open_in_new" />
-                </i></a>
-            </figure>
-
-            <div class="portfolio-info">
-              <h4><a href="#">Card 3</a></h4>
-              <p>Card</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.2s">
       </div>
-      </div>
+      <VueEasyLightbox
+        :visible="visible"
+        :imgs="imgs"
+        @hide="handleHide"
+      ></VueEasyLightbox>
     </div>
   </section>
 </template>
 
 <script>
-import { Loading, QSpinnerBars, colors } from 'quasar';
 import axios from 'axios';
+import VueEasyLightbox from 'vue-easy-lightbox';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -205,53 +63,49 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 
 export default {
   components: {
+    VueEasyLightbox,
   },
   name: 'statusComponent',
   data() {
     return {
       eventTypeOptions: [],
       eventType: [],
-      indices: [11, 12, 13, 14, 16, 23],
+      indices: [1, 2, 11, 22, 111, 222],
       selected: null,
       primary: '',
       imgs: '',
       visible: false,
+      items: [
+        {
+          id: 1,
+          text: 'All',
+          datafilter: '*',
+          class: 'filter-active',
+        }, // default active
+        {
+          id: 2,
+          text: 'Party',
+          class: '',
+          datafilter: '.filter-app',
+        },
+        {
+          id: 3,
+          text: 'Wedding',
+          class: '',
+          datafilter: '.filter-card',
+        },
+        {
+          id: 4,
+          text: 'Birthday',
+          class: '',
+          datafilter: '.filter-web',
+        },
+      ],
+      previous_active_id: 1,
     };
   },
   mounted() {
-    this.primary = colors.getBrand('primary');
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-      'login-token',
-    )}`;
 
-    Loading.show({
-      spinner: QSpinnerBars,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
-
-    axios
-      .get('/api/eventSystem/eventType')
-      .then((Response) => {
-        Loading.hide();
-        this.eventTypeOptions = Response.data.data;
-      })
-      .catch((e) => {
-        Loading.hide();
-        if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
-          this.$q.sessionStorage.set('login-token', null);
-          this.$router.push('/login');
-        }
-
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-      });
   },
   methods: {
     showCard(src) {
@@ -260,6 +114,26 @@ export default {
     },
     handleHide() {
       this.visible = false;
+    },
+    portfolioClick(id) {
+      if (this.previous_active_id === id) {
+        return; // no need to go further
+      }
+      this.items.find((item) => item.id === this.previous_active_id).class = ''; // remove the active class from old active li
+      this.items.find((item) => item.id === id).class = 'filter-active';// set active class to new li
+      this.previous_active_id = id;// store the new active li id
+      if (id === 1) {
+        this.indices = [1, 2, 11, 22, 111, 222, 333, 33];
+      }
+      if (id === 2) {
+        this.indices = [3, 33, 333, 3333];
+      }
+      if (id === 3) {
+        this.indices = [2, 22, 222, 2222];
+      }
+      if (id === 4) {
+        this.indices = [1, 11, 111, 1111];
+      }
     },
   },
 };
@@ -270,6 +144,9 @@ export default {
 
   #portfolio {
     padding: 60px 0;
+    animation: zoomInDown; /* referring directly to the animation's @keyframe declaration */
+    animation-duration: 1s; /* don't forget to set a duration! */
+    animate-delay: 0.1s;
   }
 
   #portfolio-flters {
@@ -315,14 +192,18 @@ export default {
 
   #portfolio .portfolio-item {
     position: relative;
-    height: 360px;
+    height: 200px;
     overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    animation: jackInTheBox; /* referring directly to the animation's @keyframe declaration */
+    animation-duration: 2s; /* don't forget to set a duration! */
+    animate-delay: 0.1s;
   }
 
   #portfolio .portfolio-item figure {
     background: #000;
     overflow: hidden;
-    height: 240px;
+    height: 200px;
     position: relative;
     border-radius: 4px 4px 0 0;
     margin: 0;
@@ -341,7 +222,7 @@ export default {
     line-height: 1;
     text-align: center;
     width: 36px;
-    height: 36px;
+    height: 30px;
     background: #fff;
     border-radius: 50%;
     transition: 0.2s linear;
@@ -388,7 +269,7 @@ export default {
     background: #fff;
     text-align: center;
     padding: 30px;
-    height: 90px;
+    height: 10px;
     border-radius: 0 0 3px 3px;
   }
 

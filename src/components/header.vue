@@ -604,7 +604,7 @@ export default {
         name: 'videos', label: 'About Us', icon: 'people', path: '/',
       },
       {
-        name: 'browsecards', label: 'Browse Cards', icon: 'style', path: '/',
+        name: 'portfolio', label: 'Browse Cards', icon: 'style', path: '/',
       },
       {
         name: 'reviews', label: 'Reviews', icon: 'rate_review', path: '/',

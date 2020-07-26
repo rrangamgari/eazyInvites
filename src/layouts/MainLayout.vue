@@ -6,7 +6,7 @@
       <carouselComponent id="images" v-show="showUS"></carouselComponent>
       <indiacarouselComponent id="images" v-show="showInd"></indiacarouselComponent>
       <video-component id="videos"></video-component>
-      <cards-component id="browsecards"></cards-component>
+      <cards-component id="portfolio"></cards-component>
       <reviewsCarouselComponent id="reviews"></reviewsCarouselComponent>
       <price-component id="prices" v-show="showUS"></price-component>
       <indianPriceComponent id="prices" v-show="!showUS"></indianPriceComponent>
@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      showUS: false,
+      showUS: true,
       showInd: false,
     };
   },
