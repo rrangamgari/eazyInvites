@@ -39,7 +39,7 @@
         mask="(###) ### - ####"
         unmasked-value
         fill-mask="#"
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Phone']"
+        :rules="[ isValidPhone]"
       />
       <!-- <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
@@ -62,7 +62,7 @@
         v-model="email"
         label="Email"
         lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
+        :rules="[ isValidEmail]"
       />
       <div style="padding-left: 0.5%; padding-right: 0.53%;"
        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 7%;' : ''}
@@ -141,16 +141,17 @@
                 {{(props.row.lastname === null||props.row.lastname === '')?"":props.row.lastname}}
               </div>
             </q-card-section>
-            <q-card-section class="flex">
-              <div v-show="(props.row.primaryPhone === null
+            <q-card-section style="line-height: 1px" v-show="(props.row.primaryPhone === null
               ||props.row.primaryPhone === '')?false:true">
+              <div>
                 Phone : <strong>{{ props.row.primaryPhone }}</strong>
               </div>
-              <div v-show="(props.row.email === null
+              </q-card-section>
+            <q-card-section style="line-height: 1px" v-show="(props.row.email === null
               ||props.row.email === '')?false:true">
+              <div >
                 Email : <strong>{{ props.row.email }}</strong></div>
             </q-card-section>
-
             <q-separator />
           </q-card>
         </div>
@@ -216,7 +217,7 @@
         mask="(###) ### - ####"
         unmasked-value
         fill-mask="#"
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Phone']"
+        :rules="[ isValidPhone]"
       />
       <!-- <q-input
         outlined
@@ -234,7 +235,7 @@
         v-model="email"
         label="Email"
         lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
+        :rules="[ isValidEmail]"
       />
       <div>
         <q-btn label="Add Contact" icon="person_add" type="submit" color="primary" class="q-mr-sm"/>
@@ -364,6 +365,20 @@ export default {
     },
   },
   methods: {
+    isValidEmail(val) {
+      if (this.phone === null || this.phone === '') {
+        const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+        return emailPattern.test(val) || 'Invalid email';
+      }
+      return null;
+    },
+    isValidPhone(val) {
+      console.log(this.email);
+      if ((this.email === null || this.email === '') && (val === null || val === '')) {
+        return 'Please enter Phone';
+      }
+      return null;
+    },
     factoryFn(file) {
       this.$q.notify({
         message: `Browser denied file download...${file}`,

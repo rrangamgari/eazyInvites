@@ -92,6 +92,14 @@
             class="q-ml-sm"
             @click="openDialog"
           />
+          <q-btn
+            label="More Options"
+            type="button"
+            color="primary"
+            flat
+            class="q-ml-sm"
+            @click="openMoreOptionsDialog"
+          />
           <q-stepper-navigation>
             <q-btn
               color="primary"
@@ -271,6 +279,7 @@ import axios from 'axios';
 import { Loading, QSpinnerBars, date } from 'quasar';
 import customMessageDialog from './customMessageDialog.vue';
 import addContactsComponent from './addContactsComponent.vue';
+import moreEventDetailsDialog from './moreEventDetailsDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -360,6 +369,28 @@ export default {
   },
 
   methods: {
+    openMoreOptionsDialog() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      this.$q.dialog({
+        component: moreEventDetailsDialog,
+        persistent: true,
+        parent: this,
+      }).onOk((me) => {
+        console.log('OK');
+        this.eventmessage = me;
+        // this.$router.push('/events');
+        console.log('OK2');
+      }).onCancel(() => {
+        console.log('Cancel');
+      }).onDismiss(() => {
+        console.log('Called on OK or Cancel');
+      });
+      Loading.hide();
+    },
     openDialog() {
       Loading.show({
         spinner: QSpinnerBars,

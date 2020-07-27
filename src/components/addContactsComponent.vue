@@ -58,11 +58,11 @@
         :style="`${cWidth > $q.screen.sizes.sm ? 'width: 33%' : ''}
         ${cWidth > 850 ? 'padding-top: 0px; width: 30%;' : ''}`"
         outlined
-        type="text"
+        type="email"
         v-model="email"
         label="Email"
         lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
+        :rules="[ val=> isValid]"
       />
       <div style="padding-left: 0.5%; padding-right: 0.53%;"
        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 7%;' : ''}
@@ -288,7 +288,7 @@
         mask="(###) ### - ####"
         unmasked-value
         fill-mask="#"
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Phone']"
+        :rules="[ isValidPhone ]"
       />
       <!-- <q-input
         outlined
@@ -306,7 +306,7 @@
         v-model="email"
         label="Email"
         lazy-rules
-        :rules="[ val=> val !== null && val !== '' || 'Please enter Email']"
+        :rules="[ isValidEmail]"
       />
       <div>
         <q-btn label="Add Contact" icon="person_add" type="submit" color="primary" class="q-mr-sm"/>
@@ -441,6 +441,20 @@ export default {
     },
   },
   methods: {
+    isValidEmail(val) {
+      if (this.phone === null || this.phone === '') {
+        const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+        return emailPattern.test(val) || 'Invalid email';
+      }
+      return null;
+    },
+    isValidPhone(val) {
+      console.log(this.email);
+      if ((this.email === null || this.email === '') && (val === null || val === '')) {
+        return 'Please enter Phone';
+      }
+      return null;
+    },
     factoryFn(file) {
       this.$q.notify({
         message: `Browser denied file download...${file}`,
@@ -620,6 +634,7 @@ export default {
           primaryPhone: this.phone,
           secondaryPhone: this.phone2,
           email: this.email,
+          country: this.$q.localStorage.getItem('country-token'),
         })
         .then((response) => {
           // JSON responses are automatically parsed.

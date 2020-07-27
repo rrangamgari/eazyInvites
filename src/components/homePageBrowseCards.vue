@@ -70,7 +70,7 @@ export default {
     return {
       eventTypeOptions: [],
       eventType: [],
-      indices: [1, 2, 11, 22, 111, 222],
+      indices: [3, 33, 333, 3333, 1, 2, 11, 22, 111, 222, 2222, 1111],
       selected: null,
       primary: '',
       imgs: '',
@@ -119,11 +119,12 @@ export default {
       if (this.previous_active_id === id) {
         return; // no need to go further
       }
+      this.indices = [];
       this.items.find((item) => item.id === this.previous_active_id).class = ''; // remove the active class from old active li
       this.items.find((item) => item.id === id).class = 'filter-active';// set active class to new li
       this.previous_active_id = id;// store the new active li id
       if (id === 1) {
-        this.indices = [1, 2, 11, 22, 111, 222, 333, 33];
+        this.indices = [1, 2, 3, 11, 22, 33, 111, 222, 333, 1111, 2222, 3333];
       }
       if (id === 2) {
         this.indices = [3, 33, 333, 3333];
