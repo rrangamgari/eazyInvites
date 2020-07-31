@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="q-pa-lg row warp justify-left items-center" style="background: #f7f7f7;">
+    <div class="q-pa-lg row warp justify-left items-center">
       <div class="col-12 q-px-md q-py-sm row">
         <q-select class="col-8" style="max-width: 300px;" label="Event Type"
          outlined v-model="eventType" :options="eventTypeOptions"/>
@@ -9,22 +9,22 @@
          @click="selected !== null ? $router.push(`/editcard/${selected}`) : ''"/>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 q-px-md q-py-sm"
-       v-for="index in indices" :key="index">
+       v-for="card in cards" :key="card.id">
             <section id="portfolio"  class="section-bg" >
               <div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
                 <div class="portfolio-wrap">
                   <figure>
                     <img height="250px" :ratio="16/9" style="width: 100%;"
-                     :src="require(`../assets/home/ez${index}.jpg`)" >
-                    <a @click= "showCard(require(`../assets/home/ez${index}.jpg`))"
-                    data-lightbox="portfolio" data-title="Card"
-                    class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
-                    <a  @click= "$router.push(`/editcard/${index}`)"
+                     :src="card.img" >
+                    <a @click="showCard(card.img)"
+                     data-lightbox="portfolio" data-title="Card"
+                     class="link-preview" title="Preview"><q-icon name="remove_red_eye" /></a>
+                    <a @click="$router.push(`/editcard/${card.id}`)"
                      class="link-details" title="Use this card">
-                    <i class="ion ion-android-open"></i></a>
+                    <q-icon name="open_in_new" /></a>
                   </figure>
                   <div class="portfolio-info">
-                    <h4>{{index}}</h4>
+                    <h4>{{card.id}}</h4>
                   </div>
                 </div>
               </div>
@@ -56,9 +56,9 @@ export default {
   name: 'statusComponent',
   data() {
     return {
-      eventTypeOptions: [],
-      eventType: [],
-      indices: [11, 12, 13, 14, 16, 23],
+      eventTypeOptions: [{ value: 0, label: 'All' }],
+      eventType: { value: 0, label: 'All' },
+      data: [],
       selected: null,
       primary: '',
       imgs: '',
@@ -67,40 +67,55 @@ export default {
   },
   mounted() {
     this.primary = colors.getBrand('primary');
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-      'login-token',
-    )}`;
 
-    Loading.show({
-      spinner: QSpinnerBars,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token') || ''}`;
 
     axios
       .get('/api/eventSystem/eventType')
       .then((Response) => {
-        Loading.hide();
-        this.eventTypeOptions = Response.data.data;
-      })
-      .catch((e) => {
-        Loading.hide();
-        if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
-          this.$q.sessionStorage.set('login-token', null);
-          this.$router.push('/login');
-        }
-
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
+        this.eventTypeOptions = this.eventTypeOptions.concat(Response.data.data);
       });
+
+    this.loadCards();
+  },
+  computed: {
+    cards() {
+      if (!this.eventType.value) return this.data;
+      return this.data.filter((e) => (e.eventTypeId === this.eventType.value));
+    },
   },
   methods: {
+    loadCards(eventTypeId) {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
+      axios
+        .get(`/api/cards${eventTypeId ? `?eventType=${eventTypeId}` : ''}`)
+        .then((Response) => {
+          this.data = Response.data.data;
+          console.log(this.data);
+          Loading.hide();
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.sessionStorage.remove('login-token');
+            this.$q.sessionStorage.set('login-token', null);
+            this.$router.push('/login');
+          }
+
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
     showCard(src) {
       this.imgs = src;
       this.visible = true;
@@ -111,3 +126,176 @@ export default {
   },
 };
 </script>
+
+<style>
+  /* Portfolio Section
+--------------------------------*/
+
+  #portfolio {
+    padding: 60px 0;
+    animation: zoomInDown; /* referring directly to the animation's @keyframe declaration */
+    animation-duration: 1s; /* don't forget to set a duration! */
+    animate-delay: 0.1s;
+  }
+
+  #portfolio-flters {
+    padding: 0;
+    margin: 5px 0 35px 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  #portfolio-flters li {
+    cursor: pointer;
+    margin: 15px 15px 15px 0;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #666666;
+    border-radius: 4px;
+    text-transform: uppercase;
+    background: #fff;
+    margin-bottom: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  #portfolio-flters li:hover,
+  #portfolio-flters li.filter-active {
+    background: #18d26e;
+    color: #fff;
+  }
+
+  #portfolio-flters li:last-child {
+    margin-right: 0;
+  }
+
+  #portfolio .portfolio-wrap {
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+  }
+
+  #portfolio .portfolio-wrap:hover {
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.16);
+  }
+
+  #portfolio .portfolio-item {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    animation: jackInTheBox; /* referring directly to the animation's @keyframe declaration */
+    animation-duration: 2s; /* don't forget to set a duration! */
+    animate-delay: 0.1s;
+  }
+
+  #portfolio .portfolio-item figure {
+    background: #000;
+    overflow: hidden;
+    height: 200px;
+    position: relative;
+    border-radius: 4px 4px 0 0;
+    margin: 0;
+  }
+
+  #portfolio .portfolio-item figure:hover img {
+    opacity: 0.4;
+    transition: 0.3s;
+  }
+
+  #portfolio .portfolio-item figure .link-preview,
+  #portfolio .portfolio-item figure .link-details {
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    line-height: 1;
+    text-align: center;
+    width: 36px;
+    height: 30px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.2s linear;
+  }
+
+  #portfolio .portfolio-item figure .link-preview i,
+  #portfolio .portfolio-item figure .link-details i {
+    padding-top: 6px;
+    font-size: 22px;
+    color: #333;
+  }
+
+  #portfolio .portfolio-item figure .link-preview:hover,
+  #portfolio .portfolio-item figure .link-details:hover {
+    background: #18d26e;
+  }
+
+  #portfolio .portfolio-item figure .link-preview:hover i,
+  #portfolio .portfolio-item figure .link-details:hover i {
+    color: #fff;
+  }
+
+  #portfolio .portfolio-item figure .link-preview {
+    left: calc(50% - 38px);
+    top: calc(50% - 18px);
+  }
+
+  #portfolio .portfolio-item figure .link-details {
+    right: calc(50% - 38px);
+    top: calc(50% - 18px);
+  }
+
+  #portfolio .portfolio-item figure:hover .link-preview {
+    opacity: 1;
+    left: calc(50% - 44px);
+  }
+
+  #portfolio .portfolio-item figure:hover .link-details {
+    opacity: 1;
+    right: calc(50% - 44px);
+  }
+
+  #portfolio .portfolio-item .portfolio-info {
+    background: #fff;
+    text-align: center;
+    padding: 30px;
+    height: 10px;
+    border-radius: 0 0 3px 3px;
+  }
+
+  #portfolio .portfolio-item .portfolio-info h4 {
+    font-size: 18px;
+    line-height: 1px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-bottom: 0;
+  }
+
+  #portfolio .portfolio-item .portfolio-info h4 a {
+    color: #333;
+  }
+
+  #portfolio .portfolio-item .portfolio-info h4 a:hover {
+    color: #18d26e;
+  }
+
+  #portfolio .portfolio-item .portfolio-info p {
+    padding: 0;
+    margin: 0;
+    color: #b8b8b8;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  .portfolio h3 {
+    font-weight: 400;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #334242;
+    margin-bottom: 10px;
+  }
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

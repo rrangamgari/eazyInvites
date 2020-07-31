@@ -19,7 +19,7 @@ import browseCardsComponent from '../components/browseCards.vue';
 
 
 export default {
-  name: 'browseCards',
+  name: 'browseCardsLayout',
   components: {
     headerComponent,
     footerComponent,

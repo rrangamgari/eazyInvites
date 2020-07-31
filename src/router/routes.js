@@ -16,13 +16,8 @@ const routes = [
   },
   {
     path: '/createInvitation',
-    name: 'createEvent',
+    name: 'createEvent', // Dependency Exists in quickInvitaitonComponent.vue
     component: () => import('layouts/createInvitationLayout.vue'),
-    children: [
-      { path: '', component: () => import('components/header.vue') },
-      { path: '', component: () => import('components/footer.vue') },
-
-    ],
   },
   {
     path: '/addContacts',
@@ -46,10 +41,12 @@ const routes = [
   },
   {
     path: '/browsecards',
+    name: 'browsecards',
     component: () => import('layouts/browseCardsLayout.vue'),
   },
   {
     path: '/editcard',
+    name: 'editcard',
     component: () => import('layouts/editCardLayout.vue'),
     children: [
       { path: '', redirect: '/browseCards' },

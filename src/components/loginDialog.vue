@@ -4,10 +4,7 @@
     enter-active-class="animated fadeIn"
     leave-active-class="animated fadeOut"
   >
-<q-dialog ref="dialog" @hide="onDialogHide" :persistent="persistent"
- :no-backdrop-dismiss="noBackdropDismiss" :no-esc-dismiss="noEscDismiss"
- :no-route-dismiss="noRouteDismiss"
- :transition-show="transitionShow" :transition-hide="transitionHide">
+  <q-dialog ref="dialog" @hide="onDialogHide" v-bind="$props">
     <q-card :style="`height: 80%; width: 400px; background-color: ${body[i]}`">
       <q-card-section :style="`height: 55px; padding: 0px; background-color: ${head[i]}`">
         <q-toolbar style="padding-right: 4px; height: 50px;">

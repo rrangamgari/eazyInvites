@@ -1,6 +1,7 @@
 <template>
   <q-layout view="lHh lpr fff"> <!-- Be sure to play with the Layout demo on docs -->
 
+    <header-component></header-component>
 
     <!-- (Optional) The Footer -->
     <footer-component></footer-component>
@@ -20,17 +21,14 @@
 
 <script>
 import createInvitationComponent from '../components/quickInvitationComponent.vue';
-
-
+import headerComponent from '../components/header.vue';
 import footerComponent from '../components/footer.vue';
 
-
 export default {
-  name: 'login',
+  name: 'createInvitationLayout',
   components: {
     createInvitationComponent,
-
-
+    headerComponent,
     footerComponent,
   },
 };

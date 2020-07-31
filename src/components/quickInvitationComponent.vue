@@ -18,13 +18,13 @@
             <q-input
               v-model="eventtitle"
               type="text"
-               outlined
+              outlined
               label="Event Title"
               name="eventtitle"
             />
             <q-select
               name="eventType"
-               outlined
+              outlined
               label="Event Type"
               v-model="eventType"
               :options="options"
@@ -68,11 +68,13 @@
               </template>
             </q-input>
             <q-file
-               outlined
+              :disable="card"
+              outlined
               v-model="file"
               label="Upload Invitation"
               style="padding-right:15px"
-               :rules="[val => !!val || 'Please upload your invitation']">
+              lazy-rules
+              :rules="[val => val || 'Please upload your invitation']">
               <template v-slot:append>
                 <q-icon name="attach_file" />
               </template>
@@ -296,6 +298,7 @@ export default {
     return {
       file: null,
       fileId: null,
+      card: false,
       first: false,
       url: '',
       step: 1,
@@ -434,45 +437,17 @@ export default {
           thickness: '3',
         });
         this.step = 2;
-        if (this.file !== null) this.url = URL.createObjectURL(this.file);
+        if (!this.card && this.file !== null) this.url = URL.createObjectURL(this.file);
         Loading.hide();
-        // if (this.dataLoaded) {
-        //   Loading.hide();
-        //   return;
-        // }
-
-        // axios
-        //   .get('/api/userEvents/userguestlist')
-        //   .then((response) => {
-        //     Loading.hide();
-        //     this.data = response.data.data;
-        //     this.dataLoaded = true;
-        //     console.log(this.data);
-        //   })
-        //   .catch((e) => {
-        //     Loading.hide();
-        //     if (e.message === 'Request failed with status code 401') {
-        //       this.$q.sessionStorage.remove('login-token');
-        //       this.$router.push('/login');
-        //     }
-
-        //     this.data = undefined;
-
-        //     this.$q.notify({
-        //       color: 'red-5',
-        //       textColor: 'white',
-        //       icon: 'error',
-        //       message: e.message,
-        //       position: 'top',
-        //     });
-        //   });
       }
     },
-
     onReset() {
-      this.eventmessage = null;
-      this.eventType = null;
-      this.model = null;
+      this.eventtitle = '';
+      this.eventType = '';
+      this.eventdate = date.formatDate(Date.now(), 'DD/MM/YYYY');
+      this.eventtime = '00:00';
+      if (!this.card) this.file = null;
+      this.eventmessage = '';
     },
     firstnameValidation(val) {
       if (val === '') {
@@ -543,7 +518,7 @@ export default {
       const from = `${this.eventdate}`.split('/');
       const fromMonth = (from[1]);
       const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
-      const startTime = `${this.eventtime}`;
+      const startTime = `${this.first ? this.eventtime : '00:00'}`;
 
       const eventDetails = {
         eventtypeid: this.eventType.value,
@@ -551,14 +526,14 @@ export default {
         eventmessage: this.eventmessage,
         startdate: new Date(`${startDate}T${startTime}:00`),
         enddate: new Date(`${startDate}T${startTime}:00`),
-        attachmentlink: null,
+        attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
       };
 
       const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
 
       const formData = new FormData();
-      formData.append('file', this.file);
+      formData.append('file', this.card ? null : this.file);
       formData.append('eventDetails', new Blob([JSON.stringify(eventDetails)], { type: 'application/json' }));
       formData.append('eventGuests', new Blob([JSON.stringify(eventMemberIdList)], { type: 'application/json' }));
 
@@ -600,6 +575,14 @@ export default {
     },
   },
   mounted() {
+    const { id, file, data } = this.$route.params;
+    if (id) {
+      this.card = true;
+      this.fileId = id;
+      this.file = file;
+      this.url = data;
+    }
+    console.log(this.fileId, this.file, this.url);
     Loading.show({
       spinner: QSpinnerBars,
       spinnerColor: 'primary',

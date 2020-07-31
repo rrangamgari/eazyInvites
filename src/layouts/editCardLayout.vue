@@ -19,7 +19,7 @@ import editCardComponent from '../components/editCard.vue';
 
 
 export default {
-  name: 'browseCards',
+  name: 'editCardLayout',
   components: {
     headerComponent,
     footerComponent,
