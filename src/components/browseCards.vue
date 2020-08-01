@@ -15,8 +15,11 @@
                 <div class="portfolio-wrap">
                   <figure>
                     <img height="250px" :ratio="16/9" style="width: 100%;"
-                     :src="card.img" >
-                    <a @click="showCard(card.img)"
+                     :src=
+                       "require(`../assets/cards/ez_${card.eventTypeId}_preview_${card.img}`)" >
+                    <a @click=
+                         "showCard
+                         (require(`../assets/cards/ez_${card.eventTypeId}_${card.img}`))"
                      data-lightbox="portfolio" data-title="Card"
                      class="link-preview" title="Preview"><q-icon name="remove_red_eye" /></a>
                     <a @click="$router.push(`/editcard/${card.id}`)"
@@ -85,7 +88,7 @@ export default {
     },
   },
   methods: {
-    loadCards(eventTypeId) {
+    loadCards() {
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -93,7 +96,7 @@ export default {
       });
 
       axios
-        .get(`/api/cards${eventTypeId ? `?eventType=${eventTypeId}` : ''}`)
+        .get('/api/cards/files')
         .then((Response) => {
           this.data = Response.data.data;
           console.log(this.data);

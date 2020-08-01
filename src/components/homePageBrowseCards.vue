@@ -100,6 +100,11 @@ export default {
           class: '',
           datafilter: '.filter-web',
         },
+        {
+          id: 5,
+          text: 'More...',
+          class: '',
+        },
       ],
       previous_active_id: 1,
     };
@@ -134,6 +139,8 @@ export default {
       }
       if (id === 4) {
         this.indices = [1, 11, 111, 1111];
+      } else {
+        this.$router.push('/browseCards');
       }
     },
   },

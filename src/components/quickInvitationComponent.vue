@@ -56,6 +56,8 @@
                     size="50px"
           />
             </div>
+          <div class="row">
+            <div style="width: 84%;">
             <q-input v-show="first"
              v-model="eventtime"  outlined mask="time" stack-label label="Event Time">
               <template v-slot:append>
@@ -79,6 +81,13 @@
                 <q-icon name="attach_file" />
               </template>
             </q-file>
+          </div>
+          <div style="width: 4%;"/>
+            <a @click="$router.push('/browseCards')"
+               class="link-details primary cursor" title="Browse Cards">
+              <q-icon name="insert_invitation" title="Browse Cards" size="xl" color="primary"/></a>
+
+  </div>
             <q-input
               v-model="eventmessage"
                outlined
