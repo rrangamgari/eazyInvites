@@ -657,6 +657,7 @@ export default {
                 email: this.email,
               },
             );
+            this.loadContacts();
           }
           // this.data = this.data.concat(response.data.data);
           Loading.hide();

@@ -88,6 +88,13 @@
               <q-icon name="insert_invitation" title="Browse Cards" size="xl" color="primary"/></a>
 
   </div>
+          <q-input
+            v-model="hostname"
+            type="text"
+            outlined
+            label="Host"
+            name="host"
+          />
             <q-input
               v-model="eventmessage"
                outlined
@@ -128,6 +135,38 @@
             />
           </q-stepper-navigation>
         </q-form>
+          <div class="absolute" style="bottom: 50%; right: 10%;">
+            <div>
+              <q-fab
+                v-model="fab1"
+                color="primary"
+                glossy
+                icon="keyboard_arrow_left"
+                direction="left"
+                :label="fabLabel"
+                label-position="right"
+                @mouseover="fabLabelChange"
+                @mouseleave="fabLabelChanged"
+                @click="fabLabelChange"
+                push
+              >
+
+                <q-fab-action square  label-position="bottom"
+                              color="primary"
+                              @click="toggeGPS" icon="mail" label="RSVP" anchor="center"/>
+                <q-fab-action square  label-position="bottom"
+                              color="secondary" anchor="center"
+                              @click="onEventTypeChange" icon="alarm" label="Add End-Time" />
+                <q-fab-action square  label-position="bottom"
+                              color="orange"
+                              @click="onEventTypeChange" icon="airplay" label="Add Venue" />
+                <q-fab-action square  label-position="bottom"
+                              color="accent"
+                              @click="onEventTypeChange" icon="room" label="Add GPS" />
+              </q-fab>
+            </div>
+
+          </div>
         </q-page>
       </q-step>
       <q-step
@@ -305,6 +344,7 @@ export default {
   },
   data() {
     return {
+      fabLabel: '',
       file: null,
       fileId: null,
       card: false,
@@ -537,6 +577,7 @@ export default {
         enddate: new Date(`${startDate}T${startTime}:00`),
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
+        hostedby: this.hostname,
       };
 
       const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
@@ -581,6 +622,15 @@ export default {
           });
           Loading.hide();
         });
+    },
+    fabLabelChange() {
+      this.fabLabel = 'Add More Options';
+    },
+    fabLabelChanged() {
+      this.fabLabel = '';
+    },
+    toggeGPS() {
+
     },
   },
   mounted() {

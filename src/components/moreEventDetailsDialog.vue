@@ -19,55 +19,42 @@
         </q-toolbar>
       </q-header>
       <q-page-container>
-        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
-             >
-          <q-card clickable v-ripple @click="onCardClick(invite)">
-            <q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
-                {{invite}}
+        <div class="col-xs-12 col-sm-12 col-md-12 col-xl-12
+              col-lg-12 q-px-md q-py-sm">
+          <q-table
+            title=""
+            :data="data"
+            :columns="columns"
+            grid
+            color="primary"
+            row-key="eventmemberid"
+            icon-left="people"
+            hide-bottom
+            hide-header
+            :rows-per-page-options="[0]"
+            :pagination="{rowsPerPage: 0}"
+            selection="multiple"
+            :selected.sync="selected"
+            :filter="filter"
+            @update:selected="(newSelected) => $emit('update:selected', newSelected)"
+          >
+            <template v-slot:item="props">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-xl-12
+              col-lg-12 q-px-md q-py-sm grid-style-transition"
+                   :style="props.selected ? 'transform: scale(0.95);' : ''">
+                <q-card :style="props.selected ? 'background-color:#F5F5F5;' : ''">
+                  <q-card-section class="flex text-primary"
+                                  :style="{ fontSize: '20px' }">
+                    <div>
+                      <q-checkbox dense v-model="props.selected" />
+                      &nbsp;&nbsp;&nbsp;{{ props.row.featurename }}
+                    </div>
+                  </q-card-section>
+                  <q-separator />
+                </q-card>
               </div>
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
-        >
-          <q-card clickable v-ripple @click="onCardClick(invite1)">
-            <q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium text-grey-7" style="font-size: 16px;">
-                {{invite1}}
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
-        >
-          <q-card clickable v-ripple @click="onCardClick(invite2)">
-            <q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
-                {{invite2}}
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
-        >
-          <q-card clickable v-ripple @click="onCardClick(invite3)">
-            <q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium text-grey-7" style="font-size: 16px;">
-                {{invite3}}
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
-        >
-          <q-card clickable v-ripple @click="onCardClick(invite4)">
-            <q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
-                {{invite4}}
-              </div>
-            </q-card-section>
-          </q-card>
+            </template>
+          </q-table>
         </div>
       </q-page-container>
     </q-layout>
@@ -79,21 +66,56 @@
 export default {
   components: {
   },
-  props: [
-    'login',
-  ],
+  model: {
+    prop: 'selected',
+    event: 'update:selected',
+  },
+  props: {
+    offset: {
+      type: Number,
+      default: 0,
+    },
+    select: Boolean,
+    selected: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
-      invite: 'Dear {{Guest Name}}, We invite you for a undefined party.\n If you are interested to attend please reply "yes" and we will notify him.\n Best Regards {{Inviter}}',
-      invite1: 'Dear {{Guest Name}}, We invite you to be with us as we celebrate our new life together….\n Best Regards {{Inviter}}',
-      invite2: 'Dear {{Guest Name}}, We Invite you to celebrate the marriage of our children ..\n Guddu and Baddu \n.\n Best Regards {{Inviter}}',
-      invite3: 'Dear {{Guest Name}}, We invite you for a undefined party.\n If you are interested to attend please reply "yes" and we will notify him.\n Best Regards {{Inviter}}',
-      invite4: 'Dear {{Guest Name}}, We invite you for a undefined party.\n If you are interested to attend please reply "yes" and we will notify him.\n Best Regards {{Inviter}}',
+      columns: [
+        {
+          name: 'featurename',
+          required: true,
+          label: 'Feature',
+          align: 'left',
+          field: (row) => `${row.featurename}`,
+          sortable: true,
+        },
+      ],
+
+      data: [
+        {
+          featurename: 'Add GPS Location',
+        },
+        {
+          featurename: 'Remove RSVP',
+        },
+        {
+          featurename: 'Remove Kids Option',
+        },
+        {
+          featurename: 'Add GPS Location',
+        },
+      ],
       tab: this.$props.login ? 'login' : 'register',
       i: 0,
       head: ['primary', 'primary'],
       body: ['white', 'white'],
     };
+  },
+  mounted: {
+
   },
   methods: {
     onCardClick(eventdetailsid) {

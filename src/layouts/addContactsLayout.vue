@@ -31,9 +31,9 @@ export default {
     };
   },
   watch: {
-    '$q.screen.width': function () {
-      this.mobileView = this.$q.screen.width <= 600;
-    },
+    // '$q.screen.width': function () {
+    // this.mobileView = this.$q.screen.width <= 600;
+    // },
   },
 };
 </script>
