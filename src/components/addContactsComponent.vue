@@ -70,7 +70,7 @@
         <q-btn :label="cWidth > $q.screen.sizes.sm ? '' : 'Add Contact'"
          :title="cWidth > $q.screen.sizes.sm ? 'Add Contact' : ''" icon="person_add"
          :dense="cWidth > $q.screen.sizes.sm" type="submit" color="primary" class="q-mr-sm"/>
-        <q-btn :label="cWidth > $q.screen.sizes.sm ? '' : 'Reset'"
+        <q-btn :label="cWidth > $q.screen.sizes.sm ? '' : 'Reset'" style="margin-top: 5px;"
          :title="cWidth > $q.screen.sizes.sm ? 'Reset' : ''" icon="autorenew"
          :dense="cWidth > $q.screen.sizes.sm" type="reset" color="primary" flat/>
       </div>

@@ -75,7 +75,7 @@ const routes = [
     component: () => import('layouts/invitesRsvpLayout.vue'),
   },
   {
-    path: '/view/:viewInviteId',
+    path: '/view/:viewInviteId/:viewInviteAlpha',
     name: 'guestInvitesRsvp',
     component: () => import('layouts/guestInvitesRsvpLayout.vue'),
     props: true,
