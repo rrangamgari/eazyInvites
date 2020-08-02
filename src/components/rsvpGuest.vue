@@ -170,6 +170,7 @@ export default {
   data() {
     return {
       viewInviteId: '',
+      viewInviteAlpha: '',
       event: {},
       eventType: [],
       height: 50,
@@ -201,7 +202,8 @@ export default {
   },
   mounted() {
     this.viewInviteId = this.$route.params.viewInviteId;
-    console.log(this.viewInviteId);
+    this.viewInviteAlpha = this.$route.params.viewInviteAlpha;
+    console.log(`$${this.viewInviteId}/${this.viewInviteAlpha}`);
     this.height = document.getElementById('header').clientHeight;
     Loading.show({
       spinner: QSpinnerBars,
@@ -210,7 +212,7 @@ export default {
     });
 
     axios
-      .get(`/api/userEvents/guestInvites/${this.viewInviteId}`)
+      .get(`/api/userEvents/guestInvites/${this.viewInviteId}/${this.viewInviteAlpha}`)
       .then((response) => {
         this.event = response.data.data;
         this.file = this.event.attachmentlink;
@@ -254,7 +256,7 @@ export default {
         thickness: '3',
       });
 
-      axios.put(`/api/userEvents/guestInvites/${this.viewInviteId}`,
+      axios.put(`/api/userEvents/guestInvites/${this.viewInviteId}/${this.viewInviteAlpha}`,
         {
           eventMembers: { firstname: this.name, primaryPhone: this.phone, email: this.email },
           status: { eventstatusid: this.status, eventstatusdescription: '' },
