@@ -1222,3 +1222,11 @@ section {
   font-size: 14px;
   text-transform: uppercase;
 }
+
+body{
+  background-image: url(../assets/home/body.jpg);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}

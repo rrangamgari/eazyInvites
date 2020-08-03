@@ -55,7 +55,7 @@
         @reset="onReset"
       >
         <q-input
-          outlined
+
           class="col-12 q-pb-lg"
           type="text"
           v-model="name"
@@ -65,7 +65,7 @@
         />
 
         <q-input
-          outlined
+
           class="col-12 q-pb-lg"
           type="text"
           v-model="phone"
@@ -76,7 +76,7 @@
         />
 
         <q-input
-          outlined
+
           class="col-12 q-pb-md"
           type="text"
           v-model="email"
@@ -85,7 +85,7 @@
 
         <q-input
           v-show="status !== 4"
-          outlined
+
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pr-xs' : ''}`"
           type="number"
@@ -99,7 +99,7 @@
 
         <q-input
           v-show="status !== 4"
-          outlined
+
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pl-xs' : ''}`"
           :disable="!event.eventallowkids"
@@ -113,7 +113,7 @@
         />
 
         <q-input
-          outlined
+
           class="col-12 q-pb-md"
           type="textarea"
           v-model="message"
@@ -124,7 +124,7 @@
         <!--div class="col-12" v-for="(poll,index) in polls" :key="index">
           <q-field
             class="q-pt-md q-pb-md"
-            outlined
+
             label-width="12"
             :label="poll.question"
             v-model="poll.answer"

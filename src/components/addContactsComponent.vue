@@ -12,7 +12,7 @@
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
         :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
-        outlined
+
         type="text"
         v-model="firstname"
         label="First Name"
@@ -22,7 +22,7 @@
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
         :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
-        outlined
+
         type="text"
         v-model="lastname"
         label="Last Name"
@@ -32,7 +32,7 @@
       <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
         :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
-        outlined
+
         v-model="phone"
         label="Phone Number"
         lazy-rules
@@ -44,7 +44,7 @@
       <!-- <q-input
         style="padding-left: 0.5%; padding-right: 0.5%;"
         :style="`${cWidth > $q.screen.sizes.sm ? 'width: 20%;' : ''}`"
-        outlined
+
         v-model="phone2"
         label="Secondary Phone Number"
         lazy-rules
@@ -57,7 +57,7 @@
         style="padding-left: 0.5%; padding-right: 0.5%;"
         :style="`${cWidth > $q.screen.sizes.sm ? 'width: 33%' : ''}
         ${cWidth > 850 ? 'padding-top: 0px; width: 30%;' : ''}`"
-        outlined
+
         type="email"
         v-model="email"
         label="Email"
@@ -265,7 +265,7 @@
       class="q-gutter-md q-pa-md q-pr-lg"
     >
       <q-input
-        outlined
+
         type="text"
         v-model="firstname"
         label="First Name"
@@ -273,7 +273,7 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Firstname']"
       />
       <q-input
-        outlined
+
         type="text"
         v-model="lastname"
         label="Last Name"
@@ -281,7 +281,7 @@
         :rules="[ val => true || 'Please enter Firstname']"
       />
       <q-input
-        outlined
+
         v-model="phone"
         label="Phone Number"
         lazy-rules
@@ -291,7 +291,7 @@
         :rules="[ isValidPhone ]"
       />
       <!-- <q-input
-        outlined
+
         v-model="phone2"
         label="Secondary Phone Number"
         lazy-rules
@@ -301,7 +301,7 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Secondary Phone']"
       /> -->
       <q-input
-        outlined
+
         type="text"
         v-model="email"
         label="Email"

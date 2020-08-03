@@ -18,13 +18,13 @@
             <q-input
               v-model="eventtitle"
               type="text"
-              outlined
+
               label="Event Title"
               name="eventtitle"
             />
             <q-select
               name="eventType"
-              outlined
+
               label="Event Type"
               v-model="eventType"
               :options="options"
@@ -38,7 +38,7 @@
             </q-select>
             <div class="row">
             <q-input style="width: 80%;"
-             v-model="eventdate"  outlined   stack-label label="Event Date"
+             v-model="eventdate"     stack-label label="Event Date"
                      :rules="[val => !!val || 'Event Date is required']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -59,7 +59,7 @@
           <div class="row">
             <div style="width: 84%;">
             <q-input v-show="first"
-             v-model="eventtime"  outlined mask="time" stack-label label="Event Time">
+             v-model="eventtime"   mask="time" stack-label label="Event Time">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
@@ -71,7 +71,7 @@
             </q-input>
             <q-file
               :disable="card"
-              outlined
+
               v-model="file"
               label="Upload Invitation"
               style="padding-right:15px"
@@ -91,13 +91,13 @@
           <q-input
             v-model="hostname"
             type="text"
-            outlined
+
             label="Host"
             name="host"
           />
             <q-input
               v-model="eventmessage"
-               outlined
+
               autogrow
               label="Custom Message"
               name="eventmessage"
@@ -299,7 +299,7 @@
       </div>
 
       <q-form @submit="applyCoupon" class="q-pa-sm row">
-        <q-input outlined class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
+        <q-input  class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
           :class="`${$q.screen.gt.xs ? 'q-mr-sm' : ''}`"
           type="text" label="Coupon" v-model="coupon" clearable
         />

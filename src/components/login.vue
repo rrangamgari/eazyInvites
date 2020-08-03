@@ -8,7 +8,7 @@
       style="width: 350px;"
     >
       <q-input
-        outlined
+
         :dark="$props.dark"
         type="text"
         v-model="name"
@@ -22,7 +22,7 @@
       />
 
       <q-input
-        outlined
+
         :dark="$props.dark"
         type="password"
         v-model="age"

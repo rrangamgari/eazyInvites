@@ -130,14 +130,11 @@ export default {
       this.previous_active_id = id;// store the new active li id
       if (id === 1) {
         this.indices = [1, 2, 3, 11, 22, 33, 111, 222, 333, 1111, 2222, 3333];
-      }
-      if (id === 2) {
+      } else if (id === 2) {
         this.indices = [3, 33, 333, 3333];
-      }
-      if (id === 3) {
+      } else if (id === 3) {
         this.indices = [2, 22, 222, 2222];
-      }
-      if (id === 4) {
+      } else if (id === 4) {
         this.indices = [1, 11, 111, 1111];
       } else {
         this.$router.push('/browseCards');

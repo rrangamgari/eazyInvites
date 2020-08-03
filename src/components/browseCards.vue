@@ -3,7 +3,7 @@
     <div class="q-pa-lg row warp justify-left items-center">
       <div class="col-12 q-px-md q-py-sm row">
         <q-select class="col-8" style="max-width: 300px;" label="Event Type"
-         outlined v-model="eventType" :options="eventTypeOptions"/>
+          v-model="eventType" :options="eventTypeOptions"/>
          <q-space/>
         <q-btn style="max-width: 100px;" class="col-3" no-caps label="Select" color="primary"
          @click="selected !== null ? $router.push(`/editcard/${selected}`) : ''"/>

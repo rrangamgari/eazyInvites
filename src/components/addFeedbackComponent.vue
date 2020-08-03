@@ -33,7 +33,7 @@
                 type="text"
                 v-model="name"
                 name="name"
-                outlined
+
                 lazy-rules='ondemand'
                 :rules="[ val=> val !== null && val !== '' || 'Please enter your Name']"
               />
@@ -42,12 +42,12 @@
                 type="textarea"
                 v-model="comment"
                 name="comments"
-                outlined
+
                 autogrow
               />
               <q-field
                 class="q-pt-md q-pb-md"
-                outlined
+
                 label="How likely are you to recommend us to a friend?"
                 v-model="group"
                 lazy-rules="ondemand"

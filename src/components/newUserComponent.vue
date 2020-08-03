@@ -8,7 +8,7 @@
       style="width: 350px;"
     >
       <q-input
-        outlined
+
         :dark="$props.dark"
         type="text"
         v-model="firstname"
@@ -18,7 +18,7 @@
         autofocus
       />
       <q-input
-        outlined
+
         :dark="$props.dark"
         type="text"
         v-model="lastname"
@@ -27,7 +27,7 @@
         :rules="[ val=> val !== null && val !== '' || 'Please enter Lastname']"
       />
       <q-input
-        outlined
+
         :dark="$props.dark"
         v-model="phone"
         label="Phone Number"
@@ -39,7 +39,7 @@
       />
 
       <q-input
-        outlined
+
         :dark="$props.dark"
         :type="passwordFieldType"
         v-model="password"
@@ -52,7 +52,7 @@
         </template>
       </q-input>
       <q-input
-        outlined
+
         :dark="$props.dark"
         type="password"
         v-model="cpassword"
