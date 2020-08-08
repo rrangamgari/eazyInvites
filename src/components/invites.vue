@@ -4,31 +4,30 @@
      v-for="(title,index) in titles" :key="index">
       <div class="text-h6 q-px-md q-pb-md text-left col-12">
         {{ ((invites(index).length == 0) ? 'No ' : '') + title }}</div>
-      <div class="col-12 q-px-md q-pr-lg q-py-sm"
+      <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
        v-for="invite in invites(index)" :key="invite.eventguestsid">
-        <q-card class="q-pa-xs row items-center">
-          <q-card-section class="col-9 justify-left">
-            <div class="text-weight-medium" style="font-size: 16px;">
+        <div class="member rounded-borders" >
+        <q-card clickable v-ripple @click="onCardClick(invite.eventguestsid)">
+          <q-img :src="invite.eventDetails.attachmentlink !== null
+          ? invite.eventDetails.attachmentlink :
+              require('../assets/logo/bird.png')" alt :ratio="4/3"
+                 :to="`/invites/${invite.eventguestsid}`">
+            <div class="absolute-bottom text-subtitle2 text-center">
               {{ (invite.eventDetails.eventtitle !== null &&
               invite.eventDetails.eventtitle.trim() !== '') ?
               invite.eventDetails.eventtitle : 'Untitled Event' }}
             </div>
-            <div class="text-left q-px-xs" style="font-size: 10px;">
-              Host: {{ invite.eventDetails.hostedby }}
-            </div>
-            <div class="text-left q-px-xs" style="font-size: 10px;">
-              Type: {{ eventType[invite.eventDetails.eventtypeid-1] !== null &&
+          </q-img>
+          <div class="member-info">
+            <div class="member-info-content">
+              <h4>Host: {{ invite.eventDetails.hostedby }}</h4>
+              <span> Type: {{ eventType[invite.eventDetails.eventtypeid-1] !== null &&
                eventType[invite.eventDetails.eventtypeid-1] !== undefined ?
-               eventType[invite.eventDetails.eventtypeid-1].label : '' }}
+               eventType[invite.eventDetails.eventtypeid-1].label : '' }}</span>
             </div>
-          </q-card-section>
-          <q-card-actions class="col-3 q-pl-sm">
-            <q-space/>
-            <q-btn no-caps :to="`/invites/${invite.eventguestsid}`" label="View"
-             :color="`${invite.status.eventstatusid === 5 ? 'primary' : ''}`"
-             :text-color="`${invite.status.eventstatusid === 5 ? 'white' : 'primary'}`"/>
-          </q-card-actions>
+          </div>
         </q-card>
+        </div>
       </div>
     </div>
   </div>
@@ -107,6 +106,9 @@ export default {
         return this.invites0;
       }
       return this.invites1;
+    },
+    onCardClick(eventguestsid) {
+      this.$router.push(`/invites/${eventguestsid}`);
     },
   },
 };
