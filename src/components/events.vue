@@ -9,13 +9,14 @@
       </div>
       <!-- <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"> -->
         <div  v-if="!index" class="row warp ">
-          <div class=" col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"
+          <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
           v-for="event in events(index)" :key="event.eventdetailsid">
-          <div class="member" >
+          <div class="member rounded-borders" >
             <q-card clickable v-ripple
-                    @click="onCardClick(event.eventdetailsid,event.eventdetailsalphaid)">
+                    @click="onCardClick(event.eventdetailsid,event.eventdetailsalphaid)"
+            class="rounded-borders text-grey">
               <q-img :src="event.attachmentlink !== null ? event.attachmentlink :
-              require('../assets/logo/bird.png')" alt :ratio="4/3">
+              require('../assets/logo/bird.png')" alt :ratio="4/3" >
               <div class="absolute-bottom text-subtitle2 text-center">
                 {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
                   event.eventtitle : 'Untitled Event' }}
@@ -33,7 +34,7 @@
           </div>
         </div>
         <div v-else class="row warp">
-          <div class=" col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
           v-for="event in events(index).slice(0,4)" :key="event.eventdetailsid">
             <div class="member" >
           <q-card clickable v-ripple

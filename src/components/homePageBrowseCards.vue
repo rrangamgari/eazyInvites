@@ -22,13 +22,14 @@
         </div>
       </div>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 col-xl-2 q-px-md q-py-sm"
-           v-for="index in indices" :key="index">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
+           v-for="index in indices" :key="index" >
           <div class="portfolio-item">
             <div class="portfolio-wrap">
               <figure>
-                <img  style="width: 100%;height: 100%"
-                     :src="require(`../assets/cards/ez${index}.jpg`)" >
+                <q-img  style="width: 100%;height: 100%"
+                     :src="require(`../assets/cards/ez${index}.jpg`)"
+                        :ratio="4/3">
                 <a @click= "showCard(require(`../assets/cards/ez${index}.jpg`))"
                    data-lightbox="portfolio" data-title="Card"
                    class="link-preview" title="Preview"><i class="ion ion-eye">
@@ -39,6 +40,7 @@
                   <i class="ion ion-android-open">
                     <q-icon name="open_in_new" />
                   </i></a>
+                </q-img>
               </figure>
             </div>
           </div>
@@ -197,10 +199,10 @@ export default {
 
   #portfolio .portfolio-item {
     position: relative;
-    height: 200px;
+    height: auto;
     overflow: hidden;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
-    animation: jackInTheBox; /* referring directly to the animation's @keyframe declaration */
+    animation: flip; /* referring directly to the animation's @keyframe declaration */
     animation-duration: 2s; /* don't forget to set a duration! */
     animate-delay: 0.1s;
   }
@@ -208,9 +210,9 @@ export default {
   #portfolio .portfolio-item figure {
     background: #000;
     overflow: hidden;
-    height: 200px;
+    height: auto;
     position: relative;
-    border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 4px 4px;
     margin: 0;
   }
 
