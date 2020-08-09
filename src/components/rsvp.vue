@@ -169,6 +169,7 @@ export default {
   },
   mounted() {
     this.inviteId = this.$route.params.inviteId;
+    this.inviteAplhaId = this.$route.params.inviteAplhaId;
     this.height = document.getElementById('header').clientHeight;
     Loading.show({
       spinner: QSpinnerBars,
@@ -181,13 +182,13 @@ export default {
     )}`;
 
     axios
-      .get(`/api/userEvents/invites/${this.inviteId}`)
+      .get(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`)
       .then((response) => {
         this.invite = response.data.data;
         this.status = this.invite.status.eventstatusid;
         if (this.status === 5) {
           this.status = 2;
-          axios.put(`/api/userEvents/invites/${this.inviteId}`,
+          axios.put(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`,
             {
               status: { eventstatusid: 2, eventstatusdescription: '' },
               headcount: 0,

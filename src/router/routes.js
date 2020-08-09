@@ -70,7 +70,7 @@ const routes = [
     component: () => import('layouts/invitesLayout.vue'),
   },
   {
-    path: '/invites/:inviteId',
+    path: '/invites/:inviteId/:inviteAplhaId',
     name: 'invitesRsvp',
     component: () => import('layouts/invitesRsvpLayout.vue'),
   },

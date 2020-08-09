@@ -7,7 +7,8 @@
       <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
        v-for="invite in invites(index)" :key="invite.eventguestsid">
         <div class="member rounded-borders" >
-        <q-card clickable v-ripple @click="onCardClick(invite.eventguestsid)">
+        <q-card clickable v-ripple
+                @click="onCardClick(invite.eventguestsid,invite.eventDetails.eventdetailsalphaid)">
           <q-img :src="invite.eventDetails.attachmentlink !== null
           ? invite.eventDetails.attachmentlink :
               require('../assets/logo/bird.png')" alt :ratio="4/3"
@@ -107,8 +108,8 @@ export default {
       }
       return this.invites1;
     },
-    onCardClick(eventguestsid) {
-      this.$router.push(`/invites/${eventguestsid}`);
+    onCardClick(eventguestsid, eventdetailsalphaid) {
+      this.$router.push(`/invites/${eventguestsid}/${eventdetailsalphaid}`);
     },
   },
 };
