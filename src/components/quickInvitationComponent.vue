@@ -1,14 +1,30 @@
 <template>
   <div class="q-pa-md">
-    <q-stepper v-model="step" color="primary" keep-alive
-     :vertical="$q.screen.width < 687" animated>
-      <q-step
-        :name="1"
-        title="Upload Invitation"
-        icon="settings"
-        :done="step > 1"
-      >
-        <q-page class="q-pa-md flex flex-center" >
+    <q-card>
+    <div class="row no-wrap items-center q-pa-sm">
+      <div class="col-4">
+        <div class="step" :class="`${step >= 1 ? 'bg-primary' : 'bg-grey-3'}`">
+          <div class="step-label">{{$q.screen.gt.xs ? 'Upload Invitation' : 'Step 1'}}</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="step" :class="`${step >= 2 ? 'bg-primary' : 'bg-grey-3'}`">
+          <div class="step-label" :class="`${step >= 2 ? '' : 'text-grey-7'}`">
+            {{$q.screen.gt.xs ? 'Select Contacts or Groups' : 'Step 2'}}</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="step" :class="`${step >= 4 ? 'bg-primary' : 'bg-grey-3'}`">
+          <div class="step-label" :class="`${step >= 4 ? '' : 'text-grey-7'}`">
+            {{$q.screen.gt.xs ? 'Review and Send' : 'Step 3'}}</div>
+        </div>
+      </div>
+    </div>
+    <q-separator />
+
+    <q-tab-panels :value="step" keep-alive animated>
+      <q-tab-panel :name="1" class="q-pa-lg">
+        <div class="q-pa-md flex flex-center">
         <q-form
           @submit="onSubmit"
           @reset="onReset"
@@ -86,8 +102,7 @@
             <a @click="$router.push('/browseCards')"
                class="link-details primary cursor" title="Browse Cards">
               <q-icon name="insert_invitation" title="Browse Cards" size="xl" color="primary"/></a>
-
-  </div>
+          </div>
           <q-input
             v-model="hostname"
             type="text"
@@ -167,15 +182,10 @@
             </div>
 
           </div>
-        </q-page>
-      </q-step>
-      <q-step
-        :name="2"
-        title="Select Contacts or Groups"
-        caption="Optional"
-        icon="create_new_folder"
-        :done="step > 2"
-      >
+        </div>
+      </q-tab-panel>
+
+      <q-tab-panel :name="2" class="q-pa-lg">
         <add-contacts-component :offset="90" select :selected.sync="selected"/>
         <q-stepper-navigation class="q-pa-md">
           <q-btn @click="onContinue()" color="primary" label="Continue" class="q-px-xl q-py-xs"/>
@@ -187,9 +197,9 @@
             class="q-ml-sm"
           />
         </q-stepper-navigation>
-      </q-step>
+      </q-tab-panel>
 
-      <q-step :name="4" title="Review and Send" icon="add_comment">
+      <q-tab-panel :name="4" class="q-pa-lg">
       <div class="col-12 q-px-md q-py-sm q-pb-lg row justify-center"
        :class="$q.screen.xs ? 'q-gutter-sm' : ''">
         <q-expansion-item
@@ -319,8 +329,9 @@
             class="q-ml-sm"
           />
         </q-stepper-navigation>
-      </q-step>
-    </q-stepper>
+      </q-tab-panel>
+    </q-tab-panels>
+    </q-card>
   </div>
 </template>
 
@@ -701,3 +712,15 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.step
+  width : 100%;
+  min-height : 50px;
+  clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%);
+.step-label
+  padding : 15px 12%;
+  text-align : center;
+  color: white;
+  cursor: pointer;
+</style>
