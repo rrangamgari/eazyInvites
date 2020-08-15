@@ -4,19 +4,19 @@
     <div class="row no-wrap items-center q-pa-sm">
       <div class="col-4">
         <div class="step" :class="`${step >= 1 ? 'bg-primary' : 'bg-grey-3'}`">
-          <div class="step-label">{{$q.screen.gt.xs ? 'Upload Invitation' : 'Step 1'}}</div>
+          <div class="step-label">Upload Invitation</div>
         </div>
       </div>
       <div class="col-4">
         <div class="step" :class="`${step >= 2 ? 'bg-primary' : 'bg-grey-3'}`">
-          <div class="step-label" :class="`${step >= 2 ? '' : 'text-grey-7'}`">
-            {{$q.screen.gt.xs ? 'Select Contacts or Groups' : 'Step 2'}}</div>
+          <div class="step-label" :class="`${step >= 2 ? '' : 'text-grey-7'}`"
+            >Select Contacts or Groups</div>
         </div>
       </div>
       <div class="col-4">
         <div class="step" :class="`${step >= 4 ? 'bg-primary' : 'bg-grey-3'}`">
-          <div class="step-label" :class="`${step >= 4 ? '' : 'text-grey-7'}`">
-            {{$q.screen.gt.xs ? 'Review and Send' : 'Step 3'}}</div>
+          <div class="step-label" :class="`${step >= 4 ? '' : 'text-grey-7'}`"
+            >Review and Send</div>
         </div>
       </div>
     </div>
@@ -714,13 +714,21 @@ export default {
 </script>
 
 <style lang="sass">
+.step-var, .step, .step-label
+  --h : 50px;
+  --d : calc((var(--h)/2) / 1.732);
+  --w : calc(100% - var(--d));
+  cursor: pointer;
 .step
   width : 100%;
-  min-height : 50px;
-  clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%);
+  height : var(--h);
+  clip-path: polygon(0 0, var(--w) 0%, 100% 50%, var(--w) 100%, 0% 100%, var(--d) 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 .step-label
-  padding : 15px 12%;
+  padding : 10px calc(var(--d) + 3px);
   text-align : center;
   color: white;
-  cursor: pointer;
+  font-size: calc(min(2.8vw, 1em));
 </style>

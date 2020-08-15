@@ -6,7 +6,7 @@
       id="addContact"
       @submit="onFormSubmit"
       @reset="onFormReset"
-      class="q-pt-sm q-pb-xs"
+      class="q-pt-sm q-pb-xs q-px-xs"
       :class="`${cWidth > $q.screen.sizes.sm ? 'row' : 'q-pa-md'}`"
     >
       <q-input
