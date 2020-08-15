@@ -2,8 +2,11 @@
   <div class="q-pt-lg">
     <div class="q-pb-lg q-px-md row warp items-center"
      v-for="(title,index) in titles" :key="index">
-      <div class="text-h6 q-px-md q-pb-md text-left col-12">
-        {{ ((invites(index).length == 0) ? 'No ' : '') + title }}</div>
+      <div class="full-width q-px-md q-pb-md text-center col-12">
+        <header class="section-header">
+          <h3 style="color: #757575">{{ ((invites(index).length == 0) ? 'No ' : '') + title }}</h3>
+        </header>
+      </div>
       <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
        v-for="invite in invites(index)" :key="invite.eventguestsid">
         <div class="member rounded-borders" >

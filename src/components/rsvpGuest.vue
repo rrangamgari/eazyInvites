@@ -14,10 +14,10 @@
     <div class="col-xs-12 col-sm-4" v-if="event.startdate !== null">
       <div class="text-subtitle1 text-center">Date</div>
       <div class="text-h6 text-center">
-        Start: {{ new Date(event.startdate).toDateString() }}
+        Start: {{ new Date(event.startdate).toUTCString() }}
       </div>
       <div class="text-h6 text-center">
-        End: {{ new Date(event.enddate).toDateString() }}
+        End: {{ new Date(event.enddate).toUTCString() }}
       </div>
     </div>
     <div class="col-xs-12 col-sm-4" v-if="event.addresses !== null">
@@ -37,14 +37,14 @@
     </div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
       <q-btn style="width:100%;" unelevated label="Tentaive" no-caps
-             :outline="status !== 3" color="yellow" @click="status = 3"/>
+             :outline="status !== 2" color="yellow" @click="status = 2"/>
     </div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
       <q-btn style="width:100%;" unelevated label="Regrets" no-caps
-             :outline="status !== 4" color="red" @click="status = 4"/>
+             :outline="status !== 3" color="red" @click="status = 3"/>
     </div>
     <div class="col-12 text-center text-red q-pa-xs text-caption"
-     v-if="!([1, 3, 4].includes(this.status)) && error">Please select an option above</div>
+     v-if="!([1, 2, 3].includes(this.status)) && error">Please select an option above</div>
 
     <div class="col-12 q-py-md">
       <q-form
@@ -84,7 +84,7 @@
         />
 
         <q-input
-          v-show="status !== 4"
+          v-show="status !== 3"
 
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pr-xs' : ''}`"
@@ -98,7 +98,7 @@
         />
 
         <q-input
-          v-show="status !== 4"
+          v-show="status !== 3"
 
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pl-xs' : ''}`"
@@ -178,7 +178,7 @@ export default {
       name: '',
       phone: '',
       email: '',
-      status: 2,
+      status: 5,
       adults: 1,
       kids: 0,
       message: '',
@@ -245,7 +245,7 @@ export default {
     onSubmit() {
       window.console.log(this.polls);
 
-      if (!([1, 3, 4].includes(this.status))) {
+      if (!([1, 2, 3].includes(this.status))) {
         this.error = true;
         return;
       }
@@ -256,12 +256,12 @@ export default {
         thickness: '3',
       });
 
-      axios.put(`/api/userEvents/guestInvites/${this.viewInviteId}/${this.viewInviteAlpha}`,
+      axios.put(`/api/userEvents/guestInvites/${this.viewInviteId}`,
         {
           eventMembers: { firstname: this.name, primaryPhone: this.phone, email: this.email },
           status: { eventstatusid: this.status, eventstatusdescription: '' },
-          headcount: `${this.status === 4 ? '0' : this.adults}`,
-          kidscount: `${this.status === 4 ? '0' : this.kids}`,
+          headcount: `${this.status === 3 ? '0' : this.adults}`,
+          kidscount: `${this.status === 3 ? '0' : this.kids}`,
         })
         .then((response) => {
           if (response.data.data === 'User is null') {
@@ -293,7 +293,7 @@ export default {
       this.name = '';
       this.phone = '';
       this.email = '';
-      this.status = 2;
+      this.status = 5;
       this.adults = 1;
       this.kids = 0;
       this.message = '';

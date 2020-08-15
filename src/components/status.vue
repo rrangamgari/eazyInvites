@@ -73,7 +73,7 @@
           <q-card-section class="q-pa-xs">
             <div class="text-subtitle2 text-center">Tentative</div>
             <q-avatar style="position: absolute; top: 5px; right: 5px;"
-             icon="oval" :color="colour[3]" size="12px"/>
+             icon="oval" :color="colour[2]" size="12px"/>
           </q-card-section>
           <q-card-section class="q-pa-xs row no-warp justify-center items-center">
             <div class="q-px-auto q-ma-none" style="width:70px">
@@ -182,7 +182,7 @@ export default {
       event: {},
       eventType: [],
       file: null,
-      colour: ['white', 'green', 'grey', 'yellow', 'red', 'black'],
+      colour: ['white', 'green', 'yellow', 'red', 'grey', 'grey', 'grey', 'grey', 'black'],
       A: { adults: 0, kids: 0 },
       T: { adults: 0, kids: 0 },
       N: { count: 0 },
@@ -324,10 +324,10 @@ export default {
         if (rec.status.eventstatusid === 1) {
           this.A.adults += rec.headcount;
           this.A.kids += rec.kidscount;
-        } else if (rec.status.eventstatusid === 3) {
+        } else if (rec.status.eventstatusid === 2) {
           this.T.adults += rec.headcount;
           this.T.kids += rec.kidscount;
-        } else if (rec.status.eventstatusid === 4) {
+        } else if (rec.status.eventstatusid === 3) {
           this.N.count += 1;
         } else {
           this.R.count += 1;

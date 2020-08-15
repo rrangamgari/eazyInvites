@@ -4,23 +4,23 @@
    transition="rotate" contain :src="file"/>
   <div class="row justify-center q-pa-lg">
     <div class="text-h5 text-center col-12 q-pb-md">
-    {{invite.eventDetails.eventtitle !== null ? invite.eventDetails.eventtitle : 'Untitled Event'}}
+    {{invite.eventDetails.eventtitle ? invite.eventDetails.eventtitle : 'Untitled Event'}}
     </div>
-    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.hostedby !== null">
+    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.hostedby">
       <div class="text-subtitle1 text-center">Host</div>
       <div class="text-h6 text-center">{{ invite.eventDetails.hostedby }}</div>
       <div class="text-h6 text-center">Ph: {{ invite.eventDetails.phone }}</div>
     </div>
-    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.startdate !== null">
+    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.startdate">
       <div class="text-subtitle1 text-center">Date</div>
       <div class="text-h6 text-center">
-        Start: {{ new Date(invite.eventDetails.startdate).toDateString() }}
+        Start: {{ new Date(invite.eventDetails.startdate).toUTCString() }}
       </div>
       <div class="text-h6 text-center">
-        End: {{ new Date(invite.eventDetails.enddate).toDateString() }}
+        End: {{ new Date(invite.eventDetails.enddate).toUTCString() }}
       </div>
     </div>
-    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.addresses !== null">
+    <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.addresses">
       <div class="text-subtitle1 text-center">Venue</div>
       <div class="text-h6 text-center">{{ getAddress(invite) }}</div>
     </div>
@@ -37,14 +37,14 @@
     </div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
       <q-btn style="width:100%;" unelevated label="Tentaive" no-caps
-             :outline="status !== 3" color="yellow" @click="status = 3"/>
+             :outline="status !== 2" color="yellow" @click="status = 2"/>
     </div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
       <q-btn style="width:100%;" unelevated label="Regrets" no-caps
-             :outline="status !== 4" color="red" @click="status = 4"/>
+             :outline="status !== 3" color="red" @click="status = 3"/>
     </div>
     <div class="col-12 text-center text-red q-pa-xs text-caption"
-     v-if="!([1, 3, 4].includes(this.status)) && error">Please select an option above</div>
+     v-if="!([1, 2, 3].includes(this.status)) && error">Please select an option above</div>
 
     <div class="col-12 q-py-md">
       <q-form
@@ -55,7 +55,7 @@
         @reset="onReset"
       >
         <q-input
-          v-show="status !== 4"
+          v-show="status !== 3"
 
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pr-xs' : ''}`"
@@ -69,7 +69,7 @@
         />
 
         <q-input
-          v-show="status !== 4"
+          v-show="status !== 3"
 
           class="col-xs-12 col-sm-6"
           :class="`${$q.screen.gt.xs ? 'q-pl-xs' : ''}`"
@@ -141,11 +141,11 @@ export default {
   data() {
     return {
       inviteId: '',
-      invite: {},
+      invite: { eventDetails: {} },
       eventType: [],
       height: 50,
       file: null,
-      status: 0,
+      status: Number(this.$route.query.status) || 0,
       adults: 1,
       kids: 0,
       message: '',
@@ -167,9 +167,12 @@ export default {
       ],
     };
   },
-  mounted() {
+  created() {
     this.inviteId = this.$route.params.inviteId;
     this.inviteAplhaId = this.$route.params.inviteAplhaId;
+    this.auth = this.$route.query.auth;
+  },
+  mounted() {
     this.height = document.getElementById('header').clientHeight;
     Loading.show({
       spinner: QSpinnerBars,
@@ -177,24 +180,23 @@ export default {
       thickness: '3',
     });
 
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-      'login-token',
-    )}`;
+    axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.sessionStorage.getItem('login-token')}` : null;
 
-    axios
-      .get(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`)
+    axios.get(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`,
+      this.auth ? { params: { auth: this.auth } } : null)
       .then((response) => {
         this.invite = response.data.data;
-        this.status = this.invite.status.eventstatusid;
-        if (this.status === 5) {
-          this.status = 2;
-          axios.put(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`,
+        if (this.invite.status.eventstatusid >= 6) {
+          this.status = Number(this.$route.query.status) || 5;
+          axios.put(`/api/userEvents/invites/${this.inviteId}`,
             {
-              status: { eventstatusid: 2, eventstatusdescription: '' },
-              headcount: 0,
+              status: { eventstatusid: 5, eventstatusdescription: '' },
+              headcount: 1,
               kidscount: 0,
-            });
-        }
+            },
+            this.auth ? { params: { auth: this.auth } } : null);
+        } else this.status = Number(this.$route.query.status) || this.invite.status.eventstatusid;
+        console.log(this.status);
         this.adults = this.invite.headcount || 1;
         this.kids = this.invite.kidscount;
         this.message = this.invite.message;
@@ -259,7 +261,7 @@ export default {
     onSubmit() {
       window.console.log(this.polls);
 
-      if (!([1, 3, 4].includes(this.status))) {
+      if (!([1, 2, 3].includes(this.status))) {
         this.error = true;
         return;
       }
@@ -270,16 +272,15 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.sessionStorage.getItem('login-token')}` : null;
 
       axios.put(`/api/userEvents/invites/${this.inviteId}`,
         {
           status: { eventstatusid: this.status, eventstatusdescription: '' },
-          headcount: `${this.status === 4 ? '0' : this.adults}`,
-          kidscount: `${this.status === 4 ? '0' : this.kids}`,
-        })
+          headcount: `${this.status === 3 ? '0' : this.adults}`,
+          kidscount: `${this.status === 3 ? '0' : this.kids}`,
+        },
+        this.auth ? { params: { auth: this.auth } } : null)
         .then((response) => {
           if (response.data.data === 'User is null') {
             Loading.hide();
@@ -293,7 +294,9 @@ export default {
               position: 'top',
             });
             Loading.hide();
-            this.$router.push('/invites');
+
+            if (this.auth && !this.$q.sessionStorage.getItem('login-token')) this.$router.push('/');
+            else this.$router.push('/invites');
           }
         })
         .catch((e) => {
