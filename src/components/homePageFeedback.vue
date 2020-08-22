@@ -148,7 +148,7 @@ export default {
     };
   },
   mounted() {
-    axios.get('/api/feedback')
+    axios.get('http://invites-env.eba-662y8mnq.ap-south-1.elasticbeanstalk.com/api/feedback')
       .then((response) => {
         // JSON responses are automatically parsed.
         this.feedbackList = this.feedbackList.concat(response.data.data);

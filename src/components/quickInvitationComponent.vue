@@ -81,6 +81,10 @@
                   <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
                     <q-time v-model="eventtime" @input="() => $refs.qTimeProxy.hide()"
                             format24h/>
+                    <q-tooltip content-class="bg-primary"
+                               content-style="font-size: 16px" :offset="[10, 10]">
+                      Add Time
+                    </q-tooltip>
                   </q-popup-proxy>
                 </q-icon>
               </template>
@@ -100,9 +104,14 @@
           </div>
           <div style="width: 4%;"/>
             <a @click="$router.push('/browseCards')"
-               class="link-details primary cursor" title="Browse Cards">
-              <q-icon name="insert_invitation" title="Browse Cards" size="xl" color="primary"/></a>
-          </div>
+               class="link-details primary cursor-pointer">
+              <q-icon name="insert_invitation" title="Browse Cards" size="xl" color="primary"/>
+              <q-tooltip content-class="bg-primary"
+                         content-style="font-size: 16px" :offset="[10, 10]">
+                Browse Cards
+              </q-tooltip>
+            </a>
+  </div>
           <q-input
             v-model="hostname"
             type="text"
