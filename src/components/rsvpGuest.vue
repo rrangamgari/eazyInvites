@@ -26,9 +26,8 @@
     </div>
     <div class="col-12 q-py-lg">
       <div class="text-subtitle1 text-center">Message</div>
-      <div class="text-h6 text-center" style="max-width: 350px; margin: auto;">
-        {{ event.eventmessage }}
-      </div>
+      <div class="text-h6 text-center" style="max-width: 350px; margin: auto;"
+       v-html="event.eventmessagehtml"></div>
     </div>
     <div class="text-subtitle1 text-center col-12 q-py-md">RSVP</div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
@@ -203,7 +202,6 @@ export default {
   mounted() {
     this.viewInviteId = this.$route.params.viewInviteId;
     this.viewInviteAlpha = this.$route.params.viewInviteAlpha;
-    console.log(`$${this.viewInviteId}/${this.viewInviteAlpha}`);
     this.height = document.getElementById('header').clientHeight;
     Loading.show({
       spinner: QSpinnerBars,

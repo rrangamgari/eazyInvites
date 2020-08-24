@@ -26,9 +26,8 @@
     </div>
     <div class="col-12 q-py-lg">
       <div class="text-subtitle1 text-center">Message</div>
-      <div class="text-h6 text-center" style="max-width: 350px; margin: auto;">
-        {{ invite.eventDetails.eventmessage }}
-      </div>
+      <div class="text-h6 text-center" style="max-width: 350px; margin: auto;"
+       v-html="invite.eventDetails.eventmessagehtml"></div>
     </div>
     <div class="text-subtitle1 text-center col-12 q-py-md">RSVP</div>
     <div class="q-pa-sm" :style="`width: ${max(200, ($q.screen.width/6))}px;`">
@@ -180,7 +179,7 @@ export default {
       thickness: '3',
     });
 
-    axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.sessionStorage.getItem('login-token')}` : null;
+    axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.localStorage.getItem('login-token')}` : null;
 
     axios.get(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`,
       this.auth ? { params: { auth: this.auth } } : null)
@@ -196,7 +195,6 @@ export default {
             },
             this.auth ? { params: { auth: this.auth } } : null);
         } else this.status = Number(this.$route.query.status) || this.invite.status.eventstatusid;
-        console.log(this.status);
         this.adults = this.invite.headcount || 1;
         this.kids = this.invite.kidscount;
         this.message = this.invite.message;
@@ -213,7 +211,7 @@ export default {
             })
             .catch((e) => {
               if (e.message === 'Request failed with status code 401') {
-                this.$q.sessionStorage.remove('login-token');
+                this.$q.localStorage.remove('login-token');
                 this.$router.push('/login');
               }
               this.$q.notify({
@@ -229,7 +227,7 @@ export default {
       })
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
+          this.$q.localStorage.remove('login-token');
           this.$router.push('/login');
         } else if (e.message === 'Request failed with status code 400') {
           this.$router.push('/invites');
@@ -272,7 +270,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.sessionStorage.getItem('login-token')}` : null;
+      axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.localStorage.getItem('login-token')}` : null;
 
       axios.put(`/api/userEvents/invites/${this.inviteId}`,
         {
@@ -295,13 +293,13 @@ export default {
             });
             Loading.hide();
 
-            if (this.auth && !this.$q.sessionStorage.getItem('login-token')) this.$router.push('/');
+            if (this.auth && !this.$q.localStorage.getItem('login-token')) this.$router.push('/');
             else this.$router.push('/invites');
           }
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({

@@ -260,7 +260,7 @@
         class="row"
       >
       <q-input
-        v-if="$q.screen.width >= 777"
+        v-if="$q.screen.width >= 850"
         dark
         outlined dense
         class="q-pr-sm"
@@ -274,7 +274,7 @@
       />
 
       <q-input
-        v-if="$q.screen.width >= 777"
+        v-if="$q.screen.width >= 850"
         dark
         stack-label
         outlined dense
@@ -285,13 +285,16 @@
         label="Password"
       />
 
-      <div class="row" style="max-width: 90px; padding-top: 9px;">
+      <div class="row" style="max-width: 90px; padding-top: 9px; padding-right: 8px; ">
         <q-btn class="col-12" label="Login" type="submit" dense
          :color="`${qbtnColor || 'white'}`"
          :text-color="`${qbtnColor === '' ? 'black' : 'white'}`"/>
         <a @click="openDialog()" class="q-pt-xs q-px-xs" :class="`text-${qbtnColor || 'white'}`"
          style="font-size: 10px; text-decoration: underline;">New User?</a>
       </div>
+      <q-separator color="grey" size="2px" vertical inset/>
+      <oauth2-clients-component style="padding-left: 0px; padding-right: 0px;"
+       @oauth2-login-success="$router.push('/events')"/>
       </q-form>
       </div>
       <q-tabs
@@ -579,11 +582,15 @@
 import { Loading, QSpinnerBars, scroll } from 'quasar';
 import axios from 'axios';
 import loginDialog from './loginDialog.vue';
+import oauth2ClientsComponent from './oauth2Clients.vue';
 
 const { getScrollTarget, setScrollPosition } = scroll;
 
 export default {
   name: 'headerComponent',
+  components: {
+    oauth2ClientsComponent,
+  },
   data() {
     return {
       tab: '',
@@ -639,11 +646,11 @@ export default {
       return {};
     },
     viewLogin() {
-      window.console.log(`login-token : ${this.$q.sessionStorage.getItem('login-token')}`);
-      return (this.$q.sessionStorage.getItem('login-token') === null);
+      window.console.log(`login-token : ${this.$q.localStorage.getItem('login-token')}`);
+      return (this.$q.localStorage.getItem('login-token') === null);
     },
     onLogoutClick() {
-      this.$q.sessionStorage.remove('login-token');
+      this.$q.localStorage.remove('login-token');
       if (this.$route.path === '/') this.$router.go(0);
       else this.$router.push('/');
     },
@@ -707,7 +714,7 @@ export default {
       Loading.hide();
     },
     onLogin() {
-      if (this.$q.screen.width < 777) {
+      if (this.$q.screen.width < 850) {
         this.openDialog(true);
         return;
       }
@@ -728,8 +735,8 @@ export default {
       })
         .then((response) => {
           this.posts = response.data;
-          this.$q.sessionStorage.set('login-token', this.posts.token);
-          axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+          this.$q.localStorage.set('login-token', this.posts.token);
+          axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
             'login-token',
           )}`;
           Loading.hide();

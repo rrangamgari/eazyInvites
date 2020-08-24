@@ -64,7 +64,7 @@ export default {
       spinnerColor: 'primary',
       thickness: '3',
     });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
       'login-token',
     )}`;
     axios
@@ -81,7 +81,7 @@ export default {
       })
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
+          this.$q.localStorage.remove('login-token');
           this.$router.push('/login');
         }
         this.$q.notify({

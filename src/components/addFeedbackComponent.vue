@@ -91,7 +91,7 @@
    target="_blank">
       <img
         id="whatsapp_tab" class="whatsapp_tab_right"
-        src="../assets/whatsapp.png"
+        src="../statics/icons/whatsapp.png"
         style="height:50px;width:50px"
 
       />

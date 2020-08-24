@@ -265,9 +265,9 @@
 #whatsapp_tab{
   display:block;
   position:fixed;
-  background-color:#009688;
+  // background-color:#009688;
   color:#fff;
-  border:1px solid #119999;
+  // border:1px solid #119999;
   font-size:15px;
   font-family:Arial;
   line-height:15px;
@@ -311,7 +311,7 @@
   -ms-transform-origin:100% 100% 0
 }
 #whatsapp_tab.whatsapp_tab_right:hover,#whatsapp_tab.whatsapp_tab_right:focus,#whatsapp_tab.whatsapp_tab_right:active{
-  background:#26A69A;
+  // background:#26A69A;
   transform:rotate(0deg) scale(1.02) translateY(-5px);
   -ms-transform:rotate(0deg) scale(1.02) translateY(-5px);
   -webkit-transform:rotate(0deg) translateY(-5px);

@@ -15,6 +15,15 @@ const routes = [
     ],
   },
   {
+    path: '/oauth2/:client',
+    name: 'oauth2',
+    component: () => import('components/oauth2.vue'),
+    children: [
+      { path: '' },
+      { path: 'handler' },
+    ],
+  },
+  {
     path: '/createInvitation',
     name: 'createEvent', // Dependency Exists in quickInvitaitonComponent.vue
     component: () => import('layouts/createInvitationLayout.vue'),

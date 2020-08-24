@@ -2,7 +2,7 @@
   <q-layout view="hHh lpr fff" >
     <!-- Be sure to play with the Layout demo on docs -->
 
-    <q-page-container class="bg-grey-4">
+    <q-page-container>
       <!-- This is where pages get injected -->
        <add-contacts-component v-show="!mobileView"></add-contacts-component>
       <add-contacts-mobile-component v-show="mobileView"></add-contacts-mobile-component>

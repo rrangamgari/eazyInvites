@@ -368,7 +368,7 @@ export default {
       eventType: '',
       selection: ['teal'],
       selected: [],
-      hostname: this.$q.sessionStorage.getItem('user-token'),
+      hostname: this.$q.localStorage.getItem('user-token'),
       eventmessage: `\nDear {{Guest Name}}, We invite you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`,
       options: [
         { value: 1, label: 'Birthday' },
@@ -571,7 +571,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 
@@ -658,7 +658,7 @@ export default {
       spinnerColor: 'primary',
       thickness: '3',
     });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
       'login-token',
     )}`;
 
@@ -673,7 +673,7 @@ export default {
       .catch((e) => {
         //  this.errors.push(e);
         if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
+          this.$q.localStorage.remove('login-token');
           this.$router.push('/login');
         }
         this.$q.notify({
@@ -693,8 +693,8 @@ export default {
     axios.get('/api/UserDetails/getCurrentUser')
       .then((response1) => {
         // JSON responses are automatically parsed.
-        this.$q.sessionStorage.set('user-token', response1.data.data);
-        this.hostname = `${this.$q.sessionStorage.getItem('user-token').givenname} ${this.$q.sessionStorage.getItem('user-token').familyname}`;
+        this.$q.localStorage.set('user-token', response1.data.data);
+        this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
         // Notification for testing api
         Loading.hide();
       })

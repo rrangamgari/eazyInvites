@@ -60,11 +60,10 @@ export default {
     return {
       name: this.$props.username || '',
       age: '',
-      // accept: false,
     };
   },
   mounted() {
-    if (this.$q.sessionStorage.getItem('login-token') !== null) this.$router.push('/events');
+    if (this.$q.localStorage.getItem('login-token') !== null) this.$router.push('/events');
 
     axios.defaults.headers.Authorization = '';
   },
@@ -83,17 +82,17 @@ export default {
         .then((response) => {
           // JSON responses are automatically parsed.
           this.posts = response.data;
-          this.$q.sessionStorage.set('login-token', this.posts.token);
+          this.$q.localStorage.set('login-token', this.posts.token);
           axios.defaults.headers.Authorization = `Bearer ${this.posts.token}`;
 
           axios.get('/api/UserDetails/getCurrentUser')
             .then((response1) => {
               // JSON responses are automatically parsed.
-              this.$q.sessionStorage.set('user-token', response1.data);
+              this.$q.localStorage.set('user-token', response1.data);
               this.$q.notify({
-                color: 'red-5',
+                color: 'green-4',
                 textColor: 'white',
-                icon: 'error',
+                icon: 'cloud_done',
                 message: response1,
                 position: 'top',
               });
@@ -129,7 +128,6 @@ export default {
     onReset() {
       this.name = null;
       this.age = null;
-      // this.accept = false;
     },
   },
 };

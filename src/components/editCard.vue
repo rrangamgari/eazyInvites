@@ -221,7 +221,7 @@ export default {
     ctx = canvas.getContext('2d');
     console.log(ctx);
 
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token') || ''}`;
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token') || ''}`;
 
     Loading.show({
       spinner: QSpinnerBars,
@@ -267,7 +267,7 @@ export default {
       .catch((e) => {
         Loading.hide();
         if (e.message === 'Request failed with status code 401') {
-          this.$q.sessionStorage.remove('login-token');
+          this.$q.localStorage.remove('login-token');
           this.$router.push('/login');
         }
 
@@ -482,7 +482,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem('login-token') || ''}`;
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token') || ''}`;
 
       axios.post(`/api/cards/${this.cardId}`, card)
         .then((response) => {

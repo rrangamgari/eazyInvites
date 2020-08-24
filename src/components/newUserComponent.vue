@@ -95,7 +95,7 @@ export default {
     };
   },
   mounted() {
-    if (this.$q.sessionStorage.getItem('login-token') !== null) this.$router.push('/events');
+    if (this.$q.localStorage.getItem('login-token') !== null) this.$router.push('/events');
 
     axios.defaults.headers.Authorization = '';
   },
@@ -132,13 +132,13 @@ export default {
               message: 'User Created',
               position: 'center',
             });
-            this.$q.sessionStorage.set('login-token', this.posts.data);
+            this.$q.localStorage.set('login-token', this.posts.data);
             axios.defaults.headers.Authorization = `Bearer ${this.posts.data}`;
 
             axios.get('/api/UserDetails/getCurrentUser')
               .then((response1) => {
                 // JSON responses are automatically parsed.
-                this.$q.sessionStorage.set('user-token', response1.data);
+                this.$q.localStorage.set('user-token', response1.data);
                 // Notification for testing api
                 this.$router.push('/createInvitation');
                 Loading.hide();
@@ -164,7 +164,7 @@ export default {
               position: 'center',
             });
           }
-          // this.$q.sessionStorage.set('login-token', this.posts.token);
+          // this.$q.localStorage.set('login-token', this.posts.token);
           Loading.hide();
         })
         .catch((e) => {

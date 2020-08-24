@@ -23,13 +23,18 @@
           <q-btn flat v-close-popup round dense color="white" icon="close" />
         </q-toolbar>
       </q-card-section>
+      <!-- <q-card-section>
+        <div class="text-center text-white">Login With</div>
+      </q-card-section> -->
       <q-tab-panels v-model="tab" animated class="bg-transparent" keep-alive
        :style="`height: calc(100% - 55px);`">
         <q-tab-panel name="login" style="padding-right: 0px;">
+          <oauth2-clients-component class="q-pr-lg" @oauth2-login-success="onOk"/>
           <login-component :dark="!i" :username="$props.username" @login-success="onOk"/>
         </q-tab-panel>
 
         <q-tab-panel name="register" style="padding-right: 0px;">
+          <oauth2-clients-component @oauth2-login-success="onOk"/>
           <register-component :dark="!i" />
         </q-tab-panel>
       </q-tab-panels>
@@ -41,12 +46,14 @@
 <script>
 import loginComponent from './login.vue';
 import registerComponent from './newUserComponent.vue';
+import oauth2ClientsComponent from './oauth2Clients.vue';
 
 export default {
   name: 'loginDialogComponent',
   components: {
     loginComponent,
     registerComponent,
+    oauth2ClientsComponent,
   },
   props: [
     'persistent',

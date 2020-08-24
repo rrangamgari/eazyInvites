@@ -52,7 +52,7 @@
         :resize="false"
         color="blue"
       />
-         <div class="overlay"/>
+        <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Wedding Invitations</h2>
@@ -85,6 +85,7 @@
         :resize="false"
         color="blue"
       />
+        <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>Engagement Invitations</h2>
@@ -156,6 +157,7 @@
           :resize="false"
           color="blue"
         />
+        <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
           <h2>New Year Party</h2>

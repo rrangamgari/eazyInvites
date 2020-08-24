@@ -155,7 +155,7 @@
             {{ props.row.firstname }}
             <q-popup-edit
               v-model="props.row.firstname"
-              title="Edit the Name"
+              title="Edit First Name"
               buttons
               :validate="firstnameValidation"
               @hide="firstnameValidation"
@@ -368,13 +368,13 @@ export default {
     return {
       uploadContactsLayout: false,
       errorMessageProtein: '',
-      errorProtein: '',
+      errorProtein: false,
       uploadContactsModel: '',
       headerFunc: [
         {
           name: 'authorization',
           value:
-         `Bearer ${this.$q.sessionStorage.getItem('login-token')}`,
+         `Bearer ${this.$q.localStorage.getItem('login-token')}`,
         }],
       visible: ['firstname', 'lastname', 'primaryPhone', 'email'],
       columns: [
@@ -470,7 +470,7 @@ export default {
           });
         }, 2000);
       });
-      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios.defaults.headers.get.Accepts = 'multipart/form-data';
@@ -530,7 +530,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
@@ -545,7 +545,7 @@ export default {
           //  this.errors.push(e);
           Loading.hide();
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({
@@ -564,7 +564,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
@@ -588,7 +588,7 @@ export default {
         .catch((e) => {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({
@@ -604,11 +604,11 @@ export default {
     firstnameValidation(val) {
       if (val === '') {
         this.errorProtein = true;
-        this.errorMessageProtein = 'The firstname cannot be empty';
+        this.errorMessageProtein = 'Firstname cannot be empty';
         return false;
       }
       this.errorProtein = false;
-      this.errorMessageProtein = 'dasasds';
+      this.errorMessageProtein = '';
       return true;
     },
     onFormReset() {
@@ -624,7 +624,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
@@ -665,7 +665,7 @@ export default {
         .catch((e) => {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({

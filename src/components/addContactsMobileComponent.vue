@@ -304,7 +304,7 @@ export default {
         {
           name: 'authorization',
           value:
-         `Bearer ${this.$q.sessionStorage.getItem('login-token')}`,
+         `Bearer ${this.$q.localStorage.getItem('login-token')}`,
         }],
       visible: ['firstname', 'lastname', 'primaryPhone', 'email'],
       columns: [
@@ -394,7 +394,7 @@ export default {
           });
         }, 2000);
       });
-      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios.defaults.headers.get.Accepts = 'multipart/form-data';
@@ -454,7 +454,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
@@ -469,7 +469,7 @@ export default {
           //  this.errors.push(e);
           Loading.hide();
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({
@@ -488,7 +488,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
@@ -512,7 +512,7 @@ export default {
         .catch((e) => {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({
@@ -548,7 +548,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.sessionStorage.getItem(
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
@@ -587,7 +587,7 @@ export default {
         .catch((e) => {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
-            this.$q.sessionStorage.remove('login-token');
+            this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
           }
           this.$q.notify({
