@@ -119,7 +119,7 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8080,
+      port: 8888,
       open: true, // opens browser window automatically
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
@@ -140,6 +140,7 @@ module.exports = function (/* ctx */) {
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {
+          // target: 'http://invites-env.eba-662y8mnq.ap-south-1.elasticbeanstalk.com/api',
           target: 'http://localhost:5000/Emantran/api',
           changeOrigin: true,
           pathRewrite: {

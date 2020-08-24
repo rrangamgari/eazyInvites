@@ -151,7 +151,7 @@
           <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="box">
               <h3>Free Plan</h3>
-              <h4><sup>$</sup>0<span> / Invitation</span></h4>
+              <h4><sup>$</sup>0<span> / Event</span></h4>
               <ul>
                 <li>Email Invitation is always free</li>
                 <li>Track your invitations </li>
@@ -168,7 +168,7 @@
           <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="box featured">
               <h3>Premium Plan</h3>
-              <h4><span> Starts from </span><sup>$</sup>9.99<span> / Invitation</span></h4>
+              <h4><span> Starts from </span><sup>$</sup>9.99<span> / Event</span></h4>
               <ul>
                 <li>Premium Package includes emails and Whatsapp invitations</li>
                 <li>Upto 100 Email Invitations</li>
