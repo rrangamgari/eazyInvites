@@ -300,6 +300,7 @@
        @oauth2-login-success="$router.push('/events')"/>
       </q-form>
       </div>
+
       <q-tabs
         v-else-if="$q.screen.gt.xs"
         no-caps
@@ -577,6 +578,11 @@
             </q-item>
           </q-list>
       </q-btn-dropdown>
+      <a id="ei_tab" class="ei_tab_right" @click="layout = true">
+        <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
+        Feedback
+        <span class="screen_reader"> Will open a new window</span>
+      </a>
     </q-toolbar>
   </q-header>
 </template>
@@ -689,6 +695,8 @@ export default {
           this.hClass = 'elevated bordered';
           this.qbtnColor = 'primary';
           this.qmenuColor = 'white';
+
+          document.getElementById('ei_tab').style.visibility = 'visible';
         } else {
           this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
           this.hStyle = 'background-color: rgba(0,0,0,0);';
@@ -696,6 +704,7 @@ export default {
           this.lStyle = 'color:white';
           this.qbtnColor = '';
           this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
+          document.getElementById('ei_tab').style.visibility = 'hidden';
         }
       }
     },
