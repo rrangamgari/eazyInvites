@@ -39,6 +39,16 @@ const routes = [
     ],
   },
   {
+    path: '/myProfile',
+    name: 'myProfile',
+    component: () => import('layouts/myProfileLayout.vue'),
+    children: [
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
+
+    ],
+  },
+  {
     path: '/newUser',
     name: 'newUser',
     component: () => import('layouts/newUserLayout.vue'),

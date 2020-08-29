@@ -347,7 +347,7 @@
           :label="($q.screen.gt.sm) ? 'My Profile' : ''"
           :style="qtabStyle"
           icon="group"
-          to="/addContacts"
+          to="/myProfile"
         />
         <q-tab
           name="logout"
@@ -578,7 +578,7 @@
             </q-item>
           </q-list>
       </q-btn-dropdown>
-      <a id="ei_tab" class="ei_tab_right" @click="layout = true">
+      <a id="ei_tab" class="ei_tab_right" @click="layout = true" style="visibility: hidden">
         <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
         Feedback
         <span class="screen_reader"> Will open a new window</span>
