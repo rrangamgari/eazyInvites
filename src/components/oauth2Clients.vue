@@ -1,7 +1,7 @@
 <template>
     <div class="q-pa-sm row items-center justify-center">
         <div class="q-px-sm" v-for="client in clients" :key="client">
-            <q-img width="32px" class="cursor-pointer"
+            <q-img :width="size" class="cursor-pointer"
              @click="oauth2Login(client)" :src="`statics/icons/${client}.png`"/>
         </div>
     </div>
@@ -17,9 +17,14 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 
 export default {
+  props: {
+    size: {
+      default: '32px',
+    },
+  },
   data() {
     return {
-      clients: ['google', 'facebook'], // OAuth2 Clients (client logo must exist as statics/icons/client.png)
+      clients: ['google'], // 'facebook'], // OAuth2 Clients (client logo must exist as statics/icons/client.png)
     };
   },
   mounted() {

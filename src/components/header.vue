@@ -1,7 +1,7 @@
 <template>
   <q-header id="header" ref="header" v-scroll="scrollHandler"
    :style="hStyle" :class="hClass">
-    <q-toolbar>
+    <q-toolbar style="padding-right: 0px;">
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
 
       <q-btn-dropdown auto-close dropdown-icon="menu"
@@ -30,7 +30,8 @@
       <a @click="goHome" class="gt-md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <q-toolbar-title @click="goHome" class="logo" shrink :style="lStyle" style="cursor: pointer;">
+      <q-toolbar-title @click="goHome" class="logo" shrink :style="lStyle"
+       style="cursor: pointer; padding-right: 0px;">
         WE Invites
       </q-toolbar-title>
       <q-space/>
@@ -285,7 +286,8 @@
         label="Password"
       />
 
-      <div class="row" style="max-width: 90px; padding-top: 9px; padding-right: 8px; ">
+      <div class="row" style="padding-top: 9px; padding-right: 8px;"
+       :style="$q.screen.width > 400 ? 'max-width: 90px;' : 'max-width: 68px;' ">
         <q-btn class="col-12" label="Login" type="submit" dense
          :color="`${qbtnColor || 'white'}`"
          :text-color="`${qbtnColor === '' ? 'black' : 'white'}`"/>
@@ -294,6 +296,7 @@
       </div>
       <q-separator color="grey" size="2px" vertical inset/>
       <oauth2-clients-component style="padding-left: 0px; padding-right: 0px;"
+       :size="$q.screen.width <= 375 ? '16px' : '32px'"
        @oauth2-login-success="$router.push('/events')"/>
       </q-form>
       </div>

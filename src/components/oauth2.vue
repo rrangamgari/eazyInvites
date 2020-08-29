@@ -15,7 +15,7 @@ export default {
   name: 'oauth2Component',
   data() {
     return {
-      clients: ['google', 'facebook'],
+      clients: ['google'], // 'facebook'],
       client: this.$route.params.client || '',
       code: this.$route.query.code || '',
       error: this.$route.query.error || '',
