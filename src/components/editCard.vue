@@ -9,7 +9,11 @@
         <q-card id="editor" ref="editor" square style="position:absolute; width: 100%; height: 100%;
          overflow: hidden;">
         <div v-for="(layer, index) in layers" :key="index" style="display: block">
-          <img v-if="layer.type === 'img'" style="position: absolute; max-width: none;
+          <div v-if="layer.hide" style="position: absolute; max-width: none;
+           max-height:none; display:block;" :style="`width:${layer.width}%; height:${layer.height}%;
+           top: ${layer.top}%; left: ${layer.left}%; transform: rotate(${layer.rotate}deg);
+           background-image: url(${layer.img}); background-size: 100% 100%;`"/>
+          <img v-else-if="layer.type === 'img'" style="position: absolute; max-width: none;
            max-height:none; display:block;" :style="`width:${layer.width}%; height:${layer.height}%;
            top: ${layer.top}%; left: ${layer.left}%; transform: rotate(${layer.rotate}deg);`"
            :src="layer.img"/>
@@ -61,14 +65,16 @@
           <q-separator/>
           <q-card-section class="q-pa-sm">
           <div class="text-center text-primary q-pb-sm">Layers</div>
-          <q-list dense>
+          <q-list>
             <div v-for="(layer, index) in layers" :key="index">
-            <q-item clickable v-ripple dense v-if="!layer.hide"
+            <q-item class="q-px-xs" clickable v-ripple dense v-if="!layer.hide"
              @click="selectLayer(layer)" :focused="selected === layer" :tabindex="index">
-              <q-item-section thumbnail>
-                <img v-if="layer.type === 'img'" :id="layer.name"
-                 class="q-pa-xs" :src="layer.img">
-                <img v-else class="q-pa-xs" :src="require(`../assets/text.png`)">
+              <q-item-section avatar style="padding-right: 0px; min-width: 40px;">
+                <q-avatar square text-color="black">
+                <img v-if="layer.type === 'img'" class="q-pa-xs"
+                 style="object-fit: contain; object-position: top;" :src="layer.img">
+                <div v-else style="font-family: Times New Roman;">T</div>
+                </q-avatar>
               </q-item-section>
               <q-item-section>
                 <q-item-label class="text-primary" :lines="1" header>{{layer.name}}</q-item-label>
@@ -126,11 +132,11 @@
           </q-card-section>
           <q-separator/>
           <q-card-actions class="q-py-sm row justify-center items-center">
-            <div class="col-sm-12 col-md-6 col-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-6">
               <q-btn color="primary" flat icon="clear" label="Cancel" class="full-width q-ma-xs"
                @click="$router.push('/browseCards')"/>
             </div>
-            <div class="col-sm-12 col-md-6 col-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-6">
               <q-btn color="primary" icon="done" label="Done"  class="full-width q-ma-xs"
                @click="done"/>
             </div>
@@ -195,6 +201,7 @@ export default {
       }],
       rotater: false,
       isDone: true,
+      sw2h: 1,
     };
   },
   created() {
@@ -232,6 +239,16 @@ export default {
     axios.get(`/api/cards/${this.cardId}`)
       .then((response) => {
         this.card = response.data.data;
+        if (this.card == null) {
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: 'Card Not Found',
+            position: 'top',
+          });
+          this.$router.replace('/browseCards');
+        }
         console.log(this.card);
 
         this.ratio = this.card.height / this.card.width;
@@ -248,6 +265,8 @@ export default {
 
         const xf = 100 / this.card.width;
         const yf = 100 / this.card.height;
+
+        this.sw2h = this.$q.screen.width / this.height;
 
         this.layers = this.card.layers;
         this.card.layers.forEach((layer) => {
@@ -313,10 +332,11 @@ export default {
 
       layer.styles.forEach((style, index) => {
         text = layer.text.slice(i, i + style.len).replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
-        size = ((style.size * (this.height / this.card.height)) * 0.965).toFixed(2);
+        size = ((style.size / this.card.height) * (100 / this.sw2h)).toFixed(2);
         const l = text.length + 7;
-        text = `<span style="font-family:${style.font}; font-size:${size}px; line-height:${size}px; color:${style.color};
-        font-weight:${style.b ? 'bold' : 'normal'}; font-style:${style.i ? 'italic' : 'normal'};">${text}</span>`;
+        text = `<span style="font-family:${style.font}; font-size:${size}vw; line-height:${size}vw;`
+         + ` color:${style.color}; font-weight:${style.b ? 'bold' : 'normal'};`
+         + ` font-style:${style.i ? 'italic' : 'normal'};">${text}</span>`;
         if (index === 0) layer.default = `${text.slice(0, -l)}</span>`;
         html += text;
         i += style.len;
@@ -404,7 +424,7 @@ export default {
           so[entry[0].trim()] = entry[1].trim();
         });
 
-        so['font-size'] = (Number(so['font-size'].slice(0, -2)) / this.height) * this.card.height;
+        so['font-size'] = ((Number(so['font-size'].slice(0, -3)) * (this.sw2h / 100)) * this.card.height);
         const lh = so['font-size'];
         console.log(text, so);
 

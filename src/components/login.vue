@@ -88,7 +88,7 @@ export default {
           axios.get('/api/UserDetails/getCurrentUser')
             .then((response1) => {
               // JSON responses are automatically parsed.
-              this.$q.localStorage.set('user-token', response1.data);
+              this.$q.localStorage.set('user-token', response1.data.data);
               this.$q.notify({
                 color: 'green-4',
                 textColor: 'white',

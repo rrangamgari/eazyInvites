@@ -739,5 +739,5 @@ export default {
   padding : 10px calc(var(--d) + 3px);
   text-align : center;
   color: white;
-  font-size: calc(min(2.8vw, 1em));
+  font-size: calc(min(2.7vw, 1em));
 </style>

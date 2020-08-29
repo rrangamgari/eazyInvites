@@ -1,37 +1,34 @@
 <template>
-  <div>
+  <div v-scroll="scrollHandler">
     <div class="q-pa-lg row warp justify-left items-center">
       <div class="col-12 q-px-md q-py-sm row">
         <q-select class="col-8" style="max-width: 300px;" label="Event Type"
-          v-model="eventType" :options="eventTypeOptions"/>
-         <q-space/>
+          v-model="eventType" @input="eventTypeInput" :options="eventTypeOptions"/>
+        <!-- <q-space/>
         <q-btn style="max-width: 100px;" class="col-3" no-caps label="Select" color="primary"
-         @click="selected !== null ? $router.push(`/editcard/${selected}`) : ''"/>
+         @click="selected !== null ? $router.push(`/editcard/${selected}`) : ''"/> -->
       </div>
-      <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 q-px-md q-py-sm"
+      <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 q-pa-md"
        v-for="card in cards" :key="card.id">
-            <section id="portfolio"  class="section-bg" >
-              <div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
+            <div id="portfolio"  class="section-bg" >
+              <div class="col-lg-4 col-md-6 portfolio-item data-card wow fadeInUp">
                 <div class="portfolio-wrap">
                   <figure>
-                    <img height="250px" :ratio="16/9" style="width: 100%;"
-                     :src=
-                       "require(`../assets/cards/${card.img}`)" >
-                    <a @click=
-                         "showCard
-                         (require(`../assets/cards/${card.img}`))"
-                     data-lightbox="portfolio" data-title="Card"
+                    <img :height="`${height}px`" style="width: 100%;"
+                     :src="card.img" loading="lazy">
+                    <a @click="showCard(card.img)"
+                     cards-lightbox="portfolio" cards-title="Card"
                      class="link-preview" title="Preview"><q-icon name="remove_red_eye" /></a>
                     <a @click="$router.push(`/editcard/${card.id}`)"
                      class="link-details" title="Use this card">
                     <q-icon name="open_in_new" /></a>
                   </figure>
-                  <div class="portfolio-info">
-                    <h4>{{card.id}}</h4>
-                  </div>
                 </div>
               </div>
-            </section>
+            </div>
+      </div>
+      <div v-if="load" class="full-width q-pa-md row justify-center">
+        <q-spinner-bars class="col-3" color="primary" />
       </div>
       <VueEasyLightbox
         :visible="visible"
@@ -61,7 +58,13 @@ export default {
     return {
       eventTypeOptions: [{ value: 0, label: 'All' }],
       eventType: { value: 0, label: 'All' },
+      all: [],
       data: [],
+      cards: [],
+      n: 0,
+      k: 20,
+      load: false,
+      height: 200,
       selected: null,
       primary: '',
       imgs: '',
@@ -81,12 +84,6 @@ export default {
 
     this.loadCards();
   },
-  computed: {
-    cards() {
-      if (!this.eventType.value) return this.data;
-      return this.data.filter((e) => (e.eventTypeId === this.eventType.value));
-    },
-  },
   methods: {
     loadCards() {
       Loading.show({
@@ -96,16 +93,19 @@ export default {
       });
 
       axios
-        .get('/api/cards/files')
+        .get('/api/cards')
         .then((Response) => {
-          this.data = Response.data.data;
-          console.log(this.data);
+          this.all = Response.data.data;
+          this.data = this.all.filter((e) => (e.eventTypeId > 0));
+          // Image Height: 200px, Padding-Y: 32px, Max Images along Width: 6
+          this.k = Math.floor(window.innerHeight / (this.height + 32)) * 6;
+          this.n = 2 * this.k;
+          this.cards = this.data.splice(0, this.n);
           Loading.hide();
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$q.localStorage.set('login-token', null);
             this.$router.push('/login');
           }
 
@@ -126,6 +126,20 @@ export default {
     handleHide() {
       this.visible = false;
     },
+    eventTypeInput(eventType) {
+      if (eventType.value === 0) this.data = this.all.filter((e) => (e.eventTypeId > 0));
+      else this.data = this.all.filter((e) => (e.eventTypeId === eventType.value));
+      this.n = 2 * this.k;
+      this.cards = this.data.splice(0, this.n);
+    },
+    scrollHandler(pos) {
+      const h = document.body.scrollHeight - window.innerHeight - pos;
+      if (h <= (this.height + 150) && this.data.length > 0) {
+        this.load = true;
+        this.cards = this.cards.concat(this.data.splice(0, this.k));
+        this.n += this.k;
+      } else this.load = false;
+    },
   },
 };
 </script>
@@ -135,7 +149,7 @@ export default {
 --------------------------------*/
 
   #portfolio {
-    padding: 60px 0;
+    padding: 0px;
     animation: zoomInDown; /* referring directly to the animation's @keyframe declaration */
     animation-duration: 1s; /* don't forget to set a duration! */
     animate-delay: 0.1s;
@@ -164,7 +178,7 @@ export default {
   }
 
   #portfolio-flters li:hover,
-  #portfolio-flters li.filter-active {
+  #portfolio-flters li.data-active {
     background: #18d26e;
     color: #fff;
   }

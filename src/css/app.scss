@@ -1230,3 +1230,64 @@ body{
   -o-background-size: cover;
   background-size: cover;
 }
+
+// Cards Fonts
+@font-face {
+  font-family: 'Arial';
+  src: url('./fonts/arial.ttf');
+}
+
+@font-face {
+  font-family: 'Algerian';
+  src: url('./fonts/ALGER.ttf');
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('./fonts/calibri.ttf');
+}
+
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('./fonts/GOTHIC.ttf');
+}
+
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url('./fonts/comic.ttf');
+}
+
+@font-face {
+  font-family: 'Courier New';
+  src: url('./fonts/cour.ttf');
+}
+
+@font-face {
+  font-family: 'Edwardian Script ITC';
+  src: url('./fonts/ITCEDSCR.ttf');
+}
+
+@font-face {
+  font-family: 'Gabriola';
+  src: url('./fonts/Gabriola.ttf');
+}
+
+@font-face {
+  font-family: 'Georgia';
+  src: url('./fonts/georgia.ttf');
+}
+
+@font-face {
+  font-family: 'Tahoma';
+  src: url('./fonts/tahoma.ttf');
+}
+
+@font-face {
+  font-family: 'Times New Roman';
+  src: url('./fonts/times.ttf');
+}
+
+@font-face {
+  font-family: 'Verdana';
+  src: url('./fonts/verdana.ttf');
+}
