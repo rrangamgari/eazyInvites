@@ -15,7 +15,7 @@
                 <div class="portfolio-wrap">
                   <figure>
                     <img :height="`${height}px`" style="width: 100%;"
-                     :src="card.img" loading="lazy">
+                     :src="card.thumbnail" loading="lazy">
                     <a @click="showCard(card.img)"
                      cards-lightbox="portfolio" cards-title="Card"
                      class="link-preview" title="Preview"><q-icon name="remove_red_eye" /></a>
@@ -211,7 +211,7 @@ export default {
     overflow: hidden;
     height: 200px;
     position: relative;
-    border-radius: 4px 4px 0 0;
+    /* border-radius: 4px 4px 0 0; */
     margin: 0;
   }
 

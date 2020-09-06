@@ -260,6 +260,7 @@ export default {
           this.width = editor.right - editor.left - 8;
           this.height = this.width * this.ratio;
         }
+        window.addEventListener('resize', this.windowResizeHandler);
         console.log(this.width);
         console.log(this.height);
 
@@ -299,6 +300,9 @@ export default {
         });
       });
   },
+  destroyed() {
+    window.removeEventListener('resize', this.windowResizeHandler);
+  },
   methods: {
     transformOrigin(layer) {
       return `${layer.left + layer.width * 0.5}% ${layer.top + layer.height * 0.5}%`;
@@ -332,7 +336,7 @@ export default {
 
       layer.styles.forEach((style, index) => {
         text = layer.text.slice(i, i + style.len).replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
-        size = ((style.size / this.card.height) * (100 / this.sw2h)).toFixed(2);
+        size = ((style.size / this.card.height) * (97 / this.sw2h)).toFixed(2);
         const l = text.length + 7;
         text = `<span style="font-family:${style.font}; font-size:${size}vw; line-height:${size}vw;`
          + ` color:${style.color}; font-weight:${style.b ? 'bold' : 'normal'};`
@@ -706,6 +710,16 @@ export default {
     },
     captureOff() {
       this.captureToggle = false;
+    },
+    windowResizeHandler() {
+      editor = document.getElementById('editor').getBoundingClientRect();
+      if (editor.width) {
+        this.width = editor.width - 8;
+        this.height = this.width * this.ratio;
+      } else {
+        this.width = editor.right - editor.left - 8;
+        this.height = this.width * this.ratio;
+      }
     },
   },
 };
