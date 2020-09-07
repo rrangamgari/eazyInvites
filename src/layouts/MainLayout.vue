@@ -70,25 +70,28 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.get('http://ip-api.com/json/')
+      axios.get('/api/feedback/gps')
         .then((response) => {
           // JSON responses are automatically parsed.
           // this.feedbackList = this.feedbackList.concat(response.data.data);
           // Notification for testing api
           this.$q.localStorage.set('country-token', response.data.countryCode);
-          if (response.data.countryCode === 'US') {
+          if (response.data.countryCode === 'IN') {
+            this.showUS = false;
+            this.showInd = true;
+          } else {
             this.showUS = true;
             this.showInd = false;
           }
           Loading.hide();
         })
         .catch((e) => {
-          //  this.errors.push(e);
+          this.errors.push(e);
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
             icon: 'error',
-            message: e.message,
+            message: 'oops Something went wrong...',
             position: 'top',
           });
           Loading.hide();

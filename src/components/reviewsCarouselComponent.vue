@@ -103,26 +103,19 @@ export default {
       && this.$q.localStorage.getItem('country-token') === 'US') {
       this.showUS = true;
     }
-    axios.get('http://invites-env.eba-662y8mnq.ap-south-1.elasticbeanstalk.com/api/feedback')
+    axios.get('/api/feedback')
       .then((response) => {
         // JSON responses are automatically parsed.
         this.feedbackList = this.feedbackList.concat(response.data.data);
         // Notification for testing api
-        this.$q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Welcome to Eazy Invites',
-          position: 'center',
-        });
       })
       .catch((e) => {
-        //  this.errors.push(e);
+        this.errors.push(e);
         this.$q.notify({
           color: 'red-5',
           textColor: 'white',
           icon: 'error',
-          message: e.message,
+          message: 'oops Something went wrong...',
           position: 'top',
         });
       });
