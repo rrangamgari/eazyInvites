@@ -87,7 +87,12 @@
       Feedback
       <span class="screen_reader"> Will open a new window</span>
     </a>-->
-<a href="https://wa.me/13022206686?text=Hi EazyInvites, I love to start using this..."
+    <a id="ei_tab" class="ei_tab_right" @click="layout = true" style="visibility: hidden">
+      <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
+      Feedback
+      <span class="screen_reader"> Will open a new window</span>
+    </a>
+<a href="https://wa.me/918460468583?text=Hi We Invites, I love to start using this..."
    target="_blank">
       <img
         id="whatsapp_tab" class="whatsapp_tab_right"

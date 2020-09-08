@@ -17,8 +17,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { Loading } from 'quasar';
-import LogoSpinner from '../components/logoSpinner';
+import { Loading, QSpinnerBars } from 'quasar';
 import carouselComponent from '../components/homePageCarousel.vue';
 import indiacarouselComponent from '../components/indiaHomePageCarousel.vue';
 import videoComponent from '../components/homePageVideo.vue';
@@ -50,7 +49,7 @@ export default {
   },
   mounted() {
     Loading.show({
-      spinner: LogoSpinner,
+      spinner: QSpinnerBars,
       spinnerColor: 'primary',
       thickness: '3',
     });
@@ -66,7 +65,7 @@ export default {
     }
     if (this.$q.localStorage.getItem('country-token') === null) {
       Loading.show({
-        spinner: LogoSpinner,
+        spinner: QSpinnerBars,
         spinnerColor: 'primary',
         thickness: '3',
       });

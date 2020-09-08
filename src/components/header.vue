@@ -155,7 +155,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Register</q-item-label>
-                <q-item-label caption>New to Easy Invites</q-item-label>
+                <q-item-label caption>New to We Invites</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -173,7 +173,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
-                <q-item-label caption>Logout from Easy Invites</q-item-label>
+                <q-item-label caption>Logout from We Invites</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -392,7 +392,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Register</q-item-label>
-                <q-item-label caption>New to Easy Invites</q-item-label>
+                <q-item-label caption>New to We Invites</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -410,7 +410,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
-                <q-item-label caption>Logout from Easy Invites</q-item-label>
+                <q-item-label caption>Logout from We Invites</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -573,16 +573,12 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
-                <q-item-label caption>Logout from Easy Invites</q-item-label>
+                <q-item-label caption>Logout from We Invites</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
       </q-btn-dropdown>
-      <a id="ei_tab" class="ei_tab_right" @click="layout = true" style="visibility: hidden">
-        <img src="../assets/icon/ei_tab_icon_retina.gif" alt="">
-        Feedback
-        <span class="screen_reader"> Will open a new window</span>
-      </a>
+
     </q-toolbar>
   </q-header>
 </template>

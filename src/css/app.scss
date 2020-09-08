@@ -490,7 +490,7 @@ section {
   position: relative;
   // width: 120px;
   // height: 300px;
-  animation: flip; /* referring directly to the animation's @keyframe declaration */
+  animation: zoomInDown; /* referring directly to the animation's @keyframe declaration */
   animation-duration: 1.2s; /* don't forget to set a duration! */
   animate-delay: 0.1s;
 }

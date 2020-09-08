@@ -202,7 +202,7 @@ export default {
     height: auto;
     overflow: hidden;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
-    animation: flip; /* referring directly to the animation's @keyframe declaration */
+    animation: zoomInDown; /* referring directly to the animation's @keyframe declaration */
     animation-duration: 2s; /* don't forget to set a duration! */
     animate-delay: 0.1s;
   }
