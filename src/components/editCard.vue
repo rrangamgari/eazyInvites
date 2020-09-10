@@ -19,12 +19,12 @@
            :src="layer.img"/>
           <div v-else style="position: absolute; max-width: none; max-height: none; display: block;"
            :style="`top:${layer.top}%; left:${layer.left}%; transform: rotate(${layer.rotate}deg);
-            width: ${layer.width}%; height: ${layer.height}%;`">
-            <div :style="`${transformMatrix(layer.transform)}; transform-origin: 0% 0%;`"
-             style="width: max-content; outline: 0px; display: inline-block; min-width: 10px;"
+           width: ${layer.width}%; height: ${layer.height}%;`">
+            <div style="width: max-content; outline: 0px; display: inline-block; min-width: 10px;"
+             :style="`${transformMatrix(layer.transform)}; transform-origin: 0% 0%; ${layer.style}`"
              v-html="layer.text" contenteditable  @blur="(e) => layerTextChange(e, layer)"
-             @input="(e) => layerTextResize(e, layer)"
-             @load="e=>layerTextResize(e, layer)"/>
+             @input="(e) => layerTextResize(e, layer)" @paste.prevent="layerTextPaste"
+             @focus="e=>layerTextResize(e, layer)"/>
           </div>
         </div>
         </q-card>
@@ -54,9 +54,9 @@
       </div>
       <div class="col-3 q-pa-xs">
         <q-card>
-          <q-card-section class="q-pa-sm">
-            <q-file :label="layers[0] ? layers[0].name : 'Photo'" outlined
-             v-model="file" @input="uploadFile">
+          <q-card-section v-if="photos" class="q-pa-sm">
+            <q-file v-for="i in photos" :key="i" :label="layers[i-1].name" outlined
+             accept="image/*" v-model="file[i-1]" @input="(e) => uploadFile(e, i-1)">
               <template v-slot:append>
                 <q-icon name="attach_file" />
               </template>
@@ -73,7 +73,7 @@
                 <q-avatar square text-color="black">
                 <img v-if="layer.type === 'img'" class="q-pa-xs"
                  style="object-fit: contain; object-position: top;" :src="layer.img">
-                <div v-else style="font-family: Times New Roman;">T</div>
+                <div v-else style="font-family: serif;">T</div>
                 </q-avatar>
               </q-item-section>
               <q-item-section>
@@ -165,7 +165,7 @@ export default {
   data() {
     return {
       cardId: '',
-      file: null,
+      file: [],
       ratio: 9 / 16,
       card: null,
       layers: [],
@@ -202,6 +202,7 @@ export default {
       rotater: false,
       isDone: true,
       sw2h: 1,
+      photos: 0,
     };
   },
   created() {
@@ -270,12 +271,16 @@ export default {
         this.sw2h = this.$q.screen.width / this.height;
 
         this.layers = this.card.layers;
-        this.card.layers.forEach((layer) => {
+        this.card.layers.forEach((layer, index) => {
           layer.left *= xf;
           layer.top *= yf;
           layer.width *= xf;
           layer.height *= yf;
-          if (layer.name.toLowerCase().indexOf('card') !== -1 && layer.img !== '') layer.hide = true;
+          if (layer.name.toLowerCase().indexOf('card') !== -1 && layer.img !== '') {
+            layer.hide = true;
+            this.photos = index;
+            if (index) this.file = new Array(index);
+          }
           if (layer.type === 'txt') {
             this.layerToHtml(layer);
             console.log(layer.text);
@@ -310,13 +315,13 @@ export default {
     transformMatrix(mat) {
       return `transform: matrix(${mat[0][0]}, ${mat[0][1]}, ${mat[1][0]}, ${mat[1][1]}, ${mat[2][0]}, ${mat[2][1]})`;
     },
-    uploadFile(val) {
+    uploadFile(val, i) {
       console.log(val);
       const reader = new FileReader();
       reader.readAsDataURL(val);
       reader.onload = () => {
         console.log(reader.result);
-        this.layers[0].img = reader.result;
+        this.layers[i].img = reader.result;
       };
       reader.onerror = (e) => {
         this.$q.notify({
@@ -336,39 +341,50 @@ export default {
 
       layer.styles.forEach((style, index) => {
         text = layer.text.slice(i, i + style.len).replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+        layer.text = text; // Only single styled text assumed
         size = ((style.size / this.card.height) * (97 / this.sw2h)).toFixed(2);
-        const l = text.length + 7;
-        text = `<span style="font-family:${style.font}; font-size:${size}vw; line-height:${size}vw;`
+        // const l = text.length + 7;
+        const styleText = `font-family:${style.font}; font-size:${size}vw; line-height:${size * 1.2}vw;`
          + ` color:${style.color}; font-weight:${style.b ? 'bold' : 'normal'};`
-         + ` font-style:${style.i ? 'italic' : 'normal'};">${text}</span>`;
-        if (index === 0) layer.default = `${text.slice(0, -l)}</span>`;
+         + ` font-style:${style.i ? 'italic' : 'normal'};`;
+        text = `<span style="${styleText}">${text}</span>`;
+        layer.style = styleText; // Only single styled text assumed
+        if (index === 0) layer.default = '';
         html += text;
         i += style.len;
       });
 
-      layer.text = html;
+      // layer.text = html;
+      text = html;
     },
     layerTextChange(evt, layer) {
       layer.text = evt.target.innerHTML;
       layer.name = evt.target.innerText;
     },
+    layerTextPaste(evt) {
+      const text = evt.clipboardData.getData('text/plain').replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+      console.log(evt, evt.clipboardData.getData('text/plain'), text);
+      document.execCommand('insertHTML', false, text);
+    },
     layerTextResize(evt, layer) {
       const rect = evt.target.getBoundingClientRect();
-      console.log(evt.target.innerHTML, rect);
+      console.log(evt, rect);
       layer.width = (rect.width / this.width) * 100 + 0.2;
       layer.height = (rect.height / this.height) * 100 + 0.2;
-      if (evt.target.innerHTML.trim() === '' || evt.target.innerHTML.trim() === '<br>') {
-        evt.target.innerHTML = '';
-        console.log(1, layer);
-      } else if (evt.target.innerHTML.trim().startsWith('<font')) {
-        evt.target.innerHTML = `${layer.default.slice(0, -7)}${evt.target.innerText}</span>`;
-        console.log(2, layer);
-        this.moveCursorToEnd(evt.target);
-      } else if (!evt.target.innerHTML.trim().startsWith('<span')) {
-        evt.target.innerHTML = `${layer.default.slice(0, -7)}${evt.target.innerHTML}</span>`;
-        console.log(3, layer);
-        this.moveCursorToEnd(evt.target);
-      }
+      // if (evt.target.innerHTML.trim() === '' || evt.target.innerHTML.trim() === '<br>') {
+      //   evt.target.innerHTML = '';
+      //   console.log(1, layer);
+      // } else if (evt.target.innerHTML.trim().startsWith('<font')) {
+      //   evt.target.innerHTML = '';
+      //   console.log(2, layer);
+      //   document.execCommand('insertHTML', false, `${layer.default.slice(0, -7)}
+      // ${evt.target.innerText}</span>`);
+      // } else if (!evt.target.innerHTML.trim().startsWith('<span')) {
+      //   evt.target.innerHTML = '';
+      //   console.log(3, layer);
+      //   document.execCommand('insertHTML', false, `${layer.default.slice(0, -7)}
+      // ${evt.target.innerHTML}</span>`);
+      // }
     },
     moveCursorToEnd(el) {
       el.focus();
@@ -389,6 +405,8 @@ export default {
     },
     layerTextToImg(layer) {
       console.log(layer);
+      const ta = document.createElement('textarea');
+      layer.text = `<span style="${layer.style}">${layer.text}</span>`; // Only single styled text assumed
       const words = layer.name.replace(/&nbsp;/g, ' ').replace(/<br>/g, '\n').split(/\s+/);
       const styles = layer.text.split('</span>');
       console.log(layer.name, words, styles);
@@ -415,9 +433,10 @@ export default {
 
       styles.forEach((style) => {
         if (style.trim() === '') return;
+        console.log(style);
 
-        const text = style.substr(style.indexOf('>') + 1).trim().replace(/&nbsp;/g, ' ').replace(/<br>/g, '\n')
-          .replace(/&#8203;/g, '');
+        ta.innerHTML = style.substr(style.indexOf('>') + 1).trim();
+        const text = ta.value.replace(/<br>/g, '\n');
         const str = style.substring(style.indexOf('"') + 1, style.lastIndexOf('"') - 1).split(/[ \n]*;[ \n]*/);
         const so = {};
 
@@ -429,7 +448,7 @@ export default {
         });
 
         so['font-size'] = ((Number(so['font-size'].slice(0, -3)) * (this.sw2h / 100)) * this.card.height);
-        const lh = so['font-size'];
+        const lh = so['font-size'] * 1.2;
         console.log(text, so);
 
         ctx.font = `${so['font-style']} ${so['font-weight']} ${so['font-size']}px ${so['font-family']}`;
@@ -439,7 +458,7 @@ export default {
           if (text[i] === '\n') {
             y += lh;
             x = 0;
-          } else if (text[i] === ' ') {
+          } else if (text[i].trim().length === 0) {
             ctx.fillText(' ', x, y);
             x += ctx.measureText(' ').width;
           } else {
