@@ -77,7 +77,7 @@
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
                     <q-time v-model="eventtime" @input="() => $refs.qTimeProxy.hide()"
-                            format24h/>
+                            />
                     <q-tooltip content-class="bg-primary"
                                content-style="font-size: 16px" :offset="[10, 10]">
                       Add Time
@@ -86,7 +86,32 @@
                 </q-icon>
               </template>
             </q-input>
+              <div style="width: 4%;"/>
+              <q-toggle style="width: 10%;"
+                        v-model="second"
+                        v-show="first"
+                        icon="alarm"
+                        size="50px"
+              />
             </div>
+          <div class="row">
+            <q-input v-show="second" style="width: 80%"
+                     v-model="eventendtime"   mask="time" stack-label label="Event End Time">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
+                    <q-time v-model="eventendtime" @input="() => $refs.qTimeProxy.hide()"
+                    />
+                    <q-tooltip content-class="bg-primary"
+                               content-style="font-size: 16px" :offset="[10, 10]">
+                      Add Time
+                    </q-tooltip>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+
+          </div>
           <div class="row">
             <div style="width: 84%;">
             <q-file
@@ -369,11 +394,13 @@ export default {
       fileId: null,
       card: false,
       first: false,
+      second: false,
       url: '',
       step: 1,
       eventtitle: '',
       eventdate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
       eventtime: '00:00',
+      eventendtime: '00:00',
       eventType: '',
       selection: ['teal'],
       selected: [],
@@ -515,6 +542,7 @@ export default {
       this.eventType = '';
       this.eventdate = date.formatDate(Date.now(), 'DD/MM/YYYY');
       this.eventtime = '00:00';
+      this.eventendtime = '00:00';
       if (!this.card) this.file = null;
       this.eventmessage = '';
     },
@@ -589,13 +617,14 @@ export default {
       const fromMonth = (from[1]);
       const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
       const startTime = `${this.first ? this.eventtime : '00:00'}`;
+      const endTime = `${this.first ? this.eventendtime : this.eventtime}`;
 
       const eventDetails = {
         eventtypeid: this.eventType.value,
         eventtitle: this.eventtitle,
         eventmessage: this.eventmessage,
         startdate: new Date(`${startDate}T${startTime}:00`),
-        enddate: new Date(`${startDate}T${startTime}:00`),
+        enddate: new Date(`${startDate}T${endTime}:00`),
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
         hostedby: this.hostname,
