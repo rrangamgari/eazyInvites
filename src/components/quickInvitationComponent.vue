@@ -607,7 +607,6 @@ export default {
       formData.append('file', this.card ? null : this.file);
       formData.append('eventDetails', new Blob([JSON.stringify(eventDetails)], { type: 'application/json' }));
       formData.append('eventGuests', new Blob([JSON.stringify(eventMemberIdList)], { type: 'application/json' }));
-
       axios.post('/api/userEvents/event', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         .then((response) => {
           if (!response.data.data || response.data.data === 'null') {

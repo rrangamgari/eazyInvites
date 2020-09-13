@@ -190,6 +190,7 @@ export default {
               Loading.hide();
               this.getImages();
             });
+          Loading.hide();
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
