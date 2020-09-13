@@ -27,7 +27,7 @@
             :columns="columns"
             grid
             color="primary"
-            row-key="eventmemberid"
+            row-key="eventmemberidUI"
             icon-left="people"
             hide-bottom
             hide-header

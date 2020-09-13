@@ -10,10 +10,10 @@
       <!-- <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"> -->
         <div  v-if="!index" class="row warp ">
           <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
-          v-for="event in events(index)" :key="event.eventdetailsid">
+          v-for="event in events(index)" :key="event.eventdetailsidUI">
           <div class="member rounded-borders" >
             <q-card clickable v-ripple
-                    @click="onCardClick(event.eventdetailsid,event.eventdetailsalphaid)"
+                    @click="onCardClick(event.eventdetailsidUI,event.eventdetailsalphaid)"
             class="rounded-borders text-grey">
               <q-img :src="event.attachmentlink !== null ? event.attachmentlink :
               require('../assets/logo/bird.png')" alt :ratio="4/3" >
@@ -35,10 +35,10 @@
         </div>
         <div v-else class="row warp">
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
-          v-for="event in events(index).slice(0,4)" :key="event.eventdetailsid">
+          v-for="event in events(index).slice(0,4)" :key="event.eventdetailsidUI">
             <div class="member" >
           <q-card clickable v-ripple
-                  @click="onCardClick(event.eventdetailsid,event.eventdetailsalphaid)">
+                  @click="onCardClick(event.eventdetailsidUI,event.eventdetailsalphaid)">
               <q-img :src="event.attachmentlink !== null ? (event.attachmentlink) :
               require('../assets/logo/bird.png')" alt :ratio="4/3">
               <div class="absolute-bottom text-subtitle2 text-center">
@@ -57,7 +57,7 @@
               </div>
           </div>
         </div>
-        <!-- <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)"> -->
+        <!-- <q-card clickable v-ripple @click="onCardClick(event.eventdetailsidUI)"> -->
           <!-- <div>
           <img src="../assets/logo/bird.png">
           <transition name="fade-in" mode="out-in">
@@ -246,8 +246,8 @@ export default {
       }
       return this.events1;
     },
-    onCardClick(eventdetailsid, eventdetailsalphaid) {
-      this.$router.push(`/events/${eventdetailsid}/${eventdetailsalphaid}`);
+    onCardClick(eventdetailsidUI, eventdetailsalphaid) {
+      this.$router.push(`/events/${eventdetailsidUI}/${eventdetailsalphaid}`);
     },
     getcard(url) {
       return axios
@@ -264,8 +264,8 @@ export default {
       <div class="text-h6 q-px-md q-pb-md text-left col-12 text-primary">
         {{ ((events(index).length == 0) ? 'No ' : '') + title }}</div>
       <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
-       v-for="event in events(index)" :key="event.eventdetailsid">
-        <q-card clickable v-ripple @click="onCardClick(event.eventdetailsid)">
+       v-for="event in events(index)" :key="event.eventdetailsidUI">
+        <q-card clickable v-ripple @click="onCardClick(event.eventdetailsidUI)">
           <q-card-section class="q-pa-xs">
             <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
             {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
@@ -375,8 +375,8 @@ export default {
       }
       return this.events1;
     },
-    onCardClick(eventdetailsid) {
-      this.$router.push(`/events/${eventdetailsid}`);
+    onCardClick(eventdetailsidUI) {
+      this.$router.push(`/events/${eventdetailsidUI}`);
     },
   },
 };

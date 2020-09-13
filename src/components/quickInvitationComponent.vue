@@ -600,7 +600,7 @@ export default {
         hostedby: this.hostname,
       };
 
-      const eventMemberIdList = this.selected.map((el) => el.eventmemberid);
+      const eventMemberIdList = this.selected.map((el) => el.eventmemberidUI);
 
       const formData = new FormData();
       formData.append('file', this.card ? null : this.file);

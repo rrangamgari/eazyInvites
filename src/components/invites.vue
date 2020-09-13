@@ -8,14 +8,15 @@
         </header>
       </div>
       <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
-       v-for="invite in invites(index)" :key="invite.eventguestsid">
+       v-for="invite in invites(index)" :key="invite.eventguestsidUI">
         <div class="member rounded-borders" >
         <q-card clickable v-ripple
-                @click="onCardClick(invite.eventguestsid,invite.eventDetails.eventdetailsalphaid)">
+                @click="onCardClick(invite.eventguestsidUI,invite.eventDetails.eventdetailsalphaid)"
+        >
           <q-img :src="invite.eventDetails.attachmentlink !== null
           ? invite.eventDetails.attachmentlink :
               require('../assets/logo/bird.png')" alt :ratio="4/3"
-                 :to="`/invites/${invite.eventguestsid}`">
+                 :to="`/invites/${invite.eventguestsidUI}`">
             <div class="absolute-bottom text-subtitle2 text-center">
               {{ (invite.eventDetails.eventtitle !== null &&
               invite.eventDetails.eventtitle.trim() !== '') ?
@@ -111,8 +112,8 @@ export default {
       }
       return this.invites1;
     },
-    onCardClick(eventguestsid, eventdetailsalphaid) {
-      this.$router.push(`/invites/${eventguestsid}/${eventdetailsalphaid}`);
+    onCardClick(eventguestsidUI, eventdetailsalphaid) {
+      this.$router.push(`/invites/${eventguestsidUI}/${eventdetailsalphaid}`);
     },
   },
 };

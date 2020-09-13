@@ -83,7 +83,7 @@
       :data="data"
       :columns="columns"
       color="primary"
-      row-key="eventmemberid"
+      row-key="eventmemberidUI"
       icon-left="people"
       hide-bottom
       :rows-per-page-options="[0]"
@@ -223,7 +223,7 @@
           <q-td v-if="!select" key="delete" :props="props">
             <q-icon name="delete" size="2rem" color='primary' class=""
                     style="cursor:pointer;"
-                    @click="deleteMe(props.row.eventmemberid)"/>
+                    @click="deleteMe(props.row.eventmemberidUI)"/>
           </q-td>
         </q-tr>
       </template>
@@ -419,7 +419,7 @@ export default {
           name: 'delete',
           label: 'Delete',
           sortable: false,
-          field: (row) => `${row.eventmemberid}`,
+          field: (row) => `${row.eventmemberidUI}`,
         },
       ],
 
