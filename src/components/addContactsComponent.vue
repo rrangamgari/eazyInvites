@@ -93,6 +93,7 @@
       :selection="select ? 'multiple' : 'none'"
       :selected="selected"
       @update:selected="(newSelected) => $emit('update:selected', newSelected)"
+      :style="`max-height: ${$q.screen.height * 2 / 3}px;`"
     >
       <template v-slot:top-right>
         <q-btn
