@@ -72,7 +72,7 @@
             </div>
             <div class="row">
             <q-input v-show="first" style="width: 80%"
-             v-model="eventtime"   mask="time" stack-label label="Event Time">
+             v-model="eventtime"   mask="time" stack-label label="Event Start Time">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
@@ -95,7 +95,7 @@
               />
             </div>
           <div class="row">
-            <q-input v-show="second" style="width: 80%"
+            <q-input v-show="first&&second" style="width: 80%"
                      v-model="eventendtime"   mask="time" stack-label label="Event End Time">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
