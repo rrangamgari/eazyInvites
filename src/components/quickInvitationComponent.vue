@@ -31,13 +31,6 @@
           class="q-gutter-md q-pa-xs q-pr-md"
           style="width:450px"
         >
-            <q-input
-              v-model="eventtitle"
-              type="text"
-
-              label="Event Title"
-              name="eventtitle"
-            />
             <q-select
               name="eventType"
 
@@ -50,8 +43,13 @@
                   onEventTypeChange();
                 }
               "
-            >
-            </q-select>
+            />
+            <q-input
+              v-model="eventtitle"
+              type="text"
+              label="Event Title"
+              name="eventtitle"
+            />
             <div class="row">
             <q-input style="width: 80%;"
              v-model="eventdate"     stack-label label="Event Date"
@@ -72,9 +70,8 @@
                     size="50px"
           />
             </div>
-          <div class="row">
-            <div style="width: 84%;">
-            <q-input v-show="first"
+            <div class="row">
+            <q-input v-show="first" style="width: 80%"
              v-model="eventtime"   mask="time" stack-label label="Event Time">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -89,6 +86,9 @@
                 </q-icon>
               </template>
             </q-input>
+            </div>
+          <div class="row">
+            <div style="width: 84%;">
             <q-file
               :disable="card"
 
@@ -101,9 +101,9 @@
                 <q-icon name="attach_file" />
               </template>
             </q-file>
-          </div>
-          <div style="width: 4%;"/>
-            <a @click="$router.push('/browseCards')"
+            </div>
+            <div style="width: 4%;" />
+            <a @click="$router.push('/browseCards')" style="width: 10%;"
                class="link-details primary cursor-pointer">
               <q-icon name="insert_invitation" title="Browse Cards" size="xl" color="primary"/>
               <q-tooltip content-class="bg-primary"
@@ -111,7 +111,7 @@
                 Browse Cards
               </q-tooltip>
             </a>
-  </div>
+          </div>
           <q-input
             v-model="hostname"
             type="text"
@@ -159,6 +159,7 @@
             />
           </q-stepper-navigation>
         </q-form>
+        </div>
           <div class="absolute" style="bottom: 50%; right: 10%;">
             <div>
               <q-fab
@@ -191,7 +192,6 @@
             </div>
 
           </div>
-        </div>
       </q-tab-panel>
 
       <q-tab-panel :name="2" class="q-pa-lg">
@@ -533,6 +533,7 @@ export default {
       // alert(this.eventType);
       // eslint-disable-next-line max-len
       this.eventmessage = `\nDear {{Guest Name}}, We invite you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`;
+      if (this.eventType && (!this.eventtitle || this.eventtitle.length === 0)) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
       // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
       // \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
@@ -661,6 +662,7 @@ export default {
       this.file = file;
       this.url = data;
     }
+    if (this.$route.params.eventType) this.eventType = this.$route.params.eventType;
     console.log(this.fileId, this.file, this.url);
     Loading.show({
       spinner: QSpinnerBars,
@@ -676,6 +678,7 @@ export default {
       .then((response) => {
         // JSON responses are automatically parsed.
         this.options = response.data.data;
+        if (this.eventType && typeof this.eventType === 'string') this.eventType = this.options[Number(this.eventType) - 1];
         // this.data = this.data.concat(response.data.data);
         Loading.hide();
       })
@@ -704,6 +707,7 @@ export default {
         // JSON responses are automatically parsed.
         this.$q.localStorage.set('user-token', response1.data.data);
         this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
+        if (this.eventType && (!this.eventtitle || this.eventtitle.length === 0)) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
         // Notification for testing api
         Loading.hide();
       })

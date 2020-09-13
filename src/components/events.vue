@@ -35,12 +35,12 @@
         </div>
         <div v-else class="row warp">
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
-          v-for="event in events(index).slice(0,4)" :key="event.eventdetailsidUI">
+          v-for="event in events(index)" :key="event.eventdetailsidUI">
             <div class="member" >
           <q-card clickable v-ripple
                   @click="onCardClick(event.eventdetailsidUI,event.eventdetailsalphaid)">
-              <q-img :src="event.attachmentlink !== null ? (event.attachmentlink) :
-              require('../assets/logo/bird.png')" alt :ratio="4/3">
+              <q-img :src="event.attachmentlink && event.attachmentlink.startsWith('data:')
+               ? (event.attachmentlink) : require('../assets/logo/bird.png')" alt :ratio="4/3">
               <div class="absolute-bottom text-subtitle2 text-center">
                 {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
                   event.eventtitle : 'Untitled Event' }}
@@ -188,6 +188,7 @@ export default {
             .then((Response) => {
               this.eventType = Response.data.data;
               Loading.hide();
+              this.getImages();
             });
         })
         .catch((e) => {
@@ -219,7 +220,15 @@ export default {
     createEvents() {
       const date = new Date();
       this.data.forEach((event) => {
-        // this.event.attachmentlink = geteventcard(this.event.attachmentlink);
+        if ((new Date(event.enddate)).getTime() < date.getTime()) {
+          this.events1 = this.events1.concat(event);
+        } else {
+          this.events0 = this.events0.concat(event);
+        }
+      });
+    },
+    getImages() {
+      this.data.forEach((event) => {
         if (event.attachmentlink !== null) {
           axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
           axios
@@ -229,14 +238,8 @@ export default {
                 new Uint8Array(Response.data)
                   .reduce((data, byte) => data + String.fromCharCode(byte), ''),
               );
-              console.log(Response.headers);
               event.attachmentlink = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
             });
-        }
-        if ((new Date(event.enddate)).getTime() < date.getTime()) {
-          this.events1 = this.events1.concat(event);
-        } else {
-          this.events0 = this.events0.concat(event);
         }
       });
     },

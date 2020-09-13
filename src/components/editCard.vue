@@ -167,6 +167,7 @@ export default {
       cardId: '',
       file: [],
       ratio: 9 / 16,
+      eventType: this.$route.query.eventtype || null,
       card: null,
       layers: [],
       selected: '',
@@ -225,6 +226,7 @@ export default {
   mounted() {
     this.primary = colors.getBrand('primary');
 
+    document.execCommand('insertBrOnReturn', false, true);
     canvas = document.getElementById('Canvas');
     ctx = canvas.getContext('2d');
     console.log(ctx);
@@ -532,6 +534,7 @@ export default {
           const params = response.data.data;
           params.file = new File([], params.name, { type: 'image/jpg' });
           delete params.name;
+          params.eventType = this.eventType;
           console.log(params);
           Loading.hide();
           this.$router.push({ name: 'createEvent', params });

@@ -13,9 +13,10 @@
         <q-card clickable v-ripple
                 @click="onCardClick(invite.eventguestsidUI,invite.eventDetails.eventdetailsalphaid)"
         >
-          <q-img :src="invite.eventDetails.attachmentlink !== null
-          ? invite.eventDetails.attachmentlink :
-              require('../assets/logo/bird.png')" alt :ratio="4/3"
+          <q-img :src="invite.eventDetails.attachmentlink
+           && invite.eventDetails.attachmentlink.startsWith('data:')
+           ? invite.eventDetails.attachmentlink :
+              require('../assets/logo/bird.png')" :ratio="4/3"
                  :to="`/invites/${invite.eventguestsidUI}`">
             <div class="absolute-bottom text-subtitle2 text-center">
               {{ (invite.eventDetails.eventtitle !== null &&
@@ -78,6 +79,7 @@ export default {
           .then((Response) => {
             this.eventType = Response.data.data;
             Loading.hide();
+            this.getImages();
           });
       })
       .catch((e) => {
@@ -103,6 +105,22 @@ export default {
           this.invites1 = this.invites1.concat(invite);
         } else {
           this.invites0 = this.invites0.concat(invite);
+        }
+      });
+    },
+    getImages() {
+      this.data.forEach((invite) => {
+        if (invite.eventDetails.attachmentlink !== null) {
+          axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+          axios
+            .get(invite.eventDetails.attachmentlink, { responseType: 'arraybuffer' })
+            .then((Response) => {
+              const image = btoa(
+                new Uint8Array(Response.data)
+                  .reduce((data, byte) => data + String.fromCharCode(byte), ''),
+              );
+              invite.eventDetails.attachmentlink = `data:${Response.headers['content-type'].toLowerCase()};base64,${image}`;
+            });
         }
       });
     },

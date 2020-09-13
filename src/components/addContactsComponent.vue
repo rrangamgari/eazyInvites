@@ -3,7 +3,7 @@
   <div v-if="cWidth < 1150" class="col-12 q-px-md q-pt-md">
   <q-card>
     <q-form
-      id="addContact"
+      ref="addContact"
       @submit="onFormSubmit"
       @reset="onFormReset"
       class="q-pt-sm q-pb-xs q-px-xs"
@@ -159,6 +159,7 @@
               buttons
               :validate="firstnameValidation"
               @hide="firstnameValidation"
+              @save="(v, iv) => save(v, iv, props.row, 'firstname')"
             >
               <q-input
                 v-model="props.row.firstname"
@@ -176,6 +177,7 @@
               v-model="props.row.lastname"
               title="Edit the Last Name"
               buttons
+              @save="(v, iv) => save(v, iv, props.row, 'lastname')"
             >
               <q-input v-model="props.row.lastname" dense autofocus counter />
             </q-popup-edit>
@@ -186,6 +188,7 @@
               v-model="props.row.primaryPhone"
               title="Edit the Phone"
               buttons
+              @save="(v, iv) => save(v, iv, props.row, 'primaryPhone')"
             >
               <q-input
                 v-model="props.row.primaryPhone"
@@ -201,6 +204,7 @@
               v-model="props.row.secondaryPhone"
               title="Edit the phone"
               buttons
+              @save="(v, iv) => save(v, iv, props.row, props.key)"
             >
               <q-input
                 v-model="props.row.secondaryPhone"
@@ -216,6 +220,7 @@
               v-model="props.row.email"
               title="Edit the Email"
               buttons
+              @save="(v, iv) => save(v, iv, props.row, 'email')"
             >
               <q-input v-model="props.row.email" dense autofocus counter />
             </q-popup-edit>
@@ -259,7 +264,7 @@
   <div v-if="cWidth >= 1150" class="col-3 q-py-md q-pr-md q-mt-md">
   <q-card>
     <q-form
-      id="addContact"
+      ref="addContact"
       @submit="onFormSubmit"
       @reset="onFormReset"
       class="q-gutter-md q-pa-md q-pr-lg"
@@ -628,7 +633,7 @@ export default {
         'login-token',
       )}`;
       axios
-        .post('/api/userEvents/userguest/123', {
+        .post('/api/userEvents/userguest', {
           firstname: this.firstname,
           lastname: this.lastname,
           primaryPhone: this.phone,
@@ -638,7 +643,7 @@ export default {
         })
         .then((response) => {
           // JSON responses are automatically parsed.
-          if (response.data) {
+          if (response.data.data) {
             // this.mounted();
             this.$q.notify({
               color: 'positive',
@@ -648,19 +653,20 @@ export default {
               position: 'top',
             });
             // this.loadContacts();
-            this.data.push(
-              {
-                firstname: this.firstname,
-                lastname: this.lastname,
-                primaryPhone: this.phone,
-                secondaryPhone: this.phone2,
-                email: this.email,
-              },
-            );
-            this.loadContacts();
+            this.data.push(response.data.data);
+            Loading.hide();
+            this.$refs.addContact.reset();
+          } else {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: 'Could not Add Contact',
+              position: 'top',
+            });
+            Loading.hide();
           }
           // this.data = this.data.concat(response.data.data);
-          Loading.hide();
         })
         .catch((e) => {
           //  this.errors.push(e);
@@ -676,6 +682,51 @@ export default {
             position: 'top',
           });
           Loading.hide();
+        });
+    },
+    save(val, initalVal, eventMember, field) {
+      eventMember[field] = val;
+      console.log(val, initalVal, eventMember, field);
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .put(`/api/userEvents/userguest/${eventMember.eventmemberidUI}`, eventMember)
+        .then((response) => {
+          if (response.data.data) {
+            this.$q.notify({
+              color: 'positive',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Successfully Saved',
+              position: 'top',
+            });
+            eventMember = response.data.data;
+          } else {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: 'Could not save changes',
+              position: 'top',
+            });
+            eventMember[field] = initalVal;
+          }
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          eventMember[field] = initalVal;
         });
     },
   },

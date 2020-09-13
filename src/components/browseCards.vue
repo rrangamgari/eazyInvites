@@ -19,7 +19,7 @@
                     <a @click="showCard(card.img)"
                      cards-lightbox="portfolio" cards-title="Card"
                      class="link-preview" title="Preview"><q-icon name="remove_red_eye" /></a>
-                    <a @click="$router.push(`/editcard/${card.id}`)"
+                    <a @click="$router.push(`/editcard/${card.id}?eventtype=${card.eventTypeId}`)"
                      class="link-details" title="Use this card">
                     <q-icon name="open_in_new" /></a>
                   </figure>
