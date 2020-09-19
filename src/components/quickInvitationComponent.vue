@@ -31,18 +31,20 @@
           class="q-gutter-md q-pa-xs q-pr-md"
           style="width:450px"
         >
+          <q-input
+            v-model="hostname"
+            type="text"
+            label="Host"
+            name="host"
+            @input="val => { onEventTypeChange() }"
+          />
             <q-select
               name="eventType"
-
               label="Event Type"
               v-model="eventType"
               :options="options"
               :rules="[val => !!val || 'Event Type is required']"
-              @input="
-                val => {
-                  onEventTypeChange();
-                }
-              "
+              @input="val => { onEventTypeChange() }"
             />
             <q-input
               v-model="eventtitle"
@@ -138,19 +140,11 @@
             </a>
           </div>
           <q-input
-            v-model="hostname"
-            type="text"
-
-            label="Host"
-            name="host"
+            v-model="eventmessage"
+            autogrow
+            label="Custom Message"
+            name="eventmessage"
           />
-            <q-input
-              v-model="eventmessage"
-
-              autogrow
-              label="Custom Message"
-              name="eventmessage"
-            />
           <q-btn
             label="More Custom Messages"
             type="button"
@@ -397,6 +391,7 @@ export default {
       second: false,
       url: '',
       step: 1,
+      et: true,
       eventtitle: '',
       eventdate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
       eventtime: '00:00',
@@ -561,7 +556,7 @@ export default {
       // alert(this.eventType);
       // eslint-disable-next-line max-len
       this.eventmessage = `\nDear {{Guest Name}}, We invite you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`;
-      if (this.eventType && (!this.eventtitle || this.eventtitle.length === 0)) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
+      if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
       // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
       // \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
@@ -735,7 +730,7 @@ export default {
         // JSON responses are automatically parsed.
         this.$q.localStorage.set('user-token', response1.data.data);
         this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
-        if (this.eventType && (!this.eventtitle || this.eventtitle.length === 0)) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
+        if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
         // Notification for testing api
         Loading.hide();
       })
