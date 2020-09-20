@@ -86,6 +86,7 @@
       row-key="eventmemberidUI"
       icon-left="people"
       hide-bottom
+      :filter="filter"
       :rows-per-page-options="[0]"
       :pagination="{rowsPerPage: 0}"
       :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
@@ -93,8 +94,9 @@
       :selection="select ? 'multiple' : 'none'"
       :selected="selected"
       @update:selected="(newSelected) => $emit('update:selected', newSelected)"
-      :style="`max-height: ${$q.screen.height * 2 / 3}px;`"
+      :style="`max-height: ${$q.screen.lt.sm ? 'none' : ($q.screen.height * 2 / 3)+'px'}`"
     >
+      <!-- :grid="$q.screen.lt.sm" -->
       <template v-slot:top-right>
         <q-btn
           color="primary"
@@ -121,10 +123,86 @@
           no-caps
           @click="exportTable"
         />
+        &nbsp;&nbsp;
+        <div class="q-pa-xs">
+          <q-input dense debounce="300" v-model="filter" placeholder="Search"
+            style="max-width: 350px;">
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
+          </q-input>
+        </div>
+      </template>
+      <template v-if="$q.screen.lt.sm" v-slot:header="props">
+        <!-- Mobile View Table Header -->
+        <q-tr :props="props" class="bg-primary">
+          <q-th auto-width v-if="select" style="padding:7px;">
+            <q-checkbox dense :val="props.data" v-model="props.selected"/>
+          </q-th>
+          <q-th class="row" style="padding:0px;">
+            <q-th
+              key="firstname"
+              :props="props"
+              class="text-white"
+              style="font-size:14px; font-weight:bold; border-bottom-width:0px; padding-right:3px;"
+            >First Name</q-th>
+            <q-th
+              key="lastname"
+              :props="props"
+              class="text-white"
+              style="font-size:14px; font-weight:bold; border-bottom-width:0px;
+               padding-left:3px; padding-right:10px;"
+            >Last Name</q-th>
+            <q-th
+              key="primaryPhone"
+              :props="props"
+              class="text-white col-12"
+              style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
+            >Primary Phone
+              <!-- <q-icon
+                name="contact_phone"
+                size="2.5em"
+              /> -->
+            </q-th>
+            <!-- <q-th
+              key="secondaryPhone"
+              :props="props"
+              class="text-white col-12"
+              style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
+            >Secondary Phone
+              <q-icon
+                name="contact_phone"
+                size="2.5em"
+              />
+            </q-th> -->
+            <q-th
+              key="email"
+              :props="props"
+              class="text-white col-12"
+              style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
+            >Email
+              <!-- <q-icon
+                name="contact_mail"
+                size="2.5em"
+              /> -->
+          </q-th>
+          </q-th>
+          <q-th
+            key="delete"
+            :props="props"
+            class="text-white"
+            style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
+          >Delete
+            <!-- <q-icon
+              name="delete"
+              size="2.5em"
+            /> -->
+          </q-th>
+        </q-tr>
       </template>
       <template v-slot:header-cell="props">
         <q-th :props="props">
-          <b style="font-size:14px;"> {{ props.col.label }} &nbsp;</b>
+          <b style="font-size:14px;">{{ props.col.label }}&nbsp;</b>
           <q-icon
             name="contact_mail"
             size="2.5em"
@@ -147,7 +225,7 @@
           />
         </q-th>
       </template>
-      <template v-slot:body="props">
+      <template v-if="$q.screen.gt.xs" v-slot:body="props">
         <q-tr :props="props">
           <q-td auto-width v-if="select">
             <q-checkbox :val="props.row" v-model="props.selected"/>
@@ -176,7 +254,7 @@
             {{ props.row.lastname }}
             <q-popup-edit
               v-model="props.row.lastname"
-              title="Edit the Last Name"
+              title="Edit Last Name"
               buttons
               @save="(v, iv) => save(v, iv, props.row, 'lastname')"
             >
@@ -187,7 +265,7 @@
             {{ props.row.primaryPhone }}
             <q-popup-edit
               v-model="props.row.primaryPhone"
-              title="Edit the Phone"
+              title="Edit Phone"
               buttons
               @save="(v, iv) => save(v, iv, props.row, 'primaryPhone')"
             >
@@ -203,7 +281,7 @@
             {{ props.row.secondaryPhone }}
             <q-popup-edit
               v-model="props.row.secondaryPhone"
-              title="Edit the phone"
+              title="Edit phone"
               buttons
               @save="(v, iv) => save(v, iv, props.row, props.key)"
             >
@@ -219,13 +297,106 @@
             {{ props.row.email }}
             <q-popup-edit
               v-model="props.row.email"
-              title="Edit the Email"
+              title="Edit Email"
               buttons
               @save="(v, iv) => save(v, iv, props.row, 'email')"
             >
               <q-input v-model="props.row.email" dense autofocus counter />
             </q-popup-edit>
           </q-td>
+          <q-td v-if="!select" key="delete" :props="props">
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(props.row.eventmemberidUI)"/>
+          </q-td>
+        </q-tr>
+      </template>
+      <template v-else v-slot:body="props">
+        <q-tr :props="props">
+          <q-td auto-width v-if="select" style="height:auto;">
+            <q-checkbox :val="props.row" v-model="props.selected"/>
+          </q-td>
+         <q-td class="row" style="padding:0px; height:auto;">
+          <div key="firstname" :props="props" style="border-bottom-width:0px; height:auto;
+           padding:7px 16px; padding-right:3px;">
+            {{ props.row.firstname }}
+            <q-popup-edit
+              v-model="props.row.firstname"
+              title="Edit First Name"
+              buttons
+              :validate="firstnameValidation"
+              @hide="firstnameValidation"
+              @save="(v, iv) => save(v, iv, props.row, 'firstname')"
+            >
+              <q-input
+                v-model="props.row.firstname"
+                dense
+                autofocus
+                counter
+                :error="errorProtein"
+                :error-message="errorMessageProtein"
+              />
+            </q-popup-edit>
+          </div>
+          <div key="lastname" :props="props" style="border-bottom-width:0px; height:auto;
+           padding:7px 16px; padding-left:3px; padding-right:10px;">
+            {{ props.row.lastname }}
+            <q-popup-edit
+              v-model="props.row.lastname"
+              title="Edit Last Name"
+              buttons
+              @save="(v, iv) => save(v, iv, props.row, 'lastname')"
+            >
+              <q-input v-model="props.row.lastname" dense autofocus counter />
+            </q-popup-edit>
+          </div>
+          <div key="primaryPhone" :props="props" class="col-12"
+           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+            {{ props.row.primaryPhone }}
+            <q-popup-edit
+              v-model="props.row.primaryPhone"
+              title="Edit Phone"
+              buttons
+              @save="(v, iv) => save(v, iv, props.row, 'primaryPhone')"
+            >
+              <q-input
+                v-model="props.row.primaryPhone"
+                dense
+                autofocus
+                counter
+              />
+            </q-popup-edit>
+          </div>
+          <!-- <div key="secondaryPhone" :props="props" class="col-12"
+           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+            {{ props.row.secondaryPhone }}
+            <q-popup-edit
+              v-model="props.row.secondaryPhone"
+              title="Edit phone"
+              buttons
+              @save="(v, iv) => save(v, iv, props.row, props.key)"
+            >
+              <q-input
+                v-model="props.row.secondaryPhone"
+                dense
+                autofocus
+                counter
+              />
+            </q-popup-edit>
+          </div> -->
+          <div key="email" :props="props" class="col-12"
+           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+            {{ props.row.email }}
+            <q-popup-edit
+              v-model="props.row.email"
+              title="Edit Email"
+              buttons
+              @save="(v, iv) => save(v, iv, props.row, 'email')"
+            >
+              <q-input v-model="props.row.email" dense autofocus counter />
+            </q-popup-edit>
+          </div>
+         </q-td>
           <q-td v-if="!select" key="delete" :props="props">
             <q-icon name="delete" size="2rem" color='primary' class=""
                     style="cursor:pointer;"
@@ -373,6 +544,7 @@ export default {
   data() {
     return {
       uploadContactsLayout: false,
+      filter: '',
       errorMessageProtein: '',
       errorProtein: false,
       uploadContactsModel: '',
@@ -401,7 +573,7 @@ export default {
         },
         {
           name: 'primaryPhone',
-          align: 'center',
+          align: 'left',
           label: 'Primary Phone',
           required: true,
           field: 'primaryPhone',
@@ -412,6 +584,7 @@ export default {
           name: 'secondaryPhone',
           label: 'Secondary Phone',
           field: 'secondaryPhone',
+          align: 'left',
           sortable: true,
           icon: 'contacts',
         },
@@ -419,11 +592,13 @@ export default {
           name: 'email',
           label: 'Email',
           field: 'email',
+          align: 'left',
           sortable: true,
         },
         {
           name: 'delete',
           label: 'Delete',
+          align: 'right',
           sortable: false,
           field: (row) => `${row.eventmemberidUI}`,
         },

@@ -2,16 +2,48 @@
 const routes = [
   {
     path: '/',
+    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('layouts/loginLayout.vue'),
+    path: '',
+    name: 'routes',
+    component: () => import('layouts/newMainLayout.vue'),
     children: [
-      { path: '', component: () => import('components/header.vue') },
-      { path: '', component: () => import('components/footer.vue') },
-      { path: '', component: () => import('components/login.vue') },
+      { path: 'login', name: 'login', component: () => import('components/login.vue') }, // To be removed
+      { path: 'newUser', name: 'newUser', component: () => import('components/newUserComponent.vue') }, // To be removed
+      { path: 'events', name: 'events', component: () => import('components/events.vue') },
+      {
+        path: 'events/:eventId/:eventAlpha',
+        name: 'eventStatus',
+        component: () => import('components/status.vue'),
+      },
+      { path: 'invites', name: 'invites', component: () => import('components/invites.vue') },
+      {
+        path: 'invites/:inviteId/:inviteAplhaId',
+        name: 'invitesRsvp',
+        component: () => import('components/rsvp.vue'),
+      },
+      {
+        path: 'view/:viewInviteId/:viewInviteAlpha',
+        name: 'guestInvitesRsvp',
+        component: () => import('components/rsvpGuest.vue'),
+        props: true,
+      },
+      { path: 'browsecards', name: 'browsecards', component: () => import('components/browseCards.vue') },
+      { path: 'editcard', redirect: '/browseCards' },
+      {
+        path: 'editcard/:cardId',
+        name: 'editcard',
+        component: () => import('layouts/editCardLayout.vue'),
+      },
+      {
+        path: 'createInvitation',
+        name: 'createEvent', // Dependency Exists in editCard.vue
+        component: () => import('components/quickInvitationComponent.vue'),
+      },
+      { path: 'addContacts', name: 'contacts', component: () => import('components/addContactsComponent.vue') },
+      { path: 'myProfile', name: 'myProfile', component: () => import('components/myProfileComponent.vue') },
     ],
   },
   {
@@ -24,86 +56,9 @@ const routes = [
     ],
   },
   {
-    path: '/createInvitation',
-    name: 'createEvent', // Dependency Exists in quickInvitaitonComponent.vue
-    component: () => import('layouts/createInvitationLayout.vue'),
-  },
-  {
-    path: '/addContacts',
-    name: 'addContacts',
-    component: () => import('layouts/addContactsLayout.vue'),
-    children: [
-      { path: '', component: () => import('components/header.vue') },
-      { path: '', component: () => import('components/footer.vue') },
-
-    ],
-  },
-  {
-    path: '/myProfile',
-    name: 'myProfile',
-    component: () => import('layouts/myProfileLayout.vue'),
-    children: [
-      { path: '', component: () => import('components/header.vue') },
-      { path: '', component: () => import('components/footer.vue') },
-
-    ],
-  },
-  {
-    path: '/newUser',
-    name: 'newUser',
-    component: () => import('layouts/newUserLayout.vue'),
-    children: [
-      { path: '', component: () => import('components/header.vue') },
-      { path: '', component: () => import('components/footer.vue') },
-
-    ],
-  },
-  {
-    path: '/browsecards',
-    name: 'browsecards',
-    component: () => import('layouts/browseCardsLayout.vue'),
-  },
-  {
-    path: '/editcard',
-    name: 'editcard',
-    component: () => import('layouts/editCardLayout.vue'),
-    children: [
-      { path: '', redirect: '/browseCards' },
-      { path: ':cardId' },
-
-    ],
-  },
-  {
-    path: '/events',
-    name: 'events',
-    component: () => import('layouts/eventsLayout.vue'),
-  },
-  {
-    path: '/events/:eventId/:eventAlpha',
-    name: 'eventStatus',
-    component: () => import('layouts/eventStatusLayout.vue'),
-  },
-  {
-    path: '/invites',
-    name: 'invites',
-    component: () => import('layouts/invitesLayout.vue'),
-  },
-  {
-    path: '/invites/:inviteId/:inviteAplhaId',
-    name: 'invitesRsvp',
-    component: () => import('layouts/invitesRsvpLayout.vue'),
-  },
-  {
-    path: '/view/:viewInviteId/:viewInviteAlpha',
-    name: 'guestInvitesRsvp',
-    component: () => import('layouts/guestInvitesRsvpLayout.vue'),
-    props: true,
-  },
-  {
     path: '/termsconditions',
     name: 'termsAndConditions',
     component: () => import('layouts/terrmsAndConditions.vue'),
-    props: true,
   },
 ];
 

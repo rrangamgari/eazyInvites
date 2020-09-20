@@ -51,6 +51,7 @@
               type="text"
               label="Event Title"
               name="eventtitle"
+              @change="val => { onEventTitleChange() }"
             />
             <div class="row">
             <q-input style="width: 80%;"
@@ -193,6 +194,7 @@
                 @mouseleave="fabLabelChanged"
                 @click="fabLabelChange"
                 push
+                style="z-index: 1"
               >
 
                 <q-fab-action square  label-position="bottom"
@@ -560,6 +562,9 @@ export default {
       // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
       // \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
+    },
+    onEventTitleChange() {
+      if (this.et && (this.eventtitle.trim().toLowerCase() !== `${this.hostname}'s ${this.eventType.label}`.toLowerCase())) this.et = false;
     },
     onContinue() {
       this.step = 4;

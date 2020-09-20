@@ -1,11 +1,7 @@
 <template>
   <q-layout view="hHh lpr fff" >
-    <!-- Be sure to play with the Layout demo on docs -->
-
     <q-page-container>
-      <!-- This is where pages get injected -->
-       <add-contacts-component v-show="!mobileView"></add-contacts-component>
-      <add-contacts-mobile-component v-show="mobileView"></add-contacts-mobile-component>
+      <add-contacts-component></add-contacts-component>
       <router-view />
     </q-page-container>
     <footer-component></footer-component>
@@ -15,14 +11,12 @@
 
 <script>
 import addContactsComponent from '../components/addContactsComponent.vue';
-import addContactsMobileComponent from '../components/addContactsMobileComponent.vue';
 import footerComponent from '../components/footer.vue';
 
 export default {
   // name: 'LayoutName',
   components: {
     addContactsComponent,
-    addContactsMobileComponent,
     footerComponent,
   },
   data() {

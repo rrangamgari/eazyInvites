@@ -3,13 +3,13 @@
     <q-layout view="hhh lpr fff" class="shadow-2 rounded-borders">
 
       <header-component></header-component>
-      <carouselComponent id="images" v-show="showUS"></carouselComponent>
-      <indiacarouselComponent id="images" v-show="showInd"></indiacarouselComponent>
+      <carouselComponent id="images" v-if="showUS"></carouselComponent>
+      <indiacarouselComponent id="images" v-else></indiacarouselComponent>
       <video-component id="videos"></video-component>
       <cards-component id="portfolio"></cards-component>
       <reviewsCarouselComponent id="reviews"></reviewsCarouselComponent>
-      <price-component id="prices" v-show="showUS"></price-component>
-      <indianPriceComponent id="prices" v-show="!showUS"></indianPriceComponent>
+      <price-component id="prices" v-if="showUS"></price-component>
+      <indianPriceComponent id="prices" v-else></indianPriceComponent>
       <router-view/>
       <footer-component class="bg-primary"></footer-component>
     </q-layout>

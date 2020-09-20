@@ -1,12 +1,10 @@
 <template>
   <div>
     <q-page class="q-pa-sm q-pl-md q-pr-md  flex flex-center">
-
-      <q-page-container>
-        <q-page class="">
           <q-form
             @submit="onSubmit"
             @reset="onReset"
+            style="width: 350px;"
           >
             <q-input
               class="q-pt-sm"
@@ -61,9 +59,6 @@
               />
             </div>
           </q-form>
-        </q-page>
-      </q-page-container>
-
     </q-page>
   </div>
 </template>
