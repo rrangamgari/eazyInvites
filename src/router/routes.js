@@ -35,7 +35,7 @@ const routes = [
       {
         path: 'editcard/:cardId',
         name: 'editcard',
-        component: () => import('layouts/editCardLayout.vue'),
+        component: () => import('components/editCard.vue'),
       },
       {
         path: 'createInvitation',
@@ -47,12 +47,13 @@ const routes = [
     ],
   },
   {
-    path: '/oauth2/:client',
+    path: '/oauth2',
     name: 'oauth2',
     component: () => import('components/oauth2.vue'),
     children: [
-      { path: '' },
-      { path: 'handler' },
+      { path: ':client' },
+      { path: ':client/handler' },
+      { path: 'contacts/:client/handler' },
     ],
   },
   {

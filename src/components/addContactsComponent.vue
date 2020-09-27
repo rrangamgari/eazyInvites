@@ -100,7 +100,16 @@
       <template v-slot:top-right>
         <q-btn
           color="primary"
-          icon-right="cloud_upload"
+          icon-right="img:statics/icons/google.png"
+          label="Import from Google"
+          title=""
+          no-caps
+          @click="uploadOAuth2Contacts('Google')"
+        />
+        &nbsp;&nbsp;
+        <q-btn
+          color="primary"
+          icon-right="img:statics/icons/whatsapp.png"
           label="Import from whatsapp"
           title="CSV or XLS file accepted"
           no-caps
@@ -905,6 +914,33 @@ export default {
           eventMember[field] = initalVal;
         });
     },
+    uploadOAuth2Contacts(client) {
+      window.addEventListener('storage', this.oauth2SuccessCheck);
+      axios.get(`/api/oauth2/contacts/${client.toLowerCase()}/`)
+        .then((response) => {
+          Loading.hide();
+          window.open(response.data.data, `${client} Contacts`, `left=${Math.max(0, (window.screen.width / 2) - 250)},top=50,width=500,height=600,location=no`);
+        })
+        .catch((e) => {
+          Loading.hide();
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
+    },
+    oauth2SuccessCheck(evt) {
+      if (evt && evt.key === 'oauth2-contacts' && this.$q.localStorage.getItem('oauth2-contacts')) {
+        this.$q.localStorage.remove('oauth2-contacts');
+        this.loadContacts();
+      }
+    },
+  },
+  destroyed() {
+    window.removeEventListener('storage', this.oauth2SuccessCheck);
   },
 };
 </script>

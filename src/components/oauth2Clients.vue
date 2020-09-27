@@ -1,8 +1,9 @@
 <template>
-    <div class="q-pa-sm row items-center justify-center">
-        <div class="q-px-sm" v-for="client in clients" :key="client">
-            <q-img :width="size" class="cursor-pointer"
-             @click="oauth2Login(client)" :src="`statics/icons/${client}.png`"/>
+    <div class="q-pa-xs row items-center justify-center">
+        <div class="q-px-xs" v-for="client in clients" :key="client">
+            <q-btn :size="size" ripple unelevated dense @click="oauth2Login(client)"
+             :icon="`img:statics/icons/${client}.png`"/>
+             <!-- :label="label ? `Continue with ${client}` : ''" no-caps/> -->
         </div>
     </div>
 </template>
@@ -19,7 +20,11 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Reque
 export default {
   props: {
     size: {
-      default: '32px',
+      default: '16px',
+    },
+    label: {
+      default: false,
+      type: Boolean,
     },
   },
   data() {

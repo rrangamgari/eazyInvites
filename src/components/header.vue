@@ -296,7 +296,7 @@
       </div>
       <q-separator color="grey" size="2px" vertical inset/>
       <oauth2-clients-component style="padding-left: 0px; padding-right: 0px;"
-       :size="$q.screen.width <= 375 ? '16px' : '32px'"
+       :size="$q.screen.width <= 375 ? '10px' : '16px'"
        @oauth2-login-success="$router.push('/events')"/>
       </q-form>
       </div>

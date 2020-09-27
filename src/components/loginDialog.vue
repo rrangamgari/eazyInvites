@@ -29,12 +29,12 @@
       <q-tab-panels v-model="tab" animated class="bg-transparent" keep-alive
        :style="`height: calc(100% - 55px);`">
         <q-tab-panel name="login" style="padding-right: 0px;">
-          <oauth2-clients-component class="q-pr-lg" @oauth2-login-success="onOk"/>
+          <oauth2-clients-component label class="q-pr-lg" @oauth2-login-success="onOk"/>
           <login-component :dark="!i" :username="$props.username" @login-success="onOk"/>
         </q-tab-panel>
 
         <q-tab-panel name="register" style="padding-right: 0px;">
-          <oauth2-clients-component @oauth2-login-success="onOk"/>
+          <oauth2-clients-component label @oauth2-login-success="onOk"/>
           <register-component :dark="!i" />
         </q-tab-panel>
       </q-tab-panels>

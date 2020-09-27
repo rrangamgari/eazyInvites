@@ -23,10 +23,48 @@ export default {
   },
   mounted() {
     if (!this.clients.includes(this.client)) window.close();
-    if (!this.$route.path.includes('handler')) this.forwardToOAuth2();
+    if (this.$route.path.includes('contacts')) this.handleContacts();
+    else if (!this.$route.path.includes('handler')) this.forwardToOAuth2();
     else this.validateCode();
   },
   methods: {
+    handleContacts() {
+      if (this.error !== '' && this.code === '') {
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'error',
+          message: 'Error Occurred',
+          position: 'top',
+        });
+        setTimeout(window.close, 3000);
+      }
+      Loading.show({
+        message: 'Fetching User Details',
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.get(`/api/oauth2/contacts/${this.client}/handler`, { params: { code: this.code } })
+        .then(() => {
+          this.$q.localStorage.set('oauth2-contacts', true);
+          Loading.hide();
+          window.close();
+        })
+        .catch((e) => {
+          Loading.hide();
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          setTimeout(window.close, 3000);
+        });
+    },
     forwardToOAuth2() {
       Loading.show({
         message: `Redirecting to ${this.client.toUpperCase()} SignIn`,
