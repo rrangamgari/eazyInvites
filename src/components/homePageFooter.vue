@@ -14,13 +14,13 @@
                 <div class="col-xs-12 col-sm-6 col-md-4 footer-links">
                   <h4>Useful Links</h4>
                   <ul>
-                    <li><i class="ion-ios-arrow-right"></i> <a href="#">Home</a></li>
-                    <li><i class="ion-ios-arrow-right"></i> <a href="#">About us</a></li>
-                    <li><i class="ion-ios-arrow-right"></i> <a href="#">Services</a></li>
+                    <li><i class="ion-ios-arrow-right"></i> <a href="/">Home</a></li>
+                    <li><i class="ion-ios-arrow-right"></i> <a href="/">About us</a></li>
+                    <li><i class="ion-ios-arrow-right"></i> <a href="/">Services</a></li>
                     <li><i class="ion-ios-arrow-right"></i>
-                      <a href="/#/termsconditions">Terms of service</a></li>
+                      <a href="/termsconditions">Terms of service</a></li>
                     <li><i class="ion-ios-arrow-right"></i>
-                      <a href="/#/termsconditions">Privacy policy</a></li>
+                      <a href="/termsconditions">Privacy policy</a></li>
                   </ul>
                 </div>
 

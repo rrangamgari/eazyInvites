@@ -60,9 +60,19 @@
         lazy-rules
         :rules="[ val=> val !== null && val !== '' || 'Please enter Password']"
       />
-      <!--
-      <q-toggle v-model="accept" label="I accept the license and terms" />
-      -->
+      <div class="col q-pb-xs">
+        <div class="col row items-center">
+          <q-checkbox dense :dark="$props.dark" :value="accept"
+           :class="$props.dark ? 'text-white' : 'text-black'"
+           @input="(v) => {accept = v; error = !v;}" label="I accept the " />
+          &nbsp;
+          <a href="/termsconditions" target="_blank"> Terms & Conditions</a>
+        </div>
+        <div class="col text-negative" style="font-size: 12px; line-height: 1;"
+         :style="`padding-top: ${error ? 8.75 : 20}px;`">
+          <div v-if="error">Please accept the Terms & Conditons</div>
+        </div>
+      </div>
       <div>
         <q-btn label="Register" type="submit" color="primary" class="q-mr-sm"/>
         <q-btn label="Reset" type="reset" color="primary" flat/>
@@ -92,6 +102,8 @@ export default {
       cpassword: null,
       passwordFieldType: 'password',
       iconName: 'visibility_off',
+      accept: false,
+      error: false,
     };
   },
   mounted() {
@@ -106,8 +118,14 @@ export default {
       this.phone = null;
       this.password = null;
       this.cpassword = null;
+      this.accept = false;
+      this.error = false;
     },
     onSubmit() {
+      if (!this.accept) {
+        this.error = true;
+        return;
+      }
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
