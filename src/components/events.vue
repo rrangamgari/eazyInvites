@@ -8,17 +8,16 @@
         </header>
       </div>
       <!-- <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-smr"> -->
-        <div  v-if="!index" class="row warp ">
+        <div class="row warp ">
           <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
-          v-for="event in events(index)" :key="event.eventdetailsidUI">
+           v-for="event in events(index)" :key="event.eventdetailsidUI">
+          <router-link :to="eventUrl(event.eventdetailsidUI,event.eventdetailsalphaid)">
           <div class="member rounded-borders" >
-            <q-card clickable v-ripple
-                    @click="onCardClick(event.eventdetailsidUI,event.eventdetailsalphaid)"
-            class="rounded-borders text-grey">
-              <q-img :src="event.attachmentlink !== null ? event.attachmentlink :
-              require('../assets/logo/bird.png')" alt :ratio="4/3" >
+            <q-card class="rounded-borders text-grey">
+              <q-img :src="event.attachmentlink" placeholder-src="~assets/logo/bird.png"
+               :alt="event.eventtitle" :ratio="4/3" >
               <div class="absolute-bottom text-subtitle2 text-center">
-                {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
+                {{ (event.eventtitle && event.eventtitle.trim() !== '') ?
                   event.eventtitle : 'Untitled Event' }}
               </div>
               </q-img>
@@ -31,9 +30,10 @@
               </div>
             </q-card>
           </div>
+          </router-link>
           </div>
         </div>
-        <div v-else class="row warp">
+        <!-- <div v-else class="row warp">
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
           v-for="event in events(index)" :key="event.eventdetailsidUI">
             <div class="member" >
@@ -56,7 +56,7 @@
             </q-card>
               </div>
           </div>
-        </div>
+        </div> -->
         <!-- <q-card clickable v-ripple @click="onCardClick(event.eventdetailsidUI)"> -->
           <!-- <div>
           <img src="../assets/logo/bird.png">
@@ -249,6 +249,9 @@ export default {
         return this.events0;
       }
       return this.events1;
+    },
+    eventUrl(eventdetailsidUI, eventdetailsalphaid) {
+      return `/events/${eventdetailsidUI}/${eventdetailsalphaid}`;
     },
     onCardClick(eventdetailsidUI, eventdetailsalphaid) {
       this.$router.push(`/events/${eventdetailsidUI}/${eventdetailsalphaid}`);

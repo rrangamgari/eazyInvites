@@ -85,10 +85,14 @@
       color="primary"
       row-key="eventmemberidUI"
       icon-left="people"
-      hide-bottom
+      no-data-label="Add Contacts to view them here"
+      no-results-label="No matching Contacts found"
+      :selected-rows-label="getSelectedString"
+      hide-pagination
+      :hide-selected-banner="!select"
       :filter="filter"
       :rows-per-page-options="[0]"
-      :pagination="{rowsPerPage: 0}"
+      :pagination.sync="pagination"
       :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
       :visible-columns="select ? visible : visible.concat('delete')"
       :selection="select ? 'multiple' : 'none'"
@@ -96,7 +100,11 @@
       @update:selected="(newSelected) => $emit('update:selected', newSelected)"
       :style="`max-height: ${$q.screen.lt.sm ? 'none' : ($q.screen.height * 2 / 3)+'px'}`"
     >
-      <!-- :grid="$q.screen.lt.sm" -->
+      <template v-slot:no-data="{ message }">
+        <div class="full-width row flex-center">
+          <span>{{ message }}</span>
+        </div>
+      </template>
       <template v-slot:top-right>
         <q-btn
           color="primary"
@@ -570,14 +578,14 @@ export default {
           required: true,
           label: 'First Name *',
           align: 'left',
-          field: (row) => `${row.firstname}`,
+          field: 'firstname',
           sortable: true,
         },
         {
           name: 'lastname',
           label: 'Last Name',
           align: 'left',
-          field: (row) => `${row.lastname}`,
+          field: 'lastname',
           sortable: true,
         },
         {
@@ -609,10 +617,11 @@ export default {
           label: 'Delete',
           align: 'right',
           sortable: false,
-          field: (row) => `${row.eventmemberidUI}`,
         },
       ],
+      getSelectedString: (n) => `${n} Contact${n > 1 ? 's' : ''} selected`,
 
+      pagination: { rowsPerPage: 0 },
       data: this.contacts || [],
 
       firstname: null,
@@ -620,6 +629,8 @@ export default {
       phone: null,
       phone2: null,
       email: null,
+
+      prompt: true, // Delete Prompt
     };
   },
   created() {
@@ -747,8 +758,28 @@ export default {
           });
         });
     },
+    // delete(contact) {
+    //   this.$q.dialog({
+    //     title: 'Confirm Delete',
+    //     message: 'Are you sure, you want to delete this contact?',
+    //     cancel: true,
+    //     options: {
+    //       type: 'checkbox',
+    //       model: !this.prompt,
+    //       items: [
+    //         { label: 'Do not prompt again', value: true },
+    //       ],
+    //     },
+    //   }).onOk(() => {
+    //     console.log(contact, this.prompt);
+    //     console.log('>>>> OK');
+    //   }).onOk(() => {
+    //     console.log('>>>> second OK catcher');
+    //   }).onCancel(() => {
+    //     console.log('>>>> Cancel');
+    //   });
+    // },
     deleteMe(id) {
-      // naive encoding to csv format
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -761,7 +792,7 @@ export default {
         .delete(`/api/userEvents/userguest/${id}`)
         .then((response) => {
           // JSON responses are automatically parsed.
-          if (response.data) {
+          if (response.data.data) {
             // this.mounted();
             this.$q.notify({
               color: 'positive',
@@ -771,6 +802,14 @@ export default {
               position: 'top',
             });
             this.loadContacts();
+          } else {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: 'Could not delete Contact',
+              position: 'top',
+            });
           }
           // this.data = this.data.concat(response.data.data);
           Loading.hide();

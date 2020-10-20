@@ -40,7 +40,7 @@
         <q-card>
           <q-card-section class="q-pa-xs">
               <div class="row justify-center items-center">
-              <q-avatar icon="oval" :color="colour[1]" size="10px" class="q-pt-xs q-pb-md"/> &nbsp;
+              <q-avatar icon="oval" :color="colour[1]" size="10px" /> &nbsp;
               <div class="text-subtitle2 text-center">Attending</div></div>
               <!--q-avatar style="position: absolute; top: 5px; right: 5px;"
                icon="oval" :color="colour[1]" size="15px"/-->
@@ -140,22 +140,28 @@
           <q-icon slot="prepend" name="search" />
         </q-input>
         <q-table
-          :visible-columns.sync="['name', 'status'].concat(vCol)"
+          :visible-columns.sync="['name', 'status'].concat(col)"
           :data="data"
           :columns="columns"
           :filter="filter"
           color="primary"
           rows-key="name"
-          :rows-per-page-label="''"
-          :rows-per-page-options="[0]"
-          :pagination-label="(firstRowIndex, endRowIndex, totalRowsNumber) => ''"
-          :pagination="{rowsPerPage: 0}"
+          no-data-label="Add Contacts to view them here"
+          no-results-label="No matching Contacts found"
+          hide-pagination
+          hide-selected-banner
+          :pagination.sync="pagination"
           :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
         >
+          <template v-slot:no-data="{ message }">
+            <div class="full-width row flex-center">
+              <span>{{ message }}</span>
+            </div>
+          </template>
           <template v-slot:body-cell-status="props">
             <q-td :props="props" >
               <q-avatar icon="oval" :color="colour[`${props.row.status.eventstatusid}`]"
-                size="10px" class="q-pt-xs q-pb-md"/>
+                size="10px" />
               {{ ($q.screen.width > 350) ? props.row.status.eventstatusdescription : '' }}
             </q-td>
           </template>
@@ -190,6 +196,7 @@ export default {
       filter: '',
       vCol: [],
       data: [],
+      pagination: { rowsPerPage: 0 },
       columns: [
         {
           name: 'name',
@@ -218,6 +225,7 @@ export default {
           label: 'Status',
           required: 'true',
           align: 'left',
+          field: (row) => (row.status.eventstatusid),
           sortable: true,
         },
       ],
@@ -311,13 +319,13 @@ export default {
         this.eventType = Response.data.data;
       });
   },
-  created() {
-    window.addEventListener('resize', this.windowResizeHandler);
-    this.windowResizeHandler();
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.windowResizeHandler);
-  },
+  // created() {
+  //   window.addEventListener('resize', this.windowResizeHandler);
+  //   this.windowResizeHandler();
+  // },
+  // destroyed() {
+  //   window.removeEventListener('resize', this.windowResizeHandler);
+  // },
   methods: {
     computeCounts() {
       this.data.forEach((rec) => {
@@ -334,16 +342,25 @@ export default {
         }
       });
     },
-    windowResizeHandler() {
+    // windowResizeHandler() {
+    //   const vCol = ['phone', 'email'];
+
+    //   if (this.$q.screen.width <= 450) {
+    //     this.vCol = vCol.slice(0, 0);
+    //   } else if (this.$q.screen.width <= 650) {
+    //     this.vCol = vCol.slice(0, 1);
+    //   } else {
+    //     this.vCol = vCol;
+    //   }
+    // },
+  },
+  computed: {
+    col() {
       const vCol = ['phone', 'email'];
 
-      if (this.$q.screen.width <= 450) {
-        this.vCol = vCol.slice(0, 0);
-      } else if (this.$q.screen.width <= 650) {
-        this.vCol = vCol.slice(0, 1);
-      } else {
-        this.vCol = vCol;
-      }
+      if (this.$q.screen.width <= 450) return vCol.slice(0, 0);
+      if (this.$q.screen.width <= 650) return vCol.slice(0, 1);
+      return vCol;
     },
   },
 };

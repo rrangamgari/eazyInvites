@@ -9,15 +9,12 @@
       </div>
       <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
        v-for="invite in invites(index)" :key="invite.eventguestsidUI">
+        <router-link :to="inviteUrl(invite.eventguestsidUI,
+         invite.eventDetails.eventdetailsalphaid)">
         <div class="member rounded-borders" >
-        <q-card clickable v-ripple
-                @click="onCardClick(invite.eventguestsidUI,invite.eventDetails.eventdetailsalphaid)"
-        >
-          <q-img :src="invite.eventDetails.attachmentlink
-           && invite.eventDetails.attachmentlink.startsWith('data:')
-           ? invite.eventDetails.attachmentlink :
-              require('../assets/logo/bird.png')" :ratio="4/3"
-                 :to="`/invites/${invite.eventguestsidUI}`">
+        <q-card>
+          <q-img :src="invite.eventDetails.attachmentlink" placeholder-src="~assets/logo/bird.png"
+           :alt="invite.eventDetails.eventtitle" :ratio="4/3">
             <div class="absolute-bottom text-subtitle2 text-center">
               {{ (invite.eventDetails.eventtitle !== null &&
               invite.eventDetails.eventtitle.trim() !== '') ?
@@ -34,6 +31,7 @@
           </div>
         </q-card>
         </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -129,6 +127,9 @@ export default {
         return this.invites0;
       }
       return this.invites1;
+    },
+    inviteUrl(eventguestsidUI, eventdetailsalphaid) {
+      return `/invites/${eventguestsidUI}/${eventdetailsalphaid}`;
     },
     onCardClick(eventguestsidUI, eventdetailsalphaid) {
       this.$router.push(`/invites/${eventguestsidUI}/${eventdetailsalphaid}`);

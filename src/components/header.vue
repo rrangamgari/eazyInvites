@@ -8,7 +8,7 @@
        dense flat :color="qmenuColor">
         <q-list v-for="Tab  in tabs" :key="Tab.name">
           <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
-            <q-item-section avatar>
+            <q-item-section avatar style="min-width: 0px;">
               <q-icon :name="Tab.icon" />
             </q-item-section>
             <q-item-section >
@@ -18,21 +18,23 @@
         </q-list>
       </q-btn-dropdown>
 
-      <a @click="goHome" class="xs">
+      <a href="/" class="xs">
         <img src="../assets/logo/logo_final.png" width="40px" />
       </a>
-      <a @click="goHome" class="gt-xs lt-md">
+      <a href="/" class="gt-xs lt-md">
         <img src="../assets/logo/logo_final.png" width="60px" />
       </a>
-      <a @click="goHome" class="md">
+      <a href="/" class="md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <a @click="goHome" class="gt-md">
+      <a href="/" class="gt-md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <q-toolbar-title @click="goHome" class="logo" shrink :style="lStyle"
-       style="cursor: pointer; padding-right: 0px;">
+      <q-toolbar-title class="logo" shrink :style="lStyle"
+       style="padding-right: 0px;">
+       <a href="/" class="text-white">
         WE Invites
+       </a>
       </q-toolbar-title>
       <q-space/>
       <!--q-tabs
@@ -346,7 +348,7 @@
           name="My Profile"
           :label="($q.screen.gt.sm) ? 'My Profile' : ''"
           :style="qtabStyle"
-          icon="group"
+          icon="person"
           to="/myProfile"
         />
         <q-tab
@@ -496,12 +498,8 @@
               v-close-popup
               to="/createInvitation"
             >
-              <q-item-section avatar>
-                <q-avatar
-                  icon="create_new_folder"
-                  color="secondary"
-                  text-color="white"
-                />
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="create_new_folder"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>New Invitation</q-item-label>
@@ -513,12 +511,8 @@
               v-close-popup
               to="/events"
             >
-              <q-item-section avatar>
-                <q-avatar
-                  icon="folder_shared"
-                  color="secondary"
-                  text-color="white"
-                />
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="folder_shared"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Events</q-item-label>
@@ -530,12 +524,8 @@
               v-close-popup
               to="/invites"
             >
-              <q-item-section avatar>
-                <q-avatar
-                  icon="folder_shared"
-                  color="secondary"
-                  text-color="white"
-                />
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="folder_shared"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Invites</q-item-label>
@@ -547,12 +537,8 @@
               v-close-popup
               to="/addContacts"
             >
-              <q-item-section avatar>
-                <q-avatar
-                  icon="group"
-                  color="secondary"
-                  text-color="white"
-                />
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="group"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Contacts</q-item-label>
@@ -562,14 +548,23 @@
             <q-item
               clickable
               v-close-popup
+              to="/myProfile"
+            >
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="person"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>My Profile</q-item-label>
+                <q-item-label caption>Show my profile</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
               @click="onLogoutClick"
             >
-              <q-item-section avatar>
-                <q-avatar
-                  icon="person_add"
-                  color="secondary"
-                  text-color="white"
-                />
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="person_add"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
