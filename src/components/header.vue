@@ -18,21 +18,21 @@
         </q-list>
       </q-btn-dropdown>
 
-      <a href="/" class="xs">
-        <img src="../assets/logo/logo_final.png" width="40px" />
+      <a href="/" v-if="$q.screen.xs">
+        <img src="../assets/logo/logo_final.png" width="50px" />
       </a>
-      <a href="/" class="gt-xs lt-md">
+      <a href="/" v-else-if="$q.screen.sm">
         <img src="../assets/logo/logo_final.png" width="60px" />
       </a>
-      <a href="/" class="md">
+      <a href="/" v-else-if="$q.screen.md">
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
-      <a href="/" class="gt-md">
+      <a href="/" v-else>
         <img src="../assets/logo/logo_final.png" width="75px" />
       </a>
       <q-toolbar-title class="logo" shrink :style="lStyle"
        style="padding-right: 0px;">
-       <a href="/" class="text-white">
+       <a href="/" class="text-white" style="text-decoration: none;">
         WE Invites
        </a>
       </q-toolbar-title>
@@ -304,7 +304,7 @@
       </div>
 
       <q-tabs
-        v-else-if="$q.screen.gt.xs"
+        v-else-if="$q.screen.width > 614"
         no-caps
         active-color="primary"
         indicator-color="transparent"
@@ -317,7 +317,7 @@
       >
         <q-route-tab
           name="New Invitation"
-          :label="($q.screen.gt.sm) ? 'New Invitation' : ''"
+          :label="($q.screen.width > 1032) ? 'New Invitation' : ''"
           :style="qtabStyle"
           icon="create_new_folder"
           to="/createInvitation"
@@ -325,35 +325,35 @@
         />
         <q-route-tab
           name="My Events"
-          :label="($q.screen.gt.sm) ? 'My Events' : ''"
+          :label="($q.screen.width > 1032) ? 'My Events' : ''"
           :style="qtabStyle"
           icon="folder_shared"
           to="/events"
         />
         <q-route-tab
           name="My Invites"
-          :label="($q.screen.gt.sm) ? 'My Invites' : ''"
+          :label="($q.screen.width > 1032) ? 'My Invites' : ''"
           :style="qtabStyle"
           icon="folder_shared"
           to="/invites"
         />
         <q-route-tab
           name="My Contacts"
-          :label="($q.screen.gt.sm) ? 'My Contacts' : ''"
+          :label="($q.screen.width > 1032) ? 'My Contacts' : ''"
           :style="qtabStyle"
           icon="group"
           to="/addContacts"
         />
         <q-route-tab
           name="My Profile"
-          :label="($q.screen.gt.sm) ? 'My Profile' : ''"
+          :label="($q.screen.width > 1032) ? 'My Profile' : ''"
           :style="qtabStyle"
           icon="person"
           to="/myProfile"
         />
         <q-tab
           name="logout"
-          :label="($q.screen.gt.sm) ? 'Logout' : ''"
+          :label="($q.screen.width > 1032) ? 'Logout' : ''"
           :style="qtabStyle"
           icon="person_add"
           @click="onLogoutClick"

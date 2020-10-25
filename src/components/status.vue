@@ -2,7 +2,7 @@
   <div>
     <div class="q-pa-lg row warp justify-center items-center">
       <div class="col-12 q-px-md q-py-sm q-pb-lg">
-        <q-card class="row justify-center">
+        <q-card v-if="event && eventType" class="row justify-center">
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
               'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
             <q-card-section class="q-pa-xs">
@@ -10,6 +10,8 @@
               {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
                   event.eventtitle : 'Untitled Event' }}
               </div>
+              <q-btn class="absolute-top-right" flat icon="edit" round
+               :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
             </q-card-section>
             <q-card-section class="q-pa-xs row items-center">
               <div class="text-left q-px-xs col-12" style="font-size: 34px;" >
@@ -185,8 +187,8 @@ export default {
   data() {
     return {
       eventId: '',
-      event: {},
-      eventType: [],
+      event: null,
+      eventType: null,
       file: null,
       colour: ['white', 'green', 'yellow', 'red', 'grey', 'grey', 'grey', 'grey', 'black'],
       A: { adults: 0, kids: 0 },

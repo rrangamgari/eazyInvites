@@ -80,7 +80,7 @@
   <div class="q-pa-md" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
     <q-table
       title="Contacts"
-      :data="data"
+      :data="data.filter((e) => !e.readonly)"
       :columns="columns"
       color="primary"
       row-key="eventmemberidUI"
@@ -421,6 +421,193 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-if="$q.screen.gt.xs" v-slot:bottom-row>
+        <q-tr v-if="select && edit">
+          <q-td colspan="100%">Contacts already Invited</q-td>
+        </q-tr>
+        <q-tr v-for="row in data.filter((e) => e.readonly)" :key="row.eventmemberidUI"
+         class="selected">
+          <q-td auto-width v-if="select">
+            <q-checkbox :value="true" disable/>
+          </q-td>
+          <q-td>
+            {{ row.firstname }}
+            <q-popup-edit
+              v-model="row.firstname"
+              title="Edit First Name"
+              buttons
+              :validate="firstnameValidation"
+              @hide="firstnameValidation"
+              @save="(v, iv) => save(v, iv, row, 'firstname')"
+            >
+              <q-input
+                v-model="row.firstname"
+                dense
+                autofocus
+                counter
+                :error="errorProtein"
+                :error-message="errorMessageProtein"
+              />
+            </q-popup-edit>
+          </q-td>
+          <q-td>
+            {{ row.lastname }}
+            <q-popup-edit
+              v-model="row.lastname"
+              title="Edit Last Name"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'lastname')"
+            >
+              <q-input v-model="row.lastname" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td>
+            {{ row.primaryPhone }}
+            <q-popup-edit
+              v-model="row.primaryPhone"
+              title="Edit Phone"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'primaryPhone')"
+            >
+              <q-input
+                v-model="row.primaryPhone"
+                dense
+                autofocus
+                counter
+              />
+            </q-popup-edit>
+          </q-td>
+          <!-- <q-td>
+            {{ row.secondaryPhone }}
+            <q-popup-edit
+              v-model="row.secondaryPhone"
+              title="Edit phone"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'secondaryPhone')"
+            >
+              <q-input
+                v-model="row.secondaryPhone"
+                dense
+                autofocus
+                counter
+              />
+            </q-popup-edit>
+          </q-td> -->
+          <q-td>
+            {{ row.email }}
+            <q-popup-edit
+              v-model="row.email"
+              title="Edit Email"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'email')"
+            >
+              <q-input v-model="row.email" dense autofocus counter />
+            </q-popup-edit>
+          </q-td>
+          <q-td v-if="!select">
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(row.eventmemberidUI)"/>
+          </q-td>
+        </q-tr>
+      </template>
+      <template v-else v-slot:bottom-row>
+        <q-tr v-if="select && edit">
+          <q-td colspan="100%">Contacts already Invited</q-td>
+        </q-tr>
+        <q-tr v-for="row in data.filter((e) => e.readonly)" :key="row.eventmemberidUI"
+         class="selected">
+          <q-td auto-width v-if="select" style="height:auto;">
+            <q-checkbox :value="true" disable/>
+          </q-td>
+         <q-td class="row" style="padding:0px; height:auto;">
+          <div style="border-bottom-width:0px; height:auto;
+           padding:7px 16px; padding-right:3px;">
+            {{ row.firstname }}
+            <q-popup-edit
+              v-model="row.firstname"
+              title="Edit First Name"
+              buttons
+              :validate="firstnameValidation"
+              @hide="firstnameValidation"
+              @save="(v, iv) => save(v, iv, row, 'firstname')"
+            >
+              <q-input
+                v-model="row.firstname"
+                dense
+                autofocus
+                counter
+                :error="errorProtein"
+                :error-message="errorMessageProtein"
+              />
+            </q-popup-edit>
+          </div>
+          <div style="border-bottom-width:0px; height:auto;
+           padding:7px 16px; padding-left:3px; padding-right:10px;">
+            {{ row.lastname }}
+            <q-popup-edit
+              v-model="row.lastname"
+              title="Edit Last Name"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'lastname')"
+            >
+              <q-input v-model="row.lastname" dense autofocus counter />
+            </q-popup-edit>
+          </div>
+          <div class="col-12"
+           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+            {{ row.primaryPhone }}
+            <q-popup-edit
+              v-model="row.primaryPhone"
+              title="Edit Phone"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'primaryPhone')"
+            >
+              <q-input
+                v-model="row.primaryPhone"
+                dense
+                autofocus
+                counter
+              />
+            </q-popup-edit>
+          </div>
+          <!-- <div class="col-12"
+           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+            {{ row.secondaryPhone }}
+            <q-popup-edit
+              v-model="row.secondaryPhone"
+              title="Edit phone"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'secondaryPhone')"
+            >
+              <q-input
+                v-model="row.secondaryPhone"
+                dense
+                autofocus
+                counter
+              />
+            </q-popup-edit>
+          </div> -->
+          <div class="col-12"
+           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+            {{ row.email }}
+            <q-popup-edit
+              v-model="row.email"
+              title="Edit Email"
+              buttons
+              @save="(v, iv) => save(v, iv, row, 'email')"
+            >
+              <q-input v-model="row.email" dense autofocus counter />
+            </q-popup-edit>
+          </div>
+         </q-td>
+          <q-td v-if="!select">
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(row.eventmemberidUI)"/>
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
     <q-dialog v-model="uploadContactsLayout">
       <q-layout container class="bg-white" style="max-height:300px;">
@@ -623,6 +810,7 @@ export default {
 
       pagination: { rowsPerPage: 0 },
       data: this.contacts || [],
+      edit: false,
 
       firstname: null,
       lastname: null,
@@ -737,8 +925,18 @@ export default {
       axios
         .get('/api/userEvents/userguestlist')
         .then((response) => {
-          // JSON responses are automatically parsed.
           this.data = response.data.data;
+
+          if (this.selected.length > 0) {
+            const id = new Set(this.selected.filter((em) => em.readonly)
+              .map((em) => em.eventmemberidUI));
+            this.data.forEach((c) => {
+              if (id.has(c.eventmemberidUI)) c.readonly = true;
+            });
+            this.edit = id.size > 0;
+            this.$emit('update:selected', []);
+          }
+
           Loading.hide();
           // this.data = this.data.concat(response.data.data);
         })

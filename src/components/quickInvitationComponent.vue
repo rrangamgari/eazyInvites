@@ -39,6 +39,7 @@
             @input="val => { onEventTypeChange() }"
           />
             <q-select
+              class="q-pb-none"
               name="eventType"
               label="Event Type"
               v-model="eventType"
@@ -54,7 +55,7 @@
               @change="val => { onEventTitleChange() }"
             />
             <div class="row">
-            <q-input style="width: 80%;"
+            <q-input style="width: 80%;" class="q-pb-none"
              v-model="eventdate"     stack-label label="Event Date"
                      :rules="[val => !!val || 'Event Date is required']">
               <template v-slot:append>
@@ -73,11 +74,11 @@
                     size="50px"
           />
             </div>
-            <div class="row">
-            <q-input v-show="first" style="width: 80%"
+            <div v-show="first" class="row">
+            <q-input style="width: 80%"
              v-model="eventtime"   mask="time" stack-label label="Event Start Time">
               <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
+                <q-icon name="schedule" class="cursor-pointer">
                   <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
                     <q-time v-model="eventtime" @input="() => $refs.qTimeProxy.hide()"
                             />
@@ -97,11 +98,11 @@
                         size="50px"
               />
             </div>
-          <div class="row">
-            <q-input v-show="first&&second" style="width: 80%"
+          <div v-show="first&&second" class="row">
+            <q-input style="width: 80%"
                      v-model="eventendtime"   mask="time" stack-label label="Event End Time">
               <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
+                <q-icon name="query_builder" class="cursor-pointer">
                   <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
                     <q-time v-model="eventendtime" @input="() => $refs.qTimeProxy.hide()"
                     />
@@ -115,7 +116,7 @@
             </q-input>
 
           </div>
-          <div class="row">
+          <div class="row items-center">
             <div style="width: 84%;">
             <q-file
               :disable="card"
@@ -183,7 +184,7 @@
           <div class="absolute" style="bottom: 50%; right: 10%;">
             <div>
               <q-fab
-                v-model="fab1"
+                v-model="fab"
                 color="primary"
                 glossy
                 icon="keyboard_arrow_left"
@@ -383,8 +384,10 @@ export default {
   components: {
     addContactsComponent,
   },
+  props: ['eventId', 'eventAlphaId'],
   data() {
     return {
+      fab: false,
       fabLabel: '',
       file: null,
       fileId: null,
@@ -394,6 +397,7 @@ export default {
       url: '',
       step: 1,
       et: true,
+      event: {},
       eventtitle: '',
       eventdate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
       eventtime: '00:00',
@@ -401,7 +405,7 @@ export default {
       eventType: '',
       selection: ['teal'],
       selected: [],
-      hostname: this.$q.localStorage.getItem('user-token'),
+      hostname: '',
       eventmessage: `\nDear {{Guest Name}}, We invite you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`,
       options: [
         { value: 1, label: 'Birthday' },
@@ -463,7 +467,6 @@ export default {
       errorProtein: '',
     };
   },
-
   methods: {
     openMoreOptionsDialog() {
       Loading.show({
@@ -514,6 +517,175 @@ export default {
       futuredate.setDate(futuredate.getDate() + 365); // Set now + 30 days as the new date
       return date_ >= date.formatDate(Date.now(), 'YYYY/MM/DD') && date_ <= date.formatDate(futuredate, 'YYYY/MM/DD');
     },
+    loadData() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
+      this.event = {
+        eventtitle: this.eventtitle,
+        eventdate: this.eventdate,
+        eventtime: this.eventtime,
+        eventendtime: this.eventendtime,
+        eventType: this.eventType,
+        hostname: this.hostname,
+        eventmessage: this.eventmessage,
+        first: false,
+        second: false,
+      };
+
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .get('/api/eventSystem/eventType')
+        .then((response) => {
+          this.options = response.data.data;
+          if (this.eventType && typeof this.eventType === 'string') this.eventType = this.options[Number(this.eventType) - 1];
+          Loading.hide();
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.get('/api/UserDetails/getCurrentUser')
+        .then((response1) => {
+          this.$q.localStorage.set('user-token', response1.data.data);
+          this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
+          this.event.hostname = this.hostname;
+          if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
+
+          if (this.eventId) this.loadEvent();
+
+          Loading.hide();
+        })
+        .catch((e) => {
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
+    loadEvent() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+        'login-token',
+      )}`;
+
+      axios
+        .get(`/api/userEvents/event/${this.eventId}/${this.eventAlphaId}`)
+        .then((response) => {
+          const event = response.data.data;
+          if (event.attachmentlink !== null) {
+            Loading.show({
+              spinner: QSpinnerBars,
+              spinnerColor: 'primary',
+              thickness: '3',
+            });
+            axios
+              .get(event.attachmentlink, { responseType: 'blob' })
+              .then((response1) => {
+                this.file = new File([response1.data], response1.headers['content-disposition'].split('"')[1],
+                  { type: response1.headers['content-type'] });
+                console.log(this.file);
+                Loading.hide();
+              })
+              .catch((e) => {
+                if (e.message === 'Request failed with status code 401') {
+                  this.$q.localStorage.remove('login-token');
+                  this.$router.push('/login');
+                }
+                Loading.hide();
+              });
+          }
+
+          this.event = {
+            eventtitle: event.eventtitle,
+            eventdate: date.formatDate(event.startdate, 'DD/MM/YYYY'),
+            eventtime: date.formatDate(event.startdate, 'HH:mm'),
+            eventendtime: date.formatDate(event.enddate, 'HH:mm'),
+            eventType: this.options[event.eventtypeid - 1],
+            hostname: event.hostedby,
+            eventmessage: event.eventmessage,
+            first: false,
+            second: false,
+          };
+          this.event.first = this.event.eventtime !== '00:00';
+          this.event.second = this.event.eventtime !== this.event.eventendtime;
+          this.onReset();
+
+          Loading.hide();
+          this.loadEventmembers();
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
+    loadEventmembers() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios
+        .get(`/api/userEvents/guestlist/${this.eventId}`)
+        .then((response) => {
+          const { data } = response.data;
+          this.selected = data.map((a) => a.eventMembers);
+          this.selected.forEach((em) => { em.readonly = true; });
+          Loading.hide();
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
     onSubmit() {
       if (this.eventType === '') {
         this.$q.notify({
@@ -529,19 +701,23 @@ export default {
           spinnerColor: 'primary',
           thickness: '3',
         });
-        this.step = 2;
-        if (!this.card && this.file !== null) this.url = URL.createObjectURL(this.file);
+        if (!this.card && this.file) this.url = URL.createObjectURL(this.file);
+        console.log(this.url);
         Loading.hide();
+        this.step = 2;
       }
     },
     onReset() {
-      this.eventtitle = '';
-      this.eventType = '';
-      this.eventdate = date.formatDate(Date.now(), 'DD/MM/YYYY');
-      this.eventtime = '00:00';
-      this.eventendtime = '00:00';
-      if (!this.card) this.file = null;
-      this.eventmessage = '';
+      this.eventtitle = this.event.eventtitle;
+      this.et = true;
+      this.eventType = this.event.eventType;
+      this.eventdate = this.event.eventdate;
+      this.eventtime = this.event.eventtime;
+      this.eventendtime = this.event.eventendtime;
+      if (!this.card && !this.eventId) this.file = null;
+      this.eventmessage = this.event.eventmessage;
+      this.first = this.event.first;
+      this.second = this.event.second;
     },
     firstnameValidation(val) {
       if (val === '') {
@@ -603,6 +779,10 @@ export default {
       }
     },
     onFinish() {
+      if (this.eventId) {
+        this.onEditFinish();
+        return;
+      }
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -617,7 +797,8 @@ export default {
       const fromMonth = (from[1]);
       const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
       const startTime = `${this.first ? this.eventtime : '00:00'}`;
-      const endTime = `${this.first ? this.eventendtime : this.eventtime}`;
+      let endTime = `${this.first ? this.eventtime : '00:00'}`;
+      endTime = `${this.second ? this.eventendtime : endTime}`;
 
       const eventDetails = {
         eventtypeid: this.eventType.value,
@@ -672,6 +853,77 @@ export default {
           Loading.hide();
         });
     },
+    onEditFinish() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+
+      if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
+
+      const from = `${this.eventdate}`.split('/');
+      const fromMonth = (from[1]);
+      const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
+      const startTime = `${this.first ? this.eventtime : '00:00'}`;
+      let endTime = `${this.first ? this.eventtime : '00:00'}`;
+      endTime = `${this.second ? this.eventendtime : endTime}`;
+
+      const eventDetails = {
+        eventtypeid: this.eventType.value,
+        eventtitle: this.eventtitle,
+        eventmessage: this.eventmessage,
+        startdate: new Date(`${startDate}T${startTime}:00`),
+        enddate: new Date(`${startDate}T${endTime}:00`),
+        attachmentlink: `${this.card ? this.fileId : null}`,
+        eventallowkids: true,
+        hostedby: this.hostname,
+      };
+
+      const eventMemberIdList = this.selected.filter((e) => !e.readonly)
+        .map((el) => el.eventmemberidUI);
+
+      const formData = new FormData();
+      formData.append('file', this.card ? null : this.file);
+      formData.append('eventDetails', new Blob([JSON.stringify(eventDetails)], { type: 'application/json' }));
+      formData.append('eventGuests', new Blob([JSON.stringify(eventMemberIdList)], { type: 'application/json' }));
+      axios.post(`/api/userEvents/event/${this.eventId}/${this.eventAlphaId}`, formData)
+        .then((response) => {
+          if (!response.data.data || response.data.data === 'null') {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: response.data.message,
+              position: 'top',
+            });
+            Loading.hide();
+            return;
+          }
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: response.data.data,
+            position: 'center',
+          });
+
+          Loading.hide();
+          this.$router.push(`/events/${this.eventId}/${this.eventAlphaId}`);
+        })
+        .catch((e) => {
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
     fabLabelChange() {
       this.fabLabel = 'Add More Options';
     },
@@ -691,65 +943,8 @@ export default {
       this.url = data;
     }
     if (this.$route.params.eventType) this.eventType = this.$route.params.eventType;
-    console.log(this.fileId, this.file, this.url);
-    Loading.show({
-      spinner: QSpinnerBars,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-      'login-token',
-    )}`;
 
-    axios
-      .get('/api/eventSystem/eventType')
-      .then((response) => {
-        // JSON responses are automatically parsed.
-        this.options = response.data.data;
-        if (this.eventType && typeof this.eventType === 'string') this.eventType = this.options[Number(this.eventType) - 1];
-        // this.data = this.data.concat(response.data.data);
-        Loading.hide();
-      })
-      .catch((e) => {
-        //  this.errors.push(e);
-        if (e.message === 'Request failed with status code 401') {
-          this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
-        }
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-        Loading.hide();
-      });
-    Loading.show({
-      spinner: QSpinnerBars,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
-    axios.get('/api/UserDetails/getCurrentUser')
-      .then((response1) => {
-        // JSON responses are automatically parsed.
-        this.$q.localStorage.set('user-token', response1.data.data);
-        this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
-        if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
-        // Notification for testing api
-        Loading.hide();
-      })
-      .catch((e) => {
-        //  this.errors.push(e);
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-        Loading.hide();
-      });
+    this.loadData();
   },
 };
 </script>

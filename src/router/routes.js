@@ -42,6 +42,12 @@ const routes = [
         name: 'createEvent', // Dependency Exists in editCard.vue
         component: () => import('components/quickInvitationComponent.vue'),
       },
+      {
+        path: 'editInvitation/:eventId/:eventAlphaId',
+        name: 'editEvent',
+        component: () => import('components/quickInvitationComponent.vue'),
+        props: true,
+      },
       { path: 'addContacts', name: 'contacts', component: () => import('components/addContactsComponent.vue') },
       { path: 'myProfile', name: 'myProfile', component: () => import('components/myProfileComponent.vue') },
     ],
