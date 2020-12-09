@@ -316,6 +316,14 @@
         id="home_tabs"
       >
         <q-route-tab
+          name="New Promotion"
+          :label="($q.screen.width > 1032) ? 'New Promotion' : ''"
+          :style="qtabStyle"
+          icon="create_new_folder"
+          to="/createPromotion"
+          content-class="padding: 0px 8px;"
+        />
+        <q-route-tab
           name="New Invitation"
           :label="($q.screen.width > 1032) ? 'New Invitation' : ''"
           :style="qtabStyle"

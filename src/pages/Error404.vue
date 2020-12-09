@@ -1,5 +1,7 @@
 <template>
   <div class="fixed-center text-center">
+    <header-component></header-component>
+    <footer-component></footer-component>
     <p>
       <img
         src="~assets/sad.svg"
@@ -19,7 +21,14 @@
 </template>
 
 <script >
+import headerComponent from '../components/header.vue';
+import footerComponent from '../components/footer.vue';
+
 export default {
   name: 'Error404',
+  components: {
+    headerComponent,
+    footerComponent,
+  },
 };
 </script>

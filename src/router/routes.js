@@ -43,6 +43,11 @@ const routes = [
         component: () => import('components/quickInvitationComponent.vue'),
       },
       {
+        path: 'createPromotion',
+        name: 'createEvent', // Dependency Exists in editCard.vue
+        component: () => import('components/quickPromotionComponent.vue'),
+      },
+      {
         path: 'editInvitation/:eventId/:eventAlphaId',
         name: 'editEvent',
         component: () => import('components/quickInvitationComponent.vue'),
@@ -74,6 +79,11 @@ if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
     component: () => import('pages/Error404.vue'),
+    children: [
+      { path: '', component: () => import('components/header.vue') },
+      { path: '', component: () => import('components/footer.vue') },
+
+    ],
   });
 }
 

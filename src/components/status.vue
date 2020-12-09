@@ -14,7 +14,9 @@
                :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
             </q-card-section>
             <q-card-section class="q-pa-xs row items-center">
-              <div class="text-left q-px-xs col-12" style="font-size: 34px;" >
+              <div class="text-left q-px-xs col-12" style="font-size: 34px;"
+                   v-if="eventType[event.eventtypeid-1]!==null &&
+                   eventType[event.eventtypeid-1]!==Undefined">
                 Type: {{ eventType[event.eventtypeid-1].label }}
               </div>
               <div>&nbsp;</div>
@@ -22,7 +24,8 @@
                 Host: {{ event.hostedby }}
               </div>
               <div>&nbsp;</div>
-              <div class="text-left q-px-xs col-12" style="font-size: 20px;">
+              <div class="text-left q-px-xs col-12" style="font-size: 20px;"
+                   v-if="event.startdate !== null">
                 Start: {{ (new Date(event.startdate)).toDateString() }}
               </div>
               <div>&nbsp;</div>
@@ -251,8 +254,8 @@ export default {
       .get(`/api/userEvents/event/${this.eventId}/${this.eventAlpha}`)
       .then((response) => {
         this.event = response.data.data;
-        console.log(this.event.attachmentlink);
-        if (this.event.attachmentlink !== null) {
+        console.log(`this.event.attachmentlink: ${this.event.attachmentlink}`);
+        if (this.event.attachmentlink !== null && this.event.attachmentlink !== 'null') {
           axios
             .get(this.event.attachmentlink, { responseType: 'arraybuffer' })
             .then((response1) => {
