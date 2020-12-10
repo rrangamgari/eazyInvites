@@ -243,13 +243,14 @@
           :header-style="{ color: '#FFFFFF' }"
         >
         <q-card class="full-height -borders">
-          <q-card-section class="q-pa-xs">
-            <!--q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium" style="font-size: 16px;">
-              {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
-                  event.eventtitle : 'Untitled Event' }}
+          <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
+              'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+            <q-card-section class="q-pa-xs">
+              <div class="text-center text-decoration-underline" style="font-size: 34px;">
+                {{ (eventtitle !== null && eventtitle.trim() !== '') ?
+                  eventtitle : 'Untitled Event' }}
               </div>
-            </q-card-section-->
+            </q-card-section>
             <q-card-section class="q-pa-xs row items-center">
               <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                 <p style="font-size: 34px;">Type: {{ eventType.label }}</p>
@@ -275,13 +276,14 @@
         </q-expansion-item>
         <div v-else class="col-6 q-pa-xs row">
         <q-card class="full-height">
-          <q-card-section class="q-pa-xs">
-            <!--q-card-section class="q-pa-xs">
-              <div class="text-center text-weight-medium" style="font-size: 16px;">
-              {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
-                  event.eventtitle : 'Untitled Event' }}
+          <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
+              'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+            <q-card-section class="q-pa-xs">
+              <div class="text-center text-decoration-underline" style="font-size: 34px;">
+                {{ (eventtitle !== null && eventtitle.trim() !== '') ?
+                  eventtitle : 'Untitled Event' }}
               </div>
-            </q-card-section-->
+            </q-card-section>
             <q-card-section class="q-pa-xs row items-center logo" style="font-family:
               'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
               <div class="text-left q-px-xs col-12 " style="font-size: 34px;">

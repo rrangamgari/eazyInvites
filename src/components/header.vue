@@ -19,16 +19,16 @@
       </q-btn-dropdown>
 
       <a href="/" v-if="$q.screen.xs">
-        <img src="../assets/logo/logo_final.png" width="50px" />
+        <img src="../statics/WE_Invites_logo.png" width="50px" />
       </a>
       <a href="/" v-else-if="$q.screen.sm">
-        <img src="../assets/logo/logo_final.png" width="60px" />
+        <img src="../statics/WE_Invites_logo.png" width="60px" />
       </a>
       <a href="/" v-else-if="$q.screen.md">
-        <img src="../assets/logo/logo_final.png" width="75px" />
+        <img src="../statics/WE_Invites_logo.png" width="75px" />
       </a>
       <a href="/" v-else>
-        <img src="../assets/logo/logo_final.png" width="75px" />
+        <img src="../statics/WE_Invites_logo.png" width="75px" />
       </a>
       <q-toolbar-title class="logo" shrink :style="lStyle"
        style="padding-right: 0px;">

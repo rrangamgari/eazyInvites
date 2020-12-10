@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerBars } from 'quasar';
+import { Loading, QSpinnerBars, date } from 'quasar';
 import axios from 'axios';
 import loginDialog from './loginDialog.vue';
 
@@ -219,9 +219,9 @@ export default {
         });
     },
     createEvents() {
-      const date = new Date();
+      const today = new Date();
       this.data.forEach((event) => {
-        if ((new Date(event.enddate)).getTime() < date.getTime()) {
+        if (date.getDateDiff(new Date(event.enddate), today, 'days') < 0) {
           this.events1 = this.events1.concat(event);
         } else {
           this.events0 = this.events0.concat(event);

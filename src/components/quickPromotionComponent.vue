@@ -82,21 +82,26 @@
                 </q-input>
 
               </div>
+            <q-input
+              v-model="eventtitle"
+              type="text"
+              label="Promotion Title"
+              name="eventtitle"
+              @change="val => { onEventTitleChange() }"
+            />
               <div class="row items-center">
-                <div style="width: 84%;">
+                <div style="width: 100%;">
                   <q-file
                     :disable="card"
 
                     v-model="file"
                     label="Upload Promotion"
-                    style="padding-right:15px"
                     lazy-rules>
                     <template v-slot:append>
                       <q-icon name="attach_file" />
                     </template>
                   </q-file>
                 </div>
-                <div style="width: 4%;" />
 
               </div>
               <q-input
@@ -201,17 +206,18 @@
               :header-style="{ color: '#FFFFFF' }"
             >
               <q-card class="full-height -borders">
-                <q-card-section class="q-pa-xs">
-                  <!--q-card-section class="q-pa-xs">
-                    <div class="text-center text-weight-medium" style="font-size: 16px;">
-                    {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
-                        event.eventtitle : 'Untitled Event' }}
+                <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
+                    'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+                  <q-card-section class="q-pa-xs">
+                    <div class="text-center text-decoration-underline" style="font-size: 34px;">
+                      {{ (eventtitle !== null && eventtitle.trim() !== '') ?
+                       eventtitle : 'Untitled Promotion' }}
                     </div>
-                  </q-card-section-->
+                  </q-card-section>
                   <q-card-section class="q-pa-xs row items-center">
-                    <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                    <!-- <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                       <p style="font-size: 34px;">Type: {{ eventType.label }}</p>
-                    </div>
+                    </div> -->
                     <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                       Host: {{ hostname }}
                     </div>
@@ -233,19 +239,20 @@
             </q-expansion-item>
             <div v-else class="col-6 q-pa-xs row">
               <q-card class="full-height">
-                <q-card-section class="q-pa-xs">
-                  <!--q-card-section class="q-pa-xs">
-                    <div class="text-center text-weight-medium" style="font-size: 16px;">
-                    {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
-                        event.eventtitle : 'Untitled Event' }}
+                <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
+                    'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+                  <q-card-section class="q-pa-xs">
+                    <div class="text-center text-decoration-underline" style="font-size: 34px;">
+                      {{ (eventtitle !== null && eventtitle.trim() !== '') ?
+                       eventtitle : 'Untitled Promotion' }}
                     </div>
-                  </q-card-section-->
+                  </q-card-section>
                   <q-card-section class="q-pa-xs row items-center logo" style="font-family:
               'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
-                    <div class="text-left q-px-xs col-12 " style="font-size: 34px;">
+                    <!-- <div class="text-left q-px-xs col-12 " style="font-size: 34px;">
                       Type: {{ eventType.label }}
                     </div>
-                    <div>&nbsp;</div>
+                    <div>&nbsp;</div> -->
                     <div class="text-left q-px-xs col-12" style="font-size: 34px;">
                       Host: {{ hostname }}
                     </div>
@@ -278,14 +285,14 @@
             >
               <q-card class="full-height">
                 <q-card-section class="q-pa-xs">
-                  <q-img :src="url !== '' ? url : require('../assets/logo/Easy_Invites.png')" />
+                  <q-img :src="url" placeholder-src="~assets/logo/logo_final.png" />
                 </q-card-section>
               </q-card>
             </q-expansion-item>
             <div v-else class="col-6 q-pa-xs">
               <q-card class="full-height">
                 <q-card-section class="q-pa-xs full-height">
-                  <q-img class="full-height" :src="url"/>
+                  <q-img :src="url" placeholder-src="~assets/logo/logo_final.png" />
                 </q-card-section>
               </q-card>
             </div>
@@ -352,7 +359,7 @@ export default {
       card: false,
       first: false,
       second: false,
-      url: '',
+      url: null,
       step: 1,
       et: true,
       event: {},
@@ -494,30 +501,7 @@ export default {
         second: false,
       };
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
-      axios
-        .get('/api/eventSystem/eventType')
-        .then((response) => {
-          this.options = response.data.data;
-          if (this.eventType && typeof this.eventType === 'string') this.eventType = this.options[Number(this.eventType) - 1];
-          Loading.hide();
-        })
-        .catch((e) => {
-          if (e.message === 'Request failed with status code 401') {
-            this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
-          }
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'error',
-            message: e.message,
-            position: 'top',
-          });
-          Loading.hide();
-        });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -528,7 +512,7 @@ export default {
           this.$q.localStorage.set('user-token', response1.data.data);
           this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
           this.event.hostname = this.hostname;
-          if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
+          if (this.et) this.eventtitle = `${this.hostname}'s Promotion`;
 
           if (this.eventId) this.loadEvent();
 
@@ -681,14 +665,14 @@ export default {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.eventmessage = `\nDear {{Guest Name}}, We invite you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`;
-      if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
+      this.eventmessage = '\nDear {{Guest Name}},\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.';
+      if (this.et) this.eventtitle = `${this.hostname}'s Promotion`;
       // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
       // \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
     },
     onEventTitleChange() {
-      if (this.et && (this.eventtitle.trim().toLowerCase() !== `${this.hostname}'s ${this.eventType.label}`.toLowerCase())) this.et = false;
+      if (this.et && (this.eventtitle.trim().toLowerCase() !== `${this.hostname}'s Promotion`.toLowerCase())) this.et = false;
     },
     onContinue() {
       this.step = 4;

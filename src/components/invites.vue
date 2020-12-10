@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerBars } from 'quasar';
+import { Loading, QSpinnerBars, date } from 'quasar';
 import axios from 'axios';
 
 
@@ -97,9 +97,9 @@ export default {
   },
   methods: {
     createInvites() {
-      const date = new Date();
+      const today = new Date();
       this.data.forEach((invite) => {
-        if ((new Date(invite.eventDetails.enddate)).getTime() < date.getTime()) {
+        if (date.getDateDiff(new Date(invite.eventDetails.enddate), today, 'days') < 0) {
           this.invites1 = this.invites1.concat(invite);
         } else {
           this.invites0 = this.invites0.concat(invite);
