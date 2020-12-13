@@ -18,7 +18,7 @@ const routes = [
         name: 'eventStatus',
         component: () => import('components/status.vue'),
       },
-      { path: 'invites', name: 'invites', component: () => import('components/invites.vue') },
+      { path: 'currentOrders', name: 'currentOrders', component: () => import('components/currentOrders.vue') },
       {
         path: 'invites/:inviteId/:inviteAplhaId',
         name: 'invitesRsvp',
@@ -36,11 +36,6 @@ const routes = [
         path: 'editcard/:cardId',
         name: 'editcard',
         component: () => import('components/editCard.vue'),
-      },
-      {
-        path: 'createInvitation',
-        name: 'createEvent', // Dependency Exists in editCard.vue
-        component: () => import('components/quickInvitationComponent.vue'),
       },
       {
         path: 'createPromotion',

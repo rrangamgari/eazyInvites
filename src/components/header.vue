@@ -32,8 +32,8 @@
       </a>
       <q-toolbar-title class="logo" shrink :style="lStyle"
        style="padding-right: 0px;">
-       <a href="/" class="text-white" style="text-decoration: none;">
-        WE Invites
+       <a href="/"  style="text-decoration: none;">
+         <span class="text-black">WE</span>&nbsp; <span class="text-primary">Promotes</span>
        </a>
       </q-toolbar-title>
       <q-space/>
@@ -291,9 +291,9 @@
       <div class="row" style="padding-top: 9px; padding-right: 8px;"
        :style="$q.screen.width > 400 ? 'max-width: 90px;' : 'max-width: 68px;' ">
         <q-btn class="col-12" label="Login" type="submit" dense
-         :color="`${qbtnColor || 'white'}`"
-         :text-color="`${qbtnColor === '' ? 'black' : 'white'}`"/>
-        <a @click="openDialog()" class="q-pt-xs q-px-xs" :class="`text-${qbtnColor || 'white'}`"
+         :color="`${qbtnColor || 'black'}`"
+         :text-color="`${qbtnColor === '' ? 'black' : 'black'}`"/>
+        <a @click="openDialog()" class="q-pt-xs q-px-xs" :class="`text-${qbtnColor || 'black'}`"
          style="font-size: 10px; text-decoration: underline;">New User?</a>
       </div>
       <q-separator color="grey" size="2px" vertical inset/>
@@ -319,45 +319,30 @@
           name="New Promotion"
           :label="($q.screen.width > 1032) ? 'New Promotion' : ''"
           :style="qtabStyle"
-          icon="create_new_folder"
+          icon="record_voice_over"
           to="/createPromotion"
           content-class="padding: 0px 8px;"
         />
         <q-route-tab
-          name="New Invitation"
-          :label="($q.screen.width > 1032) ? 'New Invitation' : ''"
+          name="My Promotions"
+          :label="($q.screen.width > 1032) ? 'My Promotions' : ''"
           :style="qtabStyle"
-          icon="create_new_folder"
-          to="/createInvitation"
-          content-class="padding: 0px 8px;"
-        />
-        <q-route-tab
-          name="My Events"
-          :label="($q.screen.width > 1032) ? 'My Events' : ''"
-          :style="qtabStyle"
-          icon="folder_shared"
+          icon="today"
           to="/events"
         />
         <q-route-tab
-          name="My Invites"
-          :label="($q.screen.width > 1032) ? 'My Invites' : ''"
+          name="Orders"
+          :label="($q.screen.width > 1032) ? 'Orders' : ''"
           :style="qtabStyle"
-          icon="folder_shared"
-          to="/invites"
+          icon="fastfood"
+          to="/currentOrders"
         />
         <q-route-tab
-          name="My Contacts"
+          name="My Customers"
           :label="($q.screen.width > 1032) ? 'My Contacts' : ''"
           :style="qtabStyle"
           icon="group"
           to="/addContacts"
-        />
-        <q-route-tab
-          name="My Profile"
-          :label="($q.screen.width > 1032) ? 'My Profile' : ''"
-          :style="qtabStyle"
-          icon="person"
-          to="/myProfile"
         />
         <q-tab
           name="logout"
@@ -499,21 +484,8 @@
         </q-btn-dropdown-->
       </q-tabs>
       <q-btn-dropdown v-else icon="person" dropdown-icon=""
-       auto-close dense flat color="white">
+       auto-close dense flat color="black">
           <q-list>
-            <q-item
-              clickable
-              v-close-popup
-              to="/createInvitation"
-            >
-              <q-item-section avatar style="min-width: 0px;">
-                <q-icon name="create_new_folder"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>New Invitation</q-item-label>
-                <q-item-label caption>Create a new Invitation</q-item-label>
-              </q-item-section>
-            </q-item>
             <q-item
               clickable
               v-close-popup
@@ -523,7 +495,7 @@
                 <q-icon name="folder_shared"/>
               </q-item-section>
               <q-item-section>
-                <q-item-label>My Events</q-item-label>
+                <q-item-label>My Promotions</q-item-label>
                 <q-item-label caption>Show my events</q-item-label>
               </q-item-section>
             </q-item>
@@ -604,14 +576,14 @@ export default {
       tab: '',
       header: true,
       hEl: null,
-      hStyle: 'background-color: rgba(0,0,0,0);',
+      hStyle: 'background-color: rgba(255,255,255,0);',
       hideTabs: true,
       hClass: '',
       hScreenHeight: 200,
-      lStyle: 'color:white',
+      lStyle: 'color:black',
       qmenuColor: '',
       qbtnColor: '',
-      qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white',
+      qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:black',
       tabs: [{
         name: 'images', label: 'Home', icon: 'home', path: '/',
       },
@@ -638,14 +610,14 @@ export default {
     // window.alert(this.$router.currentRoute.path);
     if (this.$router.currentRoute.path !== '/') {
       this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-      this.hStyle = 'background-color: rgba(0,0,0,1);';
-      this.lStyle = 'color:white';
-      this.qtabStyle = 'font-family: \'Montserrat\', sans-serif;  font-color:white;  font-weight:bold; color:white; font-size: 13px; ';
+      this.hStyle = 'background-color: rgba(255,255,255 ,1);';
+      this.lStyle = 'color:black';
+      this.qtabStyle = 'font-family: \'Montserrat\', sans-serif;  font-color:black;  font-weight:bold; color:black; font-size: 13px; ';
       this.hClass = 'shadow-5 elevated bordered';
       // this.hEl.class = this.hEl.class.add('glossy');
       this.hideTabs = true;
       this.qbtnColor = 'primary';
-      this.qmenuColor = 'white';
+      this.qmenuColor = 'black';
       // window.alert(this.$router.currentRoute.path);
     }
   },
@@ -690,19 +662,20 @@ export default {
           this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
           this.hStyle = 'background-color: rgba(0,0,0,.7);';
           this.lStyle = 'color:#FFFFF';
-          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:black';
           this.hClass = 'elevated bordered';
           this.qbtnColor = 'primary';
-          this.qmenuColor = 'white';
+          this.qmenuColor = 'black';
 
           document.getElementById('ei_tab').style.visibility = 'visible';
         } else {
           this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
-          this.hStyle = 'background-color: rgba(0,0,0,0);';
+          this.hStyle = 'background-color: rgba(255,255,255,0);';
           this.hClass = '';
-          this.lStyle = 'color:white';
+          this.lStyle = 'color:black';
           this.qbtnColor = '';
-          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
+          this.qmenuColor = 'black';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#000000;  font-weight:bolder; color:black';
           document.getElementById('ei_tab').style.visibility = 'hidden';
         }
       }
@@ -758,7 +731,7 @@ export default {
         .catch((e) => {
           this.$q.notify({
             color: 'red-5',
-            textColor: 'white',
+            textColor: 'black',
             icon: 'error',
             message: e.message,
             position: 'top',

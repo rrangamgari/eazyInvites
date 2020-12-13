@@ -158,7 +158,7 @@ export default {
                 // JSON responses are automatically parsed.
                 this.$q.localStorage.set('user-token', response1.data);
                 // Notification for testing api
-                this.$router.push('/createInvitation');
+                this.$router.push('/createPromotion');
                 Loading.hide();
               })
               .catch((e) => {

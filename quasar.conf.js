@@ -235,7 +235,7 @@ module.exports = function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'WE Invites',
+        appId: 'WE Promotes',
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
