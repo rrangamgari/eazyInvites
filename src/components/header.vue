@@ -341,7 +341,7 @@
           name="My Customers"
           :label="($q.screen.width > 1032) ? 'My Contacts' : ''"
           :style="qtabStyle"
-          icon="group"
+          icon="contacts"
           to="/addContacts"
         />
         <q-tab
