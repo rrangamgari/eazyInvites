@@ -37,7 +37,17 @@
         fill-mask="#"
         :rules="[ val=> val !== null && val !== '' || 'Please enter Phone']"
       />
-
+      <q-input
+        type="email"
+        :dark="$props.dark"
+        v-model="email"
+        label="Email"
+        lazy-rules
+        mask=""
+        unmasked-value
+        fill-mask="#"
+        :rules="[ val=> val !== null && val !== '' || 'Please enter Email Id']"
+      />
       <q-input
 
         :dark="$props.dark"
@@ -98,6 +108,7 @@ export default {
       firstname: null,
       lastname: null,
       phone: null,
+      email: null,
       password: null,
       cpassword: null,
       passwordFieldType: 'password',
@@ -116,6 +127,7 @@ export default {
       this.firstname = null;
       this.lastname = null;
       this.phone = null;
+      this.email = null;
       this.password = null;
       this.cpassword = null;
       this.accept = false;
@@ -136,6 +148,7 @@ export default {
         password: { password: this.password },
         givenname: this.firstname,
         familyname: this.lastname,
+        email: this.email,
         fax: this.$q.localStorage.getItem('country-token') === 'US' ? '1' : '91',
         role: { roleid: 3, active: true },
       })
