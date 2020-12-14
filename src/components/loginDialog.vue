@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       tab: this.$props.login ? 'login' : 'register',
-      i: 0,
+      i: 1,
       head: ['transparent', '#18d26e'],
       body: ['rgb(0,0,0,0.7)', 'white'],
     };

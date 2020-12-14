@@ -33,7 +33,7 @@
       <q-toolbar-title class="logo" shrink :style="lStyle"
        style="padding-right: 0px;">
        <a href="/"  style="text-decoration: none;">
-         <span class="text-black">WE</span>&nbsp; <span class="text-primary">Promotes</span>
+         <span :class="weClass">WE</span>&nbsp; <span class="text-primary">Promotes</span>
        </a>
       </q-toolbar-title>
       <q-space/>
@@ -580,7 +580,8 @@ export default {
       hideTabs: true,
       hClass: '',
       hScreenHeight: 200,
-      lStyle: 'color:black',
+      lStyle: 'color:white',
+      weClass: 'text-white',
       qmenuColor: '',
       qbtnColor: '',
       qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:black',
@@ -610,8 +611,9 @@ export default {
     // window.alert(this.$router.currentRoute.path);
     if (this.$router.currentRoute.path !== '/') {
       this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-      this.hStyle = 'background-color: rgba(255,255,255 ,1);';
+      this.hStyle = 'background-color: rgba(255,255,255 ,.9);';
       this.lStyle = 'color:black';
+      this.weClass = 'text-black';
       this.qtabStyle = 'font-family: \'Montserrat\', sans-serif;  font-color:black;  font-weight:bold; color:black; font-size: 13px; ';
       this.hClass = 'shadow-5 elevated bordered';
       // this.hEl.class = this.hEl.class.add('glossy');
@@ -660,22 +662,24 @@ export default {
       if (this.$route.path === '/') {
         if (position > this.hScreenHeight) {
           this.hEl.className = this.hEl.className.replace('absolute-top', 'fixed-top');
-          this.hStyle = 'background-color: rgba(0,0,0,.7);';
+          this.hStyle = 'background-color: rgba(255,255,255,.7);';
           this.lStyle = 'color:#FFFFF';
-          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:black';
+          this.weClass = 'text-black';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white';
           this.hClass = 'elevated bordered';
           this.qbtnColor = 'primary';
-          this.qmenuColor = 'black';
+          this.qmenuColor = 'white';
 
           document.getElementById('ei_tab').style.visibility = 'visible';
         } else {
           this.hEl.className = this.hEl.className.replace('fixed-top', 'absolute-top');
           this.hStyle = 'background-color: rgba(255,255,255,0);';
           this.hClass = '';
-          this.lStyle = 'color:black';
+          this.lStyle = 'color:white';
+          this.weClass = 'text-white';
           this.qbtnColor = '';
-          this.qmenuColor = 'black';
-          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#000000;  font-weight:bolder; color:black';
+          this.qmenuColor = 'white';
+          this.qtabStyle = 'font-family: \'Montserrat\', cursive;  font-color:#000000;  font-weight:bolder; color:white';
           document.getElementById('ei_tab').style.visibility = 'hidden';
         }
       }
