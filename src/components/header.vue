@@ -299,7 +299,7 @@
       <q-separator color="grey" size="2px" vertical inset/>
       <oauth2-clients-component style="padding-left: 0px; padding-right: 0px;"
        :size="$q.screen.width <= 375 ? '10px' : '16px'"
-       @oauth2-login-success="$router.push('/events')"/>
+       @oauth2-login-success="$router.push('/promotions')"/>
       </q-form>
       </div>
 
@@ -328,7 +328,7 @@
           :label="($q.screen.width > 1032) ? 'My Promotions' : ''"
           :style="qtabStyle"
           icon="today"
-          to="/events"
+          to="/promotions"
         />
         <q-route-tab
           name="Orders"
@@ -489,7 +489,7 @@
             <q-item
               clickable
               v-close-popup
-              to="/events"
+              to="/promotions"
             >
               <q-item-section avatar style="min-width: 0px;">
                 <q-icon name="folder_shared"/>
@@ -696,7 +696,7 @@ export default {
         login,
         username,
       }).onOk(() => {
-        this.$router.push('/events');
+        this.$router.push('/promotions');
       }).onCancel(() => {
       });
       Loading.hide();
@@ -729,7 +729,7 @@ export default {
           )}`;
           Loading.hide();
           this.$nextTick(() => {
-            this.$router.push('/events');
+            this.$router.push('/promotions');
           });
         })
         .catch((e) => {

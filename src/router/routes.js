@@ -12,7 +12,7 @@ const routes = [
     children: [
       { path: 'login', name: 'login', component: () => import('components/login.vue') }, // To be removed
       { path: 'newUser', name: 'newUser', component: () => import('components/newUserComponent.vue') }, // To be removed
-      { path: 'events', name: 'events', component: () => import('components/events.vue') },
+      { path: 'promotions', name: 'promotions', component: () => import('components/promotions.vue') },
       {
         path: 'events/:eventId/:eventAlpha',
         name: 'eventStatus',

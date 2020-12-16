@@ -225,6 +225,7 @@
 <script>
 import { exportFile, Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
+import newOrderDialog from './newOrderDialog.vue';
 
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -251,7 +252,7 @@ function wrapCsvValue(val, formatFn) {
 }
 
 export default {
-  name: 'addContactsComponent',
+  name: 'currentOrdersComponent',
   components: {},
   model: {
     prop: 'selected',
@@ -381,28 +382,10 @@ export default {
           });
         }, 2000);
       });
-      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-          'login-token',
-        )}`;
-        axios.defaults.headers.get.Accepts = 'multipart/form-data';
-        const formData = new FormData();
-        formData.append('file', this.$q.file);
-        axios({
-          url: '/api/userEvents/upload',
-          method: 'POST',
-          data: formData,
-        }); */
     },
     onSubmit(evt) {
       // const formData = new FormData(evt.target);
       const submitResult = [evt];
-
-      /* for (const [name, value] of formData.entries()) {
-          submitResult.push({
-            name,
-            value,
-          });
-        } */
       this.submitResult = submitResult;
     },
     onReset() {
@@ -435,25 +418,35 @@ export default {
         });
       }
     },
-    loadContacts() {
-      Loading.show({
-        spinner: QSpinnerBars,
-        spinnerColor: 'primary',
-        thickness: '3',
-      });
+    loadOrders() {
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
       axios
-        .get('/api/orders/orderstatus')
-        .then((Response) => {
-          this.orderStatusOptions = this.orderStatusOptions.concat(Response.data.data);
-        });
-      axios
-        .get('/api/orders/current')
+        .get('/api/orders/newOrder')
         .then((response) => {
           this.data = response.data.data;
-
+          console.log(response.data);
+          if (response.data.data !== null) {
+            this.$q.dialog({
+              component: newOrderDialog,
+              persistent: true,
+              parent: this,
+            }).onOk((me) => {
+              console.log('OK');
+              this.eventmessage = me;
+              // this.$router.push('/events');
+              console.log('OK2');
+            }).onCancel(() => {
+              console.log('Cancel');
+            }).onDismiss(() => {
+              console.log('Called on OK or Cancel');
+            });
+            axios
+              .put('/api/orders/newOrder', response.data.data).then((response1) => {
+                console.log(response1.data.data);
+              });
+          }
           if (this.selected.length > 0) {
             const id = new Set(this.selected.filter((em) => em.readonly)
               .map((em) => em.eventmemberidUI));
@@ -482,6 +475,55 @@ export default {
             position: 'top',
           });
         });
+    },
+    loadContacts() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+        'login-token',
+      )}`;
+      setInterval(() => this.loadOrders(), 10000);
+      axios
+        .get('/api/orders/orderstatus')
+        .then((Response) => {
+          this.orderStatusOptions = this.orderStatusOptions.concat(Response.data.data);
+        });
+      axios
+        .get('/api/orders/current')
+        .then((response) => {
+          this.data = response.data.data;
+          if (this.selected.length > 0) {
+            const id = new Set(this.selected.filter((em) => em.readonly)
+              .map((em) => em.eventmemberidUI));
+            this.data.forEach((c) => {
+              if (id.has(c.eventmemberidUI)) c.readonly = true;
+            });
+            this.edit = id.size > 0;
+            this.$emit('update:selected', []);
+          }
+
+          Loading.hide();
+          // this.data = this.data.concat(response.data.data);
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          Loading.hide();
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
+      Loading.hide();
     },
     // delete(contact) {
     //   this.$q.dialog({

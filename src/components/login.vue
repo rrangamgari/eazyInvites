@@ -63,7 +63,7 @@ export default {
     };
   },
   mounted() {
-    if (this.$q.localStorage.getItem('login-token') !== null) this.$router.push('/events');
+    if (this.$q.localStorage.getItem('login-token') !== null) this.$router.push('/promotions');
 
     axios.defaults.headers.Authorization = '';
   },
@@ -89,14 +89,6 @@ export default {
             .then((response1) => {
               // JSON responses are automatically parsed.
               this.$q.localStorage.set('user-token', response1.data.data);
-              this.$q.notify({
-                color: 'green-4',
-                textColor: 'white',
-                icon: 'cloud_done',
-                message: response1,
-                position: 'top',
-              });
-
               // Notification for testing api
               this.$emit('login-success');
               Loading.hide();

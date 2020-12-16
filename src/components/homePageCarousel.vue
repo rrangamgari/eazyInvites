@@ -214,7 +214,7 @@ export default {
         animationDuration: '2s',
       }).onOk(() => {
         console.log('OK');
-        this.$router.push('/events');
+        this.$router.push('/promotions');
         console.log('OK2');
       }).onCancel(() => {
         console.log('Cancel');

@@ -96,7 +96,7 @@ export default {
         login,
         username,
       }).onOk(() => {
-        this.$router.push('/events');
+        this.$router.push('/promotions');
       }).onCancel(() => {
       });
       Loading.hide();

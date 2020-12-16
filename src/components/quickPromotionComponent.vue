@@ -772,7 +772,7 @@ export default {
           });
 
           Loading.hide();
-          this.$router.push(`/events/${eventId}`);
+          this.$router.push(`/promotions/${eventId}`);
         })
         .catch((e) => {
           this.$q.notify({
@@ -843,7 +843,7 @@ export default {
           });
 
           Loading.hide();
-          this.$router.push(`/events/${this.eventId}/${this.eventAlphaId}`);
+          this.$router.push(`/promotions/${this.eventId}/${this.eventAlphaId}`);
         })
         .catch((e) => {
           this.$q.notify({

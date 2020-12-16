@@ -12,7 +12,7 @@
       keep-alive
       id="intro"
     >
-    <q-carousel-slide name="first" img-src="../assets/home/ez4.jpg">
+    <q-carousel-slide name="first" img-src="../assets/home/WP4.jpg">
       <Snowf
         :amount="30"
         :size="8"
@@ -38,7 +38,7 @@
           <br>
         </div>
       </q-carousel-slide>
-       <q-carousel-slide name="second" img-src="../assets/home/ez14-min.jpg">
+       <q-carousel-slide name="second" img-src="../assets/home/WP1.jpg">
       <Snowf
         class="overlay"
         :amount="30"
@@ -71,7 +71,7 @@
         <!-- <a href="#" class="btn-get-started " style="position: absolute; bottom: 0%;"
           @click="openDialog">Started</a> -->
       </q-carousel-slide>
-    <q-carousel-slide name="third" img-src="~assets/home/ez36-min.jpg" >
+    <q-carousel-slide name="third" img-src="~assets/home/WP2.jpg" >
       <Snowf
         class="overlay"
         :amount="30"
@@ -95,13 +95,13 @@
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
       </q-carousel-slide>
-     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/ez18.jpg">
+     <!-- <q-carousel-slide name="fourth" img-src="../assets/home/WP18.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Lifetime events</div>
           <div class="text-subtitle1 merienda">Engagement, Wedding, Receptions etc</div>
         </div>
       </q-carousel-slide>-->
-       <q-carousel-slide name="first1" img-src="~assets/home/ez15-min.jpg" >
+       <q-carousel-slide name="first1" img-src="~assets/home/WP3.jpg" >
          <Snowf
            class="overlay"
            :amount="30"
@@ -130,20 +130,20 @@
            <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
          </div>
       </q-carousel-slide>
-      <!--<q-carousel-slide name="second1" img-src="../assets/home/ez15.jpg">
+      <!--<q-carousel-slide name="second1" img-src="../assets/home/WP15.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4">Celebrations</div>
           <div class="text-subtitle1 merienda">New Baby Born...</div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide name="third1" img-src="../assets/home/ez16.jpg">
+      <q-carousel-slide name="third1" img-src="../assets/home/WP16.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h2 Dancing">Bachelor Parties</div>
           <div class="text-h4">&nbsp;</div>
           <div class="text-subtitle1 merienda">Weekend Parties with friends</div>
         </div>
       </q-carousel-slide>-->
-      <q-carousel-slide name="fourth1" img-src="../assets/home/ez9-min.jpg">
+      <q-carousel-slide name="fourth1" img-src="../assets/home/WP5.jpg">
         <Snowf
           class="overlay"
           :amount="30"
@@ -212,7 +212,7 @@ export default {
         animationDuration: '2s',
       }).onOk(() => {
         console.log('OK');
-        this.$router.push('/events');
+        this.$router.push('/promotions');
         console.log('OK2');
       }).onCancel(() => {
         console.log('Cancel');
