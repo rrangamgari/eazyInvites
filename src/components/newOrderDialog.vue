@@ -47,7 +47,8 @@
           </q-card>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm">
-          <q-btn label="Confirm" type="button" color="primary" class="q-mr-sm"/>
+          <q-btn label="Confirm Order" type="button" color="primary"
+                 class="q-mr-sm" @click="onSubmit"/>
         </div>
       </q-page-container>
     </q-layout>
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+import { Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
 
 export default {
@@ -68,6 +70,7 @@ export default {
     'transitionShow',
     'transitionHide',
     'message',
+    'orderData',
   ],
   data() {
     return {
@@ -95,6 +98,35 @@ export default {
     },
     onOk() {
       this.$emit('ok');
+    },
+    onSubmit() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+        'login-token',
+      )}`;
+      console.log(this.orderData);
+      this.orderData.status = this.model;
+      axios.put('/api/orders/newOrder', this.orderData)
+        .then((response) => {
+          console.log(response.data);
+          this.onDialogHide();
+          Loading.hide();
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
     },
   },
   created() {

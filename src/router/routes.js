@@ -14,7 +14,7 @@ const routes = [
       { path: 'newUser', name: 'newUser', component: () => import('components/newUserComponent.vue') }, // To be removed
       { path: 'promotions', name: 'promotions', component: () => import('components/promotions.vue') },
       {
-        path: 'events/:eventId/:eventAlpha',
+        path: 'promotions/:eventId/:eventAlpha',
         name: 'eventStatus',
         component: () => import('components/status.vue'),
       },

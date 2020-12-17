@@ -426,11 +426,12 @@ export default {
         .get('/api/orders/newOrder')
         .then((response) => {
           this.data = response.data.data;
-          console.log(response.data);
+          // console.log(response.data);
           if (response.data.data !== null) {
             this.$q.dialog({
               component: newOrderDialog,
               persistent: true,
+              orderData: response.data.data,
               message: `${response.data.data.members.firstname} ${response.data.data.members.lastname} (${response.data.data.members.primaryPhone}) has Ordered '${response.data.data.item}' with Quantity ('${response.data.data.qty}').`,
               // parent: this,
             }).onOk((me) => {
