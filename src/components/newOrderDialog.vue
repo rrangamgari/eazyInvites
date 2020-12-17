@@ -1,6 +1,6 @@
 <template>
-<q-dialog ref="dialog" @hide="onDialogHide">
-    <q-layout container :style="`height: 80%; background-color: ${body[i]}`">
+<q-dialog ref="dialog" @hide="onDialogHide" v-bind="$props">
+    <q-layout container :style="`height: 60%; background-color: ${body[i]} `">
       <q-header :class="`${head[i]}`">
         <q-toolbar>
           <q-tabs
@@ -11,31 +11,43 @@
             align="justify"
             narrow-indicator
           >
-            <q-tab name="login" no-caps label="Select Custom Messages"/>
+            <q-tab name="login" no-caps label="Customer is waiting for order confirmation"/>
           </q-tabs>
           <q-space/>
-          <q-btn flat round dense icon="brightness_6" @click="() => {i = (i + 1) % 2}"/>
-          <q-btn flat v-close-popup round dense icon="close" />
         </q-toolbar>
       </q-header>
       <q-page-container>
         <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
         >
-          <q-card clickable v-ripple>
-            <q-card-section class="q-pa-xs">
+          <q-card v-ripple>
+            <q-card-section class="q-py-xs">
               <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
-                Ravinder Rangamgari (302-220-6686) has Ordered Item with Quantity.
-                Please Accept or Reject the request.
+                {{message}}
+              </div>
+              <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
+              Please Accept or Reject the request.
+            </div>
+              <div>
+                <q-select v-model="model" :options="options" label="Order Status" />
               </div>
               <div>
-                <q-select v-model="model" :options="options" label="Standard" />
+                <q-select v-model="waitingmodel" :options="waitingoptions"
+                          label="Order Waiting Time" />
               </div>
               <div>
-                <q-btn label="Accept" type="button" color="primary" class="q-mr-sm"/>
-                <q-btn label="Reject" type="button" color="negative" class="q-mr-sm"/>
+                <q-input
+                  v-model="eventmessage"
+                  autogrow
+                  label="Custom Message"
+                  name="eventmessage"
+                  style="height:100px;"
+                />
               </div>
             </q-card-section>
           </q-card>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm">
+          <q-btn label="Confirm" type="button" color="primary" class="q-mr-sm"/>
         </div>
       </q-page-container>
     </q-layout>
@@ -43,28 +55,30 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   components: {
   },
   props: [
-    'login',
+    'persistent',
+    'noBackdropDismiss',
+    'noEscDismiss',
+    'noRouteDismiss',
+    'transitionShow',
+    'transitionHide',
+    'message',
   ],
   data() {
     return {
-      invite: 'Dear {{Guest Name}}, We invite you for a undefined party.\n If you are interested to attend please reply "yes" and we will notify him.\n Best Regards {{Inviter}}',
-      invite1: 'Dear {{Guest Name}}, We invite you to be with us as we celebrate our new life together….\n Best Regards {{Inviter}}',
-      invite2: 'Dear {{Guest Name}}, We Invite you to celebrate the marriage of our children ..\n Guddu and Baddu \n.\n Best Regards {{Inviter}}',
-      invite3: 'Dear {{Guest Name}}, We invite you for a undefined party.\n If you are interested to attend please reply "yes" and we will notify him.\n Best Regards {{Inviter}}',
-      invite4: 'Dear {{Guest Name}}, We invite you for a undefined party.\n If you are interested to attend please reply "yes" and we will notify him.\n Best Regards {{Inviter}}',
-      tab: this.$props.login ? 'login' : 'register',
       i: 0,
       head: ['primary', 'primary'],
       body: ['white', 'white'],
-      model: null,
-      options: [
-        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle',
-      ],
+      model: 'Ordered',
+      options: [],
+      waitingoptions: [20, 25, 30, 35, 40, 45, 50, 60, 90, 120],
+      waitingmodel: 20,
+      eventmessage: null,
     };
   },
   methods: {
@@ -82,6 +96,22 @@ export default {
     onOk() {
       this.$emit('ok');
     },
+  },
+  created() {
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+      'login-token',
+    )}`;
+    axios
+      .get('/api/orders/orderstatus')
+      .then((response) => {
+        console.log(response.data.data);
+        for (let i = 0; i < response.data.data.length; i += 1) {
+          console.log(response.data.data[i]);
+          if (response.data.data[i].label === 'Confirm' || response.data.data[i].label === 'Reject') {
+            this.options = this.options.concat(response.data.data[i]);
+          }
+        }
+      });
   },
 };
 </script>

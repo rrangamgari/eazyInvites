@@ -431,16 +431,13 @@ export default {
             this.$q.dialog({
               component: newOrderDialog,
               persistent: true,
-              parent: this,
+              message: `${response.data.data.members.firstname} ${response.data.data.members.lastname} (${response.data.data.members.primaryPhone}) has Ordered '${response.data.data.item}' with Quantity ('${response.data.data.qty}').`,
+              // parent: this,
             }).onOk((me) => {
               console.log('OK');
               this.eventmessage = me;
               // this.$router.push('/events');
               console.log('OK2');
-            }).onCancel(() => {
-              console.log('Cancel');
-            }).onDismiss(() => {
-              console.log('Called on OK or Cancel');
             });
             axios
               .put('/api/orders/newOrder', response.data.data).then((response1) => {
