@@ -185,10 +185,10 @@ export default {
       return this.events1;
     },
     eventUrl(eventdetailsidUI, eventdetailsalphaid) {
-      return `/events/${eventdetailsidUI}/${eventdetailsalphaid}`;
+      return `/promotions/${eventdetailsidUI}/${eventdetailsalphaid}`;
     },
     onCardClick(eventdetailsidUI, eventdetailsalphaid) {
-      this.$router.push(`/events/${eventdetailsidUI}/${eventdetailsalphaid}`);
+      this.$router.push(`/promotions/${eventdetailsidUI}/${eventdetailsalphaid}`);
     },
     getcard(url) {
       return axios

@@ -71,6 +71,7 @@ export default {
     'transitionHide',
     'message',
     'orderData',
+    'parent',
   ],
   data() {
     return {
@@ -114,6 +115,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.onDialogHide();
+          this.$emit('ok');
           Loading.hide();
         })
         .catch((e) => {

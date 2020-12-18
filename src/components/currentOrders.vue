@@ -3,7 +3,7 @@
     <div class="q-pa-md" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
       <q-table
         title="Orders"
-        :data="data.filter((e) => !e.readonly)"
+        :data="data"
         :columns="columns"
         color="primary"
         row-key="eventmemberidUI"
@@ -13,7 +13,6 @@
         :selected-rows-label="getSelectedString"
         hide-pagination
         :hide-selected-banner="!select"
-        :filter="filter"
         :rows-per-page-options="[0]"
         :pagination.sync="pagination"
         :table-header-style="{ backgroundColor: '#05944F', color: '#FFFFFF' }"
@@ -32,12 +31,19 @@
         <template v-slot:top-right>
           <q-btn
             color="primary"
+            icon-right="refresh"
+            label="Refresh Orders"
+            no-caps
+            @click="loadContacts"
+          />
+          &nbsp;&nbsp;
+          <q-btn
+            color="primary"
             icon-right="archive"
             label="Export to csv"
             no-caps
             @click="exportTable"
           />
-          &nbsp;&nbsp;
           <div class="q-pa-xs">
             <q-input dense debounce="300" v-model="filter" placeholder="Search"
                      style="max-width: 350px;">
@@ -72,11 +78,8 @@
             />
           </q-th>
         </template>
-        <template v-if="$q.screen.gt.xs" v-slot:body="props">
+        <template  v-slot:body="props">
           <q-tr :props="props">
-            <q-td auto-width v-if="select">
-              <q-checkbox :val="props.row" v-model="props.selected"/>
-            </q-td>
             <q-td key="name" :props="props">
               {{ props.row.members.firstname }}
             &nbsp;
@@ -118,78 +121,6 @@
             </q-td>
           </q-tr>
         </template>
-        <template v-if="$q.screen.gt.xs" v-slot:bottom-row>
-          <q-tr v-if="select && edit">
-            <q-td colspan="100%">Contacts already Invited</q-td>
-          </q-tr>
-          <q-tr v-for="row in data.filter((e) => e.readonly)" :key="row.eventmemberidUI"
-                class="selected">
-            <q-td auto-width v-if="select">
-              <q-checkbox :value="true" disable/>
-            </q-td>
-            <q-td>
-              {{ row.firstname }}
-              <q-popup-edit
-                v-model="row.firstname"
-                title="Edit First Name"
-                buttons
-                :validate="firstnameValidation"
-                @hide="firstnameValidation"
-                @save="(v, iv) => save(v, iv, row, 'firstname')"
-              >
-                <q-input
-                  v-model="row.firstname"
-                  dense
-                  autofocus
-                  counter
-                  :error="errorProtein"
-                  :error-message="errorMessageProtein"
-                />
-              </q-popup-edit>
-            </q-td>
-            <q-td>
-              {{ row.lastname }}
-              <q-popup-edit
-                v-model="row.lastname"
-                title="Edit Last Name"
-                buttons
-                @save="(v, iv) => save(v, iv, row, 'lastname')"
-              >
-                <q-input v-model="row.lastname" dense autofocus counter />
-              </q-popup-edit>
-            </q-td>
-            <q-td>
-              {{ row.primaryPhone }}
-              <q-popup-edit
-                v-model="row.primaryPhone"
-                title="Edit Phone"
-                buttons
-                @save="(v, iv) => save(v, iv, row, 'primaryPhone')"
-              >
-                <q-input
-                  v-model="row.primaryPhone"
-                  dense
-                  autofocus
-                  counter
-                />
-              </q-popup-edit>
-            </q-td>
-            <q-td>
-              {{ row.email }}
-            </q-td>
-            <q-td>
-              {{ row.item }}
-            </q-td>
-            <q-td>
-              {{ row.qty }}
-            </q-td>
-            <q-td v-if="!select">
-              <q-icon name="delete" size="2rem" color='primary' class=""
-                      style="cursor:pointer;"
-                      @click="deleteMe(row.eventmemberidUI)"/>
-            </q-td>
-          </q-tr>
-        </template>
       </q-table>
       <q-dialog v-model="uploadContactsLayout">
         <q-layout container class="bg-white" style="max-height:300px;">
@@ -200,22 +131,6 @@
               <q-btn flat v-close-popup round dense icon="close"/>
             </q-toolbar>
           </q-header>
-          <q-page-container>
-            <q-page padding>
-              <q-uploader
-                field-name="file"
-                url= '/api/userEvents/userguestupload'
-                method="POST"
-                :headers=headerFunc
-                label="Files"
-                color="teal"
-                flat
-                bordered
-                no-thumbnails
-                style="max-width: 300px"
-              />
-            </q-page>
-          </q-page-container>
         </q-layout>
       </q-dialog>
     </div>
@@ -433,11 +348,12 @@ export default {
               persistent: true,
               orderData: response.data.data,
               message: `${response.data.data.members.firstname} ${response.data.data.members.lastname} (${response.data.data.members.primaryPhone}) has Ordered '${response.data.data.item}' with Quantity ('${response.data.data.qty}').`,
-              // parent: this,
+              parent: this,
             }).onOk((me) => {
               console.log('OK');
               this.eventmessage = me;
               // this.$router.push('/events');
+              this.loadContacts();
               console.log('OK2');
             });
             axios
@@ -680,7 +596,7 @@ export default {
         'login-token',
       )}`;
       axios
-        .put(`/api/userEvents/userguest/${eventMember.eventmemberidUI}`, eventMember)
+        .put(`/api/orders/orders/${eventMember.eventmemberidUI}`, eventMember)
         .then((response) => {
           if (response.data.data) {
             this.$q.notify({
