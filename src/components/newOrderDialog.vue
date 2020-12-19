@@ -3,16 +3,7 @@
     <q-layout container :style="`height: 60%; background-color: ${body[i]} `">
       <q-header :class="`${head[i]}`">
         <q-toolbar>
-          <q-tabs
-            v-model="tab"
-            dense
-            active-color="white"
-            indicator-color="white"
-            align="justify"
-            narrow-indicator
-          >
-            <q-tab name="login" no-caps label="Customer is waiting for order confirmation"/>
-          </q-tabs>
+          Customer is waiting for order confirmation
           <q-space/>
         </q-toolbar>
       </q-header>
@@ -78,7 +69,7 @@ export default {
       i: 0,
       head: ['primary', 'primary'],
       body: ['white', 'white'],
-      model: 'Ordered',
+      model: {},
       options: [],
       waitingoptions: [20, 25, 30, 35, 40, 45, 50, 60, 90, 120],
       waitingmodel: 20,
@@ -141,7 +132,10 @@ export default {
         console.log(response.data.data);
         for (let i = 0; i < response.data.data.length; i += 1) {
           console.log(response.data.data[i]);
-          if (response.data.data[i].label === 'Confirm' || response.data.data[i].label === 'Reject') {
+          if (response.data.data[i].label === 'Confirm') {
+            this.options = this.options.concat(response.data.data[i]);
+            this.model = response.data.data[i];
+          } else if (response.data.data[i].label === 'Reject') {
             this.options = this.options.concat(response.data.data[i]);
           }
         }

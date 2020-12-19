@@ -111,7 +111,7 @@
                 @save="(v, iv) => save(v, iv, props.row, 'status')"
               >
                 <q-select v-model="props.row.status"
-                          :options="orderStatusOptions" label="Standard" />
+                          :options="orderStatusOptions"/>
               </q-popup-edit>
             </q-td>
             <q-td v-if="!select" key="delete" :props="props">
@@ -178,7 +178,10 @@ export default {
       type: Number,
       default: 0,
     },
-    select: Boolean,
+    select: {
+      type: Boolean,
+      default: false,
+    },
     selected: {
       type: Array,
       default: () => [],
@@ -233,7 +236,7 @@ export default {
         {
           name: 'status',
           label: 'Status',
-          field: 'status',
+          field: (row) => row.status.label,
           align: 'left',
           sortable: true,
         },
@@ -247,7 +250,7 @@ export default {
       getSelectedString: (n) => `${n} Contact${n > 1 ? 's' : ''} selected`,
 
       pagination: { rowsPerPage: 0 },
-      data: this.contacts || [],
+      data: [],
       edit: false,
       orderStatusOptions: [{ value: 0, label: 'All' }],
       firstname: null,
@@ -403,7 +406,7 @@ export default {
       axios
         .get('/api/orders/orderstatus')
         .then((Response) => {
-          this.orderStatusOptions = this.orderStatusOptions.concat(Response.data.data);
+          this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
         });
       axios
         .get('/api/orders/current')
@@ -596,7 +599,7 @@ export default {
         'login-token',
       )}`;
       axios
-        .put(`/api/orders/orders/${eventMember.eventmemberidUI}`, eventMember)
+        .put('/api/orders/updateOrder', eventMember)
         .then((response) => {
           if (response.data.data) {
             this.$q.notify({
