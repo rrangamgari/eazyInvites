@@ -69,7 +69,7 @@ export default {
     return {
       tab: this.$props.login ? 'login' : 'register',
       i: 1,
-      head: ['transparent', '#18d26e'],
+      head: ['transparent', '#05944F'],
       body: ['rgb(0,0,0,0.7)', 'white'],
     };
   },

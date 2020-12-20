@@ -4,7 +4,7 @@
       <div class="col-12 q-px-md q-py-sm q-pb-lg">
         <q-card v-if="event && eventType" class="row justify-center">
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
-              'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+              'Montserrat', cursive;  font-weight:bolder; color:#05944F">
             <q-card-section class="q-pa-xs">
               <div class="text-center text-decoration-underline" style="font-size: 34px;">
               {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
@@ -58,7 +58,7 @@
           hide-pagination
           hide-selected-banner
           :pagination.sync="pagination"
-          :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
+          :table-header-style="{ backgroundColor: '#05944F', color: '#FFFFFF' }"
         >
           <template v-slot:no-data="{ message }">
             <div class="full-width row flex-center">

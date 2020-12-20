@@ -110,22 +110,6 @@
                 label="Custom Message"
                 name="eventmessage"
               />
-              <q-btn
-                label="More Custom Messages"
-                type="button"
-                color="primary"
-                flat
-                class="q-ml-sm"
-                @click="openDialog"
-              />
-              <q-btn
-                label="More Options"
-                type="button"
-                color="primary"
-                flat
-                class="q-ml-sm"
-                @click="openMoreOptionsDialog"
-              />
               <q-stepper-navigation>
                 <q-btn
                   color="primary"
@@ -207,7 +191,7 @@
             >
               <q-card class="full-height -borders">
                 <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
-                    'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+                    'Montserrat', cursive;  font-weight:bolder; color:#05944F">
                   <q-card-section class="q-pa-xs">
                     <div class="text-center text-decoration-underline" style="font-size: 34px;">
                       {{ (eventtitle !== null && eventtitle.trim() !== '') ?
@@ -240,7 +224,7 @@
             <div v-else class="col-6 q-pa-xs row">
               <q-card class="full-height">
                 <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
-                    'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+                    'Montserrat', cursive;  font-weight:bolder; color:#05944F">
                   <q-card-section class="q-pa-xs">
                     <div class="text-center text-decoration-underline" style="font-size: 34px;">
                       {{ (eventtitle !== null && eventtitle.trim() !== '') ?
@@ -248,7 +232,7 @@
                     </div>
                   </q-card-section>
                   <q-card-section class="q-pa-xs row items-center logo" style="font-family:
-              'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
+              'Montserrat', cursive;  font-weight:bolder; color:#05944F">
                     <!-- <div class="text-left q-px-xs col-12 " style="font-size: 34px;">
                       Type: {{ eventType.label }}
                     </div>

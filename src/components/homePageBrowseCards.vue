@@ -180,7 +180,7 @@ export default {
 
   #portfolio-flters li:hover,
   #portfolio-flters li.filter-active {
-    background: #18d26e;
+    background: #05944F;
     color: #fff;
   }
 
@@ -244,7 +244,7 @@ export default {
 
   #portfolio .portfolio-item figure .link-preview:hover,
   #portfolio .portfolio-item figure .link-details:hover {
-    background: #18d26e;
+    background: #05944F;
   }
 
   #portfolio .portfolio-item figure .link-preview:hover i,
@@ -293,7 +293,7 @@ export default {
   }
 
   #portfolio .portfolio-item .portfolio-info h4 a:hover {
-    color: #18d26e;
+    color: #05944F;
   }
 
   #portfolio .portfolio-item .portfolio-info p {

@@ -93,7 +93,7 @@
       :filter="filter"
       :rows-per-page-options="[0]"
       :pagination.sync="pagination"
-      :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
+      :table-header-style="{ backgroundColor: '#05944F', color: '#FFFFFF' }"
       :visible-columns="select ? visible : visible.concat('delete')"
       :selection="select ? 'multiple' : 'none'"
       :selected="selected"
@@ -322,7 +322,7 @@
             </q-popup-edit>
           </q-td>
           <q-td v-if="!select" key="delete" :props="props">
-            <q-icon name="delete" size="2rem" color='primary' class=""
+            <q-icon name="delete" size="2rem" color='negative' class=""
                     style="cursor:pointer;"
                     @click="deleteMe(props.row.eventmemberidUI)"/>
           </q-td>
@@ -782,6 +782,7 @@ export default {
           required: true,
           field: 'primaryPhone',
           sortable: true,
+          format: '### ### ####',
           headerStyle: 'icon-right:archive',
         },
         {
