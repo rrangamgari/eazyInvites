@@ -387,7 +387,7 @@ export default {
               console.log('OK2');
             });
             axios
-              .put('/api/orders/newOrder/1', response.data.data).then((response1) => {
+              .put('/api/orders/updateOrder', response.data.data).then((response1) => {
                 console.log(response1.data.data);
               });
           }
