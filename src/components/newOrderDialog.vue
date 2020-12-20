@@ -18,28 +18,25 @@
               <div class="text-center text-weight-medium text-primary" style="font-size: 16px;">
               Please Accept or Reject the request.
             </div>
-              <div>
-                <q-select v-model="model" :options="options" label="Order Status" />
-              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm"
+        >
+          <q-card v-ripple>
+            <q-card-section class="q-py-xs">
               <div>
                 <q-select v-model="waitingmodel" :options="waitingoptions"
                           label="Order Waiting Time" />
-              </div>
-              <div>
-                <q-input
-                  v-model="eventmessage"
-                  autogrow
-                  label="Custom Message"
-                  name="eventmessage"
-                  style="height:100px;"
-                />
               </div>
             </q-card-section>
           </q-card>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm">
           <q-btn label="Confirm Order" type="button" color="primary"
-                 class="q-mr-sm" @click="onSubmit"/>
+                 class="q-mr-sm" @click="onSubmit(3)"/>
+          <q-btn label="Reject Order" type="button" color="negative"
+                 class="q-mr-sm" @click="prompt"/>
         </div>
       </q-page-container>
     </q-layout>
@@ -69,7 +66,6 @@ export default {
       i: 0,
       head: ['primary', 'primary'],
       body: ['white', 'white'],
-      model: {},
       options: [],
       waitingoptions: [20, 25, 30, 35, 40, 45, 50, 60, 90, 120],
       waitingmodel: 20,
@@ -91,7 +87,7 @@ export default {
     onOk() {
       this.$emit('ok');
     },
-    onSubmit() {
+    onSubmit(param, customText) {
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -100,9 +96,9 @@ export default {
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
-      console.log(this.orderData);
-      this.orderData.status = this.model;
-      axios.put('/api/orders/newOrder', this.orderData)
+      this.orderData.comments = customText;
+      this.orderData.waitingtime = this.waitingmodel;
+      axios.put(`/api/orders/newOrder/${param}`, this.orderData)
         .then((response) => {
           console.log(response.data);
           this.onDialogHide();
@@ -121,25 +117,33 @@ export default {
           Loading.hide();
         });
     },
+    prompt() {
+      this.$q.dialog({
+        title: 'Reject Order',
+        message: 'Please provide the reason',
+        prompt: {
+          model: '',
+          type: 'text', // optional
+        },
+        ok: {
+          push: true,
+        },
+        cancel: true,
+        persistent: true,
+      }).onOk((data) => {
+        console.log('>>>> OK, received', data);
+        this.onSubmit(6, data);
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      });
+    },
   },
   created() {
     axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
       'login-token',
     )}`;
-    axios
-      .get('/api/orders/orderstatus')
-      .then((response) => {
-        console.log(response.data.data);
-        for (let i = 0; i < response.data.data.length; i += 1) {
-          console.log(response.data.data[i]);
-          if (response.data.data[i].label === 'Confirm') {
-            this.options = this.options.concat(response.data.data[i]);
-            this.model = response.data.data[i];
-          } else if (response.data.data[i].label === 'Reject') {
-            this.options = this.options.concat(response.data.data[i]);
-          }
-        }
-      });
   },
 };
 </script>

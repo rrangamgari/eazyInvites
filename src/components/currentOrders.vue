@@ -22,6 +22,7 @@
         @update:selected="(newSelected) => $emit('update:selected', newSelected)"
         :style="`max-height: ${$q.screen.lt.sm ? 'none' : ($q.screen.height * 2 / 3)+'px'}`"
         class="my-sticky-virtscroll-table"
+        :loading="tableloading"
       >
         <template v-slot:no-data="{ message }">
           <div class="full-width row flex-center">
@@ -29,6 +30,29 @@
           </div>
         </template>
         <template v-slot:top-right>
+            <q-btn-toggle
+              v-model="currentOrders"
+              no-caps
+              toggle-color="secondary"
+              color="white"
+              text-color="black"
+              @click="loadContacts"
+              :options="[
+          {label: 'Current Orders', value: 'current'},
+          {label: 'Cancelled Orders', value: 'cancelled'},
+          {label: 'All Orders', value: 'all'}
+        ]"
+            />
+          &nbsp;&nbsp;
+          <div class="q-pa-xs">
+            <q-input dense debounce="300" v-model="filter" placeholder="Search"
+                     style="max-width: 350px;">
+              <template v-slot:append>
+                <q-icon name="search"/>
+              </template>
+            </q-input>
+          </div>
+          &nbsp;&nbsp;
           <q-btn
             color="primary"
             icon-right="refresh"
@@ -44,14 +68,6 @@
             no-caps
             @click="exportTable"
           />
-          <div class="q-pa-xs">
-            <q-input dense debounce="300" v-model="filter" placeholder="Search"
-                     style="max-width: 350px;">
-              <template v-slot:append>
-                <q-icon name="search"/>
-              </template>
-            </q-input>
-          </div>
         </template>
         <template v-slot:header-cell="props">
           <q-th :props="props">
@@ -194,6 +210,8 @@ export default {
       errorMessageProtein: '',
       errorProtein: false,
       uploadContactsModel: '',
+      tableloading: true,
+      currentOrders: 'current',
       headerFunc: [
         {
           name: 'authorization',
@@ -263,7 +281,16 @@ export default {
     };
   },
   created() {
+    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+      'login-token',
+    )}`;
     this.loadContacts();
+    setInterval(() => this.loadOrders(), 10000);
+    axios
+      .get('/api/orders/orderstatus')
+      .then((Response) => {
+        this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
+      });
   },
   computed: {
     cWidth() {
@@ -360,7 +387,7 @@ export default {
               console.log('OK2');
             });
             axios
-              .put('/api/orders/newOrder', response.data.data).then((response1) => {
+              .put('/api/orders/newOrder/1', response.data.data).then((response1) => {
                 console.log(response1.data.data);
               });
           }
@@ -399,17 +426,8 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
-      setInterval(() => this.loadOrders(), 10000);
       axios
-        .get('/api/orders/orderstatus')
-        .then((Response) => {
-          this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
-        });
-      axios
-        .get('/api/orders/current')
+        .get(`/api/orders/myorders/${this.currentOrders}`)
         .then((response) => {
           this.data = response.data.data;
           if (this.selected.length > 0) {
@@ -440,7 +458,6 @@ export default {
             position: 'top',
           });
         });
-      Loading.hide();
     },
     // delete(contact) {
     //   this.$q.dialog({
