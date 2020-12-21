@@ -256,51 +256,7 @@
       <!-- <q-btn flat round dense icon="whatshot" /> -->
 
       <div v-if="viewLogin()" class="row items-center q-pl-sm">
-      <q-form
-        id="login"
-        @submit="onLogin"
-        @reset="() => {}"
-        class="row"
-      >
-      <q-input
-        v-if="$q.screen.width >= 850"
-        dark
-        outlined dense
-        class="q-pr-sm"
-        style="width: 180px"
-        type="text"
-        v-model="name"
-        label="Phone"
-        mask="(###) ### - ####"
-        unmasked-value
-        fill-mask="#"
-      />
 
-      <q-input
-        v-if="$q.screen.width >= 850"
-        dark
-        stack-label
-        outlined dense
-        class="q-pr-sm"
-        style="width: 180px"
-        type="password"
-        v-model="age"
-        label="Password"
-      />
-
-      <div class="row" style="padding-top: 9px; padding-right: 8px;"
-       :style="$q.screen.width > 400 ? 'max-width: 90px;' : 'max-width: 68px;' ">
-        <q-btn class="col-12" label="Login" type="submit" dense
-         :color="`${qbtnColor || 'black'}`"
-         :text-color="`${qbtnColor === '' ? 'black' : 'black'}`"/>
-        <a @click="openDialog()" class="q-pt-xs q-px-xs" :class="`text-${qbtnColor || 'black'}`"
-         style="font-size: 10px; text-decoration: underline;">New User?</a>
-      </div>
-      <q-separator color="grey" size="2px" vertical inset/>
-      <oauth2-clients-component style="padding-left: 0px; padding-right: 0px;"
-       :size="$q.screen.width <= 375 ? '10px' : '16px'"
-       @oauth2-login-success="$router.push('/promotions')"/>
-      </q-form>
       </div>
 
       <q-tabs
@@ -562,14 +518,14 @@
 import { Loading, QSpinnerBars, scroll } from 'quasar';
 import axios from 'axios';
 import loginDialog from './loginDialog.vue';
-import oauth2ClientsComponent from './oauth2Clients.vue';
+// import oauth2ClientsComponent from './oauth2Clients.vue';
 
 const { getScrollTarget, setScrollPosition } = scroll;
 
 export default {
   name: 'headerComponent',
   components: {
-    oauth2ClientsComponent,
+    // oauth2ClientsComponent,
   },
   data() {
     return {

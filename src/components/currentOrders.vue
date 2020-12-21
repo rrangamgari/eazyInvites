@@ -82,16 +82,6 @@
               size="2.5em"
               v-if="props.col.name == 'primaryPhone'"
             />
-            <!-- <q-icon
-              name="contact_phone"
-              size="2.5em"
-              v-show="props.col.name == 'secondaryPhone'"
-            /> -->
-            <q-icon
-              name="delete"
-              size="2.5em"
-              v-if="props.col.name == 'delete'"
-            />
           </q-th>
         </template>
         <template  v-slot:body="props">
@@ -129,11 +119,6 @@
                 <q-select v-model="props.row.status"
                           :options="orderStatusOptions"/>
               </q-popup-edit>
-            </q-td>
-            <q-td v-if="!select" key="delete" :props="props">
-              <q-icon name="delete" size="2rem" color='primary' class=""
-                      style="cursor:pointer;"
-                      @click="deleteMe(props.row.eventmemberidUI)"/>
             </q-td>
           </q-tr>
         </template>
@@ -257,12 +242,6 @@ export default {
           field: (row) => row.status.label,
           align: 'left',
           sortable: true,
-        },
-        {
-          name: 'delete',
-          label: 'Delete',
-          align: 'right',
-          sortable: false,
         },
       ],
       getSelectedString: (n) => `${n} Contact${n > 1 ? 's' : ''} selected`,
@@ -457,78 +436,6 @@ export default {
             message: e.message,
             position: 'top',
           });
-        });
-    },
-    // delete(contact) {
-    //   this.$q.dialog({
-    //     title: 'Confirm Delete',
-    //     message: 'Are you sure, you want to delete this contact?',
-    //     cancel: true,
-    //     options: {
-    //       type: 'checkbox',
-    //       model: !this.prompt,
-    //       items: [
-    //         { label: 'Do not prompt again', value: true },
-    //       ],
-    //     },
-    //   }).onOk(() => {
-    //     console.log(contact, this.prompt);
-    //     console.log('>>>> OK');
-    //   }).onOk(() => {
-    //     console.log('>>>> second OK catcher');
-    //   }).onCancel(() => {
-    //     console.log('>>>> Cancel');
-    //   });
-    // },
-    deleteMe(id) {
-      Loading.show({
-        spinner: QSpinnerBars,
-        spinnerColor: 'primary',
-        thickness: '3',
-      });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
-      axios
-        .delete(`/api/userEvents/userguest/${id}`)
-        .then((response) => {
-          // JSON responses are automatically parsed.
-          if (response.data.data) {
-            // this.mounted();
-            this.$q.notify({
-              color: 'positive',
-              textColor: 'white',
-              icon: 'cloud_done',
-              message: 'Successfully Deleted',
-              position: 'top',
-            });
-            this.loadContacts();
-          } else {
-            this.$q.notify({
-              color: 'red-5',
-              textColor: 'white',
-              icon: 'error',
-              message: 'Could not delete Contact',
-              position: 'top',
-            });
-          }
-          // this.data = this.data.concat(response.data.data);
-          Loading.hide();
-        })
-        .catch((e) => {
-          //  this.errors.push(e);
-          if (e.message === 'Request failed with status code 401') {
-            this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
-          }
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'error',
-            message: e.message,
-            position: 'top',
-          });
-          Loading.hide();
         });
     },
     firstnameValidation(val) {

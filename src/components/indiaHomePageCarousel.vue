@@ -17,23 +17,23 @@
         :amount="30"
         :size="8"
         :speed="1.25"
-        :wind="0"
+        :wind="1"
         :opacity="1"
         :swing="1"
         :image="null"
         :zIndex="null"
-        :resize="false"
+        :resize="true"
         color="blue"
       />
         <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left:10%; max-width: ${$q.screen.width};`
          : 'width: 570px;'">
-          <h2>Pooja Invitations</h2>
-          <p>
-            WE Invites is Here to open that closed Digital Door...
-            <br>
-            <br>Yes its the most trendiest & coolest way to make your invite Eazy & Digital..</p>
+          <h2>Breakfast Promotions</h2>
+          <p><b>We</b>&nbsp;<b class="text-primary">Promotes</b>
+            is a technology platform helping businesses
+            worldwide expand their reach, delight customers, and boost their bottom line.
+            <br><br>Partner with us today.</p>
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a>
           <br>
         </div>
@@ -50,22 +50,16 @@
         :image="null"
         :zIndex="null"
         :resize="false"
-        color="#FFFF00"
+        color="blue"
       />
         <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
-          <h2>Wedding Invitations</h2>
-          <p>Down on your knees you should be<br>
-            For only your Forever beloved...<br>
-            <br>
-            Than why you should stress for hours to send that perfect invite<br>
-            <br>
-            Come share your personalized Digital Eazy-Invites...<br>
-            <br>
-            Its Personalized<br>
-            Its Fast &<br>
-            Its the users perfect Delight!!!</p>
+          <h2>Dinner Promotions</h2>
+          <p><b>We</b>&nbsp;<b class="text-primary">Promotes</b>
+            is a technology platform helping businesses
+            worldwide expand their reach, delight customers, and boost their bottom line.
+            <br><br>Partner with us today.</p>
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
         <!-- <a href="#" class="btn-get-started " style="position: absolute; bottom: 0%;"
@@ -88,10 +82,11 @@
         <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
-          <h2>Engagement Invitations</h2>
-          <p>Finally,
-            I have someone who took my hand, opened my
-            mind and touched my heart.<br> Just got engaged to my happily ever after</p>
+          <h2>Take Away Promotions</h2>
+          <p><b>We</b>&nbsp;<b class="text-primary">Promotes</b>
+            is a technology platform helping businesses
+            worldwide expand their reach, delight customers, and boost their bottom line.
+            <br><br>Partner with us today.</p>
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
       </q-carousel-slide>
@@ -113,20 +108,16 @@
            :image="null"
            :zIndex="null"
            :resize="false"
-           color="#FFFF00"
+           color="blue"
          />
          <div class="overlay"/>
          <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
-           <h2>New Baby Born</h2>
-           <p>
-             Twinkle twinkle<br>
-             We had a new born Star<br>
-             But I wonder how to invite you all are?!? <br>
-             <br>
-             Now we have Eazy Invite option<br>
-             Its d online invite 1 stop solution<br>
-           </p>
+           <h2>New Restaurant Opening</h2>
+           <p><b>We</b>&nbsp;<b class="text-primary">Promotes</b>
+             is a technology platform helping businesses
+             worldwide expand their reach, delight customers, and boost their bottom line.
+             <br><br>Partner with us today.</p>
            <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
          </div>
       </q-carousel-slide>
@@ -160,10 +151,11 @@
         <div class="overlay"/>
         <div class="absolute custom-caption" style="bottom: 15%; right: 10%;"
          :style="($q.screen.width < 730) ? `left: 10%;`:'width: 570px;'">
-          <h2>Mehendi Function</h2>
-          <p> Mehndi is derived from the Sanskrit word mendhikā.
-            <br>The use of mehndi and turmeric is described in the earliest
-            Hindu Vedic ritual books.</p>
+          <h2>Lunch Promotions</h2>
+          <p><b>We</b>&nbsp;<b class="text-primary">Promotes</b>
+            is a technology platform helping businesses
+            worldwide expand their reach, delight customers, and boost their bottom line.
+            <br><br>Partner with us today.</p>
           <a href="#" class="btn-get-started" @click="openDialog">Get Started</a><br>
         </div>
       </q-carousel-slide>
