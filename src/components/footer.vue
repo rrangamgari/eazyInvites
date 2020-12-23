@@ -16,7 +16,7 @@
                   Licensing information: https://bootstrapmade.com/license/
                   Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=BizPage
                 -->
-                Designed by <a href="https://WeInvites.com/">WE Invites</a>
+                Designed by <a href="https://www.weinvites.com/">WE Invites</a>
               </div>
             </div>
           </footer><!-- #footer -->

@@ -116,14 +116,20 @@ export default {
         .get('/api/userEvents/events')
         .then((response) => {
           this.data = response.data.data;
-          this.createEvents();
-          axios
-            .get('/api/eventSystem/eventType')
-            .then((Response) => {
-              this.eventType = Response.data.data;
-              Loading.hide();
-              this.getImages();
-            });
+          if (this.data === 'User is null') {
+            this.$q.localStorage.remove('login-token');
+            if (this.$route.path === '/') this.$router.go(0);
+            else this.$router.push('/');
+          } else {
+            this.createEvents();
+            axios
+              .get('/api/eventSystem/eventType')
+              .then((Response) => {
+                this.eventType = Response.data.data;
+                Loading.hide();
+                this.getImages();
+              });
+          }
           Loading.hide();
         })
         .catch((e) => {

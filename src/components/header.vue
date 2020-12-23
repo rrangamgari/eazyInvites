@@ -3,21 +3,6 @@
    :style="hStyle" :class="hClass">
     <q-toolbar style="padding-right: 0px;">
       <!-- <q-btn flat round dense icon="menu" class="q-mr-sm" /> -->
-
-      <q-btn-dropdown auto-close dropdown-icon="menu"
-       dense flat :color="qmenuColor">
-        <q-list v-for="Tab  in tabs" :key="Tab.name">
-          <q-item clickable @click="tab = Tab.name; goTo(Tab.path, Tab.name);">
-            <q-item-section avatar style="min-width: 0px;">
-              <q-icon :name="Tab.icon" />
-            </q-item-section>
-            <q-item-section >
-              {{Tab.label}}
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
-
       <a href="/" v-if="$q.screen.xs">
         <img src="../statics/WE_Invites_logo.png" width="50px" />
       </a>

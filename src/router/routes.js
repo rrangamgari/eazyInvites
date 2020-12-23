@@ -50,6 +50,7 @@ const routes = [
       },
       { path: 'addContacts', name: 'contacts', component: () => import('components/addContactsComponent.vue') },
       { path: 'myProfile', name: 'myProfile', component: () => import('components/myProfileComponent.vue') },
+      { path: 'myProfile/:profileId', name: 'myProfile', component: () => import('components/myProfileComponentId.vue') },
     ],
   },
   {

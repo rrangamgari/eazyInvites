@@ -6,9 +6,9 @@
               <div class="row">
 
                 <div class="col-xs-12 col-sm-6 col-md-4 footer-info">
-                  <h3>WE Invites</h3>
-                  <p>We Invites is an application which can be used
-                    for both email and Whatsapp invitations.</p>
+                  <h3>WE Promotes</h3>
+                  <p>We Promotes is an application which can be used
+                    for both email and whatsapp promotions.</p>
                 </div>
 
                 <div class="col-xs-12 col-sm-6 col-md-4 footer-links">
@@ -59,7 +59,7 @@
                 Licensing information: https://bootstrapmade.com/license/
                 Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=BizPage
               -->
-              Designed by <a href="https://WeInvites.com/">WE Invites</a>
+              Designed by <a href="https://www.weinvites.com/">WE Invites</a>
             </div>
           </div>
         </footer><!-- #footer -->
