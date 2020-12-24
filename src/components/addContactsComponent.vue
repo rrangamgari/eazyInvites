@@ -1168,7 +1168,7 @@ export default {
     },
     uploadOAuth2Contacts(client) {
       window.addEventListener('storage', this.oauth2SuccessCheck);
-      axios.get(`/api/oauth2/contacts/${client.toLowerCase()}/`)
+      axios.get(`/api/oauth2/contacts/${client.toLowerCase()}?host=https://www.wepromotes.com`)
         .then((response) => {
           Loading.hide();
           window.open(response.data.data, `${client} Contacts`, `left=${Math.max(0, (window.screen.width / 2) - 250)},top=50,width=500,height=600,location=no`);

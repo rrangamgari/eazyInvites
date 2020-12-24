@@ -40,7 +40,28 @@ export default {
   },
   methods: {
     oauth2Login(client) {
-      window.open(`/oauth2/${client}`, `${client} Login`, `left=${Math.max(0, (window.screen.width / 2) - 250)},top=50,width=500,height=600,location=no`);
+      Loading.show({
+        message: `Redirecting to ${client.substr(0, 1).toUpperCase()}${client.substring(1)} SignIn`,
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+
+      axios.get(`/api/oauth2/${client}?host=https://www.wepromotes.com`)
+        .then((response) => {
+          Loading.hide();
+          window.open(response.data.data, `${client} Login`, `left=${Math.max(0, (window.screen.width / 2) - 250)},top=50,width=500,height=600,location=no`);
+        })
+        .catch((e) => {
+          Loading.hide();
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
     },
     oauth2SuccessCheck(evt) {
       if (evt && evt.key === 'oauth2-token'

@@ -67,13 +67,13 @@ export default {
     },
     forwardToOAuth2() {
       Loading.show({
-        message: `Redirecting to ${this.client.toUpperCase()} SignIn`,
+        message: `Redirecting to ${this.client.substr(0, 1).toUpperCase()}${this.client.substring(1)} SignIn`,
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
         thickness: '3',
       });
 
-      axios.get(`/api/oauth2/${this.client}/`)
+      axios.get(`/api/oauth2/${this.client}?host=https://www.wepromotes.com`)
         .then((response) => {
           Loading.hide();
           window.open(response.data.data, '_self');
