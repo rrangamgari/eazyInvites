@@ -62,7 +62,7 @@
         v-model="email"
         label="Email"
         lazy-rules
-        :rules="[ val=> isValid]"
+        :rules="[ val=> isValidEmail]"
       />
       <div style="padding-left: 0.5%; padding-right: 0.53%;"
        :style="`${cWidth > $q.screen.sizes.sm ? 'width: 7%;' : ''}
@@ -331,7 +331,7 @@
             />
           </q-td>
           <q-td v-if="!select" key="delete" :props="props">
-            <q-icon name="delete" size="2rem" color='negative' class=""
+            <q-icon name="delete" size="2rem" color='primary' class=""
                     style="cursor:pointer;"
                     @click="deleteMe(props.row.eventmemberidUI)"/>
           </q-td>

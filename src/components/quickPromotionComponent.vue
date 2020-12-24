@@ -105,6 +105,12 @@
 
               </div>
               <q-input
+                v-model="item"
+                type="text"
+                label="Food Item"
+                name="item"
+              />
+              <q-input
                 v-model="eventmessage"
                 autogrow
                 label="Custom Message"
@@ -118,6 +124,7 @@
                   type="submit"
                   size="md"
                 />
+                &nbsp;
                 <q-btn
                   label="Reset"
                   type="reset"
@@ -206,6 +213,10 @@
                       Host: {{ hostname }}
                     </div>
                     <div class="text-left q-px-xs col-12" style="font-size: 14px;">
+                      Item: {{ item }}
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="text-left q-px-xs col-12" style="font-size: 14px;">
                       Message: <br>{{ eventmessage }}<br>
                     </div>
                     <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
@@ -239,6 +250,10 @@
                     <div>&nbsp;</div> -->
                     <div class="text-left q-px-xs col-12" style="font-size: 34px;">
                       Host: {{ hostname }}
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="text-left q-px-xs col-12" style="font-size: 20px;">
+                      Item: {{ item }}
                     </div>
                     <div>&nbsp;</div>
                     <div class="text-left q-px-xs col-12" style="font-size: 20px; ">
@@ -355,6 +370,7 @@ export default {
       selection: ['teal'],
       selected: [],
       hostname: '',
+      item: '',
       eventmessage: '\nDear {{Guest Name}},\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.',
       options: [
         { value: 1, label: 'Birthday' },
@@ -480,6 +496,7 @@ export default {
         eventendtime: this.eventendtime,
         eventType: this.eventType,
         hostname: this.hostname,
+        item: this.item,
         eventmessage: this.eventmessage,
         first: false,
         second: false,
@@ -557,6 +574,7 @@ export default {
             eventendtime: date.formatDate(event.enddate, 'HH:mm'),
             eventType: this.options[event.eventtypeid - 1],
             hostname: event.hostedby,
+            item: event.item,
             eventmessage: event.eventmessage,
             first: false,
             second: false,
@@ -596,6 +614,7 @@ export default {
           this.selected = data.map((a) => a.eventMembers);
           this.selected.forEach((em) => { em.readonly = true; });
           Loading.hide();
+          if (this.$route.query.step === '2') this.onSubmit();
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
@@ -618,6 +637,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
+      this.item = this.item.trim() === '' ? 'Food Item' : this.item;
       if (!this.card && this.file) this.url = URL.createObjectURL(this.file);
       console.log(this.url);
       Loading.hide();
@@ -634,6 +654,8 @@ export default {
       this.eventmessage = this.event.eventmessage;
       this.first = this.event.first;
       this.second = this.event.second;
+      this.hostname = this.event.hostname;
+      this.item = this.event.item;
     },
     firstnameValidation(val) {
       if (val === '') {
@@ -717,7 +739,7 @@ export default {
       endTime = `${this.second ? this.eventendtime : endTime}`;
 
       const eventDetails = {
-        eventtypeid: this.eventType.value,
+        eventtypeid: null,
         eventtitle: this.eventtitle,
         eventmessage: this.eventmessage,
         startdate: new Date(`${startDate}T${startTime}:00`),
@@ -725,6 +747,7 @@ export default {
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
         hostedby: this.hostname,
+        item: this.item.trim() === '' ? 'Food Item' : this.item,
       };
 
       const eventMemberIdList = this.selected.map((el) => el.eventmemberidUI);
@@ -788,7 +811,7 @@ export default {
       endTime = `${this.second ? this.eventendtime : endTime}`;
 
       const eventDetails = {
-        eventtypeid: this.eventType.value,
+        eventtypeid: null,
         eventtitle: this.eventtitle,
         eventmessage: this.eventmessage,
         startdate: new Date(`${startDate}T${startTime}:00`),
@@ -796,6 +819,7 @@ export default {
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
         hostedby: this.hostname,
+        item: this.item.trim() === '' ? 'Food Item' : this.item,
       };
 
       const eventMemberIdList = this.selected.filter((e) => !e.readonly)

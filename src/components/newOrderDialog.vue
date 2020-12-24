@@ -34,7 +34,7 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 q-px-md q-py-sm">
           <q-btn label="Confirm Order" type="button" color="primary"
-                 class="q-mr-sm" @click="onSubmit(true)"/>
+                 class="q-mr-sm" @click="onSubmit(1)"/>
           <q-btn label="Reject Order" type="button" color="negative"
                  class="q-mr-sm" @click="prompt"/>
         </div>
@@ -132,7 +132,7 @@ export default {
         persistent: true,
       }).onOk((data) => {
         console.log('>>>> OK, received', data);
-        this.onSubmit(false, data);
+        this.onSubmit(0, data);
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       }).onDismiss(() => {

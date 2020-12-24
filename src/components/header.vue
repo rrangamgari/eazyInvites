@@ -33,7 +33,7 @@
       >
         <q-route-tab
           name="images"
-          :label= "($q.screen.gt.md) ? 'Home' : ''"
+          :label= "($q.screen.gt.md) ? 'Home' : undefined"
           class="text-white"
           style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
           icon="home"
@@ -43,7 +43,7 @@
         <q-route-tab
           name="videos"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'About Us' : ''"
+          :label= "($q.screen.gt.md) ? 'About Us' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -54,7 +54,7 @@
         <q-route-tab
           name="articles1"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'Browse Cards' : ''"
+          :label= "($q.screen.gt.md) ? 'Browse Cards' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -65,7 +65,7 @@
         <q-tab
           name="reviews"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'Reviews' : ''"
+          :label= "($q.screen.gt.md) ? 'Reviews' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -75,7 +75,7 @@
         <q-route-tab
           name="prices"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'Prices' : ''"
+          :label= "($q.screen.gt.md) ? 'Prices' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -97,7 +97,7 @@
       >
         <q-tab
           :name="Tab.name"
-          :label="($q.screen.gt.md) ? Tab.label : ''"
+          :label="($q.screen.gt.md) ? Tab.label : undefined"
           :style="qtabStyle"
           :icon="Tab.icon"
           @click="goTo(Tab.path, Tab.name)"
@@ -258,36 +258,36 @@
       >
         <q-route-tab
           name="New Promotion"
-          :label="($q.screen.width > 1032) ? 'New Promotion' : ''"
+          :label="($q.screen.width > 1032) ? 'New Promotion' : undefined"
           :style="qtabStyle"
           icon="record_voice_over"
           to="/createPromotion"
-          content-class="padding: 0px 8px;"
+          content-class="q-pa-none"
         />
         <q-route-tab
           name="My Promotions"
-          :label="($q.screen.width > 1032) ? 'My Promotions' : ''"
+          :label="($q.screen.width > 1032) ? 'My Promotions' : undefined"
           :style="qtabStyle"
           icon="today"
           to="/promotions"
         />
         <q-route-tab
           name="Orders"
-          :label="($q.screen.width > 1032) ? 'Orders' : ''"
+          :label="($q.screen.width > 1032) ? 'Orders' : undefined"
           :style="qtabStyle"
           icon="fastfood"
           to="/currentOrders"
         />
         <q-route-tab
           name="My Customers"
-          :label="($q.screen.width > 1032) ? 'My Contacts' : ''"
+          :label="($q.screen.width > 1032) ? 'My Contacts' : undefined"
           :style="qtabStyle"
           icon="contacts"
           to="/addContacts"
         />
         <q-tab
           name="logout"
-          :label="($q.screen.width > 1032) ? 'Logout' : ''"
+          :label="($q.screen.width > 1032) ? 'Logout' : undefined"
           :style="qtabStyle"
           icon="person_add"
           @click="onLogoutClick"
@@ -430,27 +430,40 @@
             <q-item
               clickable
               v-close-popup
-              to="/promotions"
+              to="/createPromotion"
             >
               <q-item-section avatar style="min-width: 0px;">
-                <q-icon name="folder_shared"/>
+                <q-icon name="record_voice_over"/>
               </q-item-section>
               <q-item-section>
-                <q-item-label>My Promotions</q-item-label>
-                <q-item-label caption>Show my events</q-item-label>
+                <q-item-label>New Promotion</q-item-label>
+                <q-item-label caption>Create new Promotion</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
               clickable
               v-close-popup
-              to="/invites"
+              to="/promotions"
             >
               <q-item-section avatar style="min-width: 0px;">
-                <q-icon name="folder_shared"/>
+                <q-icon name="today"/>
               </q-item-section>
               <q-item-section>
-                <q-item-label>My Invites</q-item-label>
-                <q-item-label caption>Show my invites</q-item-label>
+                <q-item-label>My Promotions</q-item-label>
+                <q-item-label caption>Show my Promotions</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              to="/currentOrders"
+            >
+              <q-item-section avatar style="min-width: 0px;">
+                <q-icon name="fastfood"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Orders</q-item-label>
+                <q-item-label caption>Show my Orders</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -459,11 +472,11 @@
               to="/addContacts"
             >
               <q-item-section avatar style="min-width: 0px;">
-                <q-icon name="group"/>
+                <q-icon name="contacts"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Contacts</q-item-label>
-                <q-item-label caption>Show my contacts</q-item-label>
+                <q-item-label caption>Show my Contacts</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -489,7 +502,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
-                <q-item-label caption>Logout from We Invites</q-item-label>
+                <q-item-label caption>Logout from We Promotes</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>

@@ -11,12 +11,12 @@
                   event.eventtitle : 'Untitled Event' }}
               </div>
               <q-btn class="absolute-top-right" flat icon="edit" round
-               :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
+               :to="`/editPromotion/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
             </q-card-section>
             <q-card-section class="q-pa-xs row items-center">
               <div class="text-left q-px-xs col-12" style="font-size: 34px;"
                    v-if="eventType[event.eventtypeid-1]!==null &&
-                   eventType[event.eventtypeid-1]!==Undefined">
+                   eventType[event.eventtypeid-1]!==undefined">
                 Type: {{ eventType[event.eventtypeid-1].label }}
               </div>
               <div>&nbsp;</div>
@@ -24,9 +24,12 @@
                 Host: {{ event.hostedby }}
               </div>
               <div>&nbsp;</div>
+              <div class="text-left q-px-xs col-12" style="font-size: 20px;">
+                Item: {{ event.item }}
+              </div>
               <div class="text-left q-px-xs col-12" style="font-size: 20px;"
                    v-if="event.startdate !== null">
-                Start: {{ (new Date(event.startdate)).toDateString() }}
+                Date: {{ (new Date(event.startdate)).toDateString() }}
               </div>
               <div>&nbsp;</div>
               <div class="text-left q-px-xs col-12" style="font-size: 20px;">
@@ -42,10 +45,15 @@
         </q-card>
       </div>
       <div class="q-px-md q-py-lg full-width">
-        <q-input class="q-pl-sm" style="max-width: 300px" borderless dense debounce="300"
-         v-model="filter" placeholder="Search">
-          <q-icon slot="prepend" name="search" />
+        <div class="row q-pb-xs" style="width: 100%;">
+        <q-input class="q-pl-sm" style="max-width: 300px;" borderless dense dark
+         debounce="300" placeholder="Search" v-model="filter" >
+          <q-icon slot="prepend" name="search" color="grey-1" />
         </q-input>
+        <q-space />
+        <q-btn v-if="event" icon="person_add" label="Add Contacts" color="primary" no-caps
+         :to="`/editPromotion/${event.eventdetailsidUI}/${event.eventdetailsalphaid}?step=2`" />
+        </div>
         <q-table
           :visible-columns.sync="['name', 'status'].concat(col)"
           :data="data"
