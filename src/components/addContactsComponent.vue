@@ -94,7 +94,7 @@
       :rows-per-page-options="[0]"
       :pagination.sync="pagination"
       :table-header-style="{ backgroundColor: '#05944F', color: '#FFFFFF' }"
-      :visible-columns="select ? visible : visible.concat('delete')"
+      :visible-columns="select ? visible : visible.concat('consent','delete')"
       :selection="select ? 'multiple' : 'none'"
       :selected="selected"
       @update:selected="(newSelected) => $emit('update:selected', newSelected)"
@@ -243,7 +243,7 @@
         </q-th>
       </template>
       <template v-if="$q.screen.gt.xs" v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" v-if="!props.row.consent||!select">
           <q-td auto-width v-if="select">
             <q-checkbox :val="props.row" v-model="props.selected"/>
           </q-td>
@@ -320,6 +320,15 @@
             >
               <q-input v-model="props.row.email" dense autofocus counter />
             </q-popup-edit>
+          </q-td>
+          <q-td v-if="!select" key="consent" :props="props">
+            <q-toggle
+              v-model="props.row.consent"
+              checked-icon="check"
+              color="red"
+              label=""
+              unchecked-icon="clear"
+            />
           </q-td>
           <q-td v-if="!select" key="delete" :props="props">
             <q-icon name="delete" size="2rem" color='negative' class=""
@@ -419,6 +428,11 @@
                     style="cursor:pointer;"
                     @click="deleteMe(props.row.eventmemberidUI)"/>
           </q-td>
+          <q-td v-if="!select" key="delete" :props="props">
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(props.row.eventmemberidUI)"/>
+          </q-td>
         </q-tr>
       </template>
       <template v-if="$q.screen.gt.xs" v-slot:bottom-row>
@@ -509,6 +523,11 @@
                     style="cursor:pointer;"
                     @click="deleteMe(row.eventmemberidUI)"/>
           </q-td>
+          <q-td v-if="!select">
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(row.eventmemberidUI)"/>
+          </q-td>
         </q-tr>
       </template>
       <template v-else v-slot:bottom-row>
@@ -571,23 +590,6 @@
               />
             </q-popup-edit>
           </div>
-          <!-- <div class="col-12"
-           style="border-bottom-width:0px; height:auto; padding:7px 16px;">
-            {{ row.secondaryPhone }}
-            <q-popup-edit
-              v-model="row.secondaryPhone"
-              title="Edit phone"
-              buttons
-              @save="(v, iv) => save(v, iv, row, 'secondaryPhone')"
-            >
-              <q-input
-                v-model="row.secondaryPhone"
-                dense
-                autofocus
-                counter
-              />
-            </q-popup-edit>
-          </div> -->
           <div class="col-12"
            style="border-bottom-width:0px; height:auto; padding:7px 16px;">
             {{ row.email }}
@@ -601,6 +603,11 @@
             </q-popup-edit>
           </div>
          </q-td>
+          <q-td v-if="!select">
+            <q-icon name="delete" size="2rem" color='primary' class=""
+                    style="cursor:pointer;"
+                    @click="deleteMe(row.eventmemberidUI)"/>
+          </q-td>
           <q-td v-if="!select">
             <q-icon name="delete" size="2rem" color='primary' class=""
                     style="cursor:pointer;"
@@ -799,6 +806,13 @@ export default {
           field: 'email',
           align: 'left',
           sortable: true,
+        },
+        {
+          name: 'consent',
+          label: 'Unsubscribed',
+          field: 'consent',
+          align: 'center',
+          sortable: false,
         },
         {
           name: 'delete',
