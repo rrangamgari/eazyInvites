@@ -120,6 +120,9 @@
                           :options="orderStatusOptions"/>
               </q-popup-edit>
             </q-td>
+            <q-td key="orderdate" :props="props">
+              {{ formatDate(props.row.orderdate) }}
+            </q-td>
           </q-tr>
         </template>
       </q-table>
@@ -203,7 +206,7 @@ export default {
           value:
               `Bearer ${this.$q.localStorage.getItem('login-token')}`,
         }],
-      visible: ['name', 'primaryPhone', 'item', 'qty', 'status'],
+      visible: ['name', 'primaryPhone', 'item', 'qty', 'status', 'orderdate'],
       columns: [
         {
           name: 'name',
@@ -243,6 +246,13 @@ export default {
           align: 'left',
           sortable: true,
         },
+        {
+          name: 'orderdate',
+          label: 'Status Date',
+          field: 'orderdate',
+          align: 'center',
+          sortable: true,
+        },
       ],
       getSelectedString: (n) => `${n} Contact${n > 1 ? 's' : ''} selected`,
 
@@ -277,6 +287,29 @@ export default {
     },
   },
   methods: {
+    formatDate(date) {
+      const d = new Date(date);
+      let month = `${d.getMonth() + 1}`;
+      let day = `${d.getDate()}`;
+      const year = d.getFullYear();
+      let hour = d.getHours();
+      const minutes = d.getMinutes();
+      let ampm = 'AM';
+      if (hour >= 12) ampm = 'PM';
+      if (hour > 12) hour -= 12;
+      const d1 = new Date();
+
+      if (d1.getFullYear() === year
+          && d1.getMonth() === d.getMonth()) {
+        if (d1.getDate() === d.getDate()) return `Today ${hour}:${minutes} ${ampm}`;
+        if (d1.getDate() === d.getDate() + 1) return `Yesterday ${hour}:${minutes} ${ampm}`;
+      }
+      if (month.length < 2) month = `0${month}`;
+      if (day.length < 2) day = `0${day}`;
+
+
+      return `${month}/${day}/${year} ${hour}:${minutes} ${ampm}`;
+    },
     isValidEmail(val) {
       if ((this.phone === null || this.phone === '') && val !== '') {
         const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
@@ -437,23 +470,6 @@ export default {
             position: 'top',
           });
         });
-    },
-    firstnameValidation(val) {
-      if (val === '') {
-        this.errorProtein = true;
-        this.errorMessageProtein = 'Firstname cannot be empty';
-        return false;
-      }
-      this.errorProtein = false;
-      this.errorMessageProtein = '';
-      return true;
-    },
-    onFormReset() {
-      this.firstname = null;
-      this.lastname = null;
-      this.phone = null;
-      this.phone2 = null;
-      this.email = null;
     },
     onFormSubmit() {
       Loading.show({
