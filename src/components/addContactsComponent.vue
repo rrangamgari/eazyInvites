@@ -138,7 +138,7 @@
           icon-right="archive"
           label="Export to csv"
           no-caps
-          @click="exportTable"
+          @click="exportTable()"
         />
         &nbsp;&nbsp;
         <div class="q-pa-xs">
@@ -716,24 +716,6 @@ axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 
-function wrapCsvValue(val, formatFn) {
-  // eslint-disable-next-line no-void
-  let formatted = formatFn !== void 0 ? formatFn(val) : val;
-
-  // eslint-disable-next-line no-void
-  formatted = formatted === void 0 || formatted === null ? '' : String(formatted);
-
-  formatted = formatted.split('"').join('""');
-  /**
-   * Excel accepts \n and \r in strings, but some other CSV parsers do not
-   * Uncomment the next two lines to escape new lines
-   */
-  // .split('\n').join('\\n')
-  // .split('\r').join('\\r')
-
-  return `"${formatted}"`;
-}
-
 export default {
   name: 'addContactsComponent',
   components: {},
@@ -817,6 +799,7 @@ export default {
         {
           name: 'delete',
           label: 'Delete',
+          field: 'delete',
           align: 'right',
           sortable: false,
         },
@@ -845,6 +828,15 @@ export default {
     },
   },
   methods: {
+    wrapCsvValue(val, formatFn) {
+      let formatted = formatFn !== undefined ? formatFn(val) : val;
+
+      formatted = formatted === undefined || formatted === null ? '' : String(formatted);
+
+      formatted = formatted.split('"').join('""');
+
+      return `"${formatted}"`;
+    },
     isValidEmail(val) {
       if ((this.phone === null || this.phone === '') && val !== '') {
         const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
@@ -874,17 +866,6 @@ export default {
           });
         }, 2000);
       });
-      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
-      axios.defaults.headers.get.Accepts = 'multipart/form-data';
-      const formData = new FormData();
-      formData.append('file', this.$q.file);
-      axios({
-        url: '/api/userEvents/upload',
-        method: 'POST',
-        data: formData,
-      }); */
     },
     onSubmit(evt) {
       // const formData = new FormData(evt.target);
@@ -903,15 +884,15 @@ export default {
     },
     exportTable() {
       // naive encoding to csv format
-      const content = [this.columns.map((col) => wrapCsvValue(col.label))]
+      const cols = this.columns.filter((col) => col.name !== 'delete');
+      const content = [cols.map((col) => this.wrapCsvValue(col.label))]
         .concat(
-          this.data.map((row) => this.columns
-            .map((col) => wrapCsvValue(
+          this.data.map((row) => cols
+            .map((col) => this.wrapCsvValue(
               typeof col.field === 'function'
                 ? col.field(row)
                 // eslint-disable-next-line no-void
                 : row[col.field === void 0 ? col.name : col.field],
-              col.format,
             ))
             .join(',')),
         )

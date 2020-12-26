@@ -196,7 +196,7 @@ export default {
           required: true,
           label: 'Name',
           align: 'left',
-          field: 'name',
+          field: (row) => `${row.members.firstname} ${row.members.lastname}`,
           sortable: true,
         },
         {
@@ -204,7 +204,7 @@ export default {
           align: 'left',
           label: 'Phone',
           required: true,
-          field: 'primaryPhone',
+          field: (row) => `${row.members.primaryPhone}`,
           sortable: true,
           headerStyle: 'icon-right:archive',
         },
@@ -366,7 +366,6 @@ export default {
                 ? col.field(row)
               // eslint-disable-next-line no-void
                 : row[col.field === void 0 ? col.name : col.field],
-              col.format,
             ))
             .join(',')),
         )
