@@ -144,6 +144,8 @@
 <script>
 import { exportFile, Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
 import newOrderDialog from './newOrderDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -248,6 +250,7 @@ export default {
       email: null,
 
       prompt: true, // Delete Prompt
+      user: this.$q.localStorage.getItem('user-token'),
     };
   },
   created() {
@@ -255,12 +258,23 @@ export default {
       'login-token',
     )}`;
     this.loadContacts();
-    setTimeout(() => this.loadOrders(), 10000);
     axios
       .get('/api/orders/orderstatus')
       .then((Response) => {
         this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
       });
+    this.loadOrders();
+
+    const socket = new SockJS('/api/websocket');
+    const stompClient = Stomp.over(socket);
+    stompClient.debug = () => {};
+    if (stompClient.connected) stompClient.disconnect();
+    stompClient.connect({}, (frame) => {
+      console.log('Connected: ', frame);
+      stompClient.subscribe('/queue/order', (msgFrame) => {
+        if (String(msgFrame.body) === String(this.user.userid)) this.loadOrders();
+      });
+    });
   },
   computed: {
     cWidth() {
@@ -274,11 +288,14 @@ export default {
       let day = `${d.getDate()}`;
       const year = d.getFullYear();
       let hour = d.getHours();
-      const minutes = d.getMinutes();
+      let minutes = d.getMinutes();
       let ampm = 'AM';
       if (hour >= 12) ampm = 'PM';
       if (hour > 12) hour -= 12;
       const d1 = new Date();
+
+      if (String(hour).length < 2) hour = `0${hour}`;
+      if (String(minutes).length < 2) minutes = `0${minutes}`;
 
       if (d1.getFullYear() === year
           && d1.getMonth() === d.getMonth()) {
@@ -386,26 +403,16 @@ export default {
               this.eventmessage = me;
               // this.$router.push('/events');
               this.loadContacts();
-              setTimeout(() => this.loadOrders(), 1000);
+              setTimeout(() => this.loadOrders(), 100);
               console.log('OK2');
             });
             axios
               .put('/api/orders/updateOrder', response.data.data).then((response1) => {
                 console.log(response1.data.data);
               });
-          } else setTimeout(() => this.loadOrders(), 10000);
-          if (this.selected.length > 0) {
-            const id = new Set(this.selected.filter((em) => em.readonly)
-              .map((em) => em.eventmemberidUI));
-            this.data.forEach((c) => {
-              if (id.has(c.eventmemberidUI)) c.readonly = true;
-            });
-            this.edit = id.size > 0;
-            this.$emit('update:selected', []);
           }
 
           Loading.hide();
-          // this.data = this.data.concat(response.data.data);
         })
         .catch((e) => {
           //  this.errors.push(e);

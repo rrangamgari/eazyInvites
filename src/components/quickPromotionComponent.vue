@@ -277,7 +277,7 @@
               class="col-xs-12 col-sm-6 overflow-hidden"
               style="border-radius: 8px"
               icon="attachment" expand-icon-class="text-white"
-              label="Invitation"
+              label="Promotion"
               v-if="$q.screen.xs"
               header-class="bg-primary"
               :header-style="{ color: '#FFFFFF' }"
@@ -297,7 +297,7 @@
             </div>
           </div>
 
-          <div class="q-pa-md text-h6">
+          <!-- <div class="q-pa-md text-h6">
             Price : ${{ price }} <br>
             Disc. : ${{ discount}} <br>
             Total : ${{ total}} <br>
@@ -312,9 +312,9 @@
               <q-btn color="primary" type="submit" class="full-width full-height"
                      label="Apply Coupon"/>
             </div>
-          </q-form>
+          </q-form> -->
 
-          <q-stepper-navigation>
+          <q-stepper-navigation class="q-pa-md">
             <q-btn color="primary" class="q-px-xl q-py-xs"  label="Finish" @click="onFinish()"/>
             <q-btn
               flat

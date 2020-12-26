@@ -81,11 +81,11 @@ export default {
     show() {
       this.$refs.dialog.show();
     },
+    hide() {
+      this.$refs.dialog.hide();
+    },
     onDialogHide() {
       this.$emit('hide');
-    },
-    onOk() {
-      this.$emit('ok');
     },
     onSubmit(param, customText) {
       Loading.show({
@@ -101,7 +101,7 @@ export default {
       axios.put(`/api/orders/newOrder/${param}`, this.orderData)
         .then((response) => {
           console.log(response.data);
-          this.onDialogHide();
+          this.hide();
           this.$emit('ok');
           Loading.hide();
         })
