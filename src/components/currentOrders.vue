@@ -251,7 +251,7 @@ export default {
 
       prompt: true, // Delete Prompt
       user: this.$q.localStorage.getItem('user-token'),
-      ws: true,
+      ws: false,
     };
   },
   created() {
