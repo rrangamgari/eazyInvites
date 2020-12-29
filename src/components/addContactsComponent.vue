@@ -1079,7 +1079,7 @@ export default {
               color: 'red-5',
               textColor: 'white',
               icon: 'error',
-              message: 'Could not Add Contact',
+              message: 'Could not add Contact, User Phone or Email Already exists',
               position: 'top',
             });
             Loading.hide();
@@ -1096,7 +1096,7 @@ export default {
             color: 'red-5',
             textColor: 'white',
             icon: 'error',
-            message: e.message,
+            message: e.data.message,
             position: 'top',
           });
           Loading.hide();
