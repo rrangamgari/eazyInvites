@@ -260,24 +260,29 @@
           name="New Promotion"
           :label="($q.screen.width > 1032) ? 'New Promotion' : undefined"
           :style="qtabStyle"
-          icon="record_voice_over"
           to="/createPromotion"
           content-class="q-pa-none"
-        />
+        >
+        <q-icon name="img:statics/icons/new_promo2.png" size="xl" >
+        </q-icon>
+        </q-route-tab>
         <q-route-tab
           name="My Promotions"
           :label="($q.screen.width > 1032) ? 'My Promotions' : undefined"
           :style="qtabStyle"
-          icon="today"
           to="/promotions"
-        />
+        >
+          <q-icon name="img:statics/icons/my_promo1.png" size="md">
+          </q-icon>
+        </q-route-tab>
         <q-route-tab
           name="Orders"
           :label="($q.screen.width > 1032) ? 'Orders' : undefined"
           :style="qtabStyle"
           icon="fastfood"
           to="/currentOrders"
-        />
+        >
+        </q-route-tab>
         <q-route-tab
           name="My Customers"
           :label="($q.screen.width > 1032) ? 'My Contacts' : undefined"
