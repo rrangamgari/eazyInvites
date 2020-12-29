@@ -251,6 +251,7 @@ export default {
 
       prompt: true, // Delete Prompt
       user: this.$q.localStorage.getItem('user-token'),
+      ws: true,
     };
   },
   created() {
@@ -264,17 +265,6 @@ export default {
         this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
       });
     this.loadOrders();
-
-    const socket = new SockJS('/api/websocket');
-    const stompClient = Stomp.over(socket);
-    stompClient.debug = () => {};
-    if (stompClient.connected) stompClient.disconnect();
-    stompClient.connect({}, (frame) => {
-      console.log('Connected: ', frame);
-      stompClient.subscribe('/queue/order', (msgFrame) => {
-        if (String(msgFrame.body) === String(this.user.userid)) this.loadOrders();
-      });
-    });
   },
   computed: {
     cWidth() {
@@ -409,7 +399,7 @@ export default {
               .put('/api/orders/updateOrder', response.data.data).then((response1) => {
                 console.log(response1.data.data);
               });
-          }
+          } else this.initWS();
 
           Loading.hide();
         })
@@ -466,6 +456,20 @@ export default {
             position: 'top',
           });
         });
+    },
+    initWS() {
+      if (this.ws) return;
+      const socket = new SockJS('/api/websocket');
+      const stompClient = Stomp.over(socket);
+      stompClient.debug = () => {};
+      if (stompClient.connected) stompClient.disconnect();
+      stompClient.connect({}, (frame) => {
+        console.log('Connected: ', frame);
+        this.ws = true;
+        stompClient.subscribe('/queue/order', (msgFrame) => {
+          if (String(msgFrame.body) === String(this.user.userid)) this.loadOrders();
+        });
+      });
     },
     onFormSubmit() {
       Loading.show({
