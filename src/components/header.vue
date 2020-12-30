@@ -245,7 +245,7 @@
       </div>
 
       <q-tabs
-        v-else-if="$q.screen.width > 614"
+        v-else-if="$q.screen.width >= 600"
         no-caps
         active-color="primary"
         indicator-color="transparent"
@@ -258,26 +258,24 @@
       >
         <q-route-tab
           name="New Promotion"
-          :label="($q.screen.width > 1032) ? 'New Promotion' : undefined"
           :style="qtabStyle"
           to="/createPromotion"
           content-class="q-pa-none"
         >
-        <q-icon name="img:statics/icons/new_promo2.png" size="xl" >
-        </q-icon>
+          <q-icon name="img:statics/icons/new_promo2.png" size="xl"/>
+          <div v-if="($q.screen.width > 965)" class="q-pl-sm q-tab__label">New Promotion</div>
         </q-route-tab>
         <q-route-tab
           name="My Promotions"
-          :label="($q.screen.width > 1032) ? 'My Promotions' : undefined"
           :style="qtabStyle"
           to="/promotions"
         >
-          <q-icon name="img:statics/icons/my_promo1.png" size="md">
-          </q-icon>
+          <q-icon name="img:statics/icons/my_promo1.png" size="md"/>
+          <div v-if="($q.screen.width > 965)" class="q-pl-sm q-tab__label">My Promotions</div>
         </q-route-tab>
         <q-route-tab
           name="Orders"
-          :label="($q.screen.width > 1032) ? 'Orders' : undefined"
+          :label="($q.screen.width > 965) ? 'Orders' : undefined"
           :style="qtabStyle"
           icon="fastfood"
           to="/currentOrders"
@@ -285,14 +283,14 @@
         </q-route-tab>
         <q-route-tab
           name="My Customers"
-          :label="($q.screen.width > 1032) ? 'My Contacts' : undefined"
+          :label="($q.screen.width > 965) ? 'My Contacts' : undefined"
           :style="qtabStyle"
           icon="contacts"
           to="/addContacts"
         />
         <q-tab
           name="logout"
-          :label="($q.screen.width > 1032) ? 'Logout' : undefined"
+          :label="($q.screen.width > 965) ? 'Logout' : undefined"
           :style="qtabStyle"
           icon="person_add"
           @click="onLogoutClick"

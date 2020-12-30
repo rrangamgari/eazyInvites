@@ -144,8 +144,6 @@
 <script>
 import { exportFile, Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
-import SockJS from 'sockjs-client';
-import Stomp from 'webstomp-client';
 import newOrderDialog from './newOrderDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -251,7 +249,6 @@ export default {
 
       prompt: true, // Delete Prompt
       user: this.$q.localStorage.getItem('user-token'),
-      ws: false,
     };
   },
   created() {
@@ -373,6 +370,7 @@ export default {
       }
     },
     loadOrders() {
+      if (this.$ws.connected) return;
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
@@ -399,7 +397,11 @@ export default {
               .put('/api/orders/updateOrder', response.data.data).then((response1) => {
                 console.log(response1.data.data);
               });
-          } else this.initWS();
+          } else {
+            this.$ws.connect('/api/websocket', '/queue/order', (msg) => {
+              if (String(msg.body) === String(this.user.userid)) this.loadOrders();
+            });
+          }
 
           Loading.hide();
         })
@@ -429,21 +431,10 @@ export default {
         .get(`/api/orders/myorders/${this.currentOrders}`)
         .then((response) => {
           this.data = response.data.data;
-          if (this.selected.length > 0) {
-            const id = new Set(this.selected.filter((em) => em.readonly)
-              .map((em) => em.eventmemberidUI));
-            this.data.forEach((c) => {
-              if (id.has(c.eventmemberidUI)) c.readonly = true;
-            });
-            this.edit = id.size > 0;
-            this.$emit('update:selected', []);
-          }
 
           Loading.hide();
-          // this.data = this.data.concat(response.data.data);
         })
         .catch((e) => {
-          //  this.errors.push(e);
           Loading.hide();
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
@@ -456,20 +447,6 @@ export default {
             position: 'top',
           });
         });
-    },
-    initWS() {
-      if (this.ws) return;
-      const socket = new SockJS('/api/websocket');
-      const stompClient = Stomp.over(socket);
-      stompClient.debug = () => {};
-      if (stompClient.connected) stompClient.disconnect();
-      stompClient.connect({}, (frame) => {
-        console.log('Connected: ', frame);
-        this.ws = true;
-        stompClient.subscribe('/queue/order', (msgFrame) => {
-          if (String(msgFrame.body) === String(this.user.userid)) this.loadOrders();
-        });
-      });
     },
     onFormSubmit() {
       Loading.show({
