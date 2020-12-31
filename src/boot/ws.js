@@ -3,8 +3,9 @@ import Stomp from 'webstomp-client';
 
 const WS = {
   connected: false,
+  function: false,
   stompClient: null,
-  connect(WS_API, Topic, msgHandler) {
+  connect(WS_API, Topic, schedule, scheduleFn) {
     if (this.stompClient && this.stompClient.connected) return;
     const socket = new SockJS(WS_API);
     this.stompClient = Stomp.over(socket);
@@ -12,7 +13,11 @@ const WS = {
     this.stompClient.connect({}, () => {
       this.connected = true;
       console.log('WebSocket Connected');
-      this.stompClient.subscribe(Topic, msgHandler);
+      this.stompClient.subscribe(Topic, (msg) => {
+        if (schedule(msg)) {
+          if (!this.function) scheduleFn();
+        }
+      });
     });
   },
   disconnect() {

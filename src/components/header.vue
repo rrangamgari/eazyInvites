@@ -255,6 +255,8 @@
         align="right"
         :breakpoint="0"
         id="home_tabs"
+        right-icon="none"
+        content-class="q-tabs__arrow--faded"
       >
         <q-route-tab
           name="New Promotion"
@@ -704,3 +706,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+  .q-tabs__arrow
+    display: none;
+</style>

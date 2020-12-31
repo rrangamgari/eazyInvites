@@ -58,7 +58,7 @@
             icon-right="refresh"
             label="Refresh Orders"
             no-caps
-            @click="loadContacts"
+            @click="refresh"
           />
           &nbsp;&nbsp;
           <q-btn
@@ -248,7 +248,6 @@ export default {
       email: null,
 
       prompt: true, // Delete Prompt
-      user: this.$q.localStorage.getItem('user-token'),
     };
   },
   created() {
@@ -369,10 +368,13 @@ export default {
         });
       }
     },
+    refresh() {
+      this.loadContacts();
+      if (!this.$ws.function) this.loadOrders();
+    },
     loadOrders() {
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      this.$ws.function = true;
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
       axios
         .get('/api/orders/newOrder')
         .then((response) => {
@@ -389,7 +391,7 @@ export default {
               this.eventmessage = me;
               // this.$router.push('/events');
               this.loadContacts();
-              if (!this.$ws.connected) setTimeout(() => this.loadOrders(), 100);
+              setTimeout(() => this.loadOrders(), 100);
               console.log('OK2');
             });
             axios
@@ -397,16 +399,13 @@ export default {
                 console.log(response1.data.data);
               });
           } else {
-            this.$ws.connect('/api/websocket', '/queue/order', (msg) => {
-              if (String(msg.body) === String(this.user.userid)) this.loadOrders();
-            });
+            this.$ws.function = false;
+            this.$ws.connect('/api/websocket', '/queue/order',
+              (msg) => (String(msg.body) === String(this.$q.localStorage.getItem('user-token').userid)),
+              this.loadOrders);
           }
-
-          Loading.hide();
         })
         .catch((e) => {
-          //  this.errors.push(e);
-          Loading.hide();
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
