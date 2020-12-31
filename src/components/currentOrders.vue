@@ -261,7 +261,7 @@ export default {
       .then((Response) => {
         this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
       });
-    this.loadOrders();
+    if (!this.$ws.connected) this.loadOrders();
   },
   computed: {
     cWidth() {
@@ -370,7 +370,6 @@ export default {
       }
     },
     loadOrders() {
-      if (this.$ws.connected) return;
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
@@ -390,7 +389,7 @@ export default {
               this.eventmessage = me;
               // this.$router.push('/events');
               this.loadContacts();
-              setTimeout(() => this.loadOrders(), 100);
+              if (!this.$ws.connected) setTimeout(() => this.loadOrders(), 100);
               console.log('OK2');
             });
             axios
