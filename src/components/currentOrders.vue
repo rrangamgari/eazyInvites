@@ -179,7 +179,7 @@ export default {
       errorMessageProtein: '',
       errorProtein: false,
       uploadContactsModel: '',
-      tableloading: true,
+      tableloading: false,
       currentOrders: 'current',
       headerFunc: [
         {
@@ -369,55 +369,65 @@ export default {
       }
     },
     refresh() {
+      if (this.tableloading) return;
       this.loadContacts();
-      if (!this.$ws.function) this.loadOrders();
+      if (this.$ws.nh === 0) {
+        this.$ws.disconnect();
+        this.tableloading = true; // To avoid concurrent execution
+        this.loadOrders().then(() => {
+          this.tableloading = false;
+          console.log('Refresh');
+        });
+      }
     },
     loadOrders() {
-      this.$ws.function = true;
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
-      axios
-        .get('/api/orders/newOrder')
-        .then((response) => {
-          // console.log(response.data);
-          if (response.data.data !== null) {
-            this.$q.dialog({
-              component: newOrderDialog,
-              persistent: true,
-              orderData: response.data.data,
-              message: `${response.data.data.members.firstname} ${response.data.data.members.lastname} (${response.data.data.members.primaryPhone}) has Ordered '${response.data.data.item}' with Quantity ('${response.data.data.qty}').`,
-              parent: this,
-            }).onOk((me) => {
-              console.log('OK');
-              this.eventmessage = me;
-              // this.$router.push('/events');
-              this.loadContacts();
-              setTimeout(() => this.loadOrders(), 100);
-              console.log('OK2');
-            });
-            axios
-              .put('/api/orders/updateOrder', response.data.data).then((response1) => {
-                console.log(response1.data.data);
+      return new Promise((resolve) => {
+        axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+        axios
+          .get('/api/orders/newOrder')
+          .then((response) => {
+            // console.log(response.data);
+            if (response.data.data !== null) {
+              this.$q.dialog({
+                component: newOrderDialog,
+                persistent: true,
+                orderData: response.data.data,
+                message: `${response.data.data.members.firstname} ${response.data.data.members.lastname} (${response.data.data.members.primaryPhone}) has Ordered '${response.data.data.item}' with Quantity ('${response.data.data.qty}').`,
+                parent: this,
+              }).onOk((me) => {
+                console.log('OK');
+                this.eventmessage = me;
+                // this.$router.push('/events');
+                this.loadContacts();
+                if (!this.$ws.connected) setTimeout(() => this.loadOrders(), 30);
+                console.log('OK2');
+                resolve();
               });
-          } else {
-            this.$ws.function = false;
-            this.$ws.connect('/api/websocket', '/queue/order',
-              (msg) => (String(msg.body) === String(this.$q.localStorage.getItem('user-token').userid)),
-              this.loadOrders);
-          }
-        })
-        .catch((e) => {
-          if (e.message === 'Request failed with status code 401') {
-            this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
-          }
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'error',
-            message: e.message,
-            position: 'top',
+              axios
+                .put('/api/orders/updateOrder', response.data.data).then((response1) => {
+                  console.log(response1.data.data);
+                });
+            } else {
+              this.$ws.connect('/api/websocket', `/queue/order/${this.$q.localStorage.getItem('user-token').userid}`,
+                this.loadOrders);
+              resolve();
+            }
+          })
+          .catch((e) => {
+            if (e.message === 'Request failed with status code 401') {
+              this.$q.localStorage.remove('login-token');
+              this.$router.push('/login');
+            }
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: e.message,
+              position: 'top',
+            });
+            resolve();
           });
-        });
+      });
     },
     loadContacts() {
       Loading.show({
