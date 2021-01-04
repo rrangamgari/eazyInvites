@@ -33,7 +33,7 @@
       <q-toolbar-title class="logo" shrink :style="lStyle"
        style="padding-right: 0px;">
        <a href="/" class="text-white" style="text-decoration: none;">
-        WE Invites
+         <span :class="weClass">WE</span>&nbsp; <span class="text-primary">Invites</span>
        </a>
       </q-toolbar-title>
       <q-space/>
