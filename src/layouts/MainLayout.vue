@@ -63,7 +63,7 @@ export default {
       this.showInd = true;
       Loading.hide();
     }
-    if (this.$q.localStorage.getItem('country-token') === null) {
+    if (this.$q.localStorage.getItem('time-zone-token') === null) {
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -75,6 +75,7 @@ export default {
           // this.feedbackList = this.feedbackList.concat(response.data.data);
           // Notification for testing api
           this.$q.localStorage.set('country-token', response.data.countryCode);
+          this.$q.localStorage.set('time-zone-token', response.data.timezone);
           if (response.data.countryCode === 'IN') {
             this.showUS = false;
             this.showInd = true;

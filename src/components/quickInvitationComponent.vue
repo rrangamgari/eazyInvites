@@ -127,7 +127,7 @@
               lazy-rules
               :rules="[val => val || 'Please upload your invitation']">
               <template v-slot:append>
-                <q-icon name="attach_file" />
+                <q-icon name="attach_file" @click.stop/>
               </template>
             </q-file>
             </div>
@@ -181,7 +181,7 @@
           </q-stepper-navigation>
         </q-form>
         </div>
-          <div class="absolute" style="bottom: 50%; right: 10%;">
+          <!--<div class="absolute" style="bottom: 50%; right: 10%;">
             <div>
               <q-fab
                 v-model="fab"
@@ -213,7 +213,7 @@
               </q-fab>
             </div>
 
-          </div>
+          </div>-->
       </q-tab-panel>
 
       <q-tab-panel :name="2" class="q-pa-lg">
@@ -577,6 +577,16 @@ export default {
           if (this.eventId) this.loadEvent();
 
           Loading.hide();
+          if (response1.data.data.mobile === null) {
+            this.$router.push('/myProfile');
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: 'Please update your phone number',
+              position: 'top',
+            });
+          }
         })
         .catch((e) => {
           this.$q.notify({

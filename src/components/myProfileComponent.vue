@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-page class="q-pa-sm q-pl-md q-pr-md  flex flex-center">
+    <q-card class="q-pt-sm q-pb-xs q-px-xs flex flex-center">
           <q-form
             @submit="onSubmit"
             @reset="onReset"
@@ -46,7 +46,16 @@
               lazy-rules='ondemand'
               :rules="[ val=> val !== null && val !== '' || 'Please enter your Phone']"
             />
+            <q-input
+              class="q-pt-sm"
+              label="Time Zone"
+              type="text"
+              v-model="timeZone"
+              name="tz"
 
+              lazy-rules='ondemand'
+              :rules="[ val=> val !== null && val !== '' || 'Please enter your Phone']"
+            />
             <div class="q-pt-md">
               <q-btn label="Save" type="submit" color="primary"/>
               <q-btn
@@ -59,7 +68,7 @@
               />
             </div>
           </q-form>
-    </q-page>
+    </q-card>
   </div>
 </template>
 
@@ -80,6 +89,7 @@ export default {
       lastName: null,
       email: null,
       phone: null,
+      timeZone: null,
     };
   },
   mounted() {
@@ -100,6 +110,32 @@ export default {
         this.firstName = res.givenname;
         this.lastName = res.familyname;
         this.email = res.email;
+        this.timeZone = res.commonname;
+        if (res.commonname === null) {
+          Loading.show({
+            spinner: QSpinnerBars,
+            spinnerColor: 'primary',
+            thickness: '3',
+          });
+          axios.get('https://timezoneapi.io/api/ip/?token=aUVcYLrWezMlqueIcmzI')
+            .then((response1) => {
+              this.timeZone = response1.data.datetime.offset_tzid;
+              Loading.hide();
+              this.onSubmit();
+            })
+            .catch((e) => {
+              this.errors.push(e);
+              this.$q.notify({
+                color: 'red-5',
+                textColor: 'white',
+                icon: 'error',
+                message: 'oops Something went wrong...',
+                position: 'top',
+              });
+              Loading.hide();
+            });
+          // = this.$q.localStorage.getItem('time-zone-token');
+        }
         // this.data = this.data.concat(response.data.data);
         Loading.hide();
       })
@@ -129,6 +165,7 @@ export default {
           givenname: this.firstName,
           familyname: this.lastName,
           email: this.email,
+          commonname: this.timeZone,
         })
         .then((response) => {
           // JSON responses are automatically parsed.
@@ -174,6 +211,7 @@ export default {
           this.firstName = res.givenname;
           this.lastName = res.familyname;
           this.email = res.email;
+          this.timeZone = res.commonname;
           // this.data = this.data.concat(response.data.data);
           Loading.hide();
         })

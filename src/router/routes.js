@@ -43,11 +43,6 @@ const routes = [
         component: () => import('components/quickInvitationComponent.vue'),
       },
       {
-        path: 'createPromotion',
-        name: 'createPromotion', // Dependency Exists in editCard.vue
-        component: () => import('components/quickPromotionComponent.vue'),
-      },
-      {
         path: 'editInvitation/:eventId/:eventAlphaId',
         name: 'editEvent',
         component: () => import('components/quickInvitationComponent.vue'),
