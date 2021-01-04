@@ -117,7 +117,7 @@ export default {
             spinnerColor: 'primary',
             thickness: '3',
           });
-          axios.get('https://timezoneapi.io/api/ip/?token=aUVcYLrWezMlqueIcmzI')
+          /* axios.get('http://timezoneapi.io/api/ip/?token=aUVcYLrWezMlqueIcmzI')
             .then((response1) => {
               this.timeZone = response1.data.datetime.offset_tzid;
               Loading.hide();
@@ -133,7 +133,9 @@ export default {
                 position: 'top',
               });
               Loading.hide();
-            });
+            }); */
+          const zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
+          this.timeZone = zone;
           // = this.$q.localStorage.getItem('time-zone-token');
         }
         // this.data = this.data.concat(response.data.data);

@@ -335,13 +335,13 @@
         </div>
       </div>
 
-      <div class="q-pa-md text-h6">
+      <!--<div class="q-pa-md text-h6">
         Price : ${{ price }} <br>
         Disc. : ${{ discount}} <br>
         Total : ${{ total}} <br>
-      </div>
+      </div>-->
 
-      <q-form @submit="applyCoupon" class="q-pa-sm row">
+      <!--<q-form @submit="applyCoupon" class="q-pa-sm row">
         <q-input  class="q-pt-sm col-xs-10 col-sm-4 col-md-3"
           :class="`${$q.screen.gt.xs ? 'q-mr-sm' : ''}`"
           type="text" label="Coupon" v-model="coupon" clearable
@@ -350,7 +350,7 @@
           <q-btn color="primary" type="submit" class="full-width full-height"
            label="Apply Coupon"/>
         </div>
-      </q-form>
+      </q-form>-->
 
         <q-stepper-navigation>
           <q-btn color="primary" class="q-px-xl q-py-xs"  label="Finish" @click="onFinish()"/>
@@ -821,6 +821,8 @@ export default {
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
         hostedby: this.hostname,
+        timezone: new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2],
+        eventtimeadded: this.first,
       };
 
       const eventMemberIdList = this.selected.map((el) => el.eventmemberidUI);
