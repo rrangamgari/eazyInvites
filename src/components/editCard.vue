@@ -141,6 +141,17 @@
                @click="done"/>
             </div>
           </q-card-actions>
+          <q-separator/>
+          <q-card-section class="q-pa-sm">
+            <div class="text-center text-primary">How to Use?</div>
+            <div class="q-pa-sm text-primary">
+             <ul class="q-ma-none" style="padding-inline-start: 15px;">
+              <li> Use the File Upload field to upload the respective image</li>
+              <li> Select a Layer to change its shape or position using the shape box</li>
+              <li> Click on the Text directly with the Text Layer unselected to edit text</li>
+             </ul>
+            </div>
+          </q-card-section>
         </q-card>
       </div>
     </div>

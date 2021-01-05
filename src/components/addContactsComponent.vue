@@ -114,7 +114,7 @@
           no-caps
           @click="uploadOAuth2Contacts('Google')"
         />
-        &nbsp;&nbsp;
+        <!-- &nbsp;&nbsp;
         <q-btn
           color="primary"
           icon-right="img:statics/icons/whatsapp.png"
@@ -122,7 +122,7 @@
           title="CSV or XLS file accepted"
           no-caps
           @click="uploadContactsLayout = true"
-        />
+        /> -->
         &nbsp;&nbsp;
         <q-btn
           color="primary"

@@ -19,16 +19,16 @@
       </q-btn-dropdown>
 
       <a href="/" v-if="$q.screen.xs">
-        <img src="../statics/WE_Invites_logo.png" width="50px" />
+        <img src="statics/WE_Invites_logo.png" width="50px" />
       </a>
       <a href="/" v-else-if="$q.screen.sm">
-        <img src="../statics/WE_Invites_logo.png" width="60px" />
+        <img src="statics/WE_Invites_logo.png" width="60px" />
       </a>
       <a href="/" v-else-if="$q.screen.md">
-        <img src="../statics/WE_Invites_logo.png" width="75px" />
+        <img src="statics/WE_Invites_logo.png" width="75px" />
       </a>
       <a href="/" v-else>
-        <img src="../statics/WE_Invites_logo.png" width="75px" />
+        <img src="statics/WE_Invites_logo.png" width="75px" />
       </a>
       <q-toolbar-title class="logo" shrink :style="lStyle"
        style="padding-right: 0px;">
@@ -48,7 +48,7 @@
       >
         <q-route-tab
           name="images"
-          :label= "($q.screen.gt.md) ? 'Home' : ''"
+          :label= "($q.screen.gt.md) ? 'Home' : undefined"
           class="text-white"
           style="font-family: 'Montserrat', cursive;  font-color:#FFFFFF;  font-weight:bold; "
           icon="home"
@@ -58,7 +58,7 @@
         <q-route-tab
           name="videos"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'About Us' : ''"
+          :label= "($q.screen.gt.md) ? 'About Us' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -69,7 +69,7 @@
         <q-route-tab
           name="articles1"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'Browse Cards' : ''"
+          :label= "($q.screen.gt.md) ? 'Browse Cards' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -80,7 +80,7 @@
         <q-tab
           name="reviews"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'Reviews' : ''"
+          :label= "($q.screen.gt.md) ? 'Reviews' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -90,7 +90,7 @@
         <q-route-tab
           name="prices"
           class="text-white"
-          :label= "($q.screen.gt.md) ? 'Prices' : ''"
+          :label= "($q.screen.gt.md) ? 'Prices' : undefined"
           style="font-family: 'Montserrat', cursive;
   font-color:#FFFFFF;
   font-weight:bold; "
@@ -112,7 +112,7 @@
       >
         <q-tab
           :name="Tab.name"
-          :label="($q.screen.gt.md) ? Tab.label : ''"
+          :label="($q.screen.gt.md) ? Tab.label : undefined"
           :style="qtabStyle"
           :icon="Tab.icon"
           @click="goTo(Tab.path, Tab.name)"
@@ -317,7 +317,7 @@
       >
         <q-route-tab
           name="New Invitation"
-          :label="($q.screen.width > 1032) ? 'New Invitation' : ''"
+          :label="($q.screen.width > 1032) ? 'New Invitation' : undefined"
           :style="qtabStyle"
           icon="create_new_folder"
           to="/createInvitation"
@@ -325,35 +325,35 @@
         />
         <q-route-tab
           name="My Events"
-          :label="($q.screen.width > 1032) ? 'My Events' : ''"
+          :label="($q.screen.width > 1032) ? 'My Events' : undefined"
           :style="qtabStyle"
           icon="folder_shared"
           to="/events"
         />
         <q-route-tab
           name="My Invites"
-          :label="($q.screen.width > 1032) ? 'My Invites' : ''"
+          :label="($q.screen.width > 1032) ? 'My Invites' : undefined"
           :style="qtabStyle"
           icon="folder_shared"
           to="/invites"
         />
         <q-route-tab
           name="My Contacts"
-          :label="($q.screen.width > 1032) ? 'My Contacts' : ''"
+          :label="($q.screen.width > 1032) ? 'My Contacts' : undefined"
           :style="qtabStyle"
           icon="group"
           to="/addContacts"
         />
         <q-route-tab
           name="My Profile"
-          :label="($q.screen.width > 1032) ? 'My Profile' : ''"
+          :label="($q.screen.width > 1032) ? 'My Profile' : undefined"
           :style="qtabStyle"
           icon="person"
           to="/myProfile"
         />
         <q-tab
           name="logout"
-          :label="($q.screen.width > 1032) ? 'Logout' : ''"
+          :label="($q.screen.width > 1032) ? 'Logout' : undefined"
           :style="qtabStyle"
           icon="person_add"
           @click="onLogoutClick"
@@ -503,7 +503,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>New Invitation</q-item-label>
-                <q-item-label caption>Create a new Invitation</q-item-label>
+                <q-item-label caption>Create a New Invitation</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -516,7 +516,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Events</q-item-label>
-                <q-item-label caption>Show my events</q-item-label>
+                <q-item-label caption>Show my Events</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -529,7 +529,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Invites</q-item-label>
-                <q-item-label caption>Show my invites</q-item-label>
+                <q-item-label caption>Show my Invites</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -542,7 +542,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Contacts</q-item-label>
-                <q-item-label caption>Show my contacts</q-item-label>
+                <q-item-label caption>Show my Contacts</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -555,7 +555,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>My Profile</q-item-label>
-                <q-item-label caption>Show my profile</q-item-label>
+                <q-item-label caption>Show my Profile</q-item-label>
               </q-item-section>
             </q-item>
             <q-item
@@ -601,6 +601,7 @@ export default {
       hClass: '',
       hScreenHeight: 200,
       lStyle: 'color:white',
+      weClass: 'text-white',
       qmenuColor: '',
       qbtnColor: '',
       qtabStyle: 'font-family: \'Montserrat\', cursive;  font-color:#FFFFFF;  font-weight:bolder; color:white',

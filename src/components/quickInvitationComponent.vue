@@ -61,8 +61,7 @@
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="eventdate" @input="() => $refs.qDateProxy.hide()"
-                            :options="optionsFn" mask="DD/MM/YYYY"/>
+                    <q-date v-model="eventdate" :options="optionsFn" mask="DD/MM/YYYY"/>
                   </q-popup-proxy>
                 </q-icon>
               </template>
@@ -75,16 +74,15 @@
           />
             </div>
             <div v-show="first" class="row">
-            <q-input style="width: 80%"
-             v-model="eventtime"   mask="time" stack-label label="Event Start Time">
+            <q-input style="width: 80%" v-model="eventtime" mask="time"
+             :suffix="timezone" stack-label label="Event Start Time">
               <template v-slot:append>
                 <q-icon name="schedule" class="cursor-pointer">
-                  <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
-                    <q-time v-model="eventtime" @input="() => $refs.qTimeProxy.hide()"
-                            />
+                  <q-popup-proxy ref="qTimeProxyS" transition-show="scale" transition-hide="scale">
+                    <q-time v-model="eventtime" />
                     <q-tooltip content-class="bg-primary"
                                content-style="font-size: 16px" :offset="[10, 10]">
-                      Add Time
+                      Add Event Time
                     </q-tooltip>
                   </q-popup-proxy>
                 </q-icon>
@@ -98,17 +96,32 @@
                         size="50px"
               />
             </div>
+            <!-- <div v-show="first&&second" class="row">
+            <q-input style="width: 80%;" class="q-pb-none"
+             v-model="eventenddate"     stack-label label="Event End Date"
+                     :rules="[val => !!val || 'Event Date is required']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                    <q-date v-model="eventenddate" @input="() => $refs.qDateProxy.hide()"
+                            :options="optionsFn" mask="DD/MM/YYYY"/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+              <div style="width: 4%;"/>
+            </div> -->
           <div v-show="first&&second" class="row">
-            <q-input style="width: 80%"
-                     v-model="eventendtime"   mask="time" stack-label label="Event End Time">
+            <q-input style="width: 80%" v-model="eventendtime" mask="time"
+             :suffix="timezone" stack-label label="Event End Time" no-error-icon
+             :rules="[val => !second || validTime(val) || 'Invalid Event end time']" >
               <template v-slot:append>
                 <q-icon name="query_builder" class="cursor-pointer">
-                  <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
-                    <q-time v-model="eventendtime" @input="() => $refs.qTimeProxy.hide()"
-                    />
+                  <q-popup-proxy ref="qTimeProxyE" transition-show="scale" transition-hide="scale">
+                    <q-time v-model="eventendtime" />
                     <q-tooltip content-class="bg-primary"
                                content-style="font-size: 16px" :offset="[10, 10]">
-                      Add Time
+                      Add Event End Time
                     </q-tooltip>
                   </q-popup-proxy>
                 </q-icon>
@@ -120,12 +133,12 @@
             <div style="width: 84%;">
             <q-file
               :disable="card"
-
+              max-file-size="4194304"
               v-model="file"
               label="Upload Invitation"
               style="padding-right:15px"
               lazy-rules
-              :rules="[val => val || 'Please upload your invitation']">
+              :rules="[val => val || 'Please upload your invitation of size below 4 MB']">
               <template v-slot:append>
                 <q-icon name="attach_file" @click.stop/>
               </template>
@@ -230,7 +243,7 @@
         </q-stepper-navigation>
       </q-tab-panel>
 
-      <q-tab-panel :name="4" class="q-pa-lg">
+      <q-tab-panel :name="4" v-if="step === 4" class="q-pa-lg">
       <div class="col-12 q-px-md q-py-sm q-pb-lg row justify-center"
        :class="$q.screen.xs ? 'q-gutter-sm' : ''">
         <q-expansion-item
@@ -403,6 +416,7 @@ export default {
       eventtitle: '',
       eventdate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
       eventtime: '00:00',
+      eventenddate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
       eventendtime: '00:00',
       eventType: '',
       selection: ['teal'],
@@ -467,6 +481,7 @@ export default {
       total: 0,
       errorMessageProtein: '',
       errorProtein: '',
+      timezone: new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1].split(/[a-z\s]+/).join(''),
     };
   },
   methods: {
@@ -531,6 +546,7 @@ export default {
         eventdate: this.eventdate,
         eventtime: this.eventtime,
         eventendtime: this.eventendtime,
+        timezone: this.timezone,
         eventType: this.eventType,
         hostname: this.hostname,
         eventmessage: this.eventmessage,
@@ -574,9 +590,9 @@ export default {
           this.event.hostname = this.hostname;
           if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
 
+          Loading.hide();
           if (this.eventId) this.loadEvent();
 
-          Loading.hide();
           if (response1.data.data.mobile === null) {
             this.$router.push('/myProfile');
             this.$q.notify({
@@ -614,25 +630,18 @@ export default {
         .then((response) => {
           const event = response.data.data;
           if (event.attachmentlink !== null) {
-            Loading.show({
-              spinner: QSpinnerBars,
-              spinnerColor: 'primary',
-              thickness: '3',
-            });
             axios
               .get(event.attachmentlink, { responseType: 'blob' })
               .then((response1) => {
                 this.file = new File([response1.data], response1.headers['content-disposition'].split('"')[1],
                   { type: response1.headers['content-type'] });
                 console.log(this.file);
-                Loading.hide();
               })
               .catch((e) => {
                 if (e.message === 'Request failed with status code 401') {
                   this.$q.localStorage.remove('login-token');
                   this.$router.push('/login');
                 }
-                Loading.hide();
               });
           }
 
@@ -642,12 +651,13 @@ export default {
             eventtime: date.formatDate(event.startdate, 'HH:mm'),
             eventendtime: date.formatDate(event.enddate, 'HH:mm'),
             eventType: this.options[event.eventtypeid - 1],
+            timezone: event.timezone ? event.timezone : this.timezone,
             hostname: event.hostedby,
             eventmessage: event.eventmessage,
             first: false,
             second: false,
           };
-          this.event.first = this.event.eventtime !== '00:00';
+          this.event.first = event.eventtimeadded;
           this.event.second = this.event.eventtime !== this.event.eventendtime;
           this.onReset();
 
@@ -682,6 +692,7 @@ export default {
           this.selected = data.map((a) => a.eventMembers);
           this.selected.forEach((em) => { em.readonly = true; });
           Loading.hide();
+          if (this.$route.query.step === '2') this.onSubmit();
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
@@ -699,6 +710,7 @@ export default {
         });
     },
     onSubmit() {
+      console.log('Submited');
       if (this.eventType === '') {
         this.$q.notify({
           color: 'red-5',
@@ -726,6 +738,7 @@ export default {
       this.eventdate = this.event.eventdate;
       this.eventtime = this.event.eventtime;
       this.eventendtime = this.event.eventendtime;
+      this.timezone = this.event.timezone;
       if (!this.card && !this.eventId) this.file = null;
       this.eventmessage = this.event.eventmessage;
       this.first = this.event.first;
@@ -821,7 +834,7 @@ export default {
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
         hostedby: this.hostname,
-        timezone: new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2],
+        timezone: this.timezone,
         eventtimeadded: this.first,
       };
 
@@ -893,7 +906,9 @@ export default {
         enddate: new Date(`${startDate}T${endTime}:00`),
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
+        timezone: this.timezone,
         hostedby: this.hostname,
+        eventtimeadded: this.first,
       };
 
       const eventMemberIdList = this.selected.filter((e) => !e.readonly)
@@ -947,6 +962,14 @@ export default {
     toggeGPS() {
 
     },
+    validTime(val) {
+      const sd = this.eventtime.split(':');
+      const ed = val.split(':');
+
+      if (sd[0] < ed[0]) return true;
+      if (sd[0] === ed[0] && sd[1] <= ed[1]) return true;
+      return false;
+    },
   },
   mounted() {
     const { id, file, data } = this.$route.params;
@@ -959,6 +982,7 @@ export default {
     if (this.$route.params.eventType) this.eventType = this.$route.params.eventType;
 
     this.loadData();
+    console.log('TimeZone :', this.timezone);
   },
 };
 </script>

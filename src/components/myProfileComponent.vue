@@ -54,7 +54,7 @@
               name="tz"
 
               lazy-rules='ondemand'
-              :rules="[ val=> val !== null && val !== '' || 'Please enter your Phone']"
+              :rules="[ val=> val !== null && val !== '' || 'Please enter your Timezone']"
             />
             <div class="q-pt-md">
               <q-btn label="Save" type="submit" color="primary"/>
