@@ -14,10 +14,13 @@
     <div class="col-xs-12 col-sm-4" v-if="event.startdate !== null">
       <div class="text-subtitle1 text-center">Date</div>
       <div class="text-h6 text-center">
-        Start: {{ format(event.startdate, 'ddd, MMM DD YYYY hh:mm A')+' '+timezone }}
+        {{ dates[0] }}
       </div>
       <div class="text-h6 text-center">
-        Start: {{ format(event.enddate, 'ddd, MMM DD YYYY hh:mm A')+' '+timezone }}
+        {{ dates[1] }}
+      </div>
+      <div class="text-h6 text-center">
+        {{ dates[2] }}
       </div>
     </div>
     <div class="col-xs-12 col-sm-4" v-if="event.addresses !== null">
@@ -199,6 +202,7 @@ export default {
       ],
       format: date.formatDate,
       timezone: new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1].split(/[a-z\s]+/).join(''),
+      dates: ['', '', ''],
     };
   },
   mounted() {
@@ -216,6 +220,7 @@ export default {
       .then((response) => {
         this.event = response.data.data;
         this.file = this.event.attachmentlink;
+        this.createDates();
         Loading.hide();
       })
       .catch((e) => {
@@ -235,6 +240,22 @@ export default {
       });
   },
   methods: {
+    createDates() {
+      const start = this.event.startdate;
+      const end = this.event.enddate;
+      if (!this.event.eventtimeadded) {
+        this.dates[0] = this.format(start, 'ddd, MMM DD YYYY');
+      } else if (start === end) {
+        this.dates[0] = this.format(start, 'ddd, MMM DD YYYY hh:mm A ') + this.timezone;
+      } else if (this.format(start, 'ddd, MMM DD YYYY') === this.format(end, 'ddd, MMM DD YYYY')) {
+        this.dates[0] = this.format(start, 'ddd, MMM DD YYYY');
+        this.dates[1] = `Start: ${this.format(start, 'hh:mm A ')}${this.timezone}`;
+        this.dates[2] = `End: ${this.format(end, 'hh:mm A ')}${this.timezone}`;
+      } else {
+        this.dates[0] = `Start: ${this.format(start, 'ddd, MMM DD YYYY hh:mm A ')}${this.timezone}`;
+        this.dates[1] = `End: ${this.format(end, 'ddd, MMM DD YYYY hh:mm A ')}${this.timezone}`;
+      }
+    },
     getAddress(event) {
       const address = event.addresses;
       return `${address.eventaddress}, ${address.eventcity}, ${address.eventstate}, ${address.eventcountry} - ${address.eventzip}`;

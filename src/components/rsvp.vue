@@ -14,10 +14,13 @@
     <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.startdate">
       <div class="text-subtitle1 text-center">Date</div>
       <div class="text-h6 text-center">
-        Start: {{ format(invite.eventDetails.startdate, 'ddd, MMM DD YYYY hh:mm A')+' '+timezone }}
+        {{ dates[0] }}
       </div>
       <div class="text-h6 text-center">
-        End: {{ format(invite.eventDetails.startdate, 'ddd, MMM DD YYYY hh:mm A')+' '+timezone }}
+        {{ dates[1] }}
+      </div>
+      <div class="text-h6 text-center">
+        {{ dates[2] }}
       </div>
     </div>
     <div class="col-xs-12 col-sm-4" v-if="invite.eventDetails.addresses">
@@ -166,6 +169,7 @@ export default {
       ],
       format: date.formatDate,
       timezone: new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1].split(/[a-z\s]+/).join(''),
+      dates: ['', '', ''],
     };
   },
   created() {
@@ -187,6 +191,7 @@ export default {
       this.auth ? { params: { auth: this.auth } } : null)
       .then((response) => {
         this.invite = response.data.data;
+        this.createDates();
         if (this.invite.status.eventstatusid >= 6) {
           this.status = Number(this.$route.query.status) || 5;
           axios.put(`/api/userEvents/invites/${this.inviteId}`,
@@ -251,6 +256,22 @@ export default {
       });
   },
   methods: {
+    createDates() {
+      const start = this.invite.eventDetails.startdate;
+      const end = this.invite.eventDetails.enddate;
+      if (!this.invite.eventDetails.eventtimeadded) {
+        this.dates[0] = this.format(start, 'ddd, MMM DD YYYY');
+      } else if (start === end) {
+        this.dates[0] = this.format(start, 'ddd, MMM DD YYYY hh:mm A ') + this.timezone;
+      } else if (this.format(start, 'ddd, MMM DD YYYY') === this.format(end, 'ddd, MMM DD YYYY')) {
+        this.dates[0] = this.format(start, 'ddd, MMM DD YYYY');
+        this.dates[1] = `Start: ${this.format(start, 'hh:mm A ')}${this.timezone}`;
+        this.dates[2] = `End: ${this.format(end, 'hh:mm A ')}${this.timezone}`;
+      } else {
+        this.dates[0] = `Start: ${this.format(start, 'ddd, MMM DD YYYY hh:mm A ')}${this.timezone}`;
+        this.dates[1] = `End: ${this.format(end, 'ddd, MMM DD YYYY hh:mm A ')}${this.timezone}`;
+      }
+    },
     getAddress(invite) {
       const address = invite.eventDetails.addresses;
       return `${address.eventaddress}, ${address.eventcity}, ${address.eventstate}, ${address.eventcountry} - ${address.eventzip}`;
