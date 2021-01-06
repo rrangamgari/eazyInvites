@@ -14,10 +14,10 @@
     <div class="col-xs-12 col-sm-4" v-if="event.startdate !== null">
       <div class="text-subtitle1 text-center">Date</div>
       <div class="text-h6 text-center">
-        Start: {{ new Date(event.startdate).toUTCString() }}
+        Start: {{ format(event.startdate, 'ddd, MMM DD YYYY hh:mm A')+' '+timezone }}
       </div>
       <div class="text-h6 text-center">
-        End: {{ new Date(event.enddate).toUTCString() }}
+        Start: {{ format(event.enddate, 'ddd, MMM DD YYYY hh:mm A')+' '+timezone }}
       </div>
     </div>
     <div class="col-xs-12 col-sm-4" v-if="event.addresses !== null">
@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import { Loading, QSpinnerBars } from 'quasar';
+import { Loading, QSpinnerBars, date } from 'quasar';
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.BASE_URL;
@@ -197,6 +197,8 @@ export default {
         answer: [],
       },
       ],
+      format: date.formatDate,
+      timezone: new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1].split(/[a-z\s]+/).join(''),
     };
   },
   mounted() {
