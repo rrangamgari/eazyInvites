@@ -75,7 +75,7 @@
             </div>
             <div v-show="first" class="row">
             <q-input style="width: 80%" v-model="eventtime" mask="time"
-             :suffix="timezone" stack-label label="Event Start Time">
+             :hint="`Time is local to ${timezone}`" stack-label label="Event Start Time">
               <template v-slot:append>
                 <q-icon name="schedule" class="cursor-pointer">
                   <q-popup-proxy ref="qTimeProxyS" transition-show="scale" transition-hide="scale">
@@ -113,7 +113,7 @@
             </div> -->
           <div v-show="first&&second" class="row">
             <q-input style="width: 80%" v-model="eventendtime" mask="time"
-             :suffix="timezone" stack-label label="Event End Time" no-error-icon
+             :hint="`Time is local to ${timezone}`" stack-label label="Event End Time" no-error-icon
              :rules="[val => !second || validTime(val) || 'Invalid Event end time']" >
               <template v-slot:append>
                 <q-icon name="query_builder" class="cursor-pointer">
@@ -481,7 +481,7 @@ export default {
       total: 0,
       errorMessageProtein: '',
       errorProtein: '',
-      timezone: new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1].split(/[a-z\s]+/).join(''),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'IST',
     };
   },
   methods: {
