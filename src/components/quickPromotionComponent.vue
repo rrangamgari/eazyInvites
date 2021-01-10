@@ -95,7 +95,7 @@
                     :disable="card"
 
                     v-model="file"
-                    label="Upload Promotion"
+                    label="Upload Promotion Image"
                     lazy-rules>
                     <template v-slot:append>
                       <q-icon name="attach_file" />
@@ -115,6 +115,14 @@
                 autogrow
                 label="Custom Message"
                 name="eventmessage"
+              />
+              <q-toggle
+                checked-icon="check"
+                unchecked-icon="clear"
+                        label="Send Custom Message as Caption"
+                        v-model="caption"
+                        v-show="file"
+                        size="50px"
               />
               <q-stepper-navigation>
                 <q-btn
@@ -358,6 +366,7 @@ export default {
       card: false,
       first: false,
       second: false,
+      caption: false,
       url: null,
       step: 1,
       et: true,
@@ -371,7 +380,7 @@ export default {
       selected: [],
       hostname: '',
       item: '',
-      eventmessage: '\nDear {{Guest Name}},\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.',
+      eventmessage: '\nDear *{{Guest Name}}*,\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.',
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -500,6 +509,7 @@ export default {
         eventmessage: this.eventmessage,
         first: false,
         second: false,
+        caption: this.caption,
       };
 
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
@@ -671,7 +681,7 @@ export default {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.eventmessage = '\nDear {{Guest Name}},\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.';
+      this.eventmessage = '\nDear *{{Guest Name}}*,\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one Biryani and get another free \nDon\'t miss out.';
       if (this.et) this.eventtitle = `${this.hostname}'s Promotion`;
       // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
@@ -746,6 +756,7 @@ export default {
         enddate: new Date(`${startDate}T${endTime}:00`),
         attachmentlink: `${this.card ? this.fileId : null}`,
         eventallowkids: true,
+        resharable: this.caption,
         hostedby: this.hostname,
         item: this.item.trim() === '' ? 'Food Item' : this.item,
       };
