@@ -785,8 +785,8 @@ export default {
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
-            message: response.data.data,
-            position: 'center',
+            message: 'Promotion Created Successfully.',
+            position: 'top',
           });
 
           Loading.hide();
