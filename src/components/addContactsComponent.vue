@@ -328,6 +328,7 @@
               color="red"
               label=""
               unchecked-icon="clear"
+              disable
             />
           </q-td>
           <q-td v-if="!select" key="delete" :props="props">

@@ -741,20 +741,23 @@ export default {
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 
-      const from = `${this.eventdate}`.split('/');
-      const fromMonth = (from[1]);
-      const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
-      const startTime = `${this.first ? this.eventtime : '00:00'}`;
-      let endTime = `${this.first ? this.eventtime : '00:00'}`;
-      endTime = `${this.second ? this.eventendtime : endTime}`;
+      // const from = `${this.eventdate}`.split('/');
+      // const fromMonth = (from[1]);
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setDate(startDate.getDate() + 1);
+      console.log(startDate, endDate);
+      // const startTime = `${this.first ? this.eventtime : '00:00'}`;
+      // let endTime = `${this.first ? this.eventtime : '00:00'}`;
+      // endTime = `${this.second ? this.eventendtime : endTime}`;
 
       const eventDetails = {
         eventtypeid: null,
         eventtitle: this.eventtitle,
         eventmessage: this.eventmessage,
-        startdate: new Date(`${startDate}T${startTime}:00`),
-        enddate: new Date(`${startDate}T${endTime}:00`),
-        attachmentlink: `${this.card ? this.fileId : null}`,
+        startdate: startDate,
+        enddate: endDate,
+        attachmentlink: this.card ? this.fileId : null,
         eventallowkids: true,
         resharable: this.caption,
         hostedby: this.hostname,
@@ -814,20 +817,23 @@ export default {
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 
-      const from = `${this.eventdate}`.split('/');
-      const fromMonth = (from[1]);
-      const startDate = `${from[2]}-${fromMonth}-${from[0]}`;
-      const startTime = `${this.first ? this.eventtime : '00:00'}`;
-      let endTime = `${this.first ? this.eventtime : '00:00'}`;
-      endTime = `${this.second ? this.eventendtime : endTime}`;
+      // const from = `${this.eventdate}`.split('/');
+      // const fromMonth = (from[1]);
+      // const startDate = new Date();
+      // const endDate = new Date();
+      // endDate.setDate(startDate.getDate() + 1);
+      // console.log(startDate, endDate);
+      // const startTime = `${this.first ? this.eventtime : '00:00'}`;
+      // let endTime = `${this.first ? this.eventtime : '00:00'}`;
+      // endTime = `${this.second ? this.eventendtime : endTime}`;
 
       const eventDetails = {
         eventtypeid: null,
         eventtitle: this.eventtitle,
         eventmessage: this.eventmessage,
-        startdate: new Date(`${startDate}T${startTime}:00`),
-        enddate: new Date(`${startDate}T${endTime}:00`),
-        attachmentlink: `${this.card ? this.fileId : null}`,
+        // startdate: startDate,
+        // enddate: endDate,
+        attachmentlink: this.card ? this.fileId : null,
         eventallowkids: true,
         hostedby: this.hostname,
         item: this.item.trim() === '' ? 'Food Item' : this.item,
