@@ -82,6 +82,7 @@
       title="Contacts"
       :data="data.filter((e) => !e.readonly)"
       :columns="columns"
+      :loading="loading"
       color="primary"
       row-key="eventmemberidUI"
       icon-left="people"
@@ -100,6 +101,13 @@
       @update:selected="(newSelected) => $emit('update:selected', newSelected)"
       :style="`max-height: ${$q.screen.lt.sm ? 'none' : ($q.screen.height * 2 / 3)+'px'}`"
     >
+      <template v-slot:loading>
+        <q-inner-loading showing>
+          <template v-slot:default>
+            <q-spinner-bars color="primary" size="80px"/>
+          </template>
+        </q-inner-loading>
+      </template>
       <template v-slot:no-data="{ message }">
         <div class="full-width row flex-center">
           <span>{{ message }}</span>
@@ -203,6 +211,13 @@
                 size="2.5em"
               /> -->
           </q-th>
+          </q-th>
+          <q-th
+            key="consent"
+            :props="props"
+            class="text-white"
+            style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
+          >Unsubscribed
           </q-th>
           <q-th
             key="delete"
@@ -424,10 +439,15 @@
             </q-popup-edit>
           </div>
          </q-td>
-          <q-td v-if="!select" key="delete" :props="props">
-            <q-icon name="delete" size="2rem" color='primary' class=""
-                    style="cursor:pointer;"
-                    @click="deleteMe(props.row.eventmemberidUI)"/>
+          <q-td v-if="!select" key="consent" :props="props">
+            <q-toggle
+              v-model="props.row.consent"
+              checked-icon="check"
+              color="red"
+              label=""
+              unchecked-icon="clear"
+              disable
+            />
           </q-td>
           <q-td v-if="!select" key="delete" :props="props">
             <q-icon name="delete" size="2rem" color='primary' class=""
@@ -818,6 +838,7 @@ export default {
       email: null,
 
       prompt: true, // Delete Prompt
+      loading: false,
     };
   },
   created() {
@@ -911,11 +932,7 @@ export default {
       }
     },
     loadContacts() {
-      Loading.show({
-        spinner: QSpinnerBars,
-        spinnerColor: 'primary',
-        thickness: '3',
-      });
+      this.loading = true;
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
         'login-token',
       )}`;
@@ -934,12 +951,12 @@ export default {
             this.$emit('update:selected', []);
           }
 
-          Loading.hide();
+          this.loading = false;
           // this.data = this.data.concat(response.data.data);
         })
         .catch((e) => {
           //  this.errors.push(e);
-          Loading.hide();
+          this.loading = false;
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
             this.$router.push('/login');

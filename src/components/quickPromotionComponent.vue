@@ -31,7 +31,7 @@
               class="q-gutter-md q-pa-xs q-pr-md"
               style="width:450px"
             >
-              <q-input
+              <!-- <q-input
                 v-model="hostname"
                 type="text"
                 label="Host"
@@ -81,7 +81,7 @@
                   </template>
                 </q-input>
 
-              </div>
+              </div> -->
             <q-input
               v-model="eventtitle"
               type="text"
@@ -119,10 +119,11 @@
               <q-toggle
                 checked-icon="check"
                 unchecked-icon="clear"
-                        label="Send Custom Message as Caption"
-                        v-model="caption"
-                        v-show="file"
-                        size="50px"
+                label="Send Custom Message as Caption"
+                v-model="caption"
+                v-show="file"
+                size="50px"
+                dense
               />
               <q-stepper-navigation>
                 <q-btn
@@ -292,14 +293,14 @@
             >
               <q-card class="full-height">
                 <q-card-section class="q-pa-xs">
-                  <q-img :src="url" placeholder-src="~assets/logo/logo_final.png" />
+                  <q-img :src="url" placeholder-src="statics/WE_Invites_logo.png" />
                 </q-card-section>
               </q-card>
             </q-expansion-item>
             <div v-else class="col-6 q-pa-xs">
               <q-card class="full-height">
                 <q-card-section class="q-pa-xs full-height">
-                  <q-img :src="url" placeholder-src="~assets/logo/logo_final.png" />
+                  <q-img :src="url" placeholder-src="statics/WE_Invites_logo.png" />
                 </q-card-section>
               </q-card>
             </div>
@@ -380,7 +381,7 @@ export default {
       selected: [],
       hostname: '',
       item: '',
-      eventmessage: '\nDear *{{Guest Name}}*,\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.',
+      eventmessage: 'Dear *{{Guest Name}}*,\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one biryani and get another free \nDon\'t miss out.',
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -588,6 +589,9 @@ export default {
             eventmessage: event.eventmessage,
             first: false,
             second: false,
+            startdate: event.startdate,
+            enddate: event.enddate,
+            caption: event.resharable,
           };
           this.event.first = this.event.eventtime !== '00:00';
           this.event.second = this.event.eventtime !== this.event.eventendtime;
@@ -666,6 +670,7 @@ export default {
       this.second = this.event.second;
       this.hostname = this.event.hostname;
       this.item = this.event.item;
+      this.caption = this.event.caption;
     },
     firstnameValidation(val) {
       if (val === '') {
@@ -681,9 +686,9 @@ export default {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.eventmessage = '\nDear *{{Guest Name}}*,\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one Biryani and get another free \nDon\'t miss out.';
+      this.eventmessage = 'Dear *{{Guest Name}}*,\n\nLast Chance for BOGO or 30% off on the purchase or $30 or more, Buy one Biryani and get another free \nDon\'t miss out.';
       if (this.et) this.eventtitle = `${this.hostname}'s Promotion`;
-      // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
+      // this.eventmessage = `Dear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
       // \nIf you are interested to attend please reply 'yes' and we will notify him.\n`;
     },
@@ -831,12 +836,13 @@ export default {
         eventtypeid: null,
         eventtitle: this.eventtitle,
         eventmessage: this.eventmessage,
-        // startdate: startDate,
-        // enddate: endDate,
+        startdate: this.event.startdate,
+        enddate: this.event.enddate,
         attachmentlink: this.card ? this.fileId : null,
         eventallowkids: true,
         hostedby: this.hostname,
         item: this.item.trim() === '' ? 'Food Item' : this.item,
+        resharable: this.caption,
       };
 
       const eventMemberIdList = this.selected.filter((e) => !e.readonly)

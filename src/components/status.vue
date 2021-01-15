@@ -39,7 +39,7 @@
             </q-card-section>
           </q-card-section>
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
-            <q-img :src="file !== null ? file : require('../assets/logo/Easy_Invites.png')"
+            <q-img :src="file !== null ? file : 'statics/WE_Invites_logo.png'"
              alt="Invitation" contain :style="`max-height: ${$q.screen.height * 2 / 3}px;`"/>
           </q-card-section>
         </q-card>
