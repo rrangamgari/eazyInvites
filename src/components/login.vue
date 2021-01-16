@@ -63,7 +63,7 @@ export default {
     };
   },
   mounted() {
-    if (this.$q.localStorage.getItem('login-token') !== null) this.$router.push('/promotions');
+    if (this.$q.localStorage.getItem('login-token') !== null) this.$router.push('/currentOrders');
 
     axios.defaults.headers.Authorization = '';
   },

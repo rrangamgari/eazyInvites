@@ -1,5 +1,15 @@
 <template>
   <div class="row">
+    <div class="full-width justify-end row items-center q-pt-lg q-px-md">
+      <q-toggle
+        :value="accept"
+        @input="onToggle"
+        color="green"
+        checked-icon="check"
+        unchecked-icon="clear"
+      />
+      <div class="text-white">Accept Orders</div>
+    </div>
     <div class="q-pa-md" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
       <q-table
         title="Orders"
@@ -181,6 +191,7 @@ export default {
       uploadContactsModel: '',
       tableloading: false,
       currentOrders: 'current',
+      accept: true,
       headerFunc: [
         {
           name: 'authorization',
@@ -246,8 +257,6 @@ export default {
       phone: null,
       phone2: null,
       email: null,
-
-      prompt: true, // Delete Prompt
     };
   },
   created() {
@@ -261,6 +270,7 @@ export default {
         this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
       });
     if (!this.$ws.connected) this.loadOrders();
+    this.onToggle(true);
   },
   computed: {
     cWidth() {
@@ -379,6 +389,46 @@ export default {
           console.log('Refresh');
         });
       }
+    },
+    onToggle(val) {
+      this.accept = val;
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.put(`/api/orders/acceptOrders/${val}`)
+        .then((response) => {
+          if (response.data.data) {
+            this.accept = val;
+            this.$q.notify({
+              color: 'green-5',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: response.data.message,
+              position: 'top',
+            });
+          } else {
+            this.accept = !val;
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: response.data.message,
+              position: 'top',
+            });
+          }
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+        });
+      console.log('Accept Orders :', this.accept);
     },
     loadOrders() {
       return new Promise((resolve) => {

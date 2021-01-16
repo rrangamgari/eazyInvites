@@ -655,7 +655,7 @@ export default {
         login,
         username,
       }).onOk(() => {
-        this.$router.push('/promotions');
+        this.$router.push('/currentOrders');
       }).onCancel(() => {
       });
       Loading.hide();
@@ -688,7 +688,7 @@ export default {
           )}`;
           Loading.hide();
           this.$nextTick(() => {
-            this.$router.push('/promotions');
+            this.$router.push('/currentOrders');
           });
         })
         .catch((e) => {
