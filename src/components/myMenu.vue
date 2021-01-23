@@ -2,13 +2,14 @@
   <div class="row">
     <div class="q-pa-md" :class="`${cWidth < 1150 ? 'col-12' : 'col'}`">
       <q-table
-        title="Contacts"
+        title="Menu Items"
         :columns="columns"
+        :data="data"
         color="primary"
         row-key="eventmemberidUI"
         icon-left="people"
-        no-data-label="Add Contacts to view them here"
-        no-results-label="No matching Contacts found"
+        no-data-label="Add Menu Items to view them here"
+        no-results-label="No matching Menu Items found"
         :selected-rows-label="getSelectedString"
         hide-pagination
         :hide-selected-banner="!select"
@@ -16,7 +17,6 @@
         :rows-per-page-options="[0]"
         :pagination.sync="pagination"
         :table-header-style="{ backgroundColor: '#05944F', color: '#FFFFFF' }"
-        :visible-columns="select ? visible : visible.concat('consent','delete')"
         :selection="select ? 'multiple' : 'none'"
         :selected="selected"
         @update:selected="(newSelected) => $emit('update:selected', newSelected)"
@@ -56,61 +56,6 @@
             </q-input>
           </div>
         </template>
-        <template v-if="$q.screen.lt.sm" v-slot:header="props">
-          <!-- Mobile View Table Header -->
-          <q-tr :props="props" class="bg-primary">
-            <q-th auto-width v-if="select" style="padding:7px;">
-              <q-checkbox dense :val="props.data" v-model="props.selected"/>
-            </q-th>
-            <q-th class="row" style="padding:0px;">
-              <q-th
-                key="name"
-                :props="props"
-                class="text-white"
-                style="font-size:14px; font-weight:bold;
-                border-bottom-width:0px; padding-right:3px;"
-              >Name
-              </q-th>
-              <q-th
-                key="type"
-                :props="props"
-                class="text-white"
-                style="font-size:14px; font-weight:bold; border-bottom-width:0px;
-               padding-left:3px; padding-right:10px;"
-              >Type
-              </q-th>
-              <q-th
-                key="price"
-                :props="props"
-                class="text-white col-12"
-                style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
-              >Price
-                <q-icon
-                  name="contact_phone"
-                  size="2.5em"
-                />
-              </q-th>
-              <q-th
-                key="stock"
-                :props="props"
-                class="text-white col-12"
-                style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
-              >Stock
-              </q-th>
-            </q-th>
-            <q-th
-              key="delete"
-              :props="props"
-              class="text-white"
-              style="font-size:14px; font-weight:bold; border-bottom-width:0px;"
-            >Delete
-              <!-- <q-icon
-                name="delete"
-                size="2.5em"
-              /> -->
-            </q-th>
-          </q-tr>
-        </template>
         <template v-slot:header-cell="props">
           <q-th :props="props">
             <b style="font-size:14px;">{{ props.col.label }}&nbsp;</b>
@@ -124,203 +69,51 @@
               size="2.5em"
               v-if="props.col.name == 'stock'"
             />
-            <!-- <q-icon
-              name="contact_phone"
-              size="2.5em"
-              v-show="props.col.name == 'secondaryPhone'"
-            /> -->
             <q-icon
+              name="edit"
+              size="2.5em"
+              v-if="props.col.name == 'edit'"
+            /><q-icon
               name="delete"
               size="2.5em"
               v-if="props.col.name == 'delete'"
             />
           </q-th>
         </template>
-        <template v-if="$q.screen.gt.xs" v-slot:body="props">
-          <q-tr :props="props" v-if="!props.row.consent||!select">
-            <q-td auto-width v-if="select">
-              <q-checkbox :val="props.row" v-model="props.selected"/>
-            </q-td>
-            <q-td key="name" :props="props">
-              {{ props.row.name }}
-              <q-popup-edit
-                v-model="props.row.name"
-                title="Edit Name"
-                buttons
-                :validate="nameValidation"
-                @hide="nameValidation"
-                @save="(v, iv) => save(v, iv, props.row, 'name')"
-              >
-                <q-input
-                  v-model="props.row.name"
-                  dense
-                  autofocus
-                  counter
-                  :error="errorProtein"
-                  :error-message="errorMessageProtein"
-                />
-              </q-popup-edit>
-            </q-td>
-            <q-td key="type" :props="props">
-              {{ props.row.type }}
-              <q-popup-edit
-                v-model="props.row.type"
-                title="Edit Type"
-                buttons
-                @save="(v, iv) => save(v, iv, props.row, 'type')"
-              >
-                <q-input v-model="props.row.type" dense autofocus counter/>
-              </q-popup-edit>
-            </q-td>
-            <q-td key="stock" :props="props">
-              {{ props.row.stock }}
-              <q-popup-edit
-                v-model="props.row.stock"
-                title="Edit Phone"
-                buttons
-                @save="(v, iv) => save(v, iv, props.row, 'stock')"
-              >
-                <q-input
-                  v-model="props.row.stock"
-                  dense
-                  autofocus
-                  counter
-                />
-              </q-popup-edit>
-            </q-td>
-            <q-td key="secondaryPhone" :props="props">
-              {{ props.row.secondaryPhone }}
-              <q-popup-edit
-                v-model="props.row.secondaryPhone"
-                title="Edit phone"
-                buttons
-                @save="(v, iv) => save(v, iv, props.row, props.key)"
-              >
-                <q-input
-                  v-model="props.row.secondaryPhone"
-                  dense
-                  autofocus
-                  counter
-                />
-              </q-popup-edit>
-            </q-td>
-            <q-td key="available" :props="props">
-              {{ props.row.available }}
-              <q-popup-edit
-                v-model="props.row.available"
-                title="Edit available"
-                buttons
-                @save="(v, iv) => save(v, iv, props.row, 'available')"
-              >
-                <q-input v-model="props.row.available" dense autofocus counter/>
-              </q-popup-edit>
-            </q-td>
-            <q-td v-if="!select" key="consent" :props="props">
-              <q-toggle
-                v-model="props.row.consent"
-                checked-icon="check"
-                color="red"
-                label=""
-                unchecked-icon="clear"
-                disable
-              />
-            </q-td>
-            <q-td v-if="!select" key="delete" :props="props">
-              <q-icon name="delete" size="2rem" color='primary' class=""
-                      style="cursor:pointer;"
-                      @click="deleteMe(props.row.eventmemberidUI)"/>
-            </q-td>
-          </q-tr>
-        </template>
-        <template v-else v-slot:body="props">
+        <template v-slot:body="props">
           <q-tr :props="props">
             <q-td auto-width v-if="select" style="height:auto;">
               <q-checkbox :val="props.row" v-model="props.selected"/>
             </q-td>
-            <q-td class="row" style="padding:0px; height:auto;">
-              <div key="firstname" :props="props" style="border-bottom-width:0px; height:auto;
-           padding:7px 16px; padding-right:3px;">
-                {{ props.row.firstname }}
-                <q-popup-edit
-                  v-model="props.row.firstname"
-                  title="Edit First Name"
-                  buttons
-                  :validate="firstnameValidation"
-                  @hide="firstnameValidation"
-                  @save="(v, iv) => save(v, iv, props.row, 'firstname')"
-                >
-                  <q-input
-                    v-model="props.row.firstname"
-                    dense
-                    autofocus
-                    counter
-                    :error="errorProtein"
-                    :error-message="errorMessageProtein"
-                  />
-                </q-popup-edit>
-              </div>
-              <div key="type" :props="props" style="border-bottom-width:0px; height:auto;
-           padding:7px 16px; padding-left:3px; padding-right:10px;">
-                {{ props.row.type }}
-                <q-popup-edit
-                  v-model="props.row.type"
-                  title="Edit Last Name"
-                  buttons
-                  @save="(v, iv) => save(v, iv, props.row, 'type')"
-                >
-                  <q-input v-model="props.row.type" dense autofocus counter/>
-                </q-popup-edit>
-              </div>
-              <div key="stock" :props="props" class="col-12"
-                   style="border-bottom-width:0px; height:auto; padding:7px 16px;">
+              <q-td key="itemname" :props="props" >
+                {{ props.row.itemname }}
+              </q-td>
+              <q-td key="itemtype" :props="props" >
+                {{ props.row.itemtype }}
+              </q-td>
+              <q-td key="price" :props="props" >
+                {{ props.row.price }}
+
+              </q-td>
+              <q-td key="stock" :props="props"
+                   >
                 {{ props.row.stock }}
-                <q-popup-edit
-                  v-model="props.row.stock"
-                  title="Edit Phone"
-                  buttons
-                  @save="(v, iv) => save(v, iv, props.row, 'stock')"
-                >
-                  <q-input
-                    v-model="props.row.stock"
-                    dense
-                    autofocus
-                    counter
-                  />
-                </q-popup-edit>
-              </div>
-              <div key="available" :props="props" class="col-12"
-                   style="border-bottom-width:0px; height:auto; padding:7px 16px;">
-                {{ props.row.available }}
-                <q-popup-edit
-                  v-model="props.row.available"
-                  title="Edit available"
-                  buttons
-                  @save="(v, iv) => save(v, iv, props.row, 'available')"
-                >
-                  <q-input v-model="props.row.available" dense autofocus counter/>
-                </q-popup-edit>
-              </div>
+
+              </q-td>
+              <q-td key="status" :props="props"
+                   >
+                {{ props.row.status }}
+              </q-td>
+            <q-td v-if="!select" key="edit" :props="props">
+              <q-icon name="edit" size="2rem" color='primary' class=""
+                      style="cursor:pointer;"
+                      @click="editMe(props.row.itemdetailsid)"/>
             </q-td>
             <q-td v-if="!select" key="delete" :props="props">
-              <q-icon name="delete" size="2rem" color='primary' class=""
+              <q-icon name="delete" size="2rem" color='negative' class=""
                       style="cursor:pointer;"
-                      @click="deleteMe(props.row.eventmemberidUI)"/>
+                      @click="deleteMe(props.row.itemdetailsid)"/>
             </q-td>
-            <q-td v-if="!select" key="delete" :props="props">
-              <q-icon name="delete" size="2rem" color='primary' class=""
-                      style="cursor:pointer;"
-                      @click="deleteMe(props.row.eventmemberidUI)"/>
-            </q-td>
-          </q-tr>
-        </template>
-        <template v-if="$q.screen.gt.xs" v-slot:bottom-row>
-          <q-tr v-if="select && edit">
-            <q-td colspan="100%">Contacts already Invited</q-td>
-          </q-tr>
-        </template>
-        <template v-else v-slot:bottom-row>
-          <q-tr v-if="select && edit">
-            <q-td colspan="100%">Contacts already Invited</q-td>
           </q-tr>
         </template>
       </q-table>
@@ -339,6 +132,8 @@
                 id="login"
                 class="q-gutter-md q-pa-xs q-pr-md"
                 style="min-width: 95%"
+                @submit="onFormSubmit"
+                @reset="onFormReset"
               >
                 <div class="row">
                   <div class="col-9">
@@ -437,7 +232,7 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 
 export default {
-  name: 'addContactsComponent',
+  name: 'addMenuComponent',
   components: {},
   model: {
     prop: 'selected',
@@ -456,11 +251,11 @@ export default {
   },
   data() {
     return {
-      addNewItemLayout: true,
+      addNewItemLayout: false,
       filter: '',
       errorMessageProtein: '',
       errorProtein: false,
-      uploadContactsModel: '',
+      uploadItemsModel: '',
       model: 'one',
       editor: '',
       prepTime: '',
@@ -478,31 +273,29 @@ export default {
           value:
               `Bearer ${this.$q.localStorage.getItem('login-token')}`,
         }],
-      visible: ['itemTitle', 'type', 'stock', 'available'],
+      visible: ['itemname', 'itemtype', 'price', 'stock', 'status'],
       columns: [
         {
-          name: 'itemTitle',
+          name: 'itemname',
           required: true,
           label: 'Name',
           align: 'left',
-          field: 'itemTitle',
+          field: 'itemname',
           sortable: true,
         },
         {
-          name: 'type',
+          name: 'itemtype',
           label: 'Type',
           align: 'left',
-          field: 'type',
+          field: 'itemtype',
           sortable: true,
         },
         {
           name: 'price',
           align: 'left',
           label: 'Price',
-          required: true,
           field: 'price',
           sortable: true,
-          format: '### ### ####',
           headerStyle: 'icon-right:archive',
         },
         {
@@ -511,13 +304,19 @@ export default {
           field: 'stock',
           align: 'left',
           sortable: true,
-          icon: 'contacts',
         },
         {
-          name: 'available',
-          label: 'In Stock',
-          field: 'available',
+          name: 'status',
+          label: 'Status',
+          field: 'status',
           align: 'center',
+          sortable: false,
+        },
+        {
+          name: 'edit',
+          label: 'Edit',
+          field: 'edit',
+          align: 'right',
           sortable: false,
         },
         {
@@ -531,7 +330,9 @@ export default {
       getSelectedString: (n) => `${n} Contact${n > 1 ? 's' : ''} selected`,
 
       pagination: { rowsPerPage: 0 },
-      data: this.contacts || [],
+      data: [{
+        itemname: 'vgdsxcvxz', itemtype: null, price: '33', saleprice: '33', stock: null, status: null, delete: null,
+      }],
       edit: false,
 
       itemTitle: null,
@@ -544,7 +345,7 @@ export default {
     };
   },
   created() {
-    this.loadContacts();
+    this.loadItems();
   },
   computed: {
     cWidth() {
@@ -604,7 +405,7 @@ export default {
       this.submitResult = submitResult;
     },
     onReset() {
-      this.uploadContactsModel = null;
+      this.uploadItemsModel = null;
     },
     exportTable() {
       // naive encoding to csv format
@@ -616,7 +417,7 @@ export default {
               typeof col.field === 'function'
                 ? col.field(row)
               // eslint-disable-next-line no-void
-                : row[col.field === void 0 ? col.itemTitle : col.field],
+                : row[col.field === void 0 ? col.itemname : col.field],
             ))
             .join(',')),
         )
@@ -633,7 +434,7 @@ export default {
         });
       }
     },
-    loadContacts() {
+    loadItems() {
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -643,16 +444,15 @@ export default {
         'login-token',
       )}`;
       axios
-        .get('/api/userEvents/userguestlist')
+        .get('/api/userItems/items')
         .then((response) => {
           this.data = response.data.data;
 
           Loading.hide();
-          // this.data = this.data.concat(response.data.data);
         })
         .catch((e) => {
           //  this.errors.push(e);
-          Loading.hide();
+          // Loading.hide();
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
@@ -699,7 +499,7 @@ export default {
               message: 'Successfully Deleted',
               position: 'top',
             });
-            this.loadContacts();
+            this.loadItems();
           } else {
             this.$q.notify({
               color: 'red-5',
@@ -745,12 +545,14 @@ export default {
         'login-token',
       )}`;
       axios
-        .post('/api/userItem/item', {
-          itemtitle: this.itemTitle,
+        .post('/api/userItems/item', {
+          itemname: this.itemTitle,
           saleprice: this.saleprice,
           price: this.price,
           stock: this.stock,
-          available: this.available,
+          status: this.available,
+          country: this.$q.localStorage.getItem('country-token'),
+          timeforpreperation: this.prepTime,
         })
         .then((response) => {
           // JSON responses are automatically parsed.
@@ -763,7 +565,7 @@ export default {
               message: 'Successfully Added',
               position: 'top',
             });
-            // this.loadContacts();
+            // this.loadItems();
             this.data.push(response.data.data);
             Loading.hide();
             this.$refs.addContact.reset();
@@ -839,30 +641,6 @@ export default {
           });
           eventMember[field] = initalVal;
         });
-    },
-    uploadOAuth2Contacts(client) {
-      window.addEventListener('storage', this.oauth2SuccessCheck);
-      axios.get(`/api/oauth2/contacts/${client.toLowerCase()}?host=https://www.wepromotes.com`)
-        .then((response) => {
-          Loading.hide();
-          window.open(response.data.data, `${client} Contacts`, `left=${Math.max(0, (window.screen.width / 2) - 250)},top=50,width=500,height=600,location=no`);
-        })
-        .catch((e) => {
-          Loading.hide();
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'error',
-            message: e.message,
-            position: 'top',
-          });
-        });
-    },
-    oauth2SuccessCheck(evt) {
-      if (evt && evt.key === 'oauth2-contacts' && this.$q.localStorage.getItem('oauth2-contacts')) {
-        this.$q.localStorage.remove('oauth2-contacts');
-        this.loadContacts();
-      }
     },
   },
   destroyed() {
