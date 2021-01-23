@@ -284,6 +284,14 @@
         >
         </q-route-tab>
         <q-route-tab
+          name="MyMenu"
+          :label="($q.screen.width > 965) ? 'My Menu' : undefined"
+          :style="qtabStyle"
+          icon="menu_book"
+          to="/myMenu"
+        >
+        </q-route-tab>
+        <q-route-tab
           name="My Customers"
           :label="($q.screen.width > 965) ? 'My Contacts' : undefined"
           :style="qtabStyle"

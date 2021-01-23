@@ -19,6 +19,7 @@ const routes = [
         component: () => import('components/status.vue'),
       },
       { path: 'currentOrders', name: 'currentOrders', component: () => import('components/currentOrders.vue') },
+      { path: 'myMenu', name: 'myMenu', component: () => import('components/myMenu.vue') },
       // {
       //   path: 'invites/:inviteId/:inviteAplhaId',
       //   name: 'invitesRsvp',
