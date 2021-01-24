@@ -73,7 +73,8 @@
               name="edit"
               size="2.5em"
               v-if="props.col.name == 'edit'"
-            /><q-icon
+            />
+            <q-icon
               name="delete"
               size="2.5em"
               v-if="props.col.name == 'delete'"
@@ -85,25 +86,31 @@
             <q-td auto-width v-if="select" style="height:auto;">
               <q-checkbox :val="props.row" v-model="props.selected"/>
             </q-td>
-              <q-td key="itemname" :props="props" >
-                {{ props.row.itemname }}
-              </q-td>
-              <q-td key="itemtype" :props="props" >
-                {{ props.row.itemtype }}
-              </q-td>
-              <q-td key="price" :props="props" >
-                {{ props.row.price }}
+            <q-td key="itemname" :props="props">
+              {{ props.row.itemname }}
+            </q-td>
+            <q-td key="itemtype" :props="props">
+              {{ props.row.itemtype }}
+            </q-td>
+            <q-td key="price" :props="props">
+              $ {{ parseFloat(props.row.price).toFixed(2) }}
 
-              </q-td>
-              <q-td key="stock" :props="props"
-                   >
-                {{ props.row.stock }}
+            </q-td>
+            <q-td key="stock" :props="props"
+                  v-if="props.row.stock===null">
+              N/A
 
-              </q-td>
-              <q-td key="status" :props="props"
-                   >
-                {{ props.row.status }}
-              </q-td>
+            </q-td>
+            <q-td key="stock" :props="props"
+                  v-else>
+              {{ props.row.stock }}
+
+            </q-td>
+
+            <q-td key="status" :props="props"
+            >
+              {{ props.row.status.label }}
+            </q-td>
             <q-td v-if="!select" key="edit" :props="props">
               <q-icon name="edit" size="2rem" color='primary' class=""
                       style="cursor:pointer;"
@@ -154,6 +161,8 @@
                           v-model="price"
                           label="Price"
                           lazy-rules
+                          mask="#.#"
+                          step="0.01"
                         />
                       </div>
                       <div class="col-5">
@@ -162,6 +171,8 @@
                           v-model="saleprice"
                           label="Sale Price"
                           lazy-rules
+                          mask="#.#"
+                          step="0.01"
                         />
                       </div>
                       <!--
@@ -173,22 +184,18 @@
                       </div>
                       <div class="col-10">
                         <q-btn-toggle
-                          v-model="model"
+                          v-model="orderVisibleModel"
                           push
                           glossy
                           toggle-color="primary"
-                          :options="[
-          {label: 'Visible', value: 'one'},
-          {label: 'Hidden', value: 'two'},
-          {label: 'Unavailable', value: 'three'}
-        ]"
+                          :options="orderVisibleOptions"
                           @click="toggleOption"
-                        />&nbsp;&nbsp;&nbsp;&nbsp; <b text-color="primary">{{optionData}}</b>
+                        />&nbsp;&nbsp;<b text-color="primary">{{optionData}}</b>
                       </div>
                       <div class="col-10">
                         <q-select label="How long does it take to prepare orders?"
                                   v-model="prepTime"
-                                  :options="options"></q-select>
+                                  :options="orderPrepOptions"></q-select>
                       </div>
                       <!--<div class="col-10">
                         <q-select label="How long does it take to prepare orders?"
@@ -256,16 +263,12 @@ export default {
       errorMessageProtein: '',
       errorProtein: false,
       uploadItemsModel: '',
-      model: 'one',
+      orderVisibleModel: '1',
+      orderVisibilityModel: null,
       editor: '',
       prepTime: '',
-      options: [
-        { value: 1, label: 'Available Immediately (No Prep Time)' },
-        { value: 2, label: '5 Minutes' },
-        { value: 3, label: '10 Minutes' },
-        { value: 4, label: '15 Minutes' },
-        { value: 5, label: '30 Minutes' },
-      ],
+      orderPrepOptions: null,
+      orderVisibleOptions: [],
       optionData: 'Your item is ready to sell online and will show up in navigation & search results.',
       headerFunc: [
         {
@@ -285,14 +288,14 @@ export default {
         },
         {
           name: 'itemtype',
-          label: 'Type',
+          label: 'Description',
           align: 'left',
           field: 'itemtype',
           sortable: true,
         },
         {
           name: 'price',
-          align: 'left',
+          align: 'right',
           label: 'Price',
           field: 'price',
           sortable: true,
@@ -302,7 +305,7 @@ export default {
           name: 'stock',
           label: 'Stock',
           field: 'stock',
-          align: 'left',
+          align: 'center',
           sortable: true,
         },
         {
@@ -397,11 +400,11 @@ export default {
       const submitResult = [evt];
 
       /* for (const [name, value] of formData.entries()) {
-              submitResult.push({
-                name,
-                value,
-              });
-            } */
+                  submitResult.push({
+                    name,
+                    value,
+                  });
+                } */
       this.submitResult = submitResult;
     },
     onReset() {
@@ -465,16 +468,48 @@ export default {
             position: 'top',
           });
         });
+      axios
+        .get('/api/userItems/itemsStatus')
+        .then((response) => {
+          this.orderVisibleOptions = response.data.data;
+          if (response.data.data !== null) {
+            this.orderVisibleModel = 1;
+          }
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+      axios
+        .get('/api/userItems/preperationTypes')
+        .then((response) => {
+          this.orderPrepOptions = response.data.data;
+          console.log(this.orderPrepOptions);
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
     },
     toggleOption() {
-      if (this.model === 'one') {
+      if (this.orderVisibleModel === 1) {
         this.optionData = 'Your item is ready to sell online and will show up in navigation & search results.';
+        this.orderVisibilityModel = {
+          value: this.orderVisibleModel,
+          label: this.orderVisibleOptions[0].label,
+        };
       }
-      if (this.model === 'two') {
-        this.optionData = 'Your item is available for purchase but only to those who have the link. Useful for exclusive items.';
+      if (this.orderVisibleModel === 2) {
+        this.optionData = 'Your item is available but will not show up in navigation & search results..';
+        this.orderVisibilityModel = {
+          value: this.orderVisibleModel,
+          label: this.orderVisibleOptions[1].label,
+        };
       }
-      if (this.model === 'three') {
-        this.optionData = 'Not ready to sell? Hide your item until it\'s ready to be published to your site.';
+      if (this.orderVisibleModel === 3) {
+        this.optionData = 'Your item will show up in navigation & search results but as Out of Stock.';
+        this.orderVisibilityModel = {
+          value: this.orderVisibleModel,
+          label: this.orderVisibleOptions[2].label,
+        };
       }
     },
     deleteMe(id) {
@@ -550,9 +585,10 @@ export default {
           saleprice: this.saleprice,
           price: this.price,
           stock: this.stock,
-          status: this.available,
+          status: this.orderVisibilityModel,
           country: this.$q.localStorage.getItem('country-token'),
           timeforpreperation: this.prepTime,
+          itemtype: this.editor,
         })
         .then((response) => {
           // JSON responses are automatically parsed.
