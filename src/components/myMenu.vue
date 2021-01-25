@@ -89,8 +89,24 @@
             <q-td key="itemname" :props="props">
               {{ props.row.itemname }}
             </q-td>
-            <q-td key="itemtype" :props="props">
-              {{ props.row.itemtype }}
+            <q-td key="itemtype" :props="props" v-if="props.row.itemtype !== null">
+              <div
+                v-html="props.row.itemtype.substring(0,150).concat('...')">
+              </div>
+              <q-tooltip
+                transition-show="scale"
+                transition-hide="scale"
+                v-html="props.row.itemtype"
+                max-width="20rem"
+                :content-style="{ color: '#FFFFFF' ,backgroundColor: '#05944F'}"
+              >
+                <div
+                  v-html="props.row.itemtype">
+                </div>
+              </q-tooltip>
+            </q-td>
+            <q-td key="itemtype" :props="props" v-else>
+              <div></div>
             </q-td>
             <q-td key="price" :props="props">
               $ {{ parseFloat(props.row.price).toFixed(2) }}
@@ -263,7 +279,7 @@ export default {
       errorMessageProtein: '',
       errorProtein: false,
       uploadItemsModel: '',
-      orderVisibleModel: '1',
+      orderVisibleModel: 1,
       orderVisibilityModel: null,
       editor: '',
       prepTime: '',
@@ -400,11 +416,11 @@ export default {
       const submitResult = [evt];
 
       /* for (const [name, value] of formData.entries()) {
-                  submitResult.push({
-                    name,
-                    value,
-                  });
-                } */
+                    submitResult.push({
+                      name,
+                      value,
+                    });
+                  } */
       this.submitResult = submitResult;
     },
     onReset() {
@@ -473,7 +489,10 @@ export default {
         .then((response) => {
           this.orderVisibleOptions = response.data.data;
           if (response.data.data !== null) {
-            this.orderVisibleModel = 1;
+            this.orderVisibilityModel = {
+              value: this.orderVisibleModel,
+              label: this.orderVisibleOptions[0].label,
+            };
           }
         })
         .catch((e) => {
@@ -522,7 +541,7 @@ export default {
         'login-token',
       )}`;
       axios
-        .delete(`/api/userEvents/userguest/${id}`)
+        .delete(`/api/userItems/item/${id}`)
         .then((response) => {
           // JSON responses are automatically parsed.
           if (response.data.data) {
