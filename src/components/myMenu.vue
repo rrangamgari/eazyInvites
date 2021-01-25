@@ -6,7 +6,7 @@
         :columns="columns"
         :data="data"
         color="primary"
-        row-key="eventmemberidUI"
+        row-key="itemdetailsid"
         icon-left="people"
         no-data-label="Add Menu Items to view them here"
         no-results-label="No matching Menu Items found"
@@ -40,7 +40,7 @@
           <q-btn
             color="primary"
             icon-right="publish"
-            label="Publish Meni"
+            label="Publish Menu"
             title="CSV or XLS file accepted"
             no-caps
             disabled="disabled"
@@ -89,20 +89,15 @@
             <q-td key="itemname" :props="props">
               {{ props.row.itemname }}
             </q-td>
-            <q-td key="itemtype" :props="props" v-if="props.row.itemtype !== null">
-              <div
-                v-html="props.row.itemtype.substring(0,150).concat('...')">
-              </div>
+            <q-td key="itemtype" auto-width :props="props" v-if="props.row.itemtype !== null">
+              <div v-html="props.row.itemtype.substring(0,50).concat('...')" />
               <q-tooltip
                 transition-show="scale"
                 transition-hide="scale"
-                v-html="props.row.itemtype"
                 max-width="20rem"
                 :content-style="{ color: '#FFFFFF' ,backgroundColor: '#05944F'}"
               >
-                <div
-                  v-html="props.row.itemtype">
-                </div>
+                <div v-html="props.row.itemtype" />
               </q-tooltip>
             </q-td>
             <q-td key="itemtype" :props="props" v-else>
@@ -130,7 +125,7 @@
             <q-td v-if="!select" key="edit" :props="props">
               <q-icon name="edit" size="2rem" color='primary' class=""
                       style="cursor:pointer;"
-                      @click="editMe(props.row.itemdetailsid)"/>
+                      @click="editMe(props.rowIndex)"/>
             </q-td>
             <q-td v-if="!select" key="delete" :props="props">
               <q-icon name="delete" size="2rem" color='negative' class=""
@@ -140,11 +135,11 @@
           </q-tr>
         </template>
       </q-table>
-      <q-dialog v-model="addNewItemLayout">
+      <q-dialog v-model="addNewItemLayout" @hide="onFormReset()">
         <q-layout container class="bg-white" style="max-height:95%;min-width: 95%">
           <q-header class="bg-primary">
             <q-toolbar>
-              <q-toolbar-title>Add Item</q-toolbar-title>
+              <q-toolbar-title>{{ !edit ? 'Add Item' : 'Edit Item' }}</q-toolbar-title>
 
               <q-btn flat v-close-popup round dense icon="close"/>
             </q-toolbar>
@@ -206,7 +201,8 @@
                           toggle-color="primary"
                           :options="orderVisibleOptions"
                           @click="toggleOption"
-                        />&nbsp;&nbsp;<b text-color="primary">{{optionData}}</b>
+                        />
+                        <div class="q-pa-xs"><b text-color="primary">{{optionData}}</b></div>
                       </div>
                       <div class="col-10">
                         <q-select label="How long does it take to prepare orders?"
@@ -353,7 +349,8 @@ export default {
         itemname: 'vgdsxcvxz', itemtype: null, price: '33', saleprice: '33', stock: null, status: null, delete: null,
       }],
       edit: false,
-
+      index: null,
+      itemdetailsid: null,
       itemTitle: null,
       type: null,
       stock: null,
@@ -531,6 +528,15 @@ export default {
         };
       }
     },
+    editMe(index) {
+      const itemdetails = this.data[index];
+      console.log(itemdetails);
+      this.onFormReset(itemdetails);
+      this.edit = true;
+      this.itemdetailsid = itemdetails.itemdetailsid;
+      this.index = index;
+      this.addNewItemLayout = true;
+    },
     deleteMe(id) {
       Loading.show({
         spinner: QSpinnerBars,
@@ -582,14 +588,35 @@ export default {
           Loading.hide();
         });
     },
-    onFormReset() {
-      this.name = null;
-      this.price = null;
-      this.stock = null;
-      this.available = null;
-      this.type = null;
+    onFormReset(itemdetails = {}) {
+      this.itemTitle = itemdetails.itemname;
+      this.price = itemdetails.price;
+      this.saleprice = itemdetails.saleprice;
+      this.editor = itemdetails.itemtype;
+      this.stock = itemdetails.stock;
+      this.orderVisibilityModel = itemdetails.status;
+      this.orderVisibleModel = itemdetails.status ? itemdetails.status.value : 1;
+      this.prepTime = itemdetails.timeforpreperation;
+      this.edit = false;
+      this.itemdetailsid = null;
+      this.index = null;
     },
     onFormSubmit() {
+      const itemdetails = {
+        itemdetailsid: this.itemdetailsid,
+        itemname: this.itemTitle,
+        saleprice: this.saleprice,
+        price: this.price,
+        stock: this.stock,
+        status: this.orderVisibilityModel,
+        country: this.$q.localStorage.getItem('country-token'),
+        timeforpreperation: this.prepTime,
+        itemtype: this.editor,
+      };
+      if (this.edit) {
+        this.onFormEdit(itemdetails);
+        return;
+      }
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -599,16 +626,7 @@ export default {
         'login-token',
       )}`;
       axios
-        .post('/api/userItems/item', {
-          itemname: this.itemTitle,
-          saleprice: this.saleprice,
-          price: this.price,
-          stock: this.stock,
-          status: this.orderVisibilityModel,
-          country: this.$q.localStorage.getItem('country-token'),
-          timeforpreperation: this.prepTime,
-          itemtype: this.editor,
-        })
+        .post('/api/userItems/item', itemdetails)
         .then((response) => {
           // JSON responses are automatically parsed.
           if (response.data.data) {
@@ -623,13 +641,13 @@ export default {
             // this.loadItems();
             this.data.push(response.data.data);
             Loading.hide();
-            this.$refs.addContact.reset();
+            this.addNewItemLayout = false;
           } else {
             this.$q.notify({
               color: 'red-5',
               textColor: 'white',
               icon: 'error',
-              message: 'Could not add Contact, User Phone or available Already exists',
+              message: response.data.message,
               position: 'top',
             });
             Loading.hide();
@@ -646,7 +664,61 @@ export default {
             color: 'red-5',
             textColor: 'white',
             icon: 'error',
-            message: e.data.message,
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
+    onFormEdit(itemdetails) {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
+        'login-token',
+      )}`;
+      axios
+        .put(`/api/userItems/item/${this.itemdetailsid}`, itemdetails)
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          if (response.data.data) {
+            // this.mounted();
+            this.$q.notify({
+              color: 'positive',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Successfully Saved',
+              position: 'top',
+            });
+            // this.loadItems();
+            this.data[this.index] = itemdetails;
+            Loading.hide();
+            this.addNewItemLayout = false;
+          } else {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'error',
+              message: response.data.message,
+              position: 'top',
+            });
+            Loading.hide();
+          }
+          // this.data = this.data.concat(response.data.data);
+        })
+        .catch((e) => {
+          //  this.errors.push(e);
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
             position: 'top',
           });
           Loading.hide();

@@ -1,8 +1,7 @@
 <template>
-<div class="row">
+<div class="row" v-scroll="scrollHandler">
   <div class="q-pa-md" style="width: 20%;">
-    <q-page-sticky class="q-ma-sm" style="width: calc(20% - 16px);"
-     position="top-left" :offset="[16, 88]">
+    <div :style="`padding-top: ${pad}px;`">
     <q-card class="bg">
       <q-card-actions class="row justify-center">
         <div class="q-ma-sm query msg-template shadow-2" v-html="'ChatBot Query'" />
@@ -35,43 +34,45 @@
           @click="saveChatBot()" />
       </q-card-actions>
     </q-card>
-    </q-page-sticky>
+    </div>
   </div>
-  <div id="editor" class="q-pa-md flex flex-center" style="position: relative;">
-    <div id="chatbot" class="bg" style="border-radius: 4px;">
-      <div v-for="(e,index) in g" :key="index" class="q-pa-md full-width">
-        <div class="row justify-center items-start">
-          <div v-for="(s) in e" :key="s" class="q-mx-lg q-mb-xs"
-           style="width: 200px; z-index: 1;" :ref="`reply-${s}`">
-              <div v-for="(reply,j) in r[s]" :key="j"
-               class="q-ma-xs msg-template shadow-2" style="clear: right;"
-               :class="{ 'bg-green-6 text-white' : (s === chatbot.accept),
-                'bg-red-6 text-white' : (s === chatbot.reject),
-                'float-right reply' : (s !== chatbot.accept && s !== chatbot.reject),
-                'selectable': !(s === chatbot.accept || s === chatbot.reject ) && rs }"
-               :style="`${(s === chatbot.accept || s === chatbot.reject ) ? 'margin: 24px 68px;'
-                : ''}`" @click="selectReply(reply.s, reply.o)"
-               v-html="reply.r" />
+  <div class="q-pa-md flex flex-left" style="width: 80%;">
+    <div id="editor" class="scroll-x" style="border-radius: 5px;">
+      <div id="chatbot" class="bg scroll-item" style="position: relative;">
+        <div v-for="(e,index) in g" :key="index" class="q-pa-md full-width scroll-item">
+          <div class="row justify-center items-start">
+            <div v-for="(s) in e" :key="s" class="q-mx-lg q-mb-xs"
+             style="width: 200px; z-index: 1;" :ref="`reply-${s}`">
+                <div v-for="(reply,j) in r[s]" :key="j"
+                 class="q-ma-xs msg-template shadow-2" style="clear: right;"
+                 :class="{ 'bg-green-6 text-white' : (s === chatbot.accept),
+                  'bg-red-6 text-white' : (s === chatbot.reject),
+                  'float-right reply' : (s !== chatbot.accept && s !== chatbot.reject),
+                  'selectable': !(s === chatbot.accept || s === chatbot.reject ) && rs }"
+                 :style="`${(s === chatbot.accept || s === chatbot.reject ) ? 'margin: 24px 68px;'
+                  : ''}`" @click="selectReply(reply.s, reply.o)"
+                 v-html="reply.r" />
+            </div>
+          </div>
+          <div class="row justify-center items-start">
+            <div v-for="(s) in e" :key="s" class="q-mx-lg query msg-template shadow-2"
+             :ref="`query-${s}`" style="width: 200px;"
+             :class="{ 'selectable': qs && sq !== s }" @click="selectQuery(s)">
+              <div v-html="chatbot.states[s].query" />
+            </div>
           </div>
         </div>
-        <div class="row justify-center items-start">
-          <div v-for="(s) in e" :key="s" class="q-mx-lg query msg-template shadow-2"
-           :ref="`query-${s}`" style="width: 200px;"
-           :class="{ 'selectable': qs && sq !== s }" @click="selectQuery(s)">
-            <div v-html="chatbot.states[s].query" />
-          </div>
-        </div>
+        <svg id="chatbot-actions" width="100%" height="100%"
+         style="position: absolute; top: 0; left: 0; z-index: 0;" @click="clear">
+          <g v-for="(a, i) in actions" :key="i">
+            <path :d="`M${a.tx} ${a.ty} L${a.tx-5} ${a.ty-10} L${a.tx+5} ${a.ty-10}`"
+             :fill="actionColor[a.a]" />
+            <polyline :points="`${a.fx},${a.fy} ${a.mx},${a.my} ${a.tx},${a.ty-3}`"
+             :stroke="actionColor[a.a]" style="stroke-width: 3; fill: transparent;" />
+          </g>
+        </svg>
       </div>
     </div>
-    <svg id="chatbot-actions" width="100%" height="100%" style="position: absolute; z-index: 0;"
-     @click="clear">
-      <g v-for="(a, i) in actions" :key="i">
-        <path :d="`M${a.tx} ${a.ty} L${a.tx-5} ${a.ty-10} L${a.tx+5} ${a.ty-10}`"
-         :fill="actionColor[a.a]" />
-        <polyline :points="`${a.fx},${a.fy} ${a.mx},${a.my} ${a.tx},${a.ty-3}`"
-         :stroke="actionColor[a.a]" style="stroke-width: 3; fill: transparent;" />
-      </g>
-    </svg>
   </div>
 </div>
 </template>
@@ -94,10 +95,6 @@ export default {
       p: null,
       g: null,
       r: null,
-      canvas: null,
-      ctx: null,
-      width: 500,
-      height: 500,
       actions: [],
       actionColor: ['#3c92ed', '#4caf50', '#f44336'],
       qs: false,
@@ -106,6 +103,7 @@ export default {
       ss: null,
       oq: 0, // 0 -> No Operation   1 -> Add Query   2 -> Edit Query   3 -> Delete Query
       or: 0, // 0 -> No Operation   1 -> Add Reply   2 -> Edit Reply   3 -> Delete Reply
+      pad: 0,
     };
   },
   created() {
@@ -123,6 +121,9 @@ export default {
 
         login: true,
       });
+    },
+    scrollHandler(vp) {
+      this.pad = vp;
     },
     loadChatBot() {
       Loading.show({
@@ -351,6 +352,7 @@ export default {
       }
     },
     queryOp(o) {
+      this.clear();
       this.qs = true;
       this.oq = o;
     },
@@ -459,6 +461,7 @@ export default {
       }
     },
     replyOp(o) {
+      this.clear();
       if (o === 1) {
         this.qs = true;
         this.or = o;
@@ -568,7 +571,7 @@ export default {
         else r = 'Number';
       }
       this.$q.dialog({
-        title: 'Delete Query',
+        title: 'Delete Reply',
         message: `Are you sure you want to delete this reply: "${r}" ?`,
         cancel: true,
         ok: true,
@@ -611,6 +614,14 @@ export default {
 <style scoped>
 .bg {
   background-color: #eeeeee50;
+}
+.scroll-x {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+.scroll-item {
+  flex: 0 0 auto;
 }
 .msg-template{
   border-radius: 7.5px;
