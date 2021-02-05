@@ -1,8 +1,7 @@
 <template>
-<div class="row" v-scroll="scrollHandler">
+<div class="row">
   <div class="q-pa-md" style="width: 20%;">
-    <div :style="`padding-top: ${pad}px;`">
-    <q-card class="bg">
+    <q-card ref="panel" class="bg" style="position: sticky;" :style="`top: ${pad}px;`">
       <q-card-actions class="row justify-center">
         <div class="q-ma-sm query msg-template shadow-2" v-html="'ChatBot Query'" />
         <div class="q-pa-xs full-width row justify-center">
@@ -34,7 +33,6 @@
           @click="saveChatBot()" />
       </q-card-actions>
     </q-card>
-    </div>
   </div>
   <div class="q-pa-md flex flex-left" style="width: 80%;">
     <div id="editor" class="scroll-x" style="border-radius: 5px;">
@@ -103,7 +101,7 @@ export default {
       ss: null,
       oq: 0, // 0 -> No Operation   1 -> Add Query   2 -> Edit Query   3 -> Delete Query
       or: 0, // 0 -> No Operation   1 -> Add Reply   2 -> Edit Reply   3 -> Delete Reply
-      pad: 0,
+      pad: 88,
     };
   },
   created() {
@@ -122,8 +120,8 @@ export default {
         login: true,
       });
     },
-    scrollHandler(vp) {
-      this.pad = vp;
+    handler() {
+      this.pad = document.getElementsByClassName('q-header')[0].clientHeight + 16;
     },
     loadChatBot() {
       Loading.show({
@@ -136,7 +134,10 @@ export default {
         .then((response) => {
           this.chatbot = response.data.data;
           this.createFlow()
-            .then(Loading.hide());
+            .then(() => {
+              Loading.hide();
+              this.handler();
+            });
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {

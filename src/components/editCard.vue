@@ -137,7 +137,7 @@
                @click="$router.push('/browseCards')"/>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-6">
-              <q-btn color="primary" icon="done" label="Done"  class="full-width q-ma-xs"
+              <q-btn color="primary" icon="done" label="Done" class="full-width q-ma-xs"
                @click="done"/>
             </div>
           </q-card-actions>

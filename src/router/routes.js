@@ -20,6 +20,7 @@ const routes = [
       },
       { path: 'currentOrders', name: 'currentOrders', component: () => import('components/currentOrders.vue') },
       { path: 'myMenu', name: 'myMenu', component: () => import('components/myMenu.vue') },
+      { path: 'menu/:id', name: 'menu', component: () => import('components/menu.vue') },
       // {
       //   path: 'invites/:inviteId/:inviteAplhaId',
       //   name: 'invitesRsvp',
@@ -34,7 +35,7 @@ const routes = [
       // {
       //   path: 'browsecards',
       //   name: 'browsecards',
-      //   component: () => import('components/browseCards.vue')
+      //   component: () => import('components/browseCards.vue'),
       // },
       // { path: 'editcard', redirect: '/browseCards' },
       // {

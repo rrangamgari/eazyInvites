@@ -1,0 +1,166 @@
+<template>
+  <div class="q-pt-lg">
+    <div class="q-px-lg q-pb-md row justify-end">
+      <q-btn icon="shopping_cart" color="primary" size="lg" round>
+        <q-badge color="red" text-color="white" floating>{{ cart.length }}</q-badge>
+      </q-btn>
+    </div>
+    <div class="q-pb-lg q-px-md items-center"
+     v-for="(category,cat) in menu.categories" :key="cat">
+      <div class="full-width q-px-md q-pb-md text-left text-white"
+       style="font-size: 28px; font-weight: 700;">
+        {{ category }}
+      </div>
+      <div class="row warp">
+        <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
+         v-for="item in menu.items[cat]" :key="item.itemdetailsid">
+          <q-card>
+            <q-img :src="item.images[0]" placeholder-src="~assets/logo/bird.png"
+             :alt="item.itemname" :ratio="4/3" />
+            <q-card-section class="q-pb-xs">
+              <div class="text-subtitle1 text-primary cursor-pointer"
+               @click="itemLayout = true; itemdetails = item;">{{ item.itemname }}</div>
+              <div>
+                <span class="text-h6 text-primary">${{ item.saleprice }}</span>
+                &nbsp;
+                <span class="text-h7 text-black text-strike">${{ item.price }}</span>
+              </div>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions>
+              <div v-if="item.status.value === 3"
+               class="full-width q-pa-sm text-red-14 text-center cursor-not-allowed"
+               >Out of Stock</div>
+              <div v-else-if="item.qty > 0" class="full-width row items-center">
+                <q-btn style="width: 10%;" color="primary" icon="remove"
+                 flat @click="decQty(item)" />
+                <div style="width: 80%;" class="text-primary text-center text-h6"
+                >{{ item.qty }}</div>
+                <q-btn style="width: 10%;" color="primary" icon="add"
+                 flat @click="incQty(item)" />
+              </div>
+              <q-btn v-else class="full-width" color="primary" label="Add Item"
+               flat no-caps @click="addToCart(item)"/>
+            </q-card-actions>
+          </q-card>
+        </div>
+      </div>
+    </div>
+    <q-dialog v-if="itemLayout" v-model="itemLayout" @input="image = 0">
+      <q-card style="width: 80%;">
+        <q-img v-if="!itemdetails.images || itemdetails.images.length === 0"
+         src="~assets/logo/bird.png" />
+        <q-carousel v-else arrows navigation animated swipeable v-model="image">
+          <q-carousel-slide v-for="(img, ind) in itemdetails.images" :key="ind"
+           :name="ind" :img-src="img" />
+        </q-carousel>
+        <q-card-section class="q-pb-xs">
+          <div class="text-h6 text-primary">{{ itemdetails.itemname }}</div>
+          <div class="text-subtitle1" style="word-break: break-all" v-html="itemdetails.itemtype" />
+          <div class="q-pt-sm">
+            <span class="text-h6 text-primary">${{ itemdetails.saleprice }}</span>
+            &nbsp;
+            <span class="text-h7 text-black text-strike">${{ itemdetails.price }}</span>
+          </div>
+        </q-card-section>
+        <q-separator />
+        <q-card-actions>
+          <div v-if="itemdetails.status.value === 3"
+           class="full-width q-pa-sm text-red-14 text-center cursor-not-allowed"
+           >Out of Stock</div>
+          <div v-else-if="itemdetails.qty > 0" class="row items-center full-width">
+            <q-btn style="width: 10%;" color="primary" icon="remove"
+             flat @click="decQty(itemdetails)" />
+            <div style="width: calc(80% - 1px);" class="text-primary text-center text-h6"
+             >{{ itemdetails.qty }}</div>
+            <q-btn style="width: 10%;" color="primary" icon="add"
+             flat @click="incQty(itemdetails)" />
+          </div>
+          <q-btn v-else class="full-width" color="primary" label="Add Item"
+           flat no-caps @click="addToCart(itemdetails)"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
+</template>
+
+<script>
+import { Loading, QSpinnerBars } from 'quasar';
+import axios from 'axios';
+
+axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.headers.get.Accepts = 'application/json';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
+
+export default {
+  name: 'menuComponent',
+  data() {
+    return {
+      id: this.$route.params.id,
+      menu: {},
+      cart: [],
+      itemdetails: {},
+      itemLayout: false,
+      image: 0,
+    };
+  },
+  created() {
+    this.loadMenu();
+  },
+  methods: {
+    loadMenu() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios
+        .get(`/api/userItems/menu/${this.id}`)
+        .then((response) => {
+          response.data.data.forEach((item) => {
+            if (!item.images) item.images = ['https://cdn.quasar.dev/img/mountains.jpg', 'https://cdn.quasar.dev/img/parallax1.jpg', 'https://cdn.quasar.dev/img/parallax2.jpg', 'https://cdn.quasar.dev/img/quasar.jpg'];
+          });
+          this.menu = {
+            categories: [''], // Categories (Example: All, Best Sellers)
+            items: [response.data.data], // Items arranged with respect to each category
+          };
+          Loading.hide();
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$router.push('/login');
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
+    addToCart(item) {
+      if (item.qty > 0) return;
+      this.cart.push(item.itemdetailsid);
+      item.qty = 1;
+    },
+    decQty(item) {
+      item.qty -= 1;
+      this.cart.splice(0, 0);
+      if (item.qty === 0) {
+        const ind = this.cart.indexOf(item.itemdetailsid);
+        this.cart.splice(ind, 1);
+      }
+    },
+    incQty(item) {
+      if (item.stock > 0 && item.qty >= item.stock) return;
+      item.qty += 1;
+      this.cart.splice(0, 0);
+    },
+  },
+};
+</script>

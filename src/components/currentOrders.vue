@@ -97,9 +97,7 @@
         <template  v-slot:body="props">
           <q-tr :props="props">
             <q-td key="name" :props="props">
-              {{ props.row.members.firstname }}
-            &nbsp;
-              {{ props.row.members.lastname }}
+              {{ props.row.members.firstname }} {{ props.row.members.lastname }}
             </q-td>
             <q-td key="primaryPhone" :props="props">
               {{ props.row.members.primaryPhone }}
@@ -160,6 +158,8 @@ axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
+
+const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.ogg');
 
 export default {
   name: 'currentOrdersComponent',
@@ -397,6 +397,7 @@ export default {
         .then((response) => {
           if (response.data.data) {
             this.accept = val;
+            audio.play();
             this.$q.notify({
               color: 'green-5',
               textColor: 'white',
