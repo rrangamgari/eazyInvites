@@ -1,10 +1,13 @@
 <template>
   <div class="q-pt-lg">
-    <div class="q-px-lg q-pb-md row justify-end">
-      <q-btn icon="shopping_cart" color="primary" size="lg" round>
+    <div class="q-px-lg q-pb-md">
+      <div class="q-px-sm text-h5 text-white" v-text="'Menu'" />
+    </div>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]" style="z-index: 3;">
+      <q-btn icon="shopping_cart" color="primary" size="lg" round @click="cartLayout = true">
         <q-badge color="red" text-color="white" floating>{{ cart.length }}</q-badge>
       </q-btn>
-    </div>
+    </q-page-sticky>
     <div class="q-pb-lg q-px-md items-center"
      v-for="(category,cat) in menu.categories" :key="cat">
       <div class="full-width q-px-md q-pb-md text-left text-white"
@@ -47,7 +50,7 @@
       </div>
     </div>
     <q-dialog v-if="itemLayout" v-model="itemLayout" @input="image = 0">
-      <q-card style="width: 80%;">
+      <q-card style="width: 60%; max-width: 80%;">
         <q-img v-if="!itemdetails.images || itemdetails.images.length === 0"
          src="~assets/logo/bird.png" />
         <q-carousel v-else arrows navigation animated swipeable v-model="image">
@@ -81,6 +84,90 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog v-if="cartLayout" v-model="cartLayout">
+      <q-card style="width: 60%; max-width: 80%">
+        <div class="q-pa-sm text-primary text-h6">
+          <q-icon name="shopping_cart" color="primary" size="md" />
+          Cart
+        </div>
+        <div v-if="cart.length === 0" class="q-pa-sm q-pb-lg text-center">
+          <div class="text-h5">Your Cart is Empty!</div>
+          <div class="q-pt-sm q-pb-md text-subtitle2">Add Items to Cart now.</div>
+          <q-btn label="Shop Now" no-caps color="primary" @click="cartLayout = false" />
+        </div>
+        <div v-else class="q-pa-sm row">
+        <div class="col-8">
+        <q-list bordered separator class="rounded-borders">
+          <q-item v-for="item in cart" :key="item.itemdetailsid">
+            <q-item-section avatar top>
+              <q-avatar class="q-pt-sm" rounded size="70px">
+                <img :src="item.images[0]">
+              </q-avatar>
+            </q-item-section>
+            <q-item-section top>
+              <q-card-section class="q-pa-xs">
+                <div class="text-subtitle1 text-primary cursor-pointer"
+                 @click="itemLayout = true; itemdetails = item;">{{ item.itemname }}</div>
+                <div>
+                  <span class="text-h6 text-primary">${{ item.saleprice }}</span>
+                  &nbsp;
+                  <span class="text-h7 text-black text-strike">${{ item.price }}</span>
+                </div>
+              </q-card-section>
+              <q-separator />
+              <q-card-actions class="q-py-xs q-px-none">
+                <div v-if="item.status.value === 3"
+                 class="full-width q-pa-sm text-red-14 text-center cursor-not-allowed"
+                 >Out of Stock</div>
+                <div v-else-if="item.qty > 0" class="full-width row items-center">
+                  <q-btn style="width: 15%;" color="primary" icon="delete"
+                   flat @click="removeFromCart(item)" />
+                  <q-btn style="width: 10%;" color="primary" icon="remove"
+                   flat @click="decQty(item)" />
+                  <div style="width: calc(65% - 1px);" class="text-primary text-center text-h6"
+                   >{{ item.qty }}</div>
+                  <q-btn style="width: 10%;" color="primary" icon="add"
+                   flat @click="incQty(item)" />
+                </div>
+                <q-btn v-else class="full-width" color="primary" label="Add Item"
+                 flat no-caps @click="addToCart(item)"/>
+              </q-card-actions>
+            </q-item-section>
+          </q-item>
+        </q-list>
+        </div>
+        <div class="col-4">
+          <q-card class="q-ml-sm">
+            <q-card-section class="q-py-sm text-primary text-h6">Price Details</q-card-section>
+            <q-separator />
+            <q-card-section class="q-py-sm text-subtitle1">
+              <div class="full-width row q-py-xs">
+                <div class="col-7">Price</div>
+                <div class="col-5 text-right">${{ price.toFixed(2) }}</div>
+              </div>
+              <div class="full-width row q-py-xs">
+                <div class="col-7">Discount (-)</div>
+                <div class="col-5 text-right">${{ disc.toFixed(2) }}</div>
+              </div>
+              <!-- <div class="full-width row q-py-xs">
+                <div class="col-7">Delivery (+)</div>
+                <div class="col-5 text-right">${{ delivery.toFixed(2) }}</div>
+              </div> -->
+              <q-separator class="q-my-xs" />
+              <div class="full-width row q-py-xs">
+                <div class="col-7">Total</div>
+                <div class="col-5 text-right">${{ total.toFixed(2) }}</div>
+              </div>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions>
+              <q-btn class="full-width" label="Checkout" color="primary" />
+            </q-card-actions>
+          </q-card>
+        </div>
+        </div>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -100,9 +187,14 @@ export default {
       id: this.$route.params.id,
       menu: {},
       cart: [],
+      cartLayout: false,
       itemdetails: {},
       itemLayout: false,
       image: 0,
+      price: 0.00,
+      disc: 0.00,
+      delivery: 0.00,
+      total: 0.00,
     };
   },
   created() {
@@ -145,21 +237,34 @@ export default {
     },
     addToCart(item) {
       if (item.qty > 0) return;
-      this.cart.push(item.itemdetailsid);
+      this.cart.push(item);
       item.qty = 1;
+      this.calcPrice(item.price, item.saleprice, +1);
+    },
+    removeFromCart(item) {
+      const ind = this.cart.indexOf(item);
+      this.cart.splice(ind, 1);
+      this.calcPrice(item.price, item.saleprice, -item.qty);
+      item.qty = 0;
     },
     decQty(item) {
-      item.qty -= 1;
-      this.cart.splice(0, 0);
-      if (item.qty === 0) {
-        const ind = this.cart.indexOf(item.itemdetailsid);
-        this.cart.splice(ind, 1);
+      if (item.qty === 1) this.removeFromCart(item);
+      else {
+        item.qty -= 1;
+        this.cart.splice(0, 0);
+        this.calcPrice(item.price, item.saleprice, -1);
       }
     },
     incQty(item) {
       if (item.stock > 0 && item.qty >= item.stock) return;
       item.qty += 1;
       this.cart.splice(0, 0);
+      this.calcPrice(item.price, item.saleprice, +1);
+    },
+    calcPrice(price, saleprice, m) {
+      this.price += m * price;
+      this.disc += m * (price - saleprice);
+      this.total += m * saleprice;
     },
   },
 };
