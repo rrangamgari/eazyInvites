@@ -43,8 +43,7 @@
             label="Publish Menu"
             title="CSV or XLS file accepted"
             no-caps
-            disabled="disabled"
-            @click="addNewItemLayout = true"
+            :to="menu"
           />
           &nbsp;&nbsp;
           <div class="q-pa-xs">
@@ -358,10 +357,12 @@ export default {
       price: null,
       saleprice: null,
       prompt: true, // Delete Prompt
+      menu: '',
     };
   },
   created() {
     this.loadItems();
+    this.menu = `/menu/${this.$q.localStorage.getItem('user-token').userid}`;
   },
   computed: {
     cWidth() {
@@ -463,7 +464,6 @@ export default {
         .get('/api/userItems/items')
         .then((response) => {
           this.data = response.data.data;
-
           Loading.hide();
         })
         .catch((e) => {
