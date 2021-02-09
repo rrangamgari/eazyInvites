@@ -3,11 +3,11 @@
     <div class="q-px-lg q-pb-md">
       <div class="q-px-sm text-h5 text-white" v-text="'Menu'" />
     </div>
-    <q-page-sticky position="bottom-right" :offset="[18, 18]" style="z-index: 3;">
+    <div style="z-index: 11; position: fixed; bottom: 40px; right: 24px;">
       <q-btn icon="shopping_cart" color="primary" size="lg" round @click="cartLayout = true">
         <q-badge color="red" text-color="white" floating>{{ cart.length }}</q-badge>
       </q-btn>
-    </q-page-sticky>
+    </div>
     <div class="q-pb-lg q-px-md items-center"
      v-for="(category,cat) in menu.categories" :key="cat">
       <div class="full-width q-px-md q-pb-md text-left text-white"
