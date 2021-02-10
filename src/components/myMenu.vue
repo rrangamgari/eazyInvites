@@ -37,14 +37,15 @@
             @click="addNewItemLayout = true"
           />
           &nbsp;&nbsp;
+          <router-link :to="menu" target="_blank">
           <q-btn
             color="primary"
             icon-right="publish"
             label="Publish Menu"
             title="CSV or XLS file accepted"
             no-caps
-            :to="menu"
           />
+          </router-link>
           &nbsp;&nbsp;
           <div class="q-pa-xs">
             <q-input dense debounce="300" v-model="filter" placeholder="Search"

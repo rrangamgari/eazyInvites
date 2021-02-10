@@ -159,7 +159,7 @@ axios.defaults.headers.get.Accepts = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 
-const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.ogg');
+const audio = new Audio('/statics/sounds/alert1.ogg');
 
 export default {
   name: 'currentOrdersComponent',
@@ -397,7 +397,7 @@ export default {
         .then((response) => {
           if (response.data.data) {
             this.accept = val;
-            audio.play();
+            // audio.play();
             this.$q.notify({
               color: 'green-5',
               textColor: 'white',
@@ -454,6 +454,7 @@ export default {
                 console.log('OK2');
                 resolve();
               });
+              audio.play();
               axios
                 .put('/api/orders/updateOrder', response.data.data).then((response1) => {
                   console.log(response1.data.data);
