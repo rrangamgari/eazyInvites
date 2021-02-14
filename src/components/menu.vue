@@ -18,8 +18,8 @@
         <div class=" col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 q-px-md q-py-sm"
          v-for="item in menu.items[cat]" :key="item.itemdetailsid">
           <q-card>
-            <q-img :src="item.images[0]" placeholder-src="~assets/logo/bird.png"
-             :alt="item.itemname" :ratio="4/3" />
+            <q-img :src="item.itemimages[0] ? `https://wecards.s3.amazonaws.com/${item.itemimages[0].itemimagename}` : ''"
+             placeholder-src="~assets/logo/bird.png" :alt="item.itemname" :ratio="4/3" />
             <q-card-section class="q-pb-xs">
               <div class="text-subtitle1 text-primary cursor-pointer"
                @click="itemLayout = true; itemdetails = item;">{{ item.itemname }}</div>
@@ -49,13 +49,14 @@
         </div>
       </div>
     </div>
+
     <q-dialog v-if="itemLayout" v-model="itemLayout" @input="image = 0">
       <q-card style="width: 60%; max-width: 80%;">
-        <q-img v-if="!itemdetails.images || itemdetails.images.length === 0"
+        <q-img v-if="!itemdetails.itemimages || itemdetails.itemimages.length === 0"
          src="~assets/logo/bird.png" />
         <q-carousel v-else arrows navigation animated swipeable v-model="image">
-          <q-carousel-slide v-for="(img, ind) in itemdetails.images" :key="ind"
-           :name="ind" :img-src="img" />
+          <q-carousel-slide v-for="(img, ind) in itemdetails.itemimages" :key="ind"
+           :name="ind" :img-src="`https://wecards.s3.amazonaws.com/${img.itemimagename}`" />
         </q-carousel>
         <q-card-section class="q-pb-xs">
           <div class="text-h6 text-primary">{{ itemdetails.itemname }}</div>
@@ -84,6 +85,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <q-dialog v-if="cartLayout" v-model="cartLayout">
       <q-card style="width: 60%; max-width: 80%">
         <div class="q-pa-sm text-primary text-h6">
@@ -101,7 +103,9 @@
           <q-item v-for="item in cart" :key="item.itemdetailsid">
             <q-item-section avatar top>
               <q-avatar class="q-pt-sm" rounded size="70px">
-                <img :src="item.images[0]">
+                <img v-if="!item.itemimages || item.itemimages.length === 0"
+                 src="~assets/logo/bird.png">
+                <img v-else :src="`https://wecards.s3.amazonaws.com/${item.itemimages[0].itemimagename}`">
               </q-avatar>
             </q-item-section>
             <q-item-section top>
@@ -211,9 +215,6 @@ export default {
       axios
         .get(`/api/userItems/menu/${this.id}`)
         .then((response) => {
-          response.data.data.forEach((item) => {
-            if (!item.images) item.images = ['https://cdn.quasar.dev/img/mountains.jpg', 'https://cdn.quasar.dev/img/parallax1.jpg', 'https://cdn.quasar.dev/img/parallax2.jpg', 'https://cdn.quasar.dev/img/quasar.jpg'];
-          });
           this.menu = {
             categories: [''], // Categories (Example: All, Best Sellers)
             items: [response.data.data], // Items arranged with respect to each category

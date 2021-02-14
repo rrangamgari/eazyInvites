@@ -224,8 +224,13 @@
                   <div class="col-3">
                     <q-uploader
                       label="Item Image"
-                      auto-upload
-                      url=""
+                      :headers="[{
+                        name: 'Authorization',
+                        value: `Bearer ${$q.localStorage.getItem('login-token')}`
+                      }]"
+                      field-name="file"
+                      :auto-upload="edit"
+                      :url="`/api/userItems/item/${itemdetailsid}/image`"
                       style="width: 100%;min-height: 90%"
                       multiple
                     />
@@ -594,7 +599,7 @@ export default {
       this.itemTitle = itemdetails.itemname;
       this.price = itemdetails.price;
       this.saleprice = itemdetails.saleprice;
-      this.editor = itemdetails.itemtype;
+      this.editor = itemdetails.itemtype || '';
       this.stock = itemdetails.stock;
       this.orderVisibilityModel = itemdetails.status;
       this.orderVisibleModel = itemdetails.status ? itemdetails.status.value : 1;
