@@ -154,46 +154,50 @@
                 @reset="onFormReset"
               >
                 <div class="row">
-                  <div class="col-9">
-                    <div class="row  q-gutter-md q-pa-xs q-pr-md">
-                      <div class="col-10">
+                  <div class="col-8 q-pa-xs q-pr-lg">
+                    <div class="row q-gutter-sm">
+                      <div class="col-12">
                         <q-input
                           type="text"
                           v-model="itemTitle"
                           label="Item Title"
-                          lazy-rules
                           unmasked-value
-                          fill-mask="#"
+                          lazy-rules
+                          :rules="[val => val && val.trim() !== ''
+                           || 'Please enter a Valid Item Title']"
                         />
                       </div>
-                      <div class="col-5">
+                      <div class="col-12 row">
                         <q-input
+                          style="width: calc(50% - 8px); margin-right: 16px;"
                           type="number"
-                          v-model="price"
+                          v-model.number="price"
                           label="Price"
                           lazy-rules
                           mask="#.#"
                           step="0.01"
+                          min="0"
                         />
-                      </div>
-                      <div class="col-5">
                         <q-input
+                          style="width: calc(50% - 8px);"
                           type="number"
-                          v-model="saleprice"
+                          v-model.number="saleprice"
                           label="Sale Price"
-                          lazy-rules
                           mask="#.#"
                           step="0.01"
+                          min="0"
+                          :max="price"
                         />
                       </div>
                       <!--
                       <q-toggle v-model="accept" label="I accept the license and terms" />
                       -->
-                      <div class="col-10">
+                      <div class="col-12">
                         Description
-                        <q-editor v-model="editor" min-height="5rem" label="Description"/>
+                        <q-editor v-model="editor" min-height="5rem" label="Description"
+                         :toolbar="[['bold', 'italic', 'strike', 'underline'], ['undo', 'redo']]" />
                       </div>
-                      <div class="col-10">
+                      <div class="col-12">
                         <q-btn-toggle
                           v-model="orderVisibleModel"
                           push
@@ -204,10 +208,12 @@
                         />
                         <div class="q-pa-xs"><b text-color="primary">{{optionData}}</b></div>
                       </div>
-                      <div class="col-10">
+                      <div class="col-12">
                         <q-select label="How long does it take to prepare orders?"
                                   v-model="prepTime"
-                                  :options="orderPrepOptions"></q-select>
+                                  :options="orderPrepOptions"
+                                  lazy-rules
+                                  :rules="[val => val || 'Please choose an Option']"></q-select>
                       </div>
                       <!--<div class="col-10">
                         <q-select label="How long does it take to prepare orders?"
@@ -221,16 +227,18 @@
                     </div>
                   </div>
 
-                  <div class="col-3">
+                  <div class="col-4">
                     <q-uploader
+                      ref="uploader"
                       label="Item Image"
                       :headers="[{
                         name: 'Authorization',
                         value: `Bearer ${$q.localStorage.getItem('login-token')}`
                       }]"
                       field-name="file"
-                      :auto-upload="edit"
+                      :auto-upload="itemdetailsid != null"
                       :url="`/api/userItems/item/${itemdetailsid}/image`"
+                      @finish="onUploadFinish()"
                       style="width: 100%;min-height: 90%"
                       multiple
                     />
@@ -350,9 +358,7 @@ export default {
       getSelectedString: (n) => `${n} Contact${n > 1 ? 's' : ''} selected`,
 
       pagination: { rowsPerPage: 0 },
-      data: [{
-        itemname: 'vgdsxcvxz', itemtype: null, price: '33', saleprice: '33', stock: null, status: null, delete: null,
-      }],
+      data: [],
       edit: false,
       index: null,
       itemdetailsid: null,
@@ -429,6 +435,12 @@ export default {
     },
     onReset() {
       this.uploadItemsModel = null;
+    },
+    onUploadFinish() {
+      if (!this.edit) {
+        Loading.hide();
+        this.addNewItemLayout = false;
+      }
     },
     exportTable() {
       // naive encoding to csv format
@@ -537,7 +549,6 @@ export default {
     },
     editMe(index) {
       const itemdetails = this.data[index];
-      console.log(itemdetails);
       this.onFormReset(itemdetails);
       this.edit = true;
       this.itemdetailsid = itemdetails.itemdetailsid;
@@ -607,13 +618,14 @@ export default {
       this.edit = false;
       this.itemdetailsid = null;
       this.index = null;
+      this.toggleOption();
     },
     onFormSubmit() {
       const itemdetails = {
         itemdetailsid: this.itemdetailsid,
         itemname: this.itemTitle,
-        saleprice: this.saleprice,
-        price: this.price,
+        saleprice: this.saleprice || 0,
+        price: this.price || 0,
         stock: this.stock,
         status: this.orderVisibilityModel,
         country: this.$q.localStorage.getItem('country-token'),
@@ -647,8 +659,13 @@ export default {
             });
             // this.loadItems();
             this.data.push(response.data.data);
-            Loading.hide();
-            this.addNewItemLayout = false;
+            this.itemdetailsid = response.data.data.itemdetailsid;
+            if (this.$refs.uploader.files.length > 0) {
+              this.$nextTick()
+                .then(() => {
+                  this.$refs.uploader.upload();
+                });
+            } else this.onUploadFinish();
           } else {
             this.$q.notify({
               color: 'red-5',

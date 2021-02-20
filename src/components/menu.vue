@@ -23,10 +23,13 @@
             <q-card-section class="q-pb-xs">
               <div class="text-subtitle1 text-primary cursor-pointer"
                @click="itemLayout = true; itemdetails = item;">{{ item.itemname }}</div>
-              <div>
+              <div v-if="item.saleprice < item.price">
                 <span class="text-h6 text-primary">${{ item.saleprice }}</span>
                 &nbsp;
                 <span class="text-h7 text-black text-strike">${{ item.price }}</span>
+              </div>
+              <div v-else>
+                <span class="text-h6 text-primary">${{ item.price }}</span>
               </div>
             </q-card-section>
             <q-separator />
@@ -52,19 +55,24 @@
 
     <q-dialog v-if="itemLayout" v-model="itemLayout" @input="image = 0">
       <q-card style="width: 60%; max-width: 80%;">
+        <q-responsive :ratio="16/9">
         <q-img v-if="!itemdetails.itemimages || itemdetails.itemimages.length === 0"
          src="~assets/logo/bird.png" />
         <q-carousel v-else arrows navigation animated swipeable v-model="image">
           <q-carousel-slide v-for="(img, ind) in itemdetails.itemimages" :key="ind"
            :name="ind" :img-src="`https://wecards.s3.amazonaws.com/${img.itemimagename}`" />
         </q-carousel>
+        </q-responsive>
         <q-card-section class="q-pb-xs">
           <div class="text-h6 text-primary">{{ itemdetails.itemname }}</div>
           <div class="text-subtitle1" style="word-break: break-all" v-html="itemdetails.itemtype" />
-          <div class="q-pt-sm">
+          <div v-if="itemdetails.saleprice < itemdetails.price">
             <span class="text-h6 text-primary">${{ itemdetails.saleprice }}</span>
             &nbsp;
             <span class="text-h7 text-black text-strike">${{ itemdetails.price }}</span>
+          </div>
+          <div v-else>
+            <span class="text-h6 text-primary">${{ itemdetails.price }}</span>
           </div>
         </q-card-section>
         <q-separator />
@@ -105,17 +113,21 @@
               <q-avatar class="q-pt-sm" rounded size="70px">
                 <img v-if="!item.itemimages || item.itemimages.length === 0"
                  src="~assets/logo/bird.png">
-                <img v-else :src="`https://wecards.s3.amazonaws.com/${item.itemimages[0].itemimagename}`">
+                <img v-else :src="`https://wecards.s3.amazonaws.com/${item.itemimages[0].itemimagename}`"
+                 placeholder-src="~assets/logo/bird.png">
               </q-avatar>
             </q-item-section>
             <q-item-section top>
               <q-card-section class="q-pa-xs">
                 <div class="text-subtitle1 text-primary cursor-pointer"
                  @click="itemLayout = true; itemdetails = item;">{{ item.itemname }}</div>
-                <div>
+                <div v-if="item.saleprice < item.price">
                   <span class="text-h6 text-primary">${{ item.saleprice }}</span>
                   &nbsp;
                   <span class="text-h7 text-black text-strike">${{ item.price }}</span>
+                </div>
+                <div v-else>
+                  <span class="text-h6 text-primary">${{ item.price }}</span>
                 </div>
               </q-card-section>
               <q-separator />
