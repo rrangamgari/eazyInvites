@@ -229,6 +229,7 @@
 
                   <div class="col-4">
                     <q-uploader
+                      v-show="false"
                       ref="uploader"
                       label="Item Image"
                       :headers="[{
@@ -238,10 +239,59 @@
                       field-name="file"
                       :auto-upload="itemdetailsid != null"
                       :url="`/api/userItems/item/${itemdetailsid}/image`"
+                      @added="onAdd"
                       @finish="onUploadFinish()"
-                      style="width: 100%;min-height: 90%"
+                      style="width: 100%; min-height: 90%;"
                       multiple
                     />
+                    <q-carousel swipeable infinite animated v-model="slide" >
+                      <q-carousel-slide :name="slide" >
+                        <q-img :src="slide < images.length ? `${url}/${images[slide].itemimagename}`
+                                     : (slide < images.length + files.length
+                                       ? files[slide-images.length].__img.src
+                                       : '')"
+                         class="bg-grey-4" contain width="100%" height="100%" />
+                      </q-carousel-slide>
+                      <!-- <q-carousel-slide :name="slide"
+                       v-else-if="slide < images.length + $refs.uploader.files.length"
+                       :img-src="images[slide] ? `${url}/${images[slide].itemimagename}`
+                                               : 'assets/home/bird.png'" /> -->
+                    </q-carousel>
+                    <q-tabs
+                      style="margin: 2px 4px; height: 58px;"
+                      v-model="slide"
+                      outside-arrows mobile-arrows
+                      align="center" dense :breakpoint="0"
+                      indicator-color="primary"
+                      narrow-indicator
+                      @dragover.prevent="allowDrag"
+                    >
+                     <template v-for="(img,idx) in images">
+                      <!-- <q-tab :key="`${ind}->${idx}`" :name="ind" v-if="idx === ind2"
+                       style="padding: 0px 2px; opacity: 0.5;">
+                        <q-img width="70px" height="50px" contain
+                         :src="`${url}/${images[ind].itemimagename}`" />
+                      </q-tab> -->
+                      <q-tab :key="img.itemimagesid" :name="idx" :tabindex="idx"
+                       style="padding: 0px 2px;"
+                       draggable="true" @dragstart="onDrag($event,idx)"
+                       @dragover.prevent="onDragOver($event,idx)" @dragend="onDrop($event,idx)">
+                        <q-img width="70px" height="50px" contain
+                         :src="`${url}/${img.itemimagename}`" />
+                      </q-tab>
+                     </template>
+                      <q-tab v-for="(file,ind) in files" :key="images.length + ind"
+                       :name="images.length + ind" style="padding: 0px 2px;">
+                        <q-img width="70px" height="50px" contain
+                         :src="file.__img.src" />
+                      </q-tab>
+                      <div style="margin: 0px 3px;">
+                        <q-btn icon="add" color="primary" flat round
+                         @click="$refs.uploader.pickFiles()">
+                          <q-tooltip>Add Image</q-tooltip>
+                        </q-btn>
+                      </div>
+                    </q-tabs>
                   </div>
                 </div>
               </q-form>
@@ -256,7 +306,6 @@
 <script>
 import { exportFile, Loading, QSpinnerBars } from 'quasar';
 import axios from 'axios';
-
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -368,8 +417,17 @@ export default {
       available: null,
       price: null,
       saleprice: null,
+      images: [],
+      files: [],
+      slide: 0,
+      ind: null,
+      el: null,
+      ind1: null,
+      ind2: null,
+      node: null,
       prompt: true, // Delete Prompt
       menu: '',
+      url: 'https://wecards.s3.amazonaws.com',
     };
   },
   created() {
@@ -441,6 +499,57 @@ export default {
         Loading.hide();
         this.addNewItemLayout = false;
       }
+    },
+    onAdd() {
+      this.files = this.$refs.uploader.files;
+    },
+    allowDrag(evt) {
+      evt.preventDefault();
+    },
+    onDrag(evt, ind) {
+      evt.dataTransfer.dropEffect = 'move';
+      evt.dataTransfer.effectAllowed = 'move';
+      this.el = evt.target;
+      this.ind = ind; // Array.from(this.el.parentNode.childNodes).indexOf(this.el);
+      // this.el.parentNode.removeChild(this.el);
+      // this.el.parentNode.replaceChild(this.node, this.el);
+      this.node = this.el.cloneNode(true);
+      this.node.ondragover = this.allowDrag;
+      // this.node.ondrop = this.onDrop;
+      // this.el.draggable = false;
+      evt.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
+      console.log(evt);
+    },
+    onDragOver(evt, ind) {
+      if (this.ind2 === null) {
+        this.el.parentNode.insertBefore(this.node, this.el);
+        this.el.parentNode.removeChild(this.el);
+        this.ind2 = this.ind;
+        return;
+      }
+      if (this.ind < ind && ind <= this.ind2) ind -= 1;
+      else if (this.ind2 <= ind && ind < this.ind) ind += 1;
+      const el = this.node.parentNode;
+      console.log(evt, this.ind2, ind);
+      if (ind > this.ind2) el.insertBefore(this.node, el.childNodes[ind + 1]);
+      else el.insertBefore(this.node, el.childNodes[ind]);
+      this.ind2 = ind;
+    },
+    onDrop(evt, ind) {
+      // if (!(ind >= 0)) return;
+      ind = this.ind2; // Array.from(this.el.parentNode.childNodes).indexOf(this.el);
+      this.$q.notify(`${this.ind} -> ${ind}`);
+      this.node.parentNode.insertBefore(this.el, this.node);
+      this.node.parentNode.removeChild(this.node);
+      const img = this.images[this.ind];
+      this.images.splice(this.ind, 1);
+      this.images.splice(this.ind2, 0, img);
+      if (this.slide === this.ind) this.slide = ind;
+      else if (this.ind < this.slide && this.slide <= this.ind2) this.slide -= 1;
+      else if (this.ind2 <= this.slide && this.slide < this.ind) this.slide += 1;
+      console.log('DP', evt, this.ind, ind, this.images.map((i) => i.itemimagesid));
+      this.ind = null;
+      this.ind2 = null;
     },
     exportTable() {
       // naive encoding to csv format
@@ -618,6 +727,9 @@ export default {
       this.edit = false;
       this.itemdetailsid = null;
       this.index = null;
+      this.images = itemdetails.itemimages || [];
+      this.files = new Array(0);
+      this.slide = 0;
       this.toggleOption();
     },
     onFormSubmit() {
