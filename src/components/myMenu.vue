@@ -229,69 +229,59 @@
 
                   <div class="col-4">
                     <q-uploader
-                      v-show="false"
-                      ref="uploader"
-                      label="Item Image"
+                      ref="uploader" label="Item Images" field-name="file" multiple
                       :headers="[{
                         name: 'Authorization',
                         value: `Bearer ${$q.localStorage.getItem('login-token')}`
                       }]"
-                      field-name="file"
                       :auto-upload="itemdetailsid != null"
                       :url="`/api/userItems/item/${itemdetailsid}/image`"
-                      @added="onAdd"
-                      @finish="onUploadFinish()"
-                      style="width: 100%; min-height: 90%;"
-                      multiple
-                    />
-                    <q-carousel swipeable infinite animated v-model="slide" >
-                      <q-carousel-slide :name="slide" >
-                        <q-img :src="slide < images.length ? `${url}/${images[slide].itemimagename}`
-                                     : (slide < images.length + files.length
-                                       ? files[slide-images.length].__img.src
-                                       : '')"
-                         class="bg-grey-4" contain width="100%" height="100%" />
-                      </q-carousel-slide>
-                      <!-- <q-carousel-slide :name="slide"
-                       v-else-if="slide < images.length + $refs.uploader.files.length"
-                       :img-src="images[slide] ? `${url}/${images[slide].itemimagename}`
-                                               : 'assets/home/bird.png'" /> -->
-                    </q-carousel>
-                    <q-tabs
-                      style="margin: 2px 4px; height: 58px;"
-                      v-model="slide"
-                      outside-arrows mobile-arrows
-                      align="center" dense :breakpoint="0"
-                      indicator-color="primary"
-                      narrow-indicator
-                      @dragover.prevent="allowDrag"
+                      @added="onAdd" @finish="onUploadFinish()"
+                      style="width: 100%; min-height: 90%; max-height: 100%"
                     >
-                     <template v-for="(img,idx) in images">
-                      <!-- <q-tab :key="`${ind}->${idx}`" :name="ind" v-if="idx === ind2"
-                       style="padding: 0px 2px; opacity: 0.5;">
-                        <q-img width="70px" height="50px" contain
-                         :src="`${url}/${images[ind].itemimagename}`" />
-                      </q-tab> -->
-                      <q-tab :key="img.itemimagesid" :name="idx" :tabindex="idx"
-                       style="padding: 0px 2px;"
-                       draggable="true" @dragstart="onDrag($event,idx)"
-                       @dragover.prevent="onDragOver($event,idx)" @dragend="onDrop($event,idx)">
-                        <q-img width="70px" height="50px" contain
-                         :src="`${url}/${img.itemimagename}`" />
-                      </q-tab>
-                     </template>
-                      <q-tab v-for="(file,ind) in files" :key="images.length + ind"
-                       :name="images.length + ind" style="padding: 0px 2px;">
-                        <q-img width="70px" height="50px" contain
-                         :src="file.__img.src" />
-                      </q-tab>
-                      <div style="margin: 0px 3px;">
-                        <q-btn icon="add" color="primary" flat round
-                         @click="$refs.uploader.pickFiles()">
-                          <q-tooltip>Add Image</q-tooltip>
-                        </q-btn>
-                      </div>
-                    </q-tabs>
+                    <template v-slot:list="scope">
+                      <q-carousel animated v-model="slide">
+                        <q-carousel-slide :name="slide" style="padding: 2px;">
+                          <q-img :src="slide < images.length
+                                      ? `${url}/${images[slide].itemimagename}`
+                                      : (slide < images.length + scope.files.length
+                                         ? scope.files[slide-images.length].__img.src
+                                         : '')"
+                           class="bg-grey-4" contain width="100%" height="100%" />
+                        </q-carousel-slide>
+                      </q-carousel>
+                      <q-tabs
+                       style="margin: 2px 4px 4px 4px; height: 58px;"
+                       v-model="slide"
+                       outside-arrows mobile-arrows
+                       align="center" dense :breakpoint="0"
+                       indicator-color="primary"
+                       narrow-indicator
+                       @dragover="allowDrag"
+                      >
+                       <template v-for="(img,idx) in images">
+                        <q-tab :key="img.itemimagesid" :name="idx" :tabindex="idx"
+                         style="padding: 0px 2px;"
+                         draggable="true" @dragstart="onDrag($event,idx)"
+                         @dragover.prevent="onDragOver($event,idx)" @dragend="onDrop($event,idx)">
+                          <q-img width="70px" height="50px" contain
+                           :src="`${url}/${img.itemimagename}`" />
+                        </q-tab>
+                       </template>
+                        <q-tab v-for="(file,idx) in scope.files" :key="images.length + idx"
+                         :name="images.length + idx" style="padding: 0px 2px;">
+                          <q-img width="70px" height="50px" contain :src="file.__img.src">
+                            <div class="absolute-full flex flex-center"
+                             style="padding: 0px; background: rgba(0,0,0,0.1);">
+                            <q-knob :thickness="0.3" color="primary" size="35px"
+                             track-color="grey-3" readonly
+                             :value="file.__progressLabel.replace('%','')" />
+                            </div>
+                          </q-img>
+                        </q-tab>
+                      </q-tabs>
+                    </template>
+                    </q-uploader>
                   </div>
                 </div>
               </q-form>
@@ -498,7 +488,7 @@ export default {
       if (!this.edit) {
         Loading.hide();
         this.addNewItemLayout = false;
-      }
+      } else this.$refs.uploader.removeUploadedFiles();
     },
     onAdd() {
       this.files = this.$refs.uploader.files;
@@ -911,3 +901,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.q-uploader__list {
+  padding: 2px;
+}
+.q-uploader__dnd {
+  display: none;
+}
+</style>
