@@ -229,14 +229,14 @@
 
                   <div class="col-4">
                     <q-uploader
-                      ref="uploader" label="Item Images" field-name="file" multiple
+                      ref="uploader" label="Item Images" field-name="files" multiple batch
                       :headers="[{
                         name: 'Authorization',
                         value: `Bearer ${$q.localStorage.getItem('login-token')}`
                       }]"
-                      :auto-upload="itemdetailsid != null"
-                      :url="`/api/userItems/item/${itemdetailsid}/image`"
-                      @added="onAdd" @finish="onUploadFinish()"
+                      :auto-upload="itemdetailsid != null" accept="image/*"
+                      :url="`/api/userItems/item/${itemdetailsid}/images`"
+                      @added="onAdd" @finish="onUploadFinish" @uploaded="onUploaded"
                       style="width: 100%; min-height: 90%; max-height: 100%"
                     >
                     <template v-slot:list="scope">
@@ -247,7 +247,7 @@
                                       : (slide < images.length + scope.files.length
                                          ? scope.files[slide-images.length].__img.src
                                          : '')"
-                           class="bg-grey-4" contain width="100%" height="100%" />
+                           class="bg-grey-3" contain width="100%" height="100%" />
                         </q-carousel-slide>
                       </q-carousel>
                       <q-tabs
@@ -262,8 +262,8 @@
                        <template v-for="(img,idx) in images">
                         <q-tab :key="img.itemimagesid" :name="idx" :tabindex="idx"
                          style="padding: 0px 2px;"
-                         draggable="true" @dragstart="onDrag($event,idx)"
-                         @dragover.prevent="onDragOver($event,idx)" @dragend="onDrop($event,idx)">
+                         :draggable="!scope.isUploading" @dragstart="onDrag($event,idx)"
+                         @dragover.prevent="onDragOver(idx)" @dragend="onDrop(idx)">
                           <q-img width="70px" height="50px" contain
                            :src="`${url}/${img.itemimagename}`" />
                         </q-tab>
@@ -271,11 +271,11 @@
                         <q-tab v-for="(file,idx) in scope.files" :key="images.length + idx"
                          :name="images.length + idx" style="padding: 0px 2px;">
                           <q-img width="70px" height="50px" contain :src="file.__img.src">
-                            <div class="absolute-full flex flex-center"
+                            <div v-if="scope.isUploading" class="absolute-full flex flex-center"
                              style="padding: 0px; background: rgba(0,0,0,0.1);">
                             <q-knob :thickness="0.3" color="primary" size="35px"
                              track-color="grey-3" readonly
-                             :value="file.__progressLabel.replace('%','')" />
+                             :value="Number(file.__progressLabel.replace('%',''))" />
                             </div>
                           </q-img>
                         </q-tab>
@@ -410,11 +410,10 @@ export default {
       images: [],
       files: [],
       slide: 0,
-      ind: null,
       el: null,
-      ind1: null,
-      ind2: null,
       node: null,
+      ind: null,
+      ind2: null,
       prompt: true, // Delete Prompt
       menu: '',
       url: 'https://wecards.s3.amazonaws.com',
@@ -490,6 +489,13 @@ export default {
         this.addNewItemLayout = false;
       } else this.$refs.uploader.removeUploadedFiles();
     },
+    onUploaded(info) {
+      const images = JSON.parse(info.xhr.response).data.itemimages;
+      this.data[this.index].itemimages = images;
+      const ids = new Set(images.map((ii) => ii.itemimagesid));
+      this.images = this.images.filter((img) => ids.has(img.itemimagesid));
+      this.images = this.images.concat(images.slice(this.images.length));
+    },
     onAdd() {
       this.files = this.$refs.uploader.files;
     },
@@ -499,18 +505,14 @@ export default {
     onDrag(evt, ind) {
       evt.dataTransfer.dropEffect = 'move';
       evt.dataTransfer.effectAllowed = 'move';
+      this.ind = ind;
       this.el = evt.target;
-      this.ind = ind; // Array.from(this.el.parentNode.childNodes).indexOf(this.el);
-      // this.el.parentNode.removeChild(this.el);
-      // this.el.parentNode.replaceChild(this.node, this.el);
       this.node = this.el.cloneNode(true);
       this.node.ondragover = this.allowDrag;
-      // this.node.ondrop = this.onDrop;
-      // this.el.draggable = false;
+      this.node.classList.add('dragging');
       evt.dataTransfer.setDragImage(document.createElement('div'), 0, 0);
-      console.log(evt);
     },
-    onDragOver(evt, ind) {
+    onDragOver(ind) {
       if (this.ind2 === null) {
         this.el.parentNode.insertBefore(this.node, this.el);
         this.el.parentNode.removeChild(this.el);
@@ -520,15 +522,12 @@ export default {
       if (this.ind < ind && ind <= this.ind2) ind -= 1;
       else if (this.ind2 <= ind && ind < this.ind) ind += 1;
       const el = this.node.parentNode;
-      console.log(evt, this.ind2, ind);
       if (ind > this.ind2) el.insertBefore(this.node, el.childNodes[ind + 1]);
       else el.insertBefore(this.node, el.childNodes[ind]);
       this.ind2 = ind;
     },
-    onDrop(evt, ind) {
-      // if (!(ind >= 0)) return;
-      ind = this.ind2; // Array.from(this.el.parentNode.childNodes).indexOf(this.el);
-      this.$q.notify(`${this.ind} -> ${ind}`);
+    onDrop(ind) {
+      ind = this.ind2;
       this.node.parentNode.insertBefore(this.el, this.node);
       this.node.parentNode.removeChild(this.node);
       const img = this.images[this.ind];
@@ -537,7 +536,6 @@ export default {
       if (this.slide === this.ind) this.slide = ind;
       else if (this.ind < this.slide && this.slide <= this.ind2) this.slide -= 1;
       else if (this.ind2 <= this.slide && this.slide < this.ind) this.slide += 1;
-      console.log('DP', evt, this.ind, ind, this.images.map((i) => i.itemimagesid));
       this.ind = null;
       this.ind2 = null;
     },
@@ -584,8 +582,6 @@ export default {
           Loading.hide();
         })
         .catch((e) => {
-          //  this.errors.push(e);
-          // Loading.hide();
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
             this.$router.push('/login');
@@ -733,6 +729,7 @@ export default {
         country: this.$q.localStorage.getItem('country-token'),
         timeforpreperation: this.prepTime,
         itemtype: this.editor,
+        itemimages: this.images,
       };
       if (this.edit) {
         this.onFormEdit(itemdetails);
@@ -760,6 +757,7 @@ export default {
               position: 'top',
             });
             // this.loadItems();
+            this.index = this.data.length;
             this.data.push(response.data.data);
             this.itemdetailsid = response.data.data.itemdetailsid;
             if (this.$refs.uploader.files.length > 0) {
@@ -908,5 +906,8 @@ export default {
 }
 .q-uploader__dnd {
   display: none;
+}
+.dragging {
+  animation: pulse 1s infinite;
 }
 </style>
