@@ -212,7 +212,7 @@ export default {
             .catch((e) => {
               if (e.message === 'Request failed with status code 401') {
                 this.$q.localStorage.remove('login-token');
-                this.$router.push('/login');
+                this.$login(() => this.$router.go(0), () => this.$router.push('/'));
               }
               this.$q.notify({
                 color: 'red-5',
@@ -228,7 +228,7 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         } else if (e.message === 'Request failed with status code 400') {
           this.$router.push('/invites');
           e.message = 'Invite not found!';
@@ -282,7 +282,7 @@ export default {
         .then((response) => {
           if (response.data.data === 'User is null') {
             Loading.hide();
-            this.$router.push('/login');
+            this.$login(this.onSubmit, () => this.$router.push('/'));
           } else {
             this.$q.notify({
               color: 'green-4',
@@ -300,7 +300,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.onSubmit, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',

@@ -260,17 +260,14 @@ export default {
     };
   },
   created() {
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-      'login-token',
-    )}`;
-    this.loadContacts();
     axios
       .get('/api/orders/orderstatus')
       .then((Response) => {
         this.orderStatusOptions = Response.data.data.filter((o) => (o.label !== 'Confirm' && o.label !== 'Reject'));
       });
-    if (!this.$ws.connected) this.loadOrders();
-    this.onToggle(true);
+    this.loadContacts(() => this.onToggle(true, () => {
+      if (!this.$ws.connected) this.loadOrders();
+    }));
   },
   computed: {
     cWidth() {
@@ -380,17 +377,18 @@ export default {
     },
     refresh() {
       if (this.tableloading) return;
-      this.loadContacts();
-      if (this.$ws.nh === 0) {
-        this.$ws.disconnect();
-        this.tableloading = true; // To avoid concurrent execution
-        this.loadOrders().then(() => {
-          this.tableloading = false;
-          console.log('Refresh');
-        });
-      }
+      this.loadContacts(() => {
+        if (this.$ws.nh === 0) {
+          this.$ws.disconnect();
+          this.tableloading = true; // To avoid concurrent execution
+          this.loadOrders().then(() => {
+            this.tableloading = false;
+            console.log('Refresh');
+          });
+        }
+      });
     },
-    onToggle(val) {
+    onToggle(val, nextFunc) {
       this.accept = val;
       axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
       axios.put(`/api/orders/acceptOrders/${val}`)
@@ -415,12 +413,13 @@ export default {
               position: 'top',
             });
           }
+          if (nextFunc) nextFunc();
         })
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
-          }
+            this.$login(() => this.onToggle(val, nextFunc));
+          } else if (nextFunc) nextFunc();
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -428,6 +427,7 @@ export default {
             message: e.message,
             position: 'top',
           });
+          this.accept = !val;
         });
       console.log('Accept Orders :', this.accept);
     },
@@ -468,7 +468,7 @@ export default {
           .catch((e) => {
             if (e.message === 'Request failed with status code 401') {
               this.$q.localStorage.remove('login-token');
-              this.$router.push('/login');
+              this.$login(this.loadOrders, () => this.$router.push('/'));
             }
             this.$q.notify({
               color: 'red-5',
@@ -481,7 +481,7 @@ export default {
           });
       });
     },
-    loadContacts() {
+    loadContacts(nextFunc) {
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -493,12 +493,14 @@ export default {
           this.data = response.data.data;
 
           Loading.hide();
+          if (nextFunc) nextFunc();
         })
         .catch((e) => {
           Loading.hide();
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-          }
+            this.$login(() => this.loadContacts(nextFunc), () => this.$router.push('/'));
+          } else if (nextFunc) nextFunc();
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -557,7 +559,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.onFormSubmit, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -602,7 +604,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(() => this.save(val, initalVal, eventMember, field));
           }
           this.$q.notify({
             color: 'red-5',

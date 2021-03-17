@@ -264,7 +264,7 @@ export default {
         .then((response) => {
           if (response.data.data === 'User is null') {
             Loading.hide();
-            this.$router.push('/login');
+            this.$login(this.onSubmit, () => this.$router.push('/'));
           } else {
             this.$q.notify({
               color: 'green-4',

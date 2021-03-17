@@ -42,10 +42,7 @@
 
 <script>
 import { Loading, QSpinnerBars, date } from 'quasar';
-import Vue from 'vue';
-import VueNativeSock from 'vue-native-websocket';
 import axios from 'axios';
-import loginDialog from './loginDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -67,42 +64,10 @@ export default {
   },
   mounted() {
     if (this.$q.localStorage.getItem('login-token') === null) {
-      this.login()
-        .onOk(() => this.loadEvents())
-        .onCancel(() => this.$router.replace('/'));
+      this.$login(this.loadEvents, () => this.$router.push('/'));
     } else this.loadEvents();
   },
   methods: {
-    webSocketTest() {
-      Vue.use(VueNativeSock, 'ws://localhost:5000/Emantran/newOrder1');
-      const connection = new WebSocket('ws://localhost:5000/Emantran/socketHandler');
-      connection.onopen = function () {
-        connection.send('Hello, Server!!'); // send a message to server once connection is opened.
-        console.log('Hello, Server!!');
-        connection.send('greet');
-      };
-      connection.onerror = function (error) {
-        console.log(`Error Logged: ${error}`); // log errors
-      };
-      connection.onmessage = function (e) {
-        console.log(`Received From Server: ${e.data}`); // log the received message
-      };
-      connection.onclose = function () {
-        console.log('Connection Closed'); // log errors
-      };
-    },
-    login() {
-      return this.$q.dialog({
-        component: loginDialog,
-        parent: this,
-
-        noBackdropDismiss: true,
-        noEscDismiss: true,
-        noRouteDismiss: false,
-
-        login: true,
-      });
-    },
     loadEvents() {
       Loading.show({
         spinner: QSpinnerBars,
@@ -143,9 +108,7 @@ export default {
               position: 'top',
             });
             Loading.hide();
-            this.login()
-              .onOk(() => this.loadEvents()) // Restart fn // Check for Stack Overflow
-              .onCancel(() => this.$router.replace('/'));
+            this.$login(this.loadEvents, () => this.$router.push('/'));
           } else {
             this.$q.notify({
               color: 'red-5',

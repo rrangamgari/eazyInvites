@@ -78,7 +78,6 @@
 <script>
 import axios from 'axios';
 import { Loading, QSpinnerBars } from 'quasar';
-import loginDialog from './loginDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -108,18 +107,6 @@ export default {
     this.loadChatBot();
   },
   methods: {
-    login() {
-      return this.$q.dialog({
-        component: loginDialog,
-        parent: this,
-
-        noBackdropDismiss: true,
-        noEscDismiss: true,
-        noRouteDismiss: false,
-
-        login: true,
-      });
-    },
     handler() {
       this.pad = document.getElementsByClassName('q-header')[0].clientHeight + 16;
     },
@@ -150,9 +137,7 @@ export default {
               position: 'top',
             });
             Loading.hide();
-            this.login()
-              .onOk(() => this.loadChatBot()) // Restart fn // Check for Stack Overflow
-              .onCancel(() => this.$router.replace('/'));
+            this.$login(this.loadChatBot, () => this.$router.push('/'));
           } else {
             this.$q.notify({
               color: 'red-5',
@@ -211,9 +196,7 @@ export default {
               position: 'top',
             });
             Loading.hide();
-            this.login()
-              .onOk(() => this.loadChatBot()) // Restart fn // Check for Stack Overflow
-              .onCancel(() => this.$router.replace('/'));
+            this.$login(this.saveChatBot, () => this.$router.push('/'));
           } else {
             this.$q.notify({
               color: 'red-5',

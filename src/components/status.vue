@@ -179,7 +179,7 @@ export default {
             .catch((e) => {
               if (e.message === 'Request failed with status code 401') {
                 this.$q.localStorage.remove('login-token');
-                this.$router.push('/login');
+                this.$login(() => this.$router.go(0), () => this.$router.push('/'));
               }
             });
         }
@@ -189,7 +189,7 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         }
         this.$q.notify({
           color: 'red-5',
@@ -216,7 +216,7 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         }
         this.$q.notify({
           color: 'red-5',

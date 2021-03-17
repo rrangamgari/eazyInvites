@@ -939,7 +939,7 @@ export default {
       axios
         .get('/api/userEvents/userguestlist')
         .then((response) => {
-          this.data = response.data.data;
+          if (response.data.status !== 'failure') this.data = response.data.data;
 
           if (this.selected.length > 0) {
             const id = new Set(this.selected.filter((em) => em.readonly)
@@ -959,7 +959,7 @@ export default {
           this.loading = false;
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadContacts, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -1030,7 +1030,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(() => this.deleteMe(id));
           }
           this.$q.notify({
             color: 'red-5',
@@ -1108,7 +1108,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.onFormSubmit, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -1153,7 +1153,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(() => this.save(val, initalVal, eventMember, field));
           }
           this.$q.notify({
             color: 'red-5',

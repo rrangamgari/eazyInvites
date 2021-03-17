@@ -106,7 +106,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadCards, () => this.$router.push('/'));
           }
 
           this.$q.notify({

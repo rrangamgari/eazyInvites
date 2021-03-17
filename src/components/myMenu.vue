@@ -90,7 +90,8 @@
               {{ props.row.itemname }}
             </q-td>
             <q-td key="itemtype" auto-width :props="props" v-if="props.row.itemtype !== null">
-              <div v-html="props.row.itemtype.substring(0,50).concat('...')" />
+              <div class="ellipsis" style="width: max(100px, 15vw);"
+               v-html="props.row.itemtype.replace(/div/,'span')" />
               <q-tooltip
                 transition-show="scale"
                 transition-hide="scale"
@@ -135,7 +136,7 @@
           </q-tr>
         </template>
       </q-table>
-      <q-dialog v-model="addNewItemLayout" @hide="onFormReset()">
+      <q-dialog v-model="addNewItemLayout" @hide="clear()">
         <q-layout container class="bg-white" style="max-height:95%;min-width: 95%">
           <q-header class="bg-primary">
             <q-toolbar>
@@ -584,7 +585,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadItems, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -642,14 +643,6 @@ export default {
         };
       }
     },
-    editMe(index) {
-      const itemdetails = this.data[index];
-      this.onFormReset(itemdetails);
-      this.edit = true;
-      this.itemdetailsid = itemdetails.itemdetailsid;
-      this.index = index;
-      this.addNewItemLayout = true;
-    },
     deleteMe(id) {
       Loading.show({
         spinner: QSpinnerBars,
@@ -689,7 +682,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(() => this.deleteMe(id));
           }
           this.$q.notify({
             color: 'red-5',
@@ -701,7 +694,15 @@ export default {
           Loading.hide();
         });
     },
-    onFormReset(itemdetails = {}) {
+    clear() {
+      this.edit = false;
+      this.index = null;
+      this.files = new Array(0);
+      this.slide = 0;
+      this.resetVariables();
+    },
+    resetVariables(itemdetails = {}) {
+      this.itemdetailsid = itemdetails.itemdetailsid;
       this.itemTitle = itemdetails.itemname;
       this.price = itemdetails.price;
       this.saleprice = itemdetails.saleprice;
@@ -710,13 +711,19 @@ export default {
       this.orderVisibilityModel = itemdetails.status;
       this.orderVisibleModel = itemdetails.status ? itemdetails.status.value : 1;
       this.prepTime = itemdetails.timeforpreperation;
-      this.edit = false;
-      this.itemdetailsid = null;
-      this.index = null;
-      this.images = itemdetails.itemimages || [];
-      this.files = new Array(0);
-      this.slide = 0;
+      this.images = (itemdetails.itemimages || []).slice();
       this.toggleOption();
+    },
+    editMe(index) {
+      const itemdetails = this.data[index];
+      this.resetVariables(itemdetails);
+      this.edit = true;
+      this.index = index;
+      this.addNewItemLayout = true;
+    },
+    onFormReset() {
+      if (this.edit) this.resetVariables(this.data[this.index]);
+      else this.resetVariables();
     },
     onFormSubmit() {
       const itemdetails = {
@@ -782,7 +789,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.onFormSubmit, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -836,7 +843,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(() => this.onFormEdit(itemdetails));
           }
           this.$q.notify({
             color: 'red-5',
@@ -881,7 +888,7 @@ export default {
           //  this.errors.push(e);
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(() => this.save(val, initalVal, eventMember, field));
           }
           this.$q.notify({
             color: 'red-5',

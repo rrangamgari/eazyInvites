@@ -111,7 +111,6 @@
 <script>
 import { Loading, QSpinnerBars, date } from 'quasar';
 import axios from 'axios';
-import loginDialog from './loginDialog.vue';
 
 axios.defaults.baseURL = process.env.BASE_URL;
 axios.defaults.headers.get.Accepts = 'application/json';
@@ -133,9 +132,7 @@ export default {
   },
   mounted() {
     if (this.$q.localStorage.getItem('login-token') === null) {
-      this.login()
-        .onOk(() => this.loadEvents())
-        .onCancel(() => this.$router.replace('/'));
+      this.$login(this.loadEvents, () => this.$router.push('/'));
     } else this.loadEvents();
   },
   methods: {
@@ -157,18 +154,6 @@ export default {
     //     });
     //   return this.eventcard;
     // },
-    login() {
-      return this.$q.dialog({
-        component: loginDialog,
-        parent: this,
-
-        noBackdropDismiss: true,
-        noEscDismiss: true,
-        noRouteDismiss: false,
-
-        login: true,
-      });
-    },
     loadEvents() {
       Loading.show({
         spinner: QSpinnerBars,
@@ -203,9 +188,7 @@ export default {
               position: 'top',
             });
             Loading.hide();
-            this.login()
-              .onOk(() => this.loadEvents()) // Restart fn // Check for Stack Overflow
-              .onCancel(() => this.$router.replace('/'));
+            this.$login(this.loadEvents, () => this.$router.push('/'));
           } else {
             this.$q.notify({
               color: 'red-5',
@@ -328,7 +311,7 @@ export default {
   },
   mounted() {
     if (this.$q.localStorage.getItem('login-token') === null) {
-      this.$router.push('/login');
+      this.$login(() => this.$router.go(0), () => this.$router.push('/'));
     }
     Loading.show({
       spinner: QSpinnerBars,
@@ -353,7 +336,7 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         }
         this.$q.notify({
           color: 'red-5',
