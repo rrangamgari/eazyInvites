@@ -715,7 +715,8 @@ export default {
 };
 </script>
 
-<style lang="sass">
-  .q-tabs__arrow
-    display: none;
+<style scoped>
+  .q-tabs__arrow {
+    visibility: hidden;
+  }
 </style>

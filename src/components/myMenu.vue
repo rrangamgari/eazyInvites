@@ -228,7 +228,7 @@
                     </div>
                   </div>
 
-                  <div class="col-4">
+                  <div class="col-4 q-mt-md">
                     <q-uploader
                       ref="uploader" label="Item Images" field-name="files" multiple batch
                       :headers="[{
@@ -908,13 +908,13 @@ export default {
 </script>
 
 <style>
-.q-uploader__list {
-  padding: 2px;
-}
-.q-uploader__dnd {
-  display: none;
-}
-.dragging {
-  animation: pulse 1s infinite;
-}
+  .q-uploader__list {
+    padding: 2px;
+  }
+  .q-uploader__dnd {
+    display: none;
+  }
+  .dragging {
+    animation: pulse 1s infinite;
+  }
 </style>
