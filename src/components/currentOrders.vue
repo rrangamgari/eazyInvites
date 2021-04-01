@@ -487,6 +487,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
+      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
       axios
         .get(`/api/orders/myorders/${this.currentOrders}`)
         .then((response) => {
