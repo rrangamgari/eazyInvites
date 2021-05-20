@@ -272,7 +272,7 @@
                 Host: {{ hostname }}
               </div>
               <div class="text-left q-px-xs col-12" style="font-size: 14px;">
-                Message: <br>{{ eventmessage }}<br>
+                Message:  <div v-html="eventmessageHtml" />
               </div>
               <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
                 Start: {{ (new Date(event.startdate)).toDateString() }}
@@ -308,7 +308,7 @@
               </div>
               <div>&nbsp;</div>
               <div class="text-left q-px-xs col-12" style="font-size: 20px; ">
-                Message: <br>{{ eventmessage }}<br>
+                Message: <div v-html="eventmessageHtml" />
               </div>
               <!--div class="text-left q-px-xs col-12" style="font-size: 10px;">
                 Start: {{ (new Date(event.startdate)).toDateString() }}
@@ -422,7 +422,7 @@ export default {
       selection: ['teal'],
       selected: [],
       hostname: '',
-      eventmessage: `\nDear {{Guest Name}}, We invite you for a ${this.eventType} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`,
+      eventmessage: `Dear {{Guest Name}}, We invite you for a ${this.eventType} party.\nIf you are interested to attend please reply 'yes' and we will notify him.\nBest Regards {{Inviter}}`,
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -983,6 +983,11 @@ export default {
 
     this.loadData();
     console.log('TimeZone :', this.timezone);
+  },
+  computed: {
+    eventmessageHtml() {
+      return this.eventmessage.replace(/^ /gm, '&nbsp;').replace(/ {2}/g, ' &nbsp;').replace(/\n/g, '<br>');
+    },
   },
 };
 </script>

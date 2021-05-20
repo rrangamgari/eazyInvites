@@ -506,7 +506,10 @@ export default {
         layer.top = Math.round(layer.top * (card.height / 100));
         layer.width = Math.round(layer.width * (card.width / 100));
         layer.height = Math.round(layer.height * (card.height / 100));
-        delete layer.hide;
+        if (layer.hide) {
+          layer.img = '';
+          delete layer.hide;
+        }
         if (layer.type === 'txt') {
           this.layerTextToImg(layer);
           layer = null;
