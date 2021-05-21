@@ -106,7 +106,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadCards, () => this.$router.push('/'));
           }
 
           this.$q.notify({
@@ -209,7 +209,7 @@ export default {
   #portfolio .portfolio-item figure {
     background: #000;
     overflow: hidden;
-    height: 200px;
+    /* height: 200px; */
     position: relative;
     /* border-radius: 4px 4px 0 0; */
     margin: 0;

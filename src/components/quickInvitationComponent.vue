@@ -335,7 +335,7 @@
         >
         <q-card class="full-height">
           <q-card-section class="q-pa-xs">
-            <q-img :src="url !== '' ? url : require('../assets/logo/Easy_Invites.png')" />
+            <q-img :src="url !== '' ? url : 'statics/WE_Invites_logo.png'" />
           </q-card-section>
         </q-card>
         </q-expansion-item>
@@ -422,7 +422,7 @@ export default {
       selection: ['teal'],
       selected: [],
       hostname: '',
-      eventmessage: `Dear {{Guest Name}}, We invite you for a ${this.eventType} party.\nIf you are interested to attend please reply 'yes' and we will notify him.\nBest Regards {{Inviter}}`,
+      eventmessage: `Dear *{{Guest Name}}*, We invite you for a ${this.eventType} party.\nIf you are interested to attend please reply *Yes* and we will notify him.\n\nBest Regards\n*{{Inviter}}*`,
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -567,7 +567,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadData, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -640,7 +640,7 @@ export default {
               .catch((e) => {
                 if (e.message === 'Request failed with status code 401') {
                   this.$q.localStorage.remove('login-token');
-                  this.$router.push('/login');
+                  this.$login(this.loadEvent, () => this.$router.push('/'));
                 }
               });
           }
@@ -667,7 +667,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadEvent, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',
@@ -697,7 +697,7 @@ export default {
         .catch((e) => {
           if (e.message === 'Request failed with status code 401') {
             this.$q.localStorage.remove('login-token');
-            this.$router.push('/login');
+            this.$login(this.loadEventmembers, () => this.$router.push('/'));
           }
           this.$q.notify({
             color: 'red-5',

@@ -214,8 +214,6 @@
 </template>
 
 <script>
-import { Loading, QSpinnerBars } from 'quasar';
-import loginDialog from './loginDialog';
 
 export default {
   // name: 'ComponentName',
@@ -226,18 +224,7 @@ export default {
   },
   methods: {
     openDialog() {
-      Loading.show({
-        spinner: QSpinnerBars,
-        spinnerColor: 'primary',
-        thickness: '3',
-      });
-      this.$q.dialog({
-        component: loginDialog,
-        parent: this,
-      }).onOk(() => {
-        this.$router.push('/events');
-      });
-      Loading.hide();
+      this.$login(() => this.$router.push('/events'));
     },
   },
 };

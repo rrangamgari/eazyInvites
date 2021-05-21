@@ -306,7 +306,7 @@ export default {
         Loading.hide();
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         }
 
         this.$q.notify({
@@ -554,6 +554,11 @@ export default {
           this.$router.push({ name: 'createEvent', params });
         })
         .catch((e) => {
+          Loading.hide();
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$login(() => this.createInvitation(card), () => { e.message = 'You need to Login to proceed with your Invitation'; });
+          }
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -561,7 +566,6 @@ export default {
             message: e.message,
             position: 'top',
           });
-          Loading.hide();
         });
     },
     selectWarn() {

@@ -20,8 +20,6 @@
 
 <script>
 import loginComponent from '../components/login.vue';
-
-
 import footerComponent from '../components/footer.vue';
 
 

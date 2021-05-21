@@ -763,3 +763,8 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+  .q-tabs__arrow
+    display: none;
+</style>

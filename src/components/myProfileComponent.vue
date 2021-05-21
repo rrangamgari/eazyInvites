@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <q-card class="q-pt-sm q-pb-xs q-px-xs flex flex-center">
+  <q-page class="flex flex-center">
+    <q-card class="q-ma-md q-pa-md">
           <q-form
             @submit="onSubmit"
             @reset="onReset"
@@ -69,7 +69,7 @@
             </div>
           </q-form>
     </q-card>
-  </div>
+  </q-page>
 </template>
 
 <script>

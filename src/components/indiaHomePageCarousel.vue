@@ -182,8 +182,6 @@
 
 <script>
 import Snowf from 'vue-snowf';
-import { Loading, QSpinnerBars } from 'quasar';
-import loginDialog from './loginDialog.vue';
 
 export default {
   components: {
@@ -198,37 +196,7 @@ export default {
   },
   methods: {
     openDialog() {
-      Loading.show({
-        spinner: QSpinnerBars,
-        spinnerColor: 'primary',
-        thickness: '3',
-      });
-      this.$q.dialog({
-        component: loginDialog,
-        parent: this,
-
-        transitionShow: 'bounceInLeft',
-        transitionHide: 'bounceInLeft',
-        animationDuration: '2s',
-      }).onOk(() => {
-        console.log('OK');
-        this.$router.push('/events');
-        console.log('OK2');
-      }).onCancel(() => {
-        console.log('Cancel');
-      }).onDismiss(() => {
-        console.log('Called on OK or Cancel');
-      });
-      Loading.hide();
-    },
-    show() {
-      this.$refs.dialog.show();
-    },
-    hide() {
-      this.$refs.dialog.hide();
-    },
-    onDialogHide() {
-      this.$emit('hide');
+      this.$login(() => this.$router.push('/events'));
     },
   },
 };

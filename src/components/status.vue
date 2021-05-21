@@ -36,8 +36,8 @@
             </q-card-section>
           </q-card-section>
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
-            <q-img :src="file !== null ? file : require('../assets/logo/Easy_Invites.png')"
-             alt="Invitation" contain :style="`max-height: ${$q.screen.height * 2 / 3}px;`"/>
+            <q-img :src="file !== null ? file : 'statics/WE_Invites_logo.png'"
+             alt="Invitation" contain/>
           </q-card-section>
         </q-card>
       </div>
@@ -274,7 +274,7 @@ export default {
             .catch((e) => {
               if (e.message === 'Request failed with status code 401') {
                 this.$q.localStorage.remove('login-token');
-                this.$router.push('/login');
+                this.$login(() => this.$router.go(0), () => this.$router.push('/'));
               }
             });
         }
@@ -284,7 +284,7 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         }
         this.$q.notify({
           color: 'red-5',
@@ -311,7 +311,7 @@ export default {
       .catch((e) => {
         if (e.message === 'Request failed with status code 401') {
           this.$q.localStorage.remove('login-token');
-          this.$router.push('/login');
+          this.$login(() => this.$router.go(0), () => this.$router.push('/'));
         }
         this.$q.notify({
           color: 'red-5',
