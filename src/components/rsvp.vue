@@ -185,7 +185,7 @@ export default {
       thickness: '3',
     });
 
-    axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.localStorage.getItem('login-token')}` : null;
+    axios.defaults.headers.Authorization = !this.auth ? this.$q.localStorage.getItem('login-token') : null;
 
     axios.get(`/api/userEvents/invites/${this.inviteId}/${this.inviteAplhaId}`,
       this.auth ? { params: { auth: this.auth } } : null)
@@ -293,7 +293,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = !this.auth ? `Bearer ${this.$q.localStorage.getItem('login-token')}` : null;
+      axios.defaults.headers.Authorization = !this.auth ? this.$q.localStorage.getItem('login-token') : null;
 
       axios.put(`/api/userEvents/invites/${this.inviteId}`,
         {

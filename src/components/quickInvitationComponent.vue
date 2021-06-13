@@ -422,7 +422,7 @@ export default {
       selection: ['teal'],
       selected: [],
       hostname: '',
-      eventmessage: `Dear *{{Guest Name}}*, We invite you for a ${this.eventType} party.\nIf you are interested to attend please reply *Yes* and we will notify him.\n\nBest Regards\n*{{Inviter}}*`,
+      eventmessage: `Dear *{{Guest Name}}*,\nWe invite you for a ${this.eventType} party.\nIf you are interested to attend please reply *Yes* and we will notify him.\n\nBest Regards\n*{{Inviter}}*`,
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -554,9 +554,7 @@ export default {
         second: false,
       };
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios
         .get('/api/eventSystem/eventType')
         .then((response) => {
@@ -621,9 +619,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       axios
         .get(`/api/userEvents/event/${this.eventId}/${this.eventAlphaId}`)
@@ -814,7 +810,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 
@@ -887,7 +883,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 

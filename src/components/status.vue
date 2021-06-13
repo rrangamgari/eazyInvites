@@ -36,7 +36,7 @@
             </q-card-section>
           </q-card-section>
           <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
-            <q-img :src="file !== null ? file : 'statics/WE_Invites_logo.png'"
+            <q-img :src="file" placeholder-src="statics/WE_Invites_logo.png"
              alt="Invitation" contain/>
           </q-card-section>
         </q-card>
@@ -251,15 +251,13 @@ export default {
       thickness: '3',
     });
 
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-      'login-token',
-    )}`;
+    axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
     axios
       .get(`/api/userEvents/event/${this.eventId}/${this.eventAlpha}`)
       .then((response) => {
         this.event = response.data.data;
-        console.log(`this.event.attachmentlink: ${this.event.attachmentlink}`);
+        // console.log(`this.event.attachmentlink: ${this.event.attachmentlink}`);
         if (this.event.attachmentlink !== null && this.event.attachmentlink !== 'null') {
           axios
             .get(this.event.attachmentlink, { responseType: 'arraybuffer' })
@@ -269,7 +267,7 @@ export default {
                   .reduce((data, byte) => data + String.fromCharCode(byte), ''),
               );
               this.file = `data:${response1.headers['content-type'].toLowerCase()};base64,${image}`;
-              console.log(`file : ${this.file}`);
+              // console.log(`file : ${this.file}`);
             })
             .catch((e) => {
               if (e.message === 'Request failed with status code 401') {

@@ -755,8 +755,7 @@ export default {
       headerFunc: [
         {
           name: 'authorization',
-          value:
-         `Bearer ${this.$q.localStorage.getItem('login-token')}`,
+          value: this.$q.localStorage.getItem('login-token'),
         }],
       visible: ['firstname', 'lastname', 'primaryPhone', 'email'],
       columns: [
@@ -859,9 +858,7 @@ export default {
           });
         }, 2000);
       });
-      /* axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      /* axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios.defaults.headers.get.Accepts = 'multipart/form-data';
       const formData = new FormData();
       formData.append('file', this.$q.file);
@@ -919,9 +916,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios
         .get('/api/userEvents/userguestlist')
         .then((response) => {
@@ -983,9 +978,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios
         .delete(`/api/userEvents/userguest/${id}`)
         .then((response) => {
@@ -1051,9 +1044,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios
         .post('/api/userEvents/userguest', {
           firstname: this.firstname,
@@ -1109,9 +1100,7 @@ export default {
     save(val, initalVal, eventMember, field) {
       eventMember[field] = val;
       console.log(val, initalVal, eventMember, field);
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios
         .put(`/api/userEvents/userguest/${eventMember.eventmemberidUI}`, eventMember)
         .then((response) => {

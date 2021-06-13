@@ -64,9 +64,7 @@ export default {
       spinnerColor: 'primary',
       thickness: '3',
     });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-      'login-token',
-    )}`;
+    axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
     axios
       .get('/api/userEvents/invites')
       .then((response) => {
@@ -109,7 +107,7 @@ export default {
     getImages() {
       this.data.forEach((invite) => {
         if (invite.eventDetails.attachmentlink !== null) {
-          axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+          axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
           axios
             .get(invite.eventDetails.attachmentlink, { responseType: 'arraybuffer' })
             .then((Response) => {

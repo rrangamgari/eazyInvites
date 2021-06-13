@@ -501,7 +501,7 @@ export default {
         second: false,
       };
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       Loading.show({
         spinner: QSpinnerBars,
         spinnerColor: 'primary',
@@ -535,9 +535,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       axios
         .get(`/api/userEvents/event/${this.eventId}/${this.eventAlphaId}`)
@@ -721,7 +719,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 
@@ -792,7 +790,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       if (!this.eventtitle || this.eventtitle === '') this.eventtitle = `Event ${(new Date()).toUTCString()}`;
 

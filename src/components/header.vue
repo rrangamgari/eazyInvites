@@ -739,10 +739,8 @@ export default {
       })
         .then((response) => {
           this.posts = response.data;
-          this.$q.localStorage.set('login-token', this.posts.token);
-          axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-            'login-token',
-          )}`;
+          this.$q.localStorage.set('login-token', `Bearer ${this.posts.token}`);
+          axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
           Loading.hide();
           this.$nextTick(() => {
             this.$router.push('/events');

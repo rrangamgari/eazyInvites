@@ -46,7 +46,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios.get(`/api/oauth2/contacts/${this.client}/handler`, { params: { code: this.code } })
         .then(() => {
           this.$q.localStorage.set('oauth2-contacts', true);

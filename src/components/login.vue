@@ -82,8 +82,8 @@ export default {
         .then((response) => {
           // JSON responses are automatically parsed.
           this.posts = response.data;
-          this.$q.localStorage.set('login-token', this.posts.token);
-          axios.defaults.headers.Authorization = `Bearer ${this.posts.token}`;
+          this.$q.localStorage.set('login-token', `Bearer ${this.posts.token}`);
+          axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
           axios.get('/api/UserDetails/getCurrentUser')
             .then((response1) => {

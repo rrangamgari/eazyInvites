@@ -98,9 +98,7 @@ export default {
       spinnerColor: 'primary',
       thickness: '3',
     });
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-      'login-token',
-    )}`;
+    axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
     axios
       .get('/api/UserDetails/getCurrentUser')
       .then((response) => {
@@ -160,7 +158,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token')}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios.put('/api/UserDetails/updateCurrentUser',
         {
           mobile: this.phone,
@@ -201,9 +199,7 @@ export default {
         spinnerColor: 'primary',
         thickness: '3',
       });
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem(
-        'login-token',
-      )}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
       axios
         .get('/api/UserDetails/getCurrentUser')
         .then((response) => {
