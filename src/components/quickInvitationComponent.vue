@@ -365,7 +365,7 @@
         </div>
       </q-form>-->
 
-        <q-stepper-navigation>
+        <q-stepper-navigation class="q-pa-md">
           <q-btn color="primary" class="q-px-xl q-py-xs"  label="Finish" @click="onFinish()"/>
           <q-btn
             flat

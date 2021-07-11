@@ -1,18 +1,27 @@
 <template>
   <div>
-    <div class="q-pa-lg row warp justify-center items-center">
-      <div class="col-12 q-px-md q-py-sm q-pb-lg">
-        <q-card v-if="event && eventType" class="row justify-center">
-          <q-card-section class="q-pa-xs col-xs-10 col-sm-6" style="font-family:
-              'Montserrat', cursive;  font-weight:bolder; color:#18d26e">
-            <q-card-section class="q-pa-xs">
-              <div class="text-center text-decoration-underline" style="font-size: 34px;">
-              {{ (event.eventtitle !== null && event.eventtitle.trim() !== '') ?
-                  event.eventtitle : 'Untitled Event' }}
-              </div>
-              <q-btn class="absolute-top-right" flat icon="edit" round
-               :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
-            </q-card-section>
+    <div class="q-pa-md row warp justify-center items-start">
+      <div class="col-xs-12 col-sm-6 col-6 q-pa-sm">
+        <q-carousel v-if="event && eventType" v-model="eventslide"
+          transition-prev="slide-right" transition-next="slide-left"
+          animated navigation navigation-position="bottom" control-type="flat"
+          control-color="primary" class="rounded-borders" :height="`${$q.screen.height*0.8}px`"
+        >
+          <q-carousel-slide :name="0" class="q-pa-xs col-xs-10 col-sm-6">
+            <q-btn class="absolute-top-right" style="z-index: 1;" color="primary" flat icon="edit"
+             round :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
+            <q-img :src="file" placeholder-src="statics/WE_Invites_logo.png"
+             alt="Invitation" contain class="full-height" />
+          </q-carousel-slide>
+          <q-carousel-slide :name="1" class="row justify-center q-pa-xs col-11" style="font-family:
+              'Montserrat', cursive; font-weight:bolder; color:#18d26e">
+            <q-btn class="absolute-top-right" style="z-index: 1;" flat icon="edit" round
+             :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}`"/>
+            <div class="q-pa-xs">
+              <div class="text-center text-decoration-underline" style="font-size: 34px;"
+               v-text="(event.eventtitle !== null && event.eventtitle.trim() !== '') ?
+                        event.eventtitle : 'Untitled Event'" />
+            </div>
             <q-card-section class="q-pa-xs row items-center">
               <div class="text-left q-px-xs col-12" style="font-size: 34px;"
                    v-if="eventType[event.eventtypeid-1]!==null &&
@@ -30,152 +39,178 @@
               </div>
               <div>&nbsp;</div>
               <div class="text-left q-px-xs col-12" style="font-size: 20px;">
-                Message: <span v-html="event.eventmessagehtml"
-                               style="font-size: 18px;" class="text-grey"></span>
+                Message
+                <div v-html="event.eventmessagehtml"
+                               style="font-size: 18px;" class="text-grey" />
               </div>
             </q-card-section>
-          </q-card-section>
-          <q-card-section class="q-pa-xs col-xs-10 col-sm-6">
-            <q-img :src="file" placeholder-src="statics/WE_Invites_logo.png"
-             alt="Invitation" contain/>
-          </q-card-section>
-        </q-card>
+          </q-carousel-slide>
+        </q-carousel>
       </div>
-      <div class="col-xs-10 col-sm-6 col-md-3 q-px-md q-py-sm">
-        <q-card>
-          <q-card-section class="q-pa-xs">
-              <div class="row justify-center items-center">
+      <div class="col-xs-12 col-sm-6 col-6 row warp justify-center items-center">
+        <div class="col-xs-10 col-sm-6 q-pa-sm">
+          <q-card>
+            <q-card-section class="q-pa-xs row justify-center items-center">
               <q-avatar icon="oval" :color="colour[1]" size="10px" /> &nbsp;
-              <div class="text-subtitle2 text-center">Attending</div></div>
+              <div class="text-subtitle2 text-center">Attending</div>
               <!--q-avatar style="position: absolute; top: 5px; right: 5px;"
-               icon="oval" :color="colour[1]" size="15px"/-->
-          </q-card-section>
-          <q-card-section class="q-pa-xs row no-warp justify-center items-center">
-            <div class="q-px-auto q-ma-none" style="width:70px">
-              <div class="q-pt-sm text-h6 text-center">
-                {{ A.adults }}
+              icon="oval" :color="colour[1]" size="15px"/-->
+            </q-card-section>
+            <q-card-section class="q-pa-xs row no-warp justify-center items-center">
+              <div class="q-px-auto q-ma-none" style="width:70px">
+                <div class="q-pt-sm text-h6 text-center">
+                  {{ A.adults }}
+                </div>
+                <!--q-icon name="person" size="25px"/-->
+                <div class="text-center text-caption">
+                  Adults
+                </div>
               </div>
-              <!--q-icon name="person" size="25px"/-->
-              <div class="text-center text-caption">
-                Adults
+              <q-separator vertical inset/>
+              <div class="q-px-auto q-ma-none" style="width:70px">
+                <div class="q-pt-sm text-h6 text-center">
+                  {{ A.kids }}
+                </div>
+                <!--q-icon name="person" size="25px"/-->
+                <div class="text-center text-caption">
+                  Kids
+                </div>
               </div>
-            </div>
-            <q-separator vertical inset/>
-            <div class="q-px-auto q-ma-none" style="width:70px">
-              <div class="q-pt-sm text-h6 text-center">
-                {{ A.kids }}
-              </div>
-              <!--q-icon name="person" size="25px"/-->
-              <div class="text-center text-caption">
-                Kids
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-xs-10  col-sm-6 col-md-3 q-px-md q-py-sm">
-        <q-card>
-          <q-card-section class="q-pa-xs">
-            <div class="text-subtitle2 text-center">Tentative</div>
-            <q-avatar style="position: absolute; top: 5px; right: 5px;"
-             icon="oval" :color="colour[2]" size="12px"/>
-          </q-card-section>
-          <q-card-section class="q-pa-xs row no-warp justify-center items-center">
-            <div class="q-px-auto q-ma-none" style="width:70px">
-              <div class="q-pt-sm text-h6 text-center">
-                {{ T.adults }}
-              </div>
-              <!--q-icon name="person" size="25px"/-->
-              <div class="text-center text-caption">
-                Adults
-              </div>
-            </div>
-            <q-separator vertical inset/>
-            <div class="q-px-auto q-ma-none" style="width:70px">
-              <div class="q-pt-sm text-h6 text-center">
-                {{ T.kids }}
-              </div>
-              <!--q-icon name="person" size="25px"/-->
-              <div class="text-center text-caption">
-                Kids
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-xs-10  col-sm-6 col-md-3 q-px-md q-py-sm">
-        <q-card>
-          <q-card-section class="q-pa-xs">
-            <div class="text-subtitle2 text-center">Not Attending</div>
-          </q-card-section>
-          <q-card-section class="q-pa-xs row justify-center items-center">
-            <div class="q-px-auto q-ma-none" style="width:70px">
-              <div class="q-pt-sm text-h6 text-center">
-                {{ N.count }}
-              </div>
-              <!--q-icon name="person" size="25px"/-->
-              <div class="text-center text-caption">
-                Invitees
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-xs-10  col-sm-6 col-md-3 q-px-md q-py-sm">
-        <q-card>
-          <q-card-section class="q-pa-xs">
-            <div class="text-subtitle2 text-center">Awaiting Response</div>
-          </q-card-section>
-          <q-card-section class="q-pa-xs row justify-center items-center">
-            <div class="q-px-auto q-ma-none" style="width:100px">
-              <div class="q-pt-sm text-h6 text-center">
-                {{ R.count }}
-              </div>
-              <!--q-icon name="person" size="25px"/-->
-              <div class="text-center text-caption">
-                Yet to Respond
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="q-px-md q-py-lg full-width">
-        <div class="row q-pb-xs" style="width: 100%;">
-        <q-input class="q-pl-sm" style="max-width: 300px" borderless dense debounce="300"
-         v-model="filter" placeholder="Search">
-          <q-icon slot="prepend" name="search" />
-        </q-input>
-        <q-space />
-        <q-btn v-if="event" icon="person_add" label="Add Contacts" color="primary" no-caps
-         :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}?step=2`" />
+            </q-card-section>
+          </q-card>
         </div>
-        <q-table
-          :visible-columns.sync="['name', 'status'].concat(col)"
-          :data="data"
-          :columns="columns"
-          :filter="filter"
-          color="primary"
-          rows-key="name"
-          no-data-label="Add Contacts to view them here"
-          no-results-label="No matching Contacts found"
-          hide-pagination
-          hide-selected-banner
-          :pagination.sync="pagination"
-          :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
-        >
-          <template v-slot:no-data="{ message }">
-            <div class="full-width row flex-center">
-              <span>{{ message }}</span>
-            </div>
-          </template>
-          <template v-slot:body-cell-status="props">
-            <q-td :props="props" >
-              <q-avatar icon="oval" :color="colour[`${props.row.status.eventstatusid}`]"
-                size="10px" />
-              {{ ($q.screen.width > 350) ? props.row.status.eventstatusdescription : '' }}
-            </q-td>
-          </template>
-        </q-table>
+        <div class="col-xs-10 col-sm-6 q-px-md q-py-sm">
+          <q-card>
+            <q-card-section class="q-pa-xs row justify-center items-center">
+              <q-avatar icon="oval" :color="colour[2]" size="10px" /> &nbsp;
+              <div class="text-subtitle2 text-center">Tentative</div>
+              <!-- <q-avatar style="position: absolute; top: 5px; right: 5px;"
+              icon="oval" :color="colour[2]" size="12px"/> -->
+            </q-card-section>
+            <q-card-section class="q-pa-xs row no-warp justify-center items-center">
+              <div class="q-px-auto q-ma-none" style="width:70px">
+                <div class="q-pt-sm text-h6 text-center">
+                  {{ T.adults }}
+                </div>
+                <!--q-icon name="person" size="25px"/-->
+                <div class="text-center text-caption">
+                  Adults
+                </div>
+              </div>
+              <q-separator vertical inset/>
+              <div class="q-px-auto q-ma-none" style="width:70px">
+                <div class="q-pt-sm text-h6 text-center">
+                  {{ T.kids }}
+                </div>
+                <!--q-icon name="person" size="25px"/-->
+                <div class="text-center text-caption">
+                  Kids
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-xs-10  col-sm-6 q-px-md q-py-sm">
+          <q-card>
+            <q-card-section class="q-pa-xs row justify-center items-center">
+              <q-avatar icon="oval" :color="colour[3]" size="10px" /> &nbsp;
+              <div class="text-subtitle2 text-center">Not Attending</div>
+            </q-card-section>
+            <q-card-section class="q-pa-xs row justify-center items-center">
+              <div class="q-px-auto q-ma-none" style="width:70px">
+                <div class="q-pt-sm text-h6 text-center">
+                  {{ N.count }}
+                </div>
+                <!--q-icon name="person" size="25px"/-->
+                <div class="text-center text-caption">
+                  Invitees
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-xs-10  col-sm-6 q-px-md q-py-sm">
+          <q-card>
+            <q-card-section class="q-pa-xs row justify-center items-center">
+              <q-avatar icon="oval" :color="colour[5]" size="10px" /> &nbsp;
+              <div class="text-subtitle2 text-center">Awaiting Response</div>
+            </q-card-section>
+            <q-card-section class="q-pa-xs row justify-center items-center">
+              <div class="q-px-auto q-ma-none" style="width:100px">
+                <div class="q-pt-sm text-h6 text-center">
+                  {{ R.count }}
+                </div>
+                <!--q-icon name="person" size="25px"/-->
+                <div class="text-center text-caption">
+                  Yet to Respond
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="q-px-md q-py-lg full-width">
+          <div class="row q-pb-xs" style="width: 100%;">
+          <q-input class="q-pl-sm" style="max-width: 300px" borderless dense debounce="300"
+          v-model="filter" placeholder="Search">
+            <q-icon slot="prepend" name="search" />
+          </q-input>
+          <q-space />
+          <q-btn v-if="event" icon="person_add" label="Add Contacts" color="primary" no-caps
+          :to="`/editInvitation/${event.eventdetailsidUI}/${event.eventdetailsalphaid}?step=2`" />
+          </div>
+          <q-table
+            :visible-columns.sync="['name', 'status'].concat(col)"
+            :data="data"
+            :columns="columns"
+            :filter="filter"
+            color="primary"
+            rows-key="name"
+            no-data-label="Add Contacts to view them here"
+            no-results-label="No matching Contacts found"
+            hide-pagination
+            hide-selected-banner
+            :pagination.sync="pagination"
+            :table-header-style="{ backgroundColor: '#18d26e', color: '#FFFFFF' }"
+          >
+            <template v-slot:no-data="{ message }">
+              <div class="full-width row flex-center">
+                <span>{{ message }}</span>
+              </div>
+            </template>
+            <template v-slot:body-cell-status="props">
+              <q-td :props="props" >
+                <q-avatar icon="oval" :color="colour[`${props.row.status.eventstatusid}`]"
+                  size="10px" />
+                {{ ($q.screen.width > 350) ? props.row.status.eventstatusdescription : '' }}
+                <q-tooltip v-if="[1, 2].includes(props.row.status.eventstatusid)">
+                  <!-- {{ props.row.headcount }} Adults <br>
+                  {{ props.row.kidscount }} Kids <br> -->
+                  <div class="q-pa-xs row no-warp justify-center items-center">
+                    <div class="q-px-auto q-ma-none" style="width:50px">
+                      <div class="q-pt-sm text-center">
+                        {{ props.row.headcount }}
+                      </div>
+                      <!--q-icon name="person" size="25px"/-->
+                      <div class="text-center text-caption">
+                        Adults
+                      </div>
+                    </div>
+                    <q-separator vertical inset dark />
+                    <div class="q-px-auto q-ma-none" style="width:50px">
+                      <div class="q-pt-sm text-center">
+                        {{ props.row.kidscount }}
+                      </div>
+                      <!--q-icon name="person" size="25px"/-->
+                      <div class="text-center text-caption">
+                        Kids
+                      </div>
+                    </div>
+                  </div>
+                </q-tooltip>
+              </q-td>
+            </template>
+          </q-table>
+        </div>
       </div>
     </div>
   </div>
@@ -197,6 +232,7 @@ export default {
       eventId: '',
       event: null,
       eventType: null,
+      eventslide: 0,
       file: null,
       colour: ['white', 'green', 'yellow', 'red', 'grey', 'grey', 'grey', 'grey', 'black'],
       A: { adults: 0, kids: 0 },
@@ -373,3 +409,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .q-carousel {
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+     0 3px 1px -2px rgb(0 0 0 / 12%);
+  }
+</style>
