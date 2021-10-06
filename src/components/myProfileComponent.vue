@@ -93,65 +93,71 @@ export default {
     };
   },
   mounted() {
-    Loading.show({
-      spinner: QSpinnerBars,
-      spinnerColor: 'primary',
-      thickness: '3',
-    });
-    axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
-    axios
-      .get('/api/UserDetails/getCurrentUser')
-      .then((response) => {
-        // JSON responses are automatically parsed.
-        const res = response.data.data;
-        this.phone = res.mobile;
-        this.firstName = res.givenname;
-        this.lastName = res.familyname;
-        this.email = res.email;
-        this.timeZone = res.commonname;
-        if (res.commonname === null) {
-          Loading.show({
-            spinner: QSpinnerBars,
-            spinnerColor: 'primary',
-            thickness: '3',
-          });
-          /* axios.get('http://timezoneapi.io/api/ip/?token=aUVcYLrWezMlqueIcmzI')
-            .then((response1) => {
-              this.timeZone = response1.data.datetime.offset_tzid;
-              Loading.hide();
-              this.onSubmit();
-            })
-            .catch((e) => {
-              this.errors.push(e);
-              this.$q.notify({
-                color: 'red-5',
-                textColor: 'white',
-                icon: 'error',
-                message: 'oops Something went wrong...',
-                position: 'top',
-              });
-              Loading.hide();
-            }); */
-          const zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
-          this.timeZone = zone;
-          // = this.$q.localStorage.getItem('time-zone-token');
-        }
-        // this.data = this.data.concat(response.data.data);
-        Loading.hide();
-      })
-      .catch((e) => {
-        //  this.errors.push(e);
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'error',
-          message: e.message,
-          position: 'top',
-        });
-        Loading.hide();
-      });
+    this.loadUser();
   },
   methods: {
+    loadUser() {
+      Loading.show({
+        spinner: QSpinnerBars,
+        spinnerColor: 'primary',
+        thickness: '3',
+      });
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
+      axios
+        .get('/api/UserDetails/getCurrentUser')
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          const res = response.data.data;
+          this.phone = res.mobile;
+          this.firstName = res.givenname;
+          this.lastName = res.familyname;
+          this.email = res.email;
+          this.timeZone = res.commonname;
+          if (res.commonname === null) {
+            Loading.show({
+              spinner: QSpinnerBars,
+              spinnerColor: 'primary',
+              thickness: '3',
+            });
+            /* axios.get('http://timezoneapi.io/api/ip/?token=aUVcYLrWezMlqueIcmzI')
+              .then((response1) => {
+                this.timeZone = response1.data.datetime.offset_tzid;
+                Loading.hide();
+                this.onSubmit();
+              })
+              .catch((e) => {
+                this.errors.push(e);
+                this.$q.notify({
+                  color: 'red-5',
+                  textColor: 'white',
+                  icon: 'error',
+                  message: 'oops Something went wrong...',
+                  position: 'top',
+                });
+                Loading.hide();
+              }); */
+            const zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
+            this.timeZone = zone;
+            // = this.$q.localStorage.getItem('time-zone-token');
+          }
+          // this.data = this.data.concat(response.data.data);
+          Loading.hide();
+        })
+        .catch((e) => {
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$login(this.loadUser, () => this.$router.push('/'));
+          }
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'error',
+            message: e.message,
+            position: 'top',
+          });
+          Loading.hide();
+        });
+    },
     onSubmit() {
       Loading.show({
         spinner: QSpinnerBars,
@@ -181,7 +187,10 @@ export default {
           this.$router.push('/myProfile');
         })
         .catch((e) => {
-          //  this.errors.push(e);
+          if (e.message === 'Request failed with status code 401') {
+            this.$q.localStorage.remove('login-token');
+            this.$login(this.onSubmit, () => this.$router.push('/'));
+          }
           this.$q.notify({
             color: 'red-5',
             textColor: 'white',
@@ -192,38 +201,8 @@ export default {
           Loading.hide();
         });
     },
-
     onReset() {
-      Loading.show({
-        spinner: QSpinnerBars,
-        spinnerColor: 'primary',
-        thickness: '3',
-      });
-      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
-      axios
-        .get('/api/UserDetails/getCurrentUser')
-        .then((response) => {
-          // JSON responses are automatically parsed.
-          const res = response.data.data;
-          this.phone = res.mobile;
-          this.firstName = res.givenname;
-          this.lastName = res.familyname;
-          this.email = res.email;
-          this.timeZone = res.commonname;
-          // this.data = this.data.concat(response.data.data);
-          Loading.hide();
-        })
-        .catch((e) => {
-          //  this.errors.push(e);
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'error',
-            message: e.message,
-            position: 'top',
-          });
-          Loading.hide();
-        });
+      this.loadUser();
     },
   },
 };

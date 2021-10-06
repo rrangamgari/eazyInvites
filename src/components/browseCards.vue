@@ -74,8 +74,6 @@ export default {
   mounted() {
     this.primary = colors.getBrand('primary');
 
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token') || ''}`;
-
     axios
       .get('/api/eventSystem/eventType')
       .then((Response) => {

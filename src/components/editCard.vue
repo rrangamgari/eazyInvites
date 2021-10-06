@@ -242,7 +242,7 @@ export default {
     ctx = canvas.getContext('2d');
     console.log(ctx);
 
-    axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token') || ''}`;
+    axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
     Loading.show({
       spinner: QSpinnerBars,
@@ -541,7 +541,7 @@ export default {
         thickness: '3',
       });
 
-      axios.defaults.headers.Authorization = `Bearer ${this.$q.localStorage.getItem('login-token') || ''}`;
+      axios.defaults.headers.Authorization = this.$q.localStorage.getItem('login-token');
 
       axios.post(`/api/cards/${this.cardId}`, card)
         .then((response) => {
