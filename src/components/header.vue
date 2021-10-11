@@ -168,7 +168,7 @@
             >
               <q-item-section avatar>
                 <q-avatar
-                  icon="person_add"
+                  icon="logout"
                   color="secondary"
                   text-color="white"
                 />
@@ -355,7 +355,7 @@
           name="logout"
           :label="($q.screen.width > 1032) ? 'Logout' : undefined"
           :style="qtabStyle"
-          icon="person_add"
+          icon="logout"
           @click="onLogoutClick"
         />
             <!--q-item
@@ -564,7 +564,7 @@
               @click="onLogoutClick"
             >
               <q-item-section avatar style="min-width: 0px;">
-                <q-icon name="person_add"/>
+                <q-icon name="logout"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
