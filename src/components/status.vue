@@ -234,7 +234,7 @@ export default {
       eventType: null,
       eventslide: 0,
       file: null,
-      colour: ['white', 'green', 'yellow', 'red', 'grey', 'grey', 'grey', 'grey', 'black'],
+      colour: ['white', 'green', 'yellow', 'red', 'black', 'grey', 'grey', 'grey', 'grey', 'black'],
       A: { adults: 0, kids: 0 },
       T: { adults: 0, kids: 0 },
       N: { count: 0 },

@@ -412,6 +412,7 @@ export default {
       url: '',
       step: 1,
       et: true,
+      edit: false,
       event: {},
       eventtitle: '',
       eventdate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
@@ -422,7 +423,7 @@ export default {
       selection: ['teal'],
       selected: [],
       hostname: '',
-      eventmessage: `Dear *{{Guest Name}}*,\nWe invite you for a ${this.eventType} party.\nIf you are interested to attend please reply *Yes* and we will notify him.\n\nBest Regards\n*{{Inviter}}*`,
+      eventmessage: `Dear *{{Guest Name}}*,\nWe invite you for a ${this.eventType || ''} party.\nIf you are interested to attend please reply *Yes* and we will notify him.\n\nBest Regards\n*{{Inviter}}*`,
       options: [
         { value: 1, label: 'Birthday' },
         { value: 2, label: 'Engagement' },
@@ -584,12 +585,14 @@ export default {
       axios.get('/api/UserDetails/getCurrentUser')
         .then((response1) => {
           this.$q.localStorage.set('user-token', response1.data.data);
-          this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
-          this.event.hostname = this.hostname;
-          if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
 
-          Loading.hide();
           if (this.eventId) this.loadEvent();
+          else {
+            this.hostname = `${this.$q.localStorage.getItem('user-token').givenname} ${this.$q.localStorage.getItem('user-token').familyname}`;
+            this.event.hostname = this.hostname;
+            if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
+          }
+          Loading.hide();
 
           if (response1.data.data.mobile === null) {
             this.$router.push('/myProfile');
@@ -655,6 +658,7 @@ export default {
           };
           this.event.first = event.eventtimeadded;
           this.event.second = this.event.eventtime !== this.event.eventendtime;
+          this.edit = true;
           this.onReset();
 
           Loading.hide();
@@ -729,13 +733,14 @@ export default {
     },
     onReset() {
       this.eventtitle = this.event.eventtitle;
-      this.et = true;
+      this.et = this.event.eventtitle === `${this.event.hostname}'s ${this.event.eventType.label}`;
       this.eventType = this.event.eventType;
       this.eventdate = this.event.eventdate;
       this.eventtime = this.event.eventtime;
       this.eventendtime = this.event.eventendtime;
       this.timezone = this.event.timezone;
       if (!this.card && !this.eventId) this.file = null;
+      this.hostname = this.event.hostname;
       this.eventmessage = this.event.eventmessage;
       this.first = this.event.first;
       this.second = this.event.second;
@@ -754,7 +759,7 @@ export default {
       // eslint-disable-next-line no-alert
       // alert(this.eventType);
       // eslint-disable-next-line max-len
-      this.eventmessage = `\nDear {{Guest Name}}, We invite you for a ${this.eventType.label} party. \nIf you are interested to attend please reply 'yes' and we will notify him.\n Best Regards {{Inviter}}`;
+      if (!this.edit) this.eventmessage = `Dear *{{Guest Name}}*,\nWe invite you for a ${this.eventType.label} party.\nIf you are interested to attend please reply *Yes* and we will notify him.\n\nBest Regards\n*{{Inviter}}*`;
       if (this.eventType && this.et) this.eventtitle = `${this.hostname}'s ${this.eventType.label}`;
       // this.eventmessage = `\nDear {{Invitee Name}}, {{Inviter Name}} has
       // invited you for a ${this.eventType.label} party.
